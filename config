@@ -1,0 +1,12 @@
+printf '\e[36m'
+printf 'Current date: '
+date
+printf '\e[32m'
+printf 'Uptime: '
+uptime
+printf '\e[m'
+printf '\e[33m'
+df -h | grep disk0s2 | awk '{print "Mac HD:", $2, "total,", $3, "used,", $4, "remaining"}'
+# I don't care about my Windows HD, but I might want to enable that in the future. Remove the # to enable
+df -h | grep disk0s3 | awk '{print "Windows HD:", $2, "total,", $3, "used,", $4, "remaining"}'
+printf '\e[m'

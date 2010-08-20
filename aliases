@@ -1,0 +1,77 @@
+alias findbig='sudo -v; sudo find -xf /.Trashes /Volumes /Library /private /Temp* -type f -size +200000 -print0 | sudo xargs -0 ls -lohdSr'
+alias measurebig='for f in /Volumes /.Spotlight* /.Trashes /Library/Logs /private/ {var/{log,spool,db,vm,tmp},tmp} /Temp*; do sudo du -hsx "$f"; done'
+alias lsrebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain system -domain user'
+alias la="ls -alGhF"
+alias dir='ls -alf'
+alias profop='sudo fs_usage -w -f filesys -e Terminal Parallels mds nmbd Dock WindowServer ATSServer Quicksilver > ~/Desktop/opera.txt' #profile opera file system usage
+alias startvnc='sudo echo -n enabled > /Library/Preferences/com.apple.ScreenSharing.launchd'
+alias grep="grep --color=auto"
+
+# Checksums
+alias md2='openssl md2'
+alias md4='openssl md4'
+alias md5='openssl md5'
+alias mdc2='openssl mdc2'
+alias rmd160='openssl rmd160'
+alias sha='openssl sha'
+alias sha1='openssl sha1'
+# Download - it downloads the specified file
+alias dl='curl -C - -O'
+# This one is really useful - it shares the current directory open in terminal
+# It shares this at the location localhost:8000
+alias sharedir='python -m SimpleHTTPServer'
+
+alias reload='source ~/.bashrc'
+alias editbash='mate ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases & reload'
+alias cls='clear; ls'
+alias l.='ls -d .[^.]*' #only show .dot files
+
+# Processes
+alias tu='top -o cpu' # cpu
+alias tm='top -o vsize' # memory
+
+alias stfu="osascript -e 'set volume output muted true'"
+alias pumpitup="sudo osascript -e 'set volume 10'"
+
+# Get readable list of network IPs
+alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
+alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias flush="dscacheutil -flushcache" # Flush DNS cache
+alias rebuildkexts="sudo touch /System/Library/Extensions"
+
+alias gzip="gzip -9n" # set strongest compression level as ‘default’ for gzip
+alias ping="ping -c 5" # ping 5 times ‘by default’
+alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
+
+alias airscan="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s"
+
+alias kext3="kextstat | grep -v com.apple" #find 3rd party kernel extensions
+alias mydisplay="ioreg -lw0 | grep IODisplayEDID | sed \"/[^<]*</s///\" | xxd -p -r | strings -6" #find id of display
+alias whywakeme="syslog |grep -i \"Wake reason =\"" #find why the machine woke up
+alias powerlog="pmset -g pslog" #log of active power/sleep info
+
+function define() {
+	local y="$@"; 
+	curl -sA "Opera" "http://www.google.com/search?q=define:${y// /+}" | grep -Po '(?<=<li>)[^<]+'|nl|perl -MHTML::Entities -pe 'decode_entities($_)' 2>/dev/null; 
+}
+
+function markdown() { 
+	/Applications/TextMate.app/Contents/SharedSupport/Support/bin/Markdown.pl $1 > $1.html 
+}
+
+function pman() {
+	man -t "${1}" | open -f -a /Applications/Preview.app
+}
+
+function tman() {
+	MANWIDTH=160 MANPAGER='col -bx' man $@ | mate
+}
+
+function serve() { 
+	python -m SimpleHTTPServer ${1:-8080}
+}
+
+function settcpdelay() { #see http://www.small-tree.com/kb_results.asp?id=1 for details, use 0,2 or 3
+	local d=${1};
+	sudo /usr/sbin/sysctl -w net.inet.tcp.delayed_ack=${d};
+}
