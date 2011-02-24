@@ -4,6 +4,7 @@ alias lsrebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Fr
 alias la="ls -alGhF"
 alias dir='ls -alf'
 alias profop='sudo fs_usage -w -f filesys -e Terminal Parallels mds nmbd Dock WindowServer ATSServer Quicksilver > ~/Desktop/opera.txt' #profile opera file system usage
+alias operalog='/Applications/Opera.app/Contents/MacOS/Opera -profilinglog ~/Desktop/opera.txt &'
 alias startvnc='sudo echo -n enabled > /Library/Preferences/com.apple.ScreenSharing.launchd'
 alias grep="grep --color=auto"
 
@@ -22,7 +23,8 @@ alias dl='curl -C - -O'
 alias sharedir='python -m SimpleHTTPServer'
 
 alias reload='source ~/.bashrc'
-alias editbash='mate -w ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases & reload'
+alias editbash='mate_wait ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
+alias flushhosts='sudo dscacheutil -flushcache'
 alias cls='clear; ls'
 alias l.='ls -d .[^.]*' #only show .dot files
 
@@ -74,4 +76,8 @@ function serve() {
 function settcpdelay() { #see http://www.small-tree.com/kb_results.asp?id=1 for details, use 0,2 or 3
 	local d=${1};
 	sudo /usr/sbin/sysctl -w net.inet.tcp.delayed_ack=${d};
+}
+
+function wireshark() {
+	sudo chgrp admin /dev/bpf*
 }

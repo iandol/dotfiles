@@ -2,6 +2,9 @@ source ~/.bash/env
 source ~/.bash/aliases
 source ~/.bash/config
 
-[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
+if [ -f `brew --prefix`/etc/bash_completion ]; then
+  . `brew --prefix`/etc/bash_completion
+fi
 
-figlet "Hello Master..."
+figlet "Tarako Hai!"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
