@@ -7,4 +7,5 @@ if [ -f `brew --prefix`/etc/bash_completion ]; then
 fi
 
 figlet "Tarako Hai!"
+
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"

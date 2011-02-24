@@ -8,6 +8,9 @@ alias operalog='/Applications/Opera.app/Contents/MacOS/Opera -profilinglog ~/Des
 alias startvnc='sudo echo -n enabled > /Library/Preferences/com.apple.ScreenSharing.launchd'
 alias grep="grep --color=auto"
 
+alias kernel64='sudo systemsetup -setkernelbootarchitecture x86_64'
+alias kernel32='sudo systemsetup -setkernelbootarchitecture i386'
+
 # Checksums
 alias md2='openssl md2'
 alias md4='openssl md4'
@@ -40,6 +43,7 @@ alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias flush="dscacheutil -flushcache" # Flush DNS cache
 alias rebuildkexts="sudo touch /System/Library/Extensions"
+alias rebuilddyld="sudo update_dyld_shared_cache -force"
 
 alias gzip="gzip -9n" # set strongest compression level as ‘default’ for gzip
 alias ping="ping -c 5" # ping 5 times ‘by default’
