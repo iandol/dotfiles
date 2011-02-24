@@ -1,6 +1,7 @@
 export PATH=/opt/local/bin:/opt/local/sbin:$HOME/bin:/usr/local/bin:/usr/local/sbin:$HOME:$PATH
 export DISPLAY=:0.0
 export ARCHFLAGS="-arch i386 x86_64"
+export EDITOR='mate'
 
 # colors
 export CLICOLOR=1

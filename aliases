@@ -3,7 +3,7 @@ alias measurebig='for f in /Volumes /.Spotlight* /.Trashes /Library/Logs /privat
 alias lsrebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain system -domain user'
 alias la="ls -alGhF"
 alias dir='ls -alf'
-alias profop='sudo fs_usage -w -f filesys -e Terminal Parallels mds nmbd Dock WindowServer ATSServer Quicksilver > ~/Desktop/opera.txt' #profile opera file system usage
+alias profop='sudo fs_usage -w -f filesys -e Terminal Parallels mds nmbd Dock WindowServer ATSServer Quicksilver > ~/Desktop/operafs.txt' #profile opera file system usage
 alias operalog='/Applications/Opera.app/Contents/MacOS/Opera -profilinglog ~/Desktop/opera.txt &'
 alias startvnc='sudo echo -n enabled > /Library/Preferences/com.apple.ScreenSharing.launchd'
 alias grep="grep --color=auto"
@@ -27,7 +27,6 @@ alias sharedir='python -m SimpleHTTPServer'
 
 alias reload='source ~/.bashrc'
 alias editbash='mate_wait ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
-alias flushhosts='sudo dscacheutil -flushcache'
 alias cls='clear; ls'
 alias l.='ls -d .[^.]*' #only show .dot files
 
@@ -40,8 +39,11 @@ alias pumpitup="sudo osascript -e 'set volume 10'"
 
 # Get readable list of network IPs
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
+#My IP address
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
-alias flush="dscacheutil -flushcache" # Flush DNS cache
+# Flush DNS cache
+alias flushdns="sudo dscacheutil -flushcache"
+#Some hardcore maintainance
 alias rebuildkexts="sudo touch /System/Library/Extensions"
 alias rebuilddyld="sudo update_dyld_shared_cache -force"
 
