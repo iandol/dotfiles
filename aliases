@@ -1,8 +1,11 @@
+alias la="ls -alGhF"
+alias dir='ls -alf'
+alias cls='clear; ls'
+alias l.='ls -d .[^.]*' #only show .dot files
+
 alias findbig='sudo -v; sudo find -xf /.Trashes /Volumes /Library /private /Temp* -type f -size +200000 -print0 | sudo xargs -0 ls -lohdSr'
 alias measurebig='for f in /Volumes /.Spotlight* /.Trashes /Library/Logs /private/ {var/{log,spool,db,vm,tmp},tmp} /Temp*; do sudo du -hsx "$f"; done'
 alias lsrebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain system -domain user'
-alias la="ls -alGhF"
-alias dir='ls -alf'
 alias profop='sudo fs_usage -w -f filesys -e Terminal Parallels mds nmbd Dock WindowServer ATSServer Quicksilver > ~/Desktop/operafs.txt' #profile opera file system usage
 alias operalog='/Applications/Opera.app/Contents/MacOS/Opera -profilinglog ~/Desktop/opera.txt &'
 alias startvnc='sudo echo -n enabled > /Library/Preferences/com.apple.ScreenSharing.launchd'
@@ -27,8 +30,6 @@ alias sharedir='python -m SimpleHTTPServer'
 
 alias reload='source ~/.bashrc'
 alias editbash='mate_wait ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
-alias cls='clear; ls'
-alias l.='ls -d .[^.]*' #only show .dot files
 
 # Processes
 alias tu='top -o cpu' # cpu
@@ -41,6 +42,10 @@ alias pumpitup="sudo osascript -e 'set volume 10'"
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 #My IP address
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
+# See all UDP ports open
+sudo lsof -i UDP -P
+# See listening TCP ports
+sudo lsof -i -P | grep -i "LISTEN"
 # Flush DNS cache
 alias flushdns="sudo dscacheutil -flushcache"
 #Some hardcore maintainance
@@ -86,4 +91,5 @@ function settcpdelay() { #see http://www.small-tree.com/kb_results.asp?id=1 for 
 
 function wireshark() {
 	sudo chgrp admin /dev/bpf*
+	sudo chmod g+rw /dev/bpf*
 }
