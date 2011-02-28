@@ -43,9 +43,9 @@ alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 #My IP address
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
 # See all UDP ports open
-sudo lsof -i UDP -P
+alias listUDP="sudo lsof -i UDP -P"
 # See listening TCP ports
-sudo lsof -i -P | grep -i "LISTEN"
+alias listTCP='sudo lsof -i -P | grep -i "LISTEN"'
 # Flush DNS cache
 alias flushdns="sudo dscacheutil -flushcache"
 #Some hardcore maintainance
