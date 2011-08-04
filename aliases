@@ -2,6 +2,21 @@ alias la="ls -alGhF"
 alias dir='ls -alf'
 alias cls='clear; ls'
 alias l.='ls -d .[^.]*' #only show .dot files
+alias grep="grep --color=auto"
+alias gzip="gzip -9n" # set strongest compression level as ‘default’ for gzip
+alias ping="ping -c 5" # ping 5 times ‘by default’
+alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
+
+#manage bash
+alias reload='source ~/.bashrc'
+alias editbash='subl -w ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
+
+# Processes
+alias tu='top -o cpu' # cpu
+alias tm='top -o vsize' # memory
+
+alias stfu="osascript -e 'set volume output muted true'"
+alias pumpitup="sudo osascript -e 'set volume 10'"
 
 alias findbig='sudo -v; sudo find -xf /.Trashes /Volumes /Library /private /Temp* -type f -size +200000 -print0 | sudo xargs -0 ls -lohdSr'
 alias measurebig='for f in /Volumes /.Spotlight* /.Trashes /Library/Logs /private/ {var/{log,spool,db,vm,tmp},tmp} /Temp*; do sudo du -hsx "$f"; done'
@@ -9,7 +24,7 @@ alias lsrebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Fr
 alias profop='sudo fs_usage -w -f filesys -e Terminal Parallels mds nmbd Dock WindowServer ATSServer Quicksilver > ~/Desktop/operafs.txt' #profile opera file system usage
 alias operalog='/Applications/Opera.app/Contents/MacOS/Opera -profilinglog ~/Desktop/opera.txt &'
 alias startvnc='sudo echo -n enabled > /Library/Preferences/com.apple.ScreenSharing.launchd'
-alias grep="grep --color=auto"
+alias airscan="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s"
 
 alias kernel64='sudo systemsetup -setkernelbootarchitecture x86_64'
 alias kernel32='sudo systemsetup -setkernelbootarchitecture i386'
@@ -22,53 +37,59 @@ alias mdc2='openssl mdc2'
 alias rmd160='openssl rmd160'
 alias sha='openssl sha'
 alias sha1='openssl sha1'
+
 # Download - it downloads the specified file
 alias dl='curl -C - -O'
 # This one is really useful - it shares the current directory open in terminal
 # It shares this at the location localhost:8000
 alias sharedir='python -m SimpleHTTPServer'
 
-alias reload='source ~/.bashrc'
-alias editbash='mate_wait ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
-
-# Processes
-alias tu='top -o cpu' # cpu
-alias tm='top -o vsize' # memory
-
-alias stfu="osascript -e 'set volume output muted true'"
-alias pumpitup="sudo osascript -e 'set volume 10'"
-
 # Get readable list of network IPs
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 #My IP address
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
-# See all UDP ports open
-alias listUDP="sudo lsof -i UDP -P"
-# See listening TCP ports
-alias listTCP='sudo lsof -i -P | grep -i "LISTEN"'
-# Flush DNS cache
-alias flushdns="sudo dscacheutil -flushcache"
+
 #Some hardcore maintainance
 alias rebuildkexts="sudo touch /System/Library/Extensions"
 alias rebuilddyld="sudo update_dyld_shared_cache -force"
 
-alias gzip="gzip -9n" # set strongest compression level as ‘default’ for gzip
-alias ping="ping -c 5" # ping 5 times ‘by default’
-alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
-
-alias airscan="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s"
-
+#useful info
 alias kext3="kextstat | grep -v com.apple" #find 3rd party kernel extensions
 alias mydisplay="ioreg -lw0 | grep IODisplayEDID | sed \"/[^<]*</s///\" | xxd -p -r | strings -6" #find id of display
 alias whywakeme="syslog |grep -i \"Wake reason =\"" #find why the machine woke up
 alias powerlog="pmset -g pslog" #log of active power/sleep info
+
+# Flush DNS cache
+alias flushdns="sudo dscacheutil -flushcache"
+
+# See all UDP ports open
+function listUDP() {
+  if [ $# == 0 ]; then
+    tok="matlab"
+    echo "search for: $tok"
+  else
+    tok=$1
+  fi
+  sudo lsof -i UDP -P | grep -i "$tok"
+}
+
+# See listening TCP ports
+function listTCP() {
+  if [ $# == 0 ]; then
+    tok="listen"
+    echo "search for: $tok"
+  else
+    tok=$1
+  fi
+  sudo lsof -i TCP -P | grep -i "$tok"
+}
 
 function define() {
 	local y="$@"; 
 	curl -sA "Opera" "http://www.google.com/search?q=define:${y// /+}" | grep -Po '(?<=<li>)[^<]+'|nl|perl -MHTML::Entities -pe 'decode_entities($_)' 2>/dev/null; 
 }
 
-function markdown() { 
+function markdown() {
 	/Applications/TextMate.app/Contents/SharedSupport/Support/bin/Markdown.pl $1 > $1.html 
 }
 
