@@ -44,6 +44,16 @@ alias dl='curl -C - -O'
 # It shares this at the location localhost:8000
 alias sharedir='python -m SimpleHTTPServer'
 
+alias reload='source ~/.bashrc'
+alias editbash='mate -w ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
+
+# Processes
+alias tu='top -o cpu' # cpu
+alias tm='top -o vsize' # memory
+
+alias stfu="osascript -e 'set volume output muted true'"
+alias pumpitup="sudo osascript -e 'set volume 10'"
+
 # Get readable list of network IPs
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 #My IP address
