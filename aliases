@@ -29,7 +29,7 @@ alias dl='curl -C - -O'
 alias sharedir='python -m SimpleHTTPServer'
 
 alias reload='source ~/.bashrc'
-alias editbash='mate_wait ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
+alias editbash='mate -w ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
 
 # Processes
 alias tu='top -o cpu' # cpu
