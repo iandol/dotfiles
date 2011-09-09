@@ -52,4 +52,4 @@ BMAGENTA='\e[45m'
 BCYAN='\e[46m'
 BWHITE='\e[47m'
 
-PS1="\n\[$GREEN\]\u@\h\[$NO_COLOR\]|\[$EYELLOW\]\w\[$NO_COLOR\]\n⚛⥤ "
+PS1="\n╭─\[$GREEN\]\u@\h\[$NO_COLOR\]|\[$EYELLOW\]\w\[$NO_COLOR\]\n╰─⚛⥤ "

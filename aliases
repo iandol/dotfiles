@@ -44,9 +44,6 @@ alias dl='curl -C - -O'
 # It shares this at the location localhost:8000
 alias sharedir='python -m SimpleHTTPServer'
 
-alias reload='source ~/.bashrc'
-alias editbash='mate -w ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
-
 # Processes
 alias tu='top -o cpu' # cpu
 alias tm='top -o vsize' # memory
