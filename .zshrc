@@ -5,7 +5,7 @@ ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="bira"
+ZSH_THEME="steeef2"
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -24,12 +24,15 @@ COMPLETION_WAITING_DOTS="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(osx ruby brew git rvm)
+plugins=(osx rvm ruby brew git)
 
 source $ZSH/oh-my-zsh.sh
 
+autoload -Uz vcs_info
+zstyle ':vcs_info:*' enable hg git bzr svn
+
 # Customize to your needs...
-export PATH=/Users/iana/.rvm/gems/ruby-1.9.2-p180/bin:/Users/iana/.rvm/gems/ruby-1.9.2-p180@global/bin:/Users/iana/.rvm/rubies/ruby-1.9.2-p180/bin:/Users/iana/.rvm/bin:/opt/local/bin:/opt/local/sbin:/Users/iana/bin:/usr/local/bin:/usr/local/sbin:/Users/iana:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/X11/bin
+export PATH=~/.rvm/gems/ruby-1.9.2-p180/bin:~/.rvm/gems/ruby-1.9.2-p180@global/bin:~/.rvm/rubies/ruby-1.9.2-p180/bin:~/.rvm/bin:/opt/local/bin:/opt/local/sbin:~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/X11/bin
 
 alias reload='source ~/.zshrc'
 alias editbash='subl -w ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
@@ -42,7 +45,6 @@ alias grep="grep --color=auto"
 alias gzip="gzip -9n" # set strongest compression level as ‘default’ for gzip
 alias ping="ping -c 5" # ping 5 times ‘by default’
 alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
-
 # Get readable list of network IPs
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 #My IP address
@@ -52,14 +54,8 @@ alias kext3="kextstat | grep -v com.apple" #find 3rd party kernel extensions
 alias mydisplay="ioreg -lw0 | grep IODisplayEDID | sed \"/[^<]*</s///\" | xxd -p -r | strings -6" #find id of display
 alias whywakeme="syslog |grep -i \"Wake reason =\"" #find why the machine woke up
 alias powerlog="pmset -g pslog" #log of active power/sleep info
-
 # Flush DNS cache
 alias flushdns="sudo dscacheutil -flushcache"
-
-function wireshark() {
-	sudo chgrp admin /dev/bpf*
-	sudo chmod g+rw /dev/bpf*
-}
 
 printf '\e[36m'
 printf 'Current date: '
@@ -79,4 +75,4 @@ echo "LAN IP Address: " `ifconfig en0 | grep "inet" | grep -v 127.0.0.1 | grep -
 echo "Wireless IP Address: " `ifconfig en1 | grep "inet" | grep -v 127.0.0.1 | grep -v inet6 | awk '{print $2}'`
 printf '\e[m'
 
-figlet "Tarako Hai!"
+figlet "Hello Dave..."
