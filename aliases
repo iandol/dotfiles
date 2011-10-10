@@ -10,6 +10,9 @@ alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
 #manage bash
 alias reload='source ~/.bashrc'
 alias editbash='subl -w ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
+alias editzsh='subl -w ~/.zshrc ~/.bash/config ~/.bash/aliases && reload'
+alias usezsh='chsh -s /bin/zsh && reload'
+alias usebash='chsh -s /bin/bash && reload'
 
 # Processes
 alias tu='top -o cpu' # cpu
