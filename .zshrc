@@ -24,7 +24,7 @@ COMPLETION_WAITING_DOTS="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(osx ruby brew git rvm)
+plugins=(osx ruby brew git rvm nyan)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -34,6 +34,8 @@ zstyle ':vcs_info:*' enable hg git bzr svn
 # Customize to your needs...
 echo $PATH
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/texbin
+export EDITOR='mate -w'
+export BZR_EDITOR='mate -w'
 
 source ~/.bash/aliases
 source ~/.bash/config
