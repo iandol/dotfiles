@@ -8,11 +8,12 @@ alias ping="ping -c 5" # ping 5 times ‘by default’
 alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
 
 #manage bash
-alias reload='source ~/.bashrc'
-alias editbash='subl -w ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reload'
-alias editzsh='subl -w ~/.zshrc ~/.bash/config ~/.bash/aliases && reload'
-alias usezsh='chsh -s /bin/zsh && reload'
-alias usebash='chsh -s /bin/bash && reload'
+alias reloadbash='source ~/.bashrc'
+alias reloadzsh='source ~/.zshrc'
+alias editbash='mate -w ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reloadbash'
+alias editzsh='mate -w ~/.zshrc ~/.bash/config ~/.bash/aliases && reloadzsh'
+alias usezsh='chsh -s /bin/zsh && reloadzsh'
+alias usebash='chsh -s /bin/bash && reloadbash'
 
 # Processes
 alias tu='top -o cpu' # cpu
