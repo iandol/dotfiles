@@ -1,4 +1,5 @@
 alias la="ls -alGhF"
+alias ll='ls -alFGh'
 alias dir='ls -alf'
 alias cls='clear; ls'
 alias l.='ls -d .[^.]*' #only show .dot files
