@@ -59,6 +59,7 @@ alias rebuildkexts="sudo touch /System/Library/Extensions"
 alias rebuilddyld="sudo update_dyld_shared_cache -force"
 
 #useful info
+alias mymemory="top -l 1 | awk '/PhysMem/ {print \"Wired: \" $2 \"; Active: \" $4 \"; Inactive: \" $6 \"; Used: \" $8 \"; Free: \" $10}'"
 alias kext3="kextstat | grep -v com.apple" #find 3rd party kernel extensions
 alias mydisplay="ioreg -lw0 | grep IODisplayEDID | sed \"/[^<]*</s///\" | xxd -p -r | strings -6" #find id of display
 alias whywakeme="syslog |grep -i \"Wake reason =\"" #find why the machine woke up
