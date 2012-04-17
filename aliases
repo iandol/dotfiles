@@ -8,11 +8,19 @@ alias gzip="gzip -9n" # set strongest compression level as ‘default’ for gzi
 alias ping="ping -c 5" # ping 5 times ‘by default’
 alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
 
+# Enable aliases to be sudo’ed
+alias sudo='sudo '
+
+# Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
+alias update='sudo softwareupdate -i -a; brew update; brew upgrade'
+
+
 #manage bash
+alias edit='subl -w'
 alias reloadbash='source ~/.bashrc'
 alias reloadzsh='source ~/.zshrc'
-alias editbash='mate -w ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reloadbash'
-alias editzsh='mate -w ~/.zshrc ~/.bash/config ~/.bash/aliases && reloadzsh'
+alias editbash='edit ~/.bashrc ~/.bash_profile ~/.bash/env ~/.bash/config ~/.bash/aliases && reloadbash'
+alias editzsh='edit ~/.zshrc ~/.bash/config ~/.bash/aliases && reloadzsh'
 alias usezsh='chsh -s /bin/zsh && reloadzsh'
 alias usebash='chsh -s /bin/bash && reloadbash'
 
@@ -22,6 +30,7 @@ alias tm='top -o vsize' # memory
 
 alias stfu="osascript -e 'set volume output muted true'"
 alias pumpitup="sudo osascript -e 'set volume 10'"
+alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 
 alias findbig='sudo -v; sudo find -xf /.Trashes /Volumes /Library /private /Temp* -type f -size +200000 -print0 | sudo xargs -0 ls -lohdSr'
 alias measurebig='for f in /Volumes /.Spotlight* /.Trashes /Library/Logs /private/ {var/{log,spool,db,vm,tmp},tmp} /Temp*; do sudo du -hsx "$f"; done'
@@ -53,10 +62,41 @@ alias sharedir='python -m SimpleHTTPServer'
 alias ips="ifconfig -a | perl -nle'/(\d+\.\d+\.\d+\.\d+)/ && print $1'"
 #My IP address
 alias myip="dig +short myip.opendns.com @resolver1.opendns.com"
+# Enhanced WHOIS lookups
+alias whois="whois -h whois-servers.net"
+
+# View HTTP traffic
+alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
+alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
 #Some hardcore maintainance
 alias rebuildkexts="sudo touch /System/Library/Extensions"
 alias rebuilddyld="sudo update_dyld_shared_cache -force"
+# Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
+alias update='sudo softwareupdate -i -a; brew update; brew upgrade'
+# Enable aliases to be sudo’ed
+alias sudo='sudo '
+
+# File size
+alias fs="stat -f \"%z bytes\""
+
+# ROT13-encode text. Works for decoding, too! ;)
+alias rot13='tr a-zA-Z n-za-mN-ZA-M'
+
+# Empty the Trash on all mounted volumes and the main HDD
+# Also, clear Apple’s System Logs to improve shell startup speed
+alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl"
+
+# Show/hide hidden files in Finder
+alias show="defaults write com.apple.Finder AppleShowAllFiles -bool true && killall Finder"
+alias hide="defaults write com.apple.Finder AppleShowAllFiles -bool false && killall Finder"
+
+# Hide/show all desktop icons (useful when presenting)
+alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+# URL-encode strings
+alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 
 #useful info
 alias kext3="kextstat | grep -v com.apple" #find 3rd party kernel extensions
