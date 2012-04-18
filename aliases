@@ -99,6 +99,7 @@ alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && k
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 
 #useful info
+alias mymemory="top -l 1 | awk '/PhysMem/ {print \"Wired: \" $2 \"; Active: \" $4 \"; Inactive: \" $6 \"; Used: \" $8 \"; Free: \" $10}'"
 alias kext3="kextstat | grep -v com.apple" #find 3rd party kernel extensions
 alias mydisplay="ioreg -lw0 | grep IODisplayEDID | sed \"/[^<]*</s///\" | xxd -p -r | strings -6" #find id of display
 alias whywakeme="syslog |grep -i \"Wake reason =\"" #find why the machine woke up

@@ -32,8 +32,10 @@ autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable hg git bzr svn
 
 # Customize to your needs...
-echo $PATH
-MYHD='/Volumes/Mac/Users/ian/'
+#echo $PATH
+if [ -d '/Volumes/Mac/Users/ian/' ]; then
+	MYHD='/Volumes/Mac/Users/ian/'
+fi
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/texbin:~/Code/android-sdk-macosx/tools:~/Code/android-sdk-macosx/platform-tools
 source ~/.bash/aliases
 source ~/.bash/config
