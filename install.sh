@@ -1,15 +1,18 @@
+#!/bin/bash
 printf '\e[36m'
 printf 'Setting up the symbolic links at: '
 date
 printf '...\n'
 printf '\e[32m'
-ln -siv ~/.bash/.zshrc ~/
-ln -siv ~/.bash/.bashrc ~/
-ln -siv ~/.bash/.bash_profile ~/
+ln -siv ~/.dotfiles/.zshrc ~/
+ln -siv ~/.dotfiles/.bashrc ~/
+ln -siv ~/.dotfiles/.bash_profile ~/
+ln -siv ~/.dotfiles/.vimrc ~/
+ln -siv ~/.dotfiles/.vim ~/
 printf '\e[36m'
 printf '\nCopying zsh theme if oh-my-zsh is installed...\n'
 if [ -d ~/.oh-my-zsh/custom ]; then
-	cp ~/.bash/*theme ~/.oh-my-zsh/custom/
+	cp ~/.dotfiles/*theme ~/.oh-my-zsh/custom/
 	printf 'Theme copied over...\n'
 else
 	printf 'Couldnt find .oh-my-zsh\n'
