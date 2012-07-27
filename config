@@ -9,10 +9,11 @@ printf '\e[33m'
 df -h | grep disk0s2 | awk '{print "Mac HD:", $2, "total,", $3, "used,", $4, "remaining"}'
 # I don't care about my Windows HD, but I might want to enable that in the future. Remove the # to enable
 #df -h | grep disk0s3 | awk '{print "Windows HD:", $2, "total,", $3, "used,", $4, "remaining"}'
-echo "Architecture: " `sysctl -n machdep.cpu.brand_string;`
+echo "Architecture: " `sysctl -n machdep.cpu.brand_string`
 echo "Memory: " `sw_vers | awk -F':t' '{print $2}' | paste -d ' ' - - -;
 sysctl -n hw.memsize | awk '{print $0/1073741824" GB RAM"}';`
-top -l 1 | awk '/PhysMem/ {print "Wired: " $2 "| Active: " $4 "| Inactive: " $6 "| Used: " $8 "| Free: " $10}'
+echo `top -l 1 | awk '/PhysMem/ {print "Wired: " $2 "| Active: " $4 "| Inactive: " $6 "| Used: " $8 "| Free: " $10}'`
+echo "Swap: " `sysctl -n vm.swapusage`
 echo "LAN IP Address: " `ifconfig en0 | grep "inet" | grep -v 127.0.0.1 | grep -v inet6 | awk '{print $2}'`
 echo "Wireless IP Address: " `ifconfig en1 | grep "inet" | grep -v 127.0.0.1 | grep -v inet6 | awk '{print $2}'`
 printf '\e[m'
