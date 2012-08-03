@@ -1,9 +1,11 @@
 #!/bin/bash
 printf '\e[36m'
-printf 'Let us bootstrap .dotfiles if not present... '
-if [ -d ~/.dotfiles ]; then
+printf 'Let us bootstrap .dotfiles if not present ... '
+if [ -d ~/.dotfiles/ ]; then
+	printf ' .dotfiles are present! \n'
+else	
 	git clone https://github.com/iandol/dotfiles.git .dotfiles
-	printf 'We cloned a new .dotfiles...\n'
+	printf 'we cloned a new .dotfiles...\n'
 fi
 printf 'Setting up the symbolic links at: '
 date
