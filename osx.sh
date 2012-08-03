@@ -1,8 +1,13 @@
-echo 'Starting defaults'
+echo 'Starting defaults edit...'
 # Set computer name (as done via System Preferences → Sharing)
 #scutil --set ComputerName "MathBook Pro"
 #scutil --set HostName "MathBook Pro"
 #scutil --set LocalHostName "MathBook-Pro"
+
+# Menu bar: disable transparency
+defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool true
+# Automatically hide and show the Dock
+defaults write com.apple.dock autohide -bool true
 
 # Don’t group windows by application in Mission Control
 # (i.e. use the old Exposé behavior instead)
@@ -10,6 +15,9 @@ defaults write com.apple.dock "expose-group-by-app" -bool false
 
 # Don’t show Dashboard as a Space
 defaults write com.apple.dock "dashboard-in-overlay" -bool true
+
+# Menu bar: hide the useless Time Machine and Volume icons
+defaults write com.apple.systemuiserver menuExtras -array "/System/Library/CoreServices/Menu Extras/TextInput.menu" "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" "/System/Library/CoreServices/Menu Extras/AirPort.menu" "/System/Library/CoreServices/Menu Extras/Battery.menu" "/System/Library/CoreServices/Menu Extras/Clock.menu"
 
 #Enable debug menus:
 #----------------------------
@@ -22,7 +30,7 @@ sudo nvram boot-args="-v"
 
 #Enable text selection in quick look:
 #---------------------------------------------
-defaults write com.apple.finder QLEnableTextSelection -bool TRUE && killall Finder
+defaults write com.apple.finder QLEnableTextSelection -bool true
 
 #Speed up mission control anim:
 #------------------------------------------
@@ -49,9 +57,6 @@ defaults write com.apple.dock autohide-time-modifier -float 0.4; killall Dock
 # To restore the default behavior, enter:
 #defaults delete com.apple.Dock autohide-delay && killall Dock  
 #defaults delete com.apple.dock autohide-time-modifier;killall Dock
-
-# Automatically hide and show the Dock
-defaults write com.apple.dock autohide -bool true
 
 #Other tweaks:
 #-------------------
@@ -160,4 +165,9 @@ defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.Web
 # Add a context menu item for showing the Web Inspector in web views
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
-echo 'Ending defaults'
+echo 'Will restart apps...'
+for app in Finder Dock Mail Safari iTunes iCal Address\ Book SystemUIServer; do
+	echo "Trying to kill $app..."
+	sudo killall "$app" > /dev/null 2>&1
+done
+echo "Done. Note that some of these changes require a logout/restart to take effect."
