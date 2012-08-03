@@ -1,6 +1,6 @@
-source ~/.bash/env
-source ~/.bash/aliases
-source ~/.bash/config
+source ~/.dotfiles/env
+source ~/.dotfiles/aliases
+source ~/.dotfiles/config
 
 # Make vim the default editor
 export EDITOR="vim"
