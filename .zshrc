@@ -24,7 +24,7 @@ COMPLETION_WAITING_DOTS="true"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(osx ruby brew git rvm nyan)
+plugins=(osx ruby brew git nyan)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -40,6 +40,8 @@ export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin
 
 export EDITOR='subl -w'
 export BZR_EDITOR='subl -w'
+#don't clear after quitting man
+export MANPAGER='less -X'
 
 source ~/.dotfiles/aliases
 source ~/.dotfiles/config
