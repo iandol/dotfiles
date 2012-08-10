@@ -42,6 +42,8 @@ export EDITOR='subl -w'
 export BZR_EDITOR='subl -w'
 #don't clear after quitting man
 export MANPAGER='less -X'
+DIRSTACKSIZE=12 #pushd stacksize
+setopt autopushd pushdminus pushdsilent
 
 source ~/.dotfiles/aliases
 source ~/.dotfiles/config
