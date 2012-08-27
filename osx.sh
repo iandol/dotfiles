@@ -34,18 +34,21 @@ defaults write com.apple.finder QLEnableTextSelection -bool true
 
 #Speed up mission control anim:
 #------------------------------------------
-defaults write com.apple.dock expose-animation-duration -float 0.15
+defaults write com.apple.dock expose-animation-duration -float 0.1
 #Remove this:
 #defaults delete com.apple.dock expose-animation-duration; 
 
 #airport scanning until, use airport -s:
 #-------------------------------------------------
-sudo ln -s /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/sbin/airport
+sudo ln -sv /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport /usr/sbin/airport
 #Wi-fi diagnostics:
 #------------------------
-sudo ln -s /System/Library/CoreServices/Wi-Fi\ Diagnostics.app /Applications/Wi-Fi\ Diagnostics.app
+sudo ln -sv /System/Library/CoreServices/Wi-Fi\ Diagnostics.app /Applications/Wi-Fi\ Diagnostics.app
+#Screen sharing:
+#---------------
+sudo ln -sv /System/Library/CoreServices/Screen\ Sharing.app /Applications/Screen\ Sharing.app
 
-#Annoying iWork stuff:
+#Fix Annoying iWork stuff:
 #------------------------------
 sudo defaults write /Library/Preferences/com.apple.iWork09.Installer InstallMode -string 'Retail'
 sudo defaults write /Library/Preferences/com.apple.iWork09 ShouldNotSendRegistration -bool yes
