@@ -38,8 +38,8 @@ if [ -d '/Volumes/Mac/Users/ian/' ]; then
 fi
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/texbin:~/Code/android-sdk-macosx/tools:~/Code/android-sdk-macosx/platform-tools
 
-export EDITOR='subl -w'
-export BZR_EDITOR='subl -w'
+export EDITOR='vim'
+export BZR_EDITOR='vim'
 #don't clear after quitting man
 export MANPAGER='less -X'
 DIRSTACKSIZE=12 #pushd stacksize

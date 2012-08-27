@@ -12,7 +12,7 @@ alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
 alias sudo='sudo '
 
 # Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
-alias update='sudo softwareupdate -i -a; brew update; brew upgrade'
+alias update='cd ~/Code/opticka; pwd; git pull; cd ~/Code/Psychtoolbox-3; pwd; git pull; brew update; brew upgrade; brew cleanup -f; sudo softwareupdate --list'
 
 #manage bash
 alias edit='subl -w'
@@ -71,10 +71,6 @@ alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET
 #Some hardcore maintainance
 alias rebuildkexts="sudo touch /System/Library/Extensions"
 alias rebuilddyld="sudo update_dyld_shared_cache -force"
-# Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
-alias update='sudo softwareupdate -i -a; brew update; brew upgrade'
-# Enable aliases to be sudo’ed
-alias sudo='sudo '
 
 # File size
 alias fs="stat -f \"%z bytes\""
