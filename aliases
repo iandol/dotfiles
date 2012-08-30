@@ -11,9 +11,6 @@ alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
 # Enable aliases to be sudo’ed
 alias sudo='sudo '
 
-# Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
-alias update='cd ~/Code/opticka; pwd; git pull; cd ~/Code/Psychtoolbox-3; pwd; git pull; brew update; brew upgrade; brew cleanup -f; sudo softwareupdate --list'
-
 #manage bash
 alias edit='subl -w'
 alias reloadbash='source ~/.bashrc'
@@ -102,6 +99,34 @@ alias powerlog="pmset -g pslog" #log of active power/sleep info
 
 # Flush DNS cache
 alias flushdns="sudo dscacheutil -flushcache"
+
+# Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
+function updateMe() {
+  olddir=$(pwd)
+  if [ -d ~/.dotfiles ]; then
+    printf '---> Updating dotfiles...\n'
+    cd ~/.dotfiles
+    git pull
+  fi
+  if [ -d ~/Code/opticka ]; then
+    printf '---> Updating opticka...\n'
+    cd ~/Code/opticka
+    git pull
+  fi
+  if [ -d ~/Code/Psychtoolbox-3 ]; then
+    printf '---> Updating PTB...\n'
+    cd ~/Code/Psychtoolbox-3
+    git pull
+  fi
+  cd olddir
+  printf '---> Updating homebrew...\n'
+  brew update
+  brew upgrade
+  brew cleanup -f
+  printf '---> Checking OS X updates...\n'
+  sudo softwareupdate --list
+  printf '\n---> Update finished...\n'
+}
 
 # See all UDP ports open
 function listUDP() {
