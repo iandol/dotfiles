@@ -34,5 +34,20 @@ if [ $ans == 'y' ]; then
 	sudo echo -n "..."
 	zsh ~/.dotfiles/osx.sh
 fi
+
+if [ -f $(which git) ]; then
+	printf 'Setting some GIT defaults...\n'
+	git config --global alias.last 'log -1 HEAD'
+	git config --global alias.unstage 'reset HEAD --'
+	git config --global alias.st status
+	git config --global alias.br branch
+	git config --global alias.co checkout
+	git config --global difftool.prompt false
+	git config --global color.branch true
+	git config --global color.diff true
+	git config --global color.grep true
+	git config --global color.interactive true
+	git config --global color.status true
+fi
 printf 'Done...\n'
 printf '\e[m'
