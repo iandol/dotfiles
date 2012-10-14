@@ -42,7 +42,9 @@ if [ -f $(which git) ]; then
 	git config --global alias.st status
 	git config --global alias.br branch
 	git config --global alias.co checkout
+	git config --global alias.dt difftool
 	git config --global difftool.prompt false
+	git config --global color.ui always
 	git config --global color.branch true
 	git config --global color.diff true
 	git config --global color.grep true
