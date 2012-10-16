@@ -30,7 +30,8 @@ alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
 
 alias findbig='sudo -v; sudo find -xf /.Trashes /Volumes /Library /private /Temp* -type f -size +200000 -print0 | sudo xargs -0 ls -lohdSr'
 alias measurebig='for f in /Volumes /.Spotlight* /.Trashes /Library/Logs /private/ {var/{log,spool,db,vm,tmp},tmp} /Temp*; do sudo du -hsx "$f"; done'
-alias lsrebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -domain local -domain system -domain user'
+alias lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
+alias lsrebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -v -kill -r -domain local -domain system -domain user'
 alias profop='sudo fs_usage -w -f filesys -e Terminal Parallels mds nmbd Dock WindowServer ATSServer Quicksilver > ~/Desktop/operafs.txt' #profile opera file system usage
 alias operalog='/Applications/Opera.app/Contents/MacOS/Opera -profilinglog ~/Desktop/opera.txt &'
 alias startvnc='sudo echo -n enabled > /Library/Preferences/com.apple.ScreenSharing.launchd'

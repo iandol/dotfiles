@@ -1,0 +1,102 @@
+#!/bin/sh
+# -- guns
+# 
+# Purge inactive memory with rapid i/o
+# 
+# 26 November 2007
+# 'killall $command' is still printing to the terminal
+
+# declare variables
+before=
+after=
+memPurged=
+pageSize=
+pagesPurged=
+timeout=5 # in seconds
+command="du /" 
+
+showUsage="Usage: $(basename $0) [-h] [-t seconds] [-c \"command\"]"
+
+function printError() 
+{
+echo >&2 $showUsage
+echo >&2 
+echo >&2 "See '$(basename $0) -h' for more details."
+}
+
+function printHelp() 
+{
+echo "Purge inactive memory with rapid i/o."
+echo 
+echo $showUsage
+echo 
+echo "Supported Options"
+echo "-----------------"
+echo "-t{seconds}\tSet the amount of time for the command to run. Default"
+echo "\t\tis 5 seconds."
+echo "-c{\"command\"}\tSet the command to run. Default is 'du /'"
+echo "-h\t\tDisplay this help and exit"
+}
+
+function getMemFree()
+{
+# the "$3-0" bit is a dirty way to chop the period at the end
+vm_stat | awk '/Pages free/ {intMemFree=$3-0; print intMemFree}'
+}
+
+function getPageSize()
+{
+vm_stat | awk '/page size/ {print $8}'
+}
+
+# variables in: $timeout and $command 
+function purgeMem()
+{
+# print a message
+printf "Accessing disk"
+
+$command >/dev/null 2>&1 &
+
+# give some feedback
+for (( i = 0; i < $timeout*2; i++ )); do # Display a dot every half
+sleep .5 # second, so multiply $timeout
+printf . # by two
+done
+
+# kill the process; if exited early, this will be a zombie process
+killall $command >/dev/null 2>&1 &
+
+if [[ $? == 0 ]]; then
+echo "stop"
+else
+echo "runaway process!"
+exit 20
+fi 
+}
+
+# 
+# Main
+# 
+
+while getopts ":ht:c:" option; do
+case $option in
+h ) printHelp; exit;;
+t ) timeout=$OPTARG;;
+c ) command=$OPTARG;;
+\?) echo >&2 "Invalid option!\n"; printError; exit 3
+esac
+done
+shift $(($OPTIND-1))
+
+before=$(getMemFree)
+
+purgeMem 
+
+# set variables
+after=$(getMemFree)
+let pagesPurged=$after-$before
+pageSize=$(getPageSize)
+
+# calculate and print
+let memPurged=($pagesPurged * $pageSize / 2**20)
+printf "%d MB purged.\n" $memPurged

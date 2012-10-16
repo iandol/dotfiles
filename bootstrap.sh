@@ -7,6 +7,7 @@ else
 	git clone https://github.com/iandol/dotfiles.git .dotfiles
 	printf 'we cloned a new .dotfiles...\n'
 fi
+
 printf 'Setting up the symbolic links at: '
 date
 printf '...\n'
@@ -17,6 +18,7 @@ ln -siv ~/.dotfiles/.bash_profile ~
 ln -siv ~/.dotfiles/.vimrc ~
 ln -siv ~/.dotfiles/.vim ~
 printf '\e[36m'
+
 if [ -d ~/.oh-my-zsh/ ]; then
 	printf '\nCopying zsh theme as oh-my-zsh is installed...\n'
 	cp -f ~/.dotfiles/*-theme ~/.oh-my-zsh/custom/
@@ -27,7 +29,18 @@ else
 	cp -f ~/.dotfiles/*-theme ~/.oh-my-zsh/custom/
 	printf ' and themes copied over...\n'
 fi
-echo 'Do you want to set up OS X defaults? (y / n)'
+
+printf 'Linking some bin files in ~/bin/: \n'
+printf '\e[32m'
+if [ -d ~/bin/ ]; then
+	ln -sv ~/.dotfiles/bin/* ~/bin
+else
+	mkdir ~/bin/
+	ln -sv ~/.dotfiles/bin/* ~/bin
+fi
+printf '\e[36m\n\n'
+
+printf 'Do you want to set up OS X defaults? (y / n):  '
 read ans
 if [ $ans == 'y' ]; then
 	echo 'Enter password for setup command:'
@@ -50,6 +63,8 @@ if [ -f $(which git) ]; then
 	git config --global color.grep true
 	git config --global color.interactive true
 	git config --global color.status true
+else
+	printf 'GIT is not installed, use command line tools or install homebrew...\n'
 fi
 printf 'Done...\n'
 printf '\e[m'
