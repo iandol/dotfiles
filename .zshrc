@@ -36,7 +36,7 @@ zstyle ':vcs_info:*' enable hg git bzr svn
 if [ -d '/Volumes/Mac/Users/ian/' ]; then
 	MYHD='/Volumes/Mac/Users/ian/'
 fi
-export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/texbin:~/Code/android-sdk-macosx/tools:~/Code/android-sdk-macosx/platform-tools
+export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin
 
 export EDITOR='vim'
 export BZR_EDITOR='vim'

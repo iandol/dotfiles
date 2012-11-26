@@ -9,11 +9,11 @@ if [ -f /Applications/Opera.app/Contents/Info.plist ]; then
 fi
 if [ -f /Applications/Opera\ Next.app/Contents/Resources/Opera.icns ]; then
 	echo "Copying icon..."
-	cp Applications/Opera\ Next.app/Contents/Resources/Opera.icns Applications/Opera.app/Contents/Resources/Opera.icns
+	cp -f Applications/Opera\ Next.app/Contents/Resources/Opera.icns Applications/Opera.app/Contents/Resources/Opera.icns
 fi
 
 echo "moving application..."
-rm -rfv /Applications/Opera\ Next.app
-mv /Applications/Opera.app /Applications/Opera\ Next.app
+rm -rf /Applications/Opera\ Next.app
+mv -f /Applications/Opera.app /Applications/Opera\ Next.app
 echo "Done..."
 # Disclaimer: Any alteration to Opera’s application bundle is unsupported and discouraged.
