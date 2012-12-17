@@ -1,11 +1,23 @@
+# ~/.osx — http://mths.be/osx
+
+# Ask for the administrator password upfront
+sudo -v
+# Keep-alive: update existing `sudo` time stamp until `.osx` has finished
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
 echo 'Starting defaults edit...'
 # Set computer name (as done via System Preferences → Sharing)
-#scutil --set ComputerName "MathBook Pro"
-#scutil --set HostName "MathBook Pro"
-#scutil --set LocalHostName "MathBook-Pro"
+#sudo scutil --set ComputerName "MathBook Pro"
+#sudo scutil --set HostName "MathBook Pro"
+#sudo scutil --set LocalHostName "MathBook-Pro"
+#sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "MathBook-Pro"
 
-# Menu bar: disable transparency
+# Set Help Viewer windows to non-floating mode
+defaults write com.apple.helpviewer DevMode -bool true
+
+# Menu bar: enable/disable transparency
 defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool true
+
 # Automatically hide and show the Dock
 defaults write com.apple.dock autohide -bool true
 
@@ -31,6 +43,9 @@ sudo nvram boot-args="-v"
 #Enable text selection in quick look:
 #---------------------------------------------
 defaults write com.apple.finder QLEnableTextSelection -bool true
+
+# Increase window resize speed for Cocoa applications
+defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
 #Speed up mission control anim:
 #------------------------------------------
