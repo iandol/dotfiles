@@ -1,5 +1,15 @@
 #!/bin/bash
 printf '\e[36m'
+
+printf 'Let us bootstrap Homebrew if not present ... '
+if [ -f /usr/local/bin/brew ]; then
+	printf 'Homebrew is present!\n'
+else
+	ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
+	printf 'Homebrew installed...\n'
+	brew install git figlet
+fi
+
 printf 'Let us bootstrap .dotfiles if not present ... '
 if [ -d ~/.dotfiles/ ]; then
 	printf ' .dotfiles are present! \n'
@@ -16,7 +26,7 @@ ln -siv ~/.dotfiles/.zshrc ~
 ln -siv ~/.dotfiles/.bashrc ~
 ln -siv ~/.dotfiles/.bash_profile ~
 ln -siv ~/.dotfiles/.vimrc ~
-ln -siv ~/.dotfiles/.vim ~
+ln -siv ~/.dotfiles/.vim/ ~
 printf '\e[36m'
 
 if [ -d ~/.oh-my-zsh/ ]; then
@@ -66,5 +76,5 @@ if [ -f $(which git) ]; then
 else
 	printf 'GIT is not installed, use command line tools or install homebrew...\n'
 fi
-printf 'Done...\n'
+printf '\n\n--->>> All Done...\n'
 printf '\e[m'
