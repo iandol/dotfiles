@@ -12,6 +12,9 @@ echo 'Starting defaults edit...'
 #sudo scutil --set LocalHostName "MathBook-Pro"
 #sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "MathBook-Pro"
 
+# Set F8 as delete
+defaults write com.apple.finder NSUserKeyEquivalents -dict-add "Move to Trash" "\\Uf70b"
+
 # Set Help Viewer windows to non-floating mode
 defaults write com.apple.helpviewer DevMode -bool true
 
