@@ -109,17 +109,18 @@ function updateMe() {
     cd ~/.dotfiles
     git pull
   fi
-  if [ -d ~/Code/opticka ]; then
+  if [ -d ~/Code/opticka/.git ]; then
     printf '---> Updating opticka...\n'
     cd ~/Code/opticka
     git pull
   fi
-  if [ -d ~/Code/Psychtoolbox-3 ]; then
+  if [ -d ~/Code/Psychtoolbox-3/.git ]; then
     printf '---> Updating PTB...\n'
     cd ~/Code/Psychtoolbox-3
     git pull
   fi
   cd olddir
+  unset olddir
   printf '---> Updating homebrew...\n'
   brew update
   brew upgrade

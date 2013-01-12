@@ -19,7 +19,7 @@ defaults write com.apple.finder NSUserKeyEquivalents -dict-add "Move to Trash" "
 defaults write com.apple.helpviewer DevMode -bool true
 
 # Menu bar: enable/disable transparency
-defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool true
+#defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool true
 
 # Automatically hide and show the Dock
 defaults write com.apple.dock autohide -bool true
@@ -32,7 +32,7 @@ defaults write com.apple.dock "expose-group-by-app" -bool false
 defaults write com.apple.dock "dashboard-in-overlay" -bool true
 
 # Menu bar: hide the useless Time Machine and Volume icons
-defaults write com.apple.systemuiserver menuExtras -array "/System/Library/CoreServices/Menu Extras/TextInput.menu" "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" "/System/Library/CoreServices/Menu Extras/AirPort.menu" "/System/Library/CoreServices/Menu Extras/Battery.menu" "/System/Library/CoreServices/Menu Extras/Clock.menu"
+#defaults write com.apple.systemuiserver menuExtras -array "/System/Library/CoreServices/Menu Extras/TextInput.menu" "/System/Library/CoreServices/Menu Extras/Bluetooth.menu" "/System/Library/CoreServices/Menu Extras/AirPort.menu" "/System/Library/CoreServices/Menu Extras/Battery.menu" "/System/Library/CoreServices/Menu Extras/Clock.menu"
 
 #Enable debug menus:
 #----------------------------

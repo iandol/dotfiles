@@ -26,7 +26,7 @@ ln -siv ~/.dotfiles/.zshrc ~
 ln -siv ~/.dotfiles/.bashrc ~
 ln -siv ~/.dotfiles/.bash_profile ~
 ln -siv ~/.dotfiles/.vimrc ~
-ln -siv ~/.dotfiles/.vim/ ~
+ln -siv ~/.dotfiles/.vim/ ~/.vim
 printf '\e[36m'
 
 if [ -d ~/.oh-my-zsh/ ]; then
