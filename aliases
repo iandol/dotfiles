@@ -102,7 +102,7 @@ alias powerlog="pmset -g pslog" #log of active power/sleep info
 alias flushdns="sudo dscacheutil -flushcache"
 
 # Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
-function updateMe() {
+function update() {
   olddir=$(pwd)
   if [ -d ~/.dotfiles ]; then
     printf '---> Updating dotfiles...\n'
@@ -118,6 +118,9 @@ function updateMe() {
     printf '---> Updating PTB...\n'
     cd ~/Code/Psychtoolbox-3
     git pull
+	if [ -n $(git remote | grep upstream) ]; then
+		git fetch upstream
+	fi
   fi
   cd olddir
   unset olddir
