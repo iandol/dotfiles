@@ -114,6 +114,11 @@ function update() {
     cd ~/Code/opticka
     git pull
   fi
+  if [ -d ~/Code/spikes/.git ]; then
+    printf '---> Updating spikes...\n'
+    cd ~/Code/spikes
+    git pull
+  fi
   if [ -d ~/Code/Psychtoolbox-3/.git ]; then
     printf '---> Updating PTB...\n'
     cd ~/Code/Psychtoolbox-3
