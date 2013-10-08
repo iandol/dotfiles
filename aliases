@@ -99,7 +99,8 @@ alias whywakeme="syslog |grep -i \"Wake reason =\"" #find why the machine woke u
 alias powerlog="pmset -g pslog" #log of active power/sleep info
 
 # Flush DNS cache
-alias flushdns="sudo dscacheutil -flushcache"
+alias flushdnsold="sudo dscacheutil -flushcache"
+alias flushdns="sudo killall -HUP mDNSResponder"
 
 # Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
