@@ -50,5 +50,9 @@ source ~/.dotfiles/config
 
 figlet "Hello Dave..."
 
+if [ -f ~/bin/ansiweather ]; then
+	ansiweather
+fi
+	
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

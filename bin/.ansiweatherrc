@@ -1,0 +1,3 @@
+location:London,UK
+fetch_cmd:curl -s
+units:metric

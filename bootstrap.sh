@@ -7,7 +7,7 @@ if [ -f /usr/local/bin/brew ]; then
 else
 	ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
 	printf 'Homebrew installed...\n'
-	brew install git figlet
+	brew install git figlet jq
 fi
 
 printf 'Let us bootstrap .dotfiles if not present ... '
