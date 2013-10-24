@@ -52,9 +52,8 @@ symbols=$(get_config "symbols" || echo true)
 background=$(get_config "background" || echo "\033[44m")
 text=$(get_config "text" || echo "\033[36;1m")
 data=$(get_config "data" || echo "\033[33;1m")
-delimiter=$(get_config "delimiter" || echo "\033[35m=>")
-dashes=$(get_config "dashes" || echo "\033[34m-")
-
+delimiter=$(get_config "delimiter" || echo "\033[35m\xe2\x87\x92")
+dashes=$(get_config "dashes" || echo "\033[34m\xe2\x80\x93")
 
 
 ###[ Unicode Symbols for icons ]###############################################
@@ -63,8 +62,7 @@ sun=$(get_config "sun" || echo "\033[33;1m\xe2\x98\x80")
 moon=$(get_config "moon" || echo "\033[36m\xe2\x98\xbd")
 clouds=$(get_config "clouds" || echo "\033[37;1m\xe2\x98\x81")
 rain=$(get_config "rain" || echo "\xe2\x98\x94")
-
-
+fog=$(get_config "fog" || echo "\xe2\x96\x92")
 
 ###[ Fetch Weather data ]######################################################
 
@@ -132,6 +130,9 @@ then
 			;;
 		Rain)
 			icon="$rain  "
+			;;
+		Fog)
+			icon="$fog  "
 			;;
 	esac
 fi
