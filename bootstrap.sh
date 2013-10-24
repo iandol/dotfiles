@@ -31,22 +31,23 @@ ln -siv ~/.dotfiles/.vimrc ~
 ln -siv ~/.dotfiles/.vim/ ~/.vim
 printf '\e[36m'
 
-printf 'Will check for functional Antigen...\n'
+printf 'Will check for a functional Antigen...\n'
 if [ -d ~/.oh-my-zsh/ ]; then
-	printf '\t...Goint to replace oh-my-zsh with antigen...\n'
+	printf '\t...Goint to replace oh-my-zsh with antigen... '
 	rm -rf ~/.oh-my-zsh/
-else
-	if [ ! -d ~/.antigen/ ]; then
-		printf '\t...Installing Antigen...\n'
-		git clone https://github.com/zsh-users/antigen.git ~/.antigen
-		antigen use oh-my-zsh
-		antigen bundle zsh-users/zsh-syntax-highlighting
-		antigen theme steeef
-		antigen apply
-	else
-		printf '\t...Antigen already installed...\n'
-	fi
 fi
+if [ ! -d ~/.antigen/ ]; then
+	printf '\tInstalling Antigen...\n'
+	git clone https://github.com/zsh-users/antigen.git ~/.antigen
+	source "$HOME/.antigen/antigen.zsh"
+	antigen use oh-my-zsh
+	antigen bundle zsh-users/zsh-syntax-highlighting
+	antigen theme steeef
+	antigen apply
+else
+	printf '\tAntigen already installed...\n'
+fi
+
 
 printf 'Linking some bin files in ~/bin/: \n'
 printf '\e[32m'
