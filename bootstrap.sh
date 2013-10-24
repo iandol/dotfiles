@@ -2,13 +2,15 @@
 printf '\e[36m'
 
 printf 'Let us bootstrap Homebrew if not present ... '
-if [ -f /usr/local/bin/brew ]; then
+if [ -e /usr/local/bin/brew ]; then
 	printf 'Homebrew is present!\n'
 else
 	ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
 	printf 'Homebrew installed...\n'
-	brew install git figlet jq
 fi
+
+#make sure our minimum packages are installed
+brew install git figlet jq &> /dev/null 
 
 printf 'Let us bootstrap .dotfiles if not present ... '
 if [ -d ~/.dotfiles/ ]; then
@@ -29,15 +31,21 @@ ln -siv ~/.dotfiles/.vimrc ~
 ln -siv ~/.dotfiles/.vim/ ~/.vim
 printf '\e[36m'
 
+printf 'Will check for functional Antigen...\n'
 if [ -d ~/.oh-my-zsh/ ]; then
-	printf '\nCopying zsh theme as oh-my-zsh is installed...\n'
-	cp -f ~/.dotfiles/*-theme ~/.oh-my-zsh/custom/
-	printf 'Themes copied over...\n'
+	printf '\t...Goint to replace oh-my-zsh with antigen...\n'
+	rm -rf ~/.oh-my-zsh/
 else
-	printf 'Installing .oh-my-zsh ... \n'
-	git clone https://github.com/robbyrussell/oh-my-zsh.git .oh-my-zsh
-	cp -f ~/.dotfiles/*-theme ~/.oh-my-zsh/custom/
-	printf ' and themes copied over...\n'
+	if [ ! -d ~/.antigen/ ]; then
+		printf '\t...Installing Antigen...\n'
+		git clone https://github.com/zsh-users/antigen.git ~/.antigen
+		antigen use oh-my-zsh
+		antigen bundle zsh-users/zsh-syntax-highlighting
+		antigen theme steeef
+		antigen apply
+	else
+		printf '\t...Antigen already installed...\n'
+	fi
 fi
 
 printf 'Linking some bin files in ~/bin/: \n'

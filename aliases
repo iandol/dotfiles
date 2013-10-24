@@ -130,10 +130,16 @@ function update() {
   fi
   cd olddir
   unset olddir
+  
   printf '---> Updating homebrew...\n'
   brew update
   brew upgrade
   brew cleanup -f
+  
+  printf '---> Updating Antigen...\n'
+  [ -e "$HOME/.antigen" ] && antigen update
+  [ -e "$HOME/.antigen" ] && antigen selfupdate
+  
   printf '---> Checking OS X updates...\n'
   sudo softwareupdate --list
   printf '\n---> Update finished...\n'
