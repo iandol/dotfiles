@@ -22,7 +22,8 @@ antigen bundle git
 antigen bundle command-not-found
 antigen bundle zsh-users/zsh-syntax-highlighting
 
-antigen theme "$HOME/.dotfiles/steeef2.zsh-theme"
+#antigen theme "$HOME/.dotfiles/steeef2.zsh-theme"
+antigen theme smt
 antigen apply
 
 #echo $PATH
@@ -40,10 +41,9 @@ setopt autopushd pushdminus pushdsilent
 
 [[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 [[ -e "$DF_BASE/config" ]] && source "$DF_BASE/config"
-if [ -f ~/bin/ansiweather ]; then
+if [ -f "$HOME/bin/ansiweather" ]; then
 	ansiweather
 fi
-figlet "Hello Dave..."
 	
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

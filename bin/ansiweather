@@ -49,7 +49,7 @@ symbols=$(get_config "symbols" || echo true)
 
 #### [ Colors and characters ]#################################################
 
-background=$(get_config "background" || echo "\033[44m")
+background=$(get_config "background" || echo "\033[40m")
 text=$(get_config "text" || echo "\033[36;1m")
 data=$(get_config "data" || echo "\033[33;1m")
 delimiter=$(get_config "delimiter" || echo "\033[35m\xe2\x87\x92")
@@ -141,4 +141,4 @@ fi
 
 ###[ Display current Weather ]#################################################
 
-echo -e "$background$text Current weather in $city $delimiter$data $temperature $scale $icon$dashes$text Humidity $delimiter$data $humidity % $dashes$text Wind $delimiter$data $wind $speed_unit $dashes$text Pressure $delimiter$data $pressure hPa \033[0m"
+echo -e "$background$text$city $delimiter$data $temperature $scale $icon$dashes$text Humidity $delimiter$data $humidity % $dashes$text Wind $delimiter$data $wind $speed_unit $dashes$text Pressure $delimiter$data $pressure hPa \033[0m"
