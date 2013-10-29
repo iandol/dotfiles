@@ -6,7 +6,7 @@
 # https://github.com/fcambus/ansiweather                                      #
 #                                                                             #
 # Created: 2013/08/29                                                         #
-# Last Updated: 2013/10/19                                                    #
+# Last Updated: 2013/10/28                                                    #
 #                                                                             #
 # AnsiWeather is released under the BSD 3-Clause license.                     #
 # See LICENSE file for details.                                               #
@@ -17,7 +17,9 @@
 
 ###[ Configuration options ]###################################################
 
-config_file=~/bin/.ansiweatherrc
+LC_NUMERIC=C
+
+config_file=~/.ansiweatherrc
 
 function get_config {
 	ret=""
@@ -35,13 +37,20 @@ function get_config {
 }
 
 # Location : example "Moscow,RU"
-location=$(get_config "location" || echo "London,UK")
-if [ ! -z "$1" ]; then
-    location=$1;
+if [ ! -z "$1" ]
+then
+	location=$1;
+else
+	location=$(get_config "location" || echo "Moscow,RU")
 fi
 
 # System of Units : "metric" or "imperial"
-units=$(get_config "units" || echo "metric")
+if [ ! -z "$2" ]
+then
+	units=$2
+else
+	units=$(get_config "units" || echo "metric")
+fi
 
 # Display symbols : "true" or "false" (requires an Unicode capable display)
 symbols=$(get_config "symbols" || echo true)
@@ -52,8 +61,8 @@ symbols=$(get_config "symbols" || echo true)
 background=$(get_config "background" || echo "\033[40m")
 text=$(get_config "text" || echo "\033[36;1m")
 data=$(get_config "data" || echo "\033[33;1m")
-delimiter=$(get_config "delimiter" || echo "\033[35m\xe2\x87\x92")
-dashes=$(get_config "dashes" || echo "\033[34m\xe2\x80\x93")
+delimiter=$(get_config "delimiter" || echo "\033[35m▷")
+dashes=$(get_config "dashes" || echo "\033[34m—")
 
 
 ###[ Unicode Symbols for icons ]###############################################
@@ -62,7 +71,19 @@ sun=$(get_config "sun" || echo "\033[33;1m\xe2\x98\x80")
 moon=$(get_config "moon" || echo "\033[36m\xe2\x98\xbd")
 clouds=$(get_config "clouds" || echo "\033[37;1m\xe2\x98\x81")
 rain=$(get_config "rain" || echo "\xe2\x98\x94")
-fog=$(get_config "fog" || echo "\xe2\x96\x92")
+fog=$(get_config "fog" || echo "\033[37;1m\xe2\x96\x92")
+snow=$(get_config "snow" || echo "\033[37;1m\xe2\x9d\x84")
+thunderstorm=$(get_config "thunderstorm" || echo "\xe2\x9a\xa1")
+
+###[ Check if jq is installed ]###############################################
+
+jqpath="`which jq`"
+if [ "$jqpath" == "" ]
+then 
+	echo -e "\njq binary is not found, please download it from http://stedolan.github.io/jq/ and put it in your PATH"
+	exit 255
+fi 
+
 
 ###[ Fetch Weather data ]######################################################
 
@@ -82,6 +103,17 @@ sky=$(echo $weather | jq -r '.weather[0].main')
 sunrise=$(echo $weather | jq '.sys.sunrise')
 sunset=$(echo $weather | jq '.sys.sunset')
 wind=$(echo $weather | jq '.wind.speed')
+azimuth=$(echo $weather | jq '.wind.deg')
+
+
+
+###[ Process Wind data ]#######################################################
+
+declare -a directions
+directions=(N NNE NE ENE E ESE SE SSE S SSW SW WSW W WNW NW NNW)
+
+direction=${directions[$(echo "($azimuth + 11.25)/22.5 % 16" | bc)]}
+
 
 
 ###[ Set the period ]##########################################################
@@ -103,10 +135,14 @@ case $units in
 	metric)
 		scale="°C"
 		speed_unit="m/s"
+		pressureUnit="hPa"
+		pressure=$(printf '%.0f' $pressure)
 		;;
 	imperial)
 		scale="°F"
 		speed_unit="mph"
+		pressureUnit="inHg"
+		pressure=$(printf '%.2f' $(echo "$pressure*0.0295" | bc))
 		;;
 esac
 
@@ -132,7 +168,13 @@ then
 			icon="$rain  "
 			;;
 		Fog)
-			icon="$fog  "
+			icon="$fog "
+			;;
+		Snow)
+			icon="$snow "
+			;;
+		Thunderstorm)
+			icon="$thunderstorm  "
 			;;
 	esac
 fi
@@ -141,4 +183,4 @@ fi
 
 ###[ Display current Weather ]#################################################
 
-echo -e "$background$text$city $delimiter$data $temperature $scale $icon$dashes$text Humidity $delimiter$data $humidity % $dashes$text Wind $delimiter$data $wind $speed_unit $dashes$text Pressure $delimiter$data $pressure hPa \033[0m"
+echo -e "$background$text$city $delimiter$data $temperature $scale $icon$dashes$text Wind $delimiter$data $wind $speed_unit $direction $dashes$text Humidity $delimiter$data $humidity % $dashes$text Pressure $delimiter$data $pressure $pressureUnit \033[0m"
