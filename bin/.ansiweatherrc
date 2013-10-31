@@ -3,3 +3,6 @@ fetch_cmd:curl -s
 units:metric
 delimiter:▷
 dashes:—
+background:\033[40m
+greeting_text:•
+forecast:0
