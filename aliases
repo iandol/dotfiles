@@ -147,10 +147,13 @@ function update() {
   printf '---> Updating Antigen...\n'
   [ -e "$HOME/.antigen" ] && antigen update
   [ -e "$HOME/.antigen" ] && antigen selfupdate
-  
-  printf '---> Checking OS X updates...\n'
-  sudo softwareupdate --list
-  printf '\n---> Update finished...\n'
+}
+
+function updateAll() {
+	update
+    printf '---> Checking OS X updates...\n'
+    sudo softwareupdate --list
+    printf '\n---> Update finished...\n'
 }
 
 # See all UDP ports open
