@@ -31,6 +31,7 @@ if [ -d '/Volumes/Mac/Users/ian/' ]; then
 	MYHD='/Volumes/Mac/Users/ian/'
 fi
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin
+export MATLAB_JAVA=/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
 
 export EDITOR='vim'
 export BZR_EDITOR='vim'
