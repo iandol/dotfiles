@@ -27,9 +27,8 @@ antigen theme smt
 antigen apply
 
 #echo $PATH
-if [ -d '/Volumes/Mac/Users/ian/' ]; then
-	MYHD='/Volumes/Mac/Users/ian/'
-fi
+[[ -d '/Volumes/Mac/Users/ian/' ]] && MYHD='/Volumes/Mac/Users/ian/'
+
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin
 export MATLAB_JAVA=/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
 
@@ -42,9 +41,7 @@ setopt autopushd pushdminus pushdsilent
 
 [[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 [[ -e "$DF_BASE/config" ]] && source "$DF_BASE/config"
-if [ -f "$HOME/bin/ansiweather" ]; then
-	ansiweather
-fi
+[[ -f "$HOME/bin/ansiweather" ]] &&	ansiweather
 	
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

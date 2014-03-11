@@ -106,52 +106,54 @@ alias flushdns="sudo killall -HUP mDNSResponder"
 function update() {
   olddir=$(pwd)
   if [ -d ~/.dotfiles ]; then
-    printf '---> Updating dotfiles...\n'
+    printf '\n\n---> Updating DOTFILES...\n'
     cd ~/.dotfiles
     git pull
   fi
   if [ -d ~/Code/opticka/.git ]; then
-    printf '---> Updating opticka...\n'
+    printf '\n\n---> Updating OPTICKA...\n'
     cd ~/Code/opticka
     git pull
   fi
   if [ -d ~/Code/spikes/.git ]; then
-    printf '---> Updating spikes...\n'
+    printf '\n\n---> Updating SPIKES...\n'
     cd ~/Code/spikes
     git pull
   fi
   if [ -d ~/Code/Psychtoolbox-3/.git ]; then
-    printf '---> Updating PTB...\n'
+    printf '\n\n---> Updating PTB...\n'
     cd ~/Code/Psychtoolbox-3
     git pull
 	if [ -n $(git remote | grep upstream) ]; then
+		printf '\t\t---> Fetching upstream PTB...\n'
 		git fetch upstream
 	fi
   fi
   if [ -d ~/Code/fieldtrip ]; then
-    printf '---> Updating fieldtrip...\n'
+    printf '\n\n---> Updating FIELDTRIP...\n'
     cd ~/Code/fieldtrip
     git pull
 	if [ -n $(git remote | grep upstream) ]; then
+		printf '\t\t---> Fetching upstream FIELDTRIP...\n'
 		git fetch upstream
 	fi
   fi
   cd olddir
   unset olddir
   
-  printf '---> Updating homebrew...\n'
+  printf '\n\n---> Updating homebrew...\n'
   brew update
   brew upgrade
   brew cleanup -f
   
-  printf '---> Updating Antigen...\n'
-  [ -e "$HOME/.antigen" ] && antigen update
+  printf '\n\n---> Updating Antigen...\n'
   [ -e "$HOME/.antigen" ] && antigen selfupdate
+  [ -e "$HOME/.antigen" ] && antigen update
 }
 
 function updateAll() {
 	update
-    printf '---> Checking OS X updates...\n'
+    printf '\n\n---> Checking OS X updates...\n'
     sudo softwareupdate --list
     printf '\n---> Update finished...\n'
 }
