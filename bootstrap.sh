@@ -5,7 +5,7 @@ printf 'Let us bootstrap Homebrew if not present ... '
 if [ -e /usr/local/bin/brew ]; then
 	printf 'Homebrew is present!\n'
 else
-	ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
+	ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 	printf 'Homebrew installed...\n'
 fi
 
@@ -82,6 +82,7 @@ if [ -f $(which git) ]; then
 	git config --global color.grep true
 	git config --global color.interactive true
 	git config --global color.status true
+	git config --global credential.helper osxkeychain
 else
 	printf 'GIT is not installed, use command line tools or install homebrew...\n'
 fi
