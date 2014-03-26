@@ -1,4 +1,6 @@
 #!/bin/bash
+cd ~
+printf "\n\n--->>> Bootstrap terminal setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
 
 printf 'Let us bootstrap Homebrew if not present ... '
@@ -16,7 +18,7 @@ printf 'Let us bootstrap .dotfiles if not present ... '
 if [ -d ~/.dotfiles/ ]; then
 	printf ' .dotfiles are present! \n'
 else	
-	git clone https://github.com/iandol/dotfiles.git .dotfiles
+	git clone https://github.com/iandol/dotfiles.git ~/.dotfiles
 	printf 'we cloned a new .dotfiles...\n'
 fi
 
@@ -47,7 +49,6 @@ if [ ! -d ~/.antigen/ ]; then
 else
 	printf '\tAntigen already installed...\n'
 fi
-
 
 printf 'Linking some bin files in ~/bin/: \n'
 printf '\e[32m'
@@ -86,5 +87,7 @@ if [ -f $(which git) ]; then
 else
 	printf 'GIT is not installed, use command line tools or install homebrew...\n'
 fi
+printf 'Switching to use ZSH...\n'
+chsh -s /bin/zsh && source ~/.zshrc
 printf '\n\n--->>> All Done...\n'
 printf '\e[m'

@@ -26,11 +26,9 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 antigen theme smt
 antigen apply
 
-#echo $PATH
-[[ -d '/Volumes/Mac/Users/ian/' ]] && MYHD='/Volumes/Mac/Users/ian/'
-
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin
-export MATLAB_JAVA=/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
+[[ -d '/Volumes/Mac/Users/ian/' ]] && MYHD='/Volumes/Mac/Users/ian/'
+[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA=/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
 
 export EDITOR='vim'
 export BZR_EDITOR='vim'
@@ -44,4 +42,4 @@ setopt autopushd pushdminus pushdsilent
 [[ -f "$HOME/bin/ansiweather" ]] &&	ansiweather
 	
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
-PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
