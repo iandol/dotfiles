@@ -2,11 +2,11 @@
 
 ###############################################################################
 #                                                                             #
-# AnsiWeather 1.00 (c) by Frederic Cambus 2013                                #
+# AnsiWeather 1.00 (c) by Frederic Cambus 2014                                #
 # https://github.com/fcambus/ansiweather                                      #
 #                                                                             #
 # Created: 2013/08/29                                                         #
-# Last Updated: 2013/11/02                                                    #
+# Last Updated: 2014/01/24                                                    #
 #                                                                             #
 # AnsiWeather is released under the BSD 3-Clause license.                     #
 # See LICENSE file for details.                                               #
@@ -25,7 +25,7 @@ function get_config {
 	ret=""
 	if [ -f $config_file ]
 	then
-		ret=$(grep "^$1" $config_file | awk -F: '{print $2}') 
+		ret=$(grep "^$1:" $config_file | awk -F: '{print $2}') 
 	fi
 
 	if [ "X$ret" = "X" ]
@@ -77,9 +77,6 @@ function auto_locate {
 # Location : example "Moscow,RU"
 location=$(get_config "location" || auto_locate || echo "Moscow,RU")
 
-# check and replace spaces for curl requests
-location=$( printf "%s\n" "$location" | sed 's/ /%20/g' )
-
 # System of Units : "metric" or "imperial"
 units=$(get_config "units" || echo "metric")
 
@@ -93,7 +90,7 @@ forecast=$(get_config "forecast" || echo 0)
 daylight=$(get_config "daylight" || echo false)
 
 # Or get config options from command line flags
-while getopts l:u:s:f:d: option
+while getopts l:u:s:f:Fd: option
 do
 	case "${option}"
 	in
@@ -101,7 +98,8 @@ do
 		u) units=${OPTARG};;
 		s) symbols=${OPTARG};;
 		f) forecast=${OPTARG};;
-                d) daylight=${OPTARG};;
+		F) forecast="5";;
+		d) daylight=${OPTARG};;
 	esac
 done
 
@@ -119,12 +117,12 @@ dashes=$(get_config "dashes" || echo "\033[34m-")
 
 ###[ Text Labels ]#############################################################
 
-greeting_text=$(get_config "greeting" || echo "Current weather in")
-wind_text=$(get_config "wind" || echo "Wind")
-humidity_text=$(get_config "humidity" || echo "Humidity")
-pressure_text=$(get_config "pressure" || echo "Pressure")
-sunrise_text=$(get_config "sunrise" || echo "Sunrise")
-sunset_text=$(get_config "sunset" || echo "Sunset")
+greeting_text=$(get_config "greeting_text" || echo "Current weather in")
+wind_text=$(get_config "wind_text" || echo "Wind")
+humidity_text=$(get_config "humidity_text" || echo "Humidity")
+pressure_text=$(get_config "pressure_text" || echo "Pressure")
+sunrise_text=$(get_config "sunrise_text" || echo "Sunrise")
+sunset_text=$(get_config "sunset_text" || echo "Sunset")
 
 
 ###[ Unicode Symbols for icons ]###############################################
@@ -226,7 +224,6 @@ fi
 ###[ Process Sunrise and Sunset data ]#########################################
 
 function epoch_to_time {
-	unamestr=$(uname)
 	if date -j -r $1 +"%r" > /dev/null 2>&1; then
 		# BSD
 		ret=$(date -j -r $1 +"%b %d %r")
@@ -239,15 +236,15 @@ function epoch_to_time {
 
 if [ $forecast = 0 ]
 then
-    if [ -n "$sunrise" ]
-    then
-	sunrise_time=$(epoch_to_time $sunrise)
-    fi
+	if [ -n "$sunrise" ]
+	then
+		sunrise_time=$(epoch_to_time $sunrise)
+	fi
 
-    if [ -n "$sunset" ]
-    then
-	sunset_time=$(epoch_to_time $sunset)
-    fi
+	if [ -n "$sunset" ]
+	then
+		sunset_time=$(epoch_to_time $sunset)
+	fi
 fi
 
 
@@ -328,14 +325,6 @@ function get_icon {
 	esac
 }
 
-if [ $symbols = true ]
-then
-	if [ $forecast = 0 ]
-	then
-		icon="$(get_icon $sky)"
-	fi
-fi
-
 
 
 ###[ Display current Weather ]#################################################
@@ -345,7 +334,11 @@ then
 	output="$background$text $city forecast $text$delimiter "
 	for i in $(seq 0 $(($forecast-1)))
 	do
-		icon="$(get_icon ${sky[$i]})"
+		icon=""
+		if [ $symbols = true ]
+		then
+			icon="$(get_icon ${sky[$i]})"
+		fi
 		output="$output$text${dates[$i]}: $data${highs[$i]}$text/$data${lows[$i]} $scale $icon"
 		if [ $i -lt $(($forecast-1)) ]
 		then
@@ -355,14 +348,18 @@ then
 	output="$output\033[0m"
 	echo -e "$output"
 else
-        output="$background$text $greeting_text $city $delimiter$data $temperature $scale $icon$dashes$text $wind_text $delimiter$data $wind $speed_unit $direction $dashes$text $humidity_text $delimiter$data $humidity % $dashes$text $pressure_text $delimiter$data $pressure $pressure_unit"
+	if [ $symbols = true ]
+	then
+		icon="$(get_icon $sky)"
+	fi
+	output="$background$text $greeting_text $city $delimiter$data $temperature $scale $icon$dashes$text $wind_text $delimiter$data $wind $speed_unit $direction $dashes$text $humidity_text $delimiter$data $humidity % $dashes$text $pressure_text $delimiter$data $pressure $pressure_unit"
 
-        if [ $daylight = true ]
-        then
-            output="$output $dashes$text $sunrise_text $delimiter$data $sunrise_time $dashes$text $sunset_text $delimiter$data $sunset_time"
-        fi
+	if [ $daylight = true ]
+	then
+		output="$output $dashes$text $sunrise_text $delimiter$data $sunrise_time $dashes$text $sunset_text $delimiter$data $sunset_time"
+	fi
 
-        output="$output \033[0m"
+	output="$output \033[0m"
 
-        echo -e "$output"
+	echo -e "$output"
 fi
