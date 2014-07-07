@@ -27,6 +27,7 @@ antigen theme smt
 antigen apply
 
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin
+[[ -d '/Applications/Araxis Merge.app/' ]] && export PATH=$PATH:/Applications/Araxis\ Merge.app/Contents/Utilities
 [[ -d '/Volumes/Mac/Users/ian/' ]] && MYHD='/Volumes/Mac/Users/ian/'
 [[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA=/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
 
