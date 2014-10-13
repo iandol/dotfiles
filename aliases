@@ -96,12 +96,13 @@ alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.ar
 alias mymemory="top -l 1 | awk '/(pagein|Mem)/'; vm_stat"
 alias kext3="kextstat | grep -v com.apple" #find 3rd party kernel extensions
 alias mydisplay="ioreg -lw0 | grep IODisplayEDID | sed \"/[^<]*</s///\" | xxd -p -r | strings -6" #find id of display
-alias whywakeme="syslog |grep -i \"Wake reason =\"" #find why the machine woke up
+alias whywakeme="syslog | grep -i \"Wake reason =\"" #find why the machine woke up
 alias powerlog="pmset -g pslog" #log of active power/sleep info
 
 # Flush DNS cache
-alias flushdnsold="sudo dscacheutil -flushcache"
-alias flushdns="sudo killall -HUP mDNSResponder"
+alias flushdnsolder="sudo dscacheutil -flushcache"
+alias flushdnsold="sudo killall -HUP mDNSResponder"
+alias flushdns="sudo discoveryutil mdnsflushcache"
 
 # Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
@@ -115,11 +116,13 @@ function update() {
     printf '\n\n---> Updating OPTICKA...\n'
     cd ~/Code/opticka
     git pull
+	 gst
   fi
   if [ -d ~/Code/spikes/.git ]; then
     printf '\n\n---> Updating SPIKES...\n'
     cd ~/Code/spikes
     git pull
+	 gst
   fi
   if [ -d ~/Code/Psychtoolbox-3/.git ]; then
     printf '\n\n---> Updating PTB...\n'
@@ -186,20 +189,12 @@ function define() {
 	curl -sA "Opera" "http://www.google.com/search?q=define:${y// /+}" | grep -Po '(?<=<li>)[^<]+'|nl|perl -MHTML::Entities -pe 'decode_entities($_)' 2>/dev/null; 
 }
 
-function markdown() {
-	/Applications/TextMate.app/Contents/SharedSupport/Support/bin/Markdown.pl $1 > $1.html 
-}
-
 function pman() {
 	man -t "${1}" | open -f -a /Applications/Preview.app
 }
 
 function tman() {
 	MANWIDTH=160 MANPAGER='col -bx' man $@ | mate
-}
-
-function serve() { 
-	python -m SimpleHTTPServer ${1:-8080}
 }
 
 function settcpdelay() { #see http://www.small-tree.com/kb_results.asp?id=1 for details, use 0,2 or 3
