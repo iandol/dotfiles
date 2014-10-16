@@ -111,6 +111,7 @@ function update() {
     printf '\n\n---> Updating DOTFILES...\n'
     cd ~/.dotfiles
     git pull
+	 gst
   fi
   if [ -d ~/Code/opticka/.git ]; then
     printf '\n\n---> Updating OPTICKA...\n'
