@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -w
 #require "rexml/document"
-#require "profile"
+require "profile"
 filename = ARGV[0]
 fail "Please specify an existing file!" unless filename and File.exists?(filename)
 
