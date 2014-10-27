@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -w
 #require "rexml/document"
-require "profile"
+#require "profile"
 filename = ARGV[0]
 fail "Please specify an existing file!" unless filename and File.exists?(filename)
 
@@ -9,8 +9,9 @@ File.open(filename, "r+") do |f|
 	linenum = 1
 	re = [ /svg:width="95%"/,
 		/style:print-content="false"/,
-		/style:font-name="Courier New"/,
-		/<style:paragraph-properties fo:margin-left="0.3937in"/,
+		/style:font-name="Courier New"/, 
+		/<style:paragraph-properties fo:margin-left="0\.3937in"/, #quotations
+		/                               fo:text-align="justify"/, #quotations
 		/<text:p text:style-name="Horizontal_20_Line"\/>/,
 		/<text:h text:outline-level="0">/,
 		/text:bullet-char=""/ ]
@@ -18,6 +19,7 @@ File.open(filename, "r+") do |f|
 		'style:print-content="true"',
 		'style:font-name="Menlo"',
 		'<style:text-properties fo:font-style="italic" style:font-style-complex="italic"/><style:paragraph-properties fo:margin-left="0.3937in"',
+		'fo:text-align="left"',
 		'',
 		'<text:h text:outline-level="0">',
 		'text:bullet-char="•"']
