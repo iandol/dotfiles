@@ -17,6 +17,7 @@ antigen use oh-my-zsh
 antigen bundle nyan
 antigen bundle ruby
 antigen bundle osx
+antigen bundle forklift
 antigen bundle brew
 antigen bundle git
 antigen bundle command-not-found

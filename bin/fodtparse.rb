@@ -1,23 +1,47 @@
 #!/usr/bin/env ruby -w
 #require "rexml/document"
 #require "profile"
-filename = ARGV[0]
-fail "Please specify an existing file!" unless filename and File.exists?(filename)
+infilename = ARGV[0]
+fail "Please specify an existing file!" unless infilename and File.exists?(infilename)
+
+ismd =  /\.md$/
+if infilename =~ ismd
+  puts "===> Converting MD to FODT..."
+  c = `which mmd2odf`
+  c = c.sub!(/\n$/," ")
+  c = c + infilename.sub(/ /,"\\ ")
+  puts "===> Command: " + c
+  x = system(c)
+  puts("===> mmd command executed: " + x.to_s)
+  puts "===> Check for FODT file..."
+  filename = infilename.sub(ismd,".fodt")
+  fail "No FODT file present!" unless File.exists?(filename)
+  puts "===> New filename: " + filename
+else
+  filename = infilename
+end
+
+fail "No FODT file present!" unless filename =~ /fodt$/ and File.exists?(filename)
 
 File.open(filename, "r+") do |f|
+  
 	fout = []
-	linenum = 1
-	re = [ /svg:width="95%"/,
-		/style:print-content="false"/,
-		/style:font-name="Courier New"/, 
+	linenum = 0
+	re = [ /svg:width="95%"/, #use more space for frames
+		/style:print-content="false"/, #Fix PDF generation not including images
+		/style:font-name="Courier New"/, #kill courier new
+    /style:font-name-asian="Courier New"/,#kill courier new
+    /style:font-name-complex="Courier New"/,#kill courier new
 		/<style:paragraph-properties fo:margin-left="0\.3937in"/, #quotations
 		/                               fo:text-align="justify"/, #quotations
-		/<text:p text:style-name="Horizontal_20_Line"\/>/,
+		/<text:p text:style-name="Horizontal_20_Line"\/>/, #kill HR
 		/<text:h text:outline-level="0">/,
 		/text:bullet-char=""/ ]
 	rep = ['style:rel-width="99%"',
 		'style:print-content="true"',
 		'style:font-name="Menlo"',
+    'style:font-name-asian="Menlo"',
+    'style:font-name-complex="Menlo"',
 		'<style:text-properties fo:font-style="italic" style:font-style-complex="italic"/><style:paragraph-properties fo:margin-left="0.3937in"',
 		'fo:text-align="left"',
 		'',
@@ -27,17 +51,16 @@ File.open(filename, "r+") do |f|
 	lines = f.readlines
 
 	lines.each do |line|
+    linenum += 1
 		renum = 0
 		re.each do |regex|
 			if line=~regex
 				line.gsub!(regex,rep[renum])
-				puts linenum.to_s + ":" + renum.to_s + " = " + line
+				puts ">>" + linenum.to_s + ":" + renum.to_s + " = " + line
 			end
 			renum += 1
 		end
-
 		fout.push(line)
-		linenum += 1
 	end
 
 	puts "TOTAL Lines: " + linenum.to_s
