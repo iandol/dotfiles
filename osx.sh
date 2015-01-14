@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-
-# ~/.osx — http://mths.be/osx
+# Modified from:
+# ~/.osx — http://mths.be/osx https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 
 # Ask for the administrator password upfront
 sudo -v
@@ -28,9 +28,11 @@ defaults write com.apple.finder NSUserKeyEquivalents -dict-add "Move to Trash" "
 
 # Expand save panel by default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
 
 # Expand print panel by default
 defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
+defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
 
 # Set Help Viewer windows to non-floating mode
 defaults write com.apple.helpviewer DevMode -bool true
@@ -41,11 +43,20 @@ defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool true
 # Speed up mission control anim:
 defaults write com.apple.dock expose-animation-duration -float 0.1
 
+# Enable highlight hover effect for the grid view of a stack (Dock)
+defaults write com.apple.dock mouse-over-hilite-stack -bool true
+
+# Minimize windows into their application’s icon
+defaults write com.apple.dock minimize-to-application -bool true
+
+# Don’t automatically rearrange Spaces based on most recent use
+defaults write com.apple.dock mru-spaces -bool false
+
 # Increase window resize speed for Cocoa applications
 defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
 # Speed up dock autohide animation
-defaults write com.apple.Dock autohide-delay -float 0.1 && killall Dock
+defaults write com.apple.Dock autohide-delay -float 0.1
 defaults write com.apple.dock autohide-time-modifier -float 0.4; killall Dock
 
 # Automatically hide and show the Dock
@@ -53,9 +64,6 @@ defaults write com.apple.dock autohide -bool true
 
 # Make Dock icons of hidden applications translucent
 defaults write com.apple.dock showhidden -bool true
-
-# Enable highlight hover effect for the grid view of a stack (Dock)
-defaults write com.apple.dock mouse-over-hilte-stack -bool true
 
 # Disk Utility Debug Menu
 defaults write com.apple.DiskUtility DUDebugMenuEnabled -bool true
@@ -107,8 +115,14 @@ defaults write com.apple.screencapture location -string "$HOME/Desktop"
 # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
 defaults write com.apple.screencapture type -string "png"
 
+# Disable shadow in screenshots
+#defaults write com.apple.screencapture disable-shadow -bool true
+
 # Enable subpixel font rendering on non-Apple LCDs
 defaults write NSGlobalDomain AppleFontSmoothing -int 2
+
+# Enable HiDPI display modes (requires restart)
+#sudo defaults write /Library/Preferences/com.apple.windowserver DisplayResolutionEnabled -bool true
 
 ###############################################################################
 # Finder                                                                      #
@@ -135,7 +149,6 @@ defaults write com.apple.finder QLEnableTextSelection -bool true
 # Display full POSIX path as Finder window title
 defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
- 
 # Disable the warning when changing a file extension
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
@@ -186,8 +199,25 @@ defaults write com.apple.Safari "com.apple.Safari.ContentPageGroupIdentifier.Web
 # Add a context menu item for showing the Web Inspector in web views
 defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 
+###############################################################################
+# SSD-specific tweaks                                                         #
+###############################################################################
 
+# Disable local Time Machine snapshots
+sudo tmutil disablelocal
 
+# Disable hibernation (speeds up entering sleep mode)
+sudo pmset -a hibernatemode 0
+
+# Remove the sleep image file to save disk space
+sudo rm /Private/var/vm/sleepimage
+# Create a zero-byte file instead…
+sudo touch /Private/var/vm/sleepimage
+# …and make sure it can’t be rewritten
+sudo chflags uchg /Private/var/vm/sleepimage
+
+# Disable the sudden motion sensor as it’s not useful for SSDs
+sudo pmset -a sms 0
 
 ###############################################################################
 # Ragtag                                                                      #
@@ -207,6 +237,9 @@ sudo ln -sv /System/Library/CoreServices/Screen\ Sharing.app /Applications/Scree
 #------------------------------
 sudo defaults write /Library/Preferences/com.apple.iWork09.Installer InstallMode -string 'Retail'
 sudo defaults write /Library/Preferences/com.apple.iWork09 ShouldNotSendRegistration -bool yes
+
+# Remove duplicates in the “Open With” menu (also see `lscleanup` alias)
+/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user
 
 # Show the ~/Library folder
 chflags nohidden ~/Library

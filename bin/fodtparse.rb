@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -w
 #require "profile"
-require "pry"
+#require "pry"
 
 infilename = ARGV[0]
 fail "Please specify an existing file!" unless infilename and File.exists?(infilename)
@@ -8,7 +8,6 @@ fail "Please specify an existing file!" unless infilename and File.exists?(infil
 #=========check if .md file is passed, if so parse it to fodt
 ismd =  /\.md$/
 if infilename =~ ismd
-	#binding.pry #use PRY to examine state
 	puts "===> Converting MD to FODT..."
 	c = `which mmd2odf`.sub!(/\n$/," ") + infilename.sub(/ /,"\\ ") #build command
 	puts "===> Command to execute: " + c
@@ -21,7 +20,7 @@ else
 end
 
 fail "===> No FODT file present!" unless filename =~ /fodt$/ and File.exists?(filename)
-binding.pry
+#binding.pry #use PRY to examine state
 File.open(filename, "r+") do |f|
 	fout = []
 	linenum = 0
@@ -34,7 +33,8 @@ File.open(filename, "r+") do |f|
 		/                               fo:text-align="justify"/, #quotations
 		/<text:p text:style-name="Horizontal_20_Line"\/>/, #kill HR
 		/<text:h text:outline-level="0">/,
-		/text:bullet-char=""/ ]
+		/text:bullet-char=""/,
+		/<style:header><text:h text:outline-level="2">Bibliography<\/text:h><\/style:header><\/style:master-page>/ ]
 	rep = ['style:rel-width="100%"',
 		'style:print-content="true"',
 		'style:font-name="Menlo"',
@@ -44,7 +44,8 @@ File.open(filename, "r+") do |f|
 		'fo:text-align="left"',
 		'',
 		'<text:h text:outline-level="0">',
-		'text:bullet-char="•"']
+		'text:bullet-char="•"',
+		'</style:master-page>']
 	
 	lines = f.readlines
 

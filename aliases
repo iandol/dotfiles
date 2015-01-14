@@ -82,7 +82,7 @@ alias rot13='tr a-zA-Z n-za-mN-ZA-M'
 alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl"
 
 #Clean font caches
-alias fontclean = 'sudo atsutil databases -remove'
+alias fontclean="sudo atsutil databases -remove"
 
 # Show/hide hidden files in Finder
 alias show="defaults write com.apple.Finder AppleShowAllFiles -bool true && killall Finder"
@@ -104,8 +104,8 @@ alias powerlog="pmset -g pslog" #log of active power/sleep info
 
 # Flush DNS cache
 alias flushdnsolder="sudo dscacheutil -flushcache"
-alias flushdnsold="sudo killall -HUP mDNSResponder"
-alias flushdns="sudo discoveryutil mdnsflushcache"
+alias flushdnsmavericks="dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+alias flushdns="sudo discoveryutil udnsflushcaches; sudo discoveryutil mdnsflushcache"
 
 # Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {

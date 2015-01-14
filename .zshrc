@@ -28,7 +28,6 @@ antigen theme smt
 antigen apply
 
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin
-[[ -d '/Applications/Araxis Merge.app/' ]] && export PATH=$PATH:/Applications/Araxis\ Merge.app/Contents/Utilities
 [[ -d '/Volumes/Mac/Users/ian/' ]] && MYHD='/Volumes/Mac/Users/ian/'
 [[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA=/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
 
@@ -41,6 +40,7 @@ setopt autopushd pushdminus pushdsilent
 
 [[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 [[ -e "$DF_BASE/config" ]] && source "$DF_BASE/config"
+[[ -d '/Applications/Araxis Merge.app/' ]] && export PATH=$PATH:/Applications/Araxis\ Merge.app/Contents/Utilities
 [[ -f "$HOME/bin/ansiweather" ]] &&	ansiweather
 	
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
