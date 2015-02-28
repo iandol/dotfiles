@@ -148,15 +148,28 @@ function update() {
   fi
   cd olddir
   unset olddir
-  
+
   printf '\n\n---> Updating homebrew...\n'
   brew update
   brew upgrade
   brew cleanup -f
-  
+
   printf '\n\n---> Updating Antigen...\n'
   [ -e "$HOME/.antigen" ] && antigen selfupdate
+	[ -e "$HOME/.antigen" ] && upgrade_oh_my_zsh
   [ -e "$HOME/.antigen" ] && antigen update
+}
+
+function updatePTB() {
+  cd ~/Code/Psychtoolbox-3
+	git fetch upstream
+	git merge upstream/master
+  cd ~/Code/fieldtrip
+	git fetch upstream
+	git checkout master
+	git merge upstream/master
+	git checkout plexon
+	git merge master
 }
 
 function updateAll() {
@@ -189,8 +202,8 @@ function listTCP() {
 }
 
 function define() {
-	local y="$@"; 
-	curl -sA "Opera" "http://www.google.com/search?q=define:${y// /+}" | grep -Po '(?<=<li>)[^<]+'|nl|perl -MHTML::Entities -pe 'decode_entities($_)' 2>/dev/null; 
+	local y="$@";
+	curl -sA "Opera" "http://www.google.com/search?q=define:${y// /+}" | grep -Po '(?<=<li>)[^<]+'|nl|perl -MHTML::Entities -pe 'decode_entities($_)' 2>/dev/null;
 }
 
 function pman() {
@@ -218,7 +231,7 @@ function _up() {
 	updir=`echo $PWD | ruby -e "print STDIN.read.sub(/(.*\/${rx}[^\/]*\/).*/i,'\1')"`
 	echo -n "$updir"
 }
- 
+
 function up() {
 	if [ $# -eq 0 ]; then
 		echo "up: traverses up the current working directory to first match and cds to it"

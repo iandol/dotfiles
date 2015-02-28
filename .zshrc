@@ -14,17 +14,23 @@ export DF_BASE="$HOME/.dotfiles"
 
 source "$ZSHA_BASE/antigen.zsh"
 antigen use oh-my-zsh
-antigen bundle nyan
-antigen bundle ruby
-antigen bundle osx
-antigen bundle forklift
-antigen bundle brew
-antigen bundle git
-antigen bundle command-not-found
-antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundles <<EOBUNDLES
+	nyan
+	ruby
+	osx
+	forklift
+	brew
+	git
+	rand-quote
+	history
+	command-not-found
+	zsh-users/zsh-syntax-highlighting
+EOBUNDLES
 
 #antigen theme "$HOME/.dotfiles/steeef2.zsh-theme"
-antigen theme smt
+#antigen theme "$HOME/.dotfiles/wild-cherry.zsh-theme"
+antigen theme mashaal/wild-cherry zsh/wild-cherry.zsh-theme
+#antigen theme smt
 antigen apply
 
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin
