@@ -109,62 +109,62 @@ alias flushdns="sudo discoveryutil udnsflushcaches; sudo discoveryutil mdnsflush
 
 # Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
-  olddir=$(pwd)
-  if [ -d ~/.dotfiles ]; then
-    printf '\n\n---> Updating DOTFILES...\n'
-    cd ~/.dotfiles
-    git pull
+	olddir=$(pwd)
+	if [ -d ~/.dotfiles ]; then
+		printf '\n\n---> Updating DOTFILES...\n'
+		cd ~/.dotfiles
+		git pull
 	 gst
-  fi
-  if [ -d ~/Code/opticka/.git ]; then
-    printf '\n\n---> Updating OPTICKA...\n'
-    cd ~/Code/opticka
-    git pull
+	fi
+	if [ -d ~/Code/opticka/.git ]; then
+		printf '\n\n---> Updating OPTICKA...\n'
+		cd ~/Code/opticka
+		git pull
 	 gst
-  fi
-  if [ -d ~/Code/spikes/.git ]; then
-    printf '\n\n---> Updating SPIKES...\n'
-    cd ~/Code/spikes
-    git pull
+	fi
+	if [ -d ~/Code/spikes/.git ]; then
+		printf '\n\n---> Updating SPIKES...\n'
+		cd ~/Code/spikes
+		git pull
 	 gst
-  fi
-  if [ -d ~/Code/Psychtoolbox-3/.git ]; then
-    printf '\n\n---> Updating PTB...\n'
-    cd ~/Code/Psychtoolbox-3
-    git pull
+	fi
+	if [ -d ~/Code/Psychtoolbox-3/.git ]; then
+		printf '\n\n---> Updating PTB...\n'
+		cd ~/Code/Psychtoolbox-3
+		git pull
 	if [ -n $(git remote | grep upstream) ]; then
 		printf '\t\t---> Fetching upstream PTB...\n'
 		git fetch upstream
 	fi
-  fi
-  if [ -d ~/Code/fieldtrip ]; then
-    printf '\n\n---> Updating FIELDTRIP...\n'
-    cd ~/Code/fieldtrip
-    git pull
+	fi
+	if [ -d ~/Code/fieldtrip ]; then
+		printf '\n\n---> Updating FIELDTRIP...\n'
+		cd ~/Code/fieldtrip
+		git pull
 	if [ -n $(git remote | grep upstream) ]; then
 		printf '\t\t---> Fetching upstream FIELDTRIP...\n'
 		git fetch upstream
 	fi
-  fi
-  cd olddir
-  unset olddir
+	fi
+	cd olddir
+	unset olddir
 
-  printf '\n\n---> Updating homebrew...\n'
-  brew update
-  brew upgrade
-  brew cleanup -f
+	printf '\n\n---> Updating homebrew...\n'
+	brew update
+	brew upgrade
+	brew cleanup -f
 
-  printf '\n\n---> Updating Antigen...\n'
-  [ -e "$HOME/.antigen" ] && antigen selfupdate
+	printf '\n\n---> Updating Antigen...\n'
+	[ -e "$HOME/.antigen" ] && antigen selfupdate
 	[ -e "$HOME/.antigen" ] && upgrade_oh_my_zsh
-  [ -e "$HOME/.antigen" ] && antigen update
+	[ -e "$HOME/.antigen" ] && antigen update
 }
 
 function updatePTB() {
-  cd ~/Code/Psychtoolbox-3
+	cd ~/Code/Psychtoolbox-3
 	git fetch upstream
 	git merge upstream/master
-  cd ~/Code/fieldtrip
+	cd ~/Code/fieldtrip
 	git fetch upstream
 	git checkout master
 	git merge upstream/master
@@ -174,31 +174,31 @@ function updatePTB() {
 
 function updateAll() {
 	update
-    printf '\n\n---> Checking OS X updates...\n'
-    sudo softwareupdate --list
-    printf '\n---> Update finished...\n'
+	printf '\n\n---> Checking OS X updates...\n'
+	sudo softwareupdate --list
+	printf '\n---> Update finished...\n'
 }
 
 # See all UDP ports open
 function listUDP() {
-  if [ $# == 0 ]; then
-    tok="matlab"
-    echo "search for: $tok"
-  else
-    tok=$1
-  fi
-  sudo lsof -i UDP -P | grep -i "$tok"
+	if [ $# == 0 ]; then
+		tok="matlab"
+		echo "search for: $tok"
+	else
+		tok=$1
+	fi
+	sudo lsof -i UDP -P | grep -i "$tok"
 }
 
 # See listening TCP ports
 function listTCP() {
-  if [ $# == 0 ]; then
-    tok="listen"
-    echo "search for: $tok"
-  else
-    tok=$1
-  fi
-  sudo lsof -i TCP -P | grep -i "$tok"
+	if [ $# == 0 ]; then
+		tok="listen"
+		echo "search for: $tok"
+	else
+		tok=$1
+	fi
+	sudo lsof -i TCP -P | grep -i "$tok"
 }
 
 function define() {
