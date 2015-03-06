@@ -1,6 +1,7 @@
 #!/bin/zsh
 cd /System/Library/Extensions
-sudo ls -al P*
+echo "\n\nCheck directory:"
+sudo ls -al Psy*
 echo "\n\nIs PsychtoolboxKernelDriver Currently Installed:"
 kextstat -b PsychtoolboxKernelDriver
 
