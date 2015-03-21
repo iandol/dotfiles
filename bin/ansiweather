@@ -2,11 +2,11 @@
 
 ###############################################################################
 #                                                                             #
-# AnsiWeather 1.00 (c) by Frederic Cambus 2014                                #
+# AnsiWeather 1.01 (c) by Frederic Cambus 2013-2015                           #
 # https://github.com/fcambus/ansiweather                                      #
 #                                                                             #
 # Created: 2013/08/29                                                         #
-# Last Updated: 2014/01/24                                                    #
+# Last Updated: 2015/03/16                                                    #
 #                                                                             #
 # AnsiWeather is released under the BSD 3-Clause license.                     #
 # See LICENSE file for details.                                               #
@@ -53,7 +53,9 @@ fi
 
 ###[ Auto-Location Logic ]####################################################
 
-geo_locate_api="http://www.telize.com/geoip" #geo location service
+geo_locate_proto=$(get_config "geo_api_proto" || echo "http")
+geo_locate_api=$(get_config "geo_api_url" || echo "www.telize.com/geoip") #geo location service
+geo_locate_api="${geo_locate_proto}://${geo_locate_api}"
 
 function auto_locate {
 	ret=""
@@ -88,6 +90,9 @@ forecast=$(get_config "forecast" || echo 0)
 
 # Show daylight : "true" or "false"
 daylight=$(get_config "daylight" || echo false)
+
+dateformat=$(get_config "dateformat" || echo "%a %b %d")
+timeformat=$(get_config "timeformat" || echo "%b %d %r")
 
 # Or get config options from command line flags
 while getopts l:u:s:f:Fd: option
@@ -165,10 +170,10 @@ fi
 function epoch_to_date {
 	if date -j -r $1 +"%a %b %d" > /dev/null 2>&1; then
 		# BSD
-		ret=$(date -j -r $1 +"%a %b %d")
+		ret=$(date -j -r $1 +"$dateformat")
 	else
 		# GNU
-		ret=$(date -d @$1 +"%a %b %d")
+		ret=$(date -d @$1 +"$dateformat")
 	fi
 	echo $ret
 }
@@ -185,7 +190,9 @@ then
 	humidity=()
 	pressure=()
 	sky=()
-	for i in $(seq 0 $(($forecast-1)))
+
+	i=0
+	while [ $i -lt $forecast ]
 	do
 		days+=("$(echo $weather | jq ".list[$i]")")
 		dates+=("$(epoch_to_date $(echo ${days[$i]} | jq -r '.dt'))")
@@ -194,6 +201,8 @@ then
 		humidity+=("$(echo ${days[$i]} | jq -r '.humidity')")
 		pressure+=("$(echo ${days[$i]} | jq -r '.pressure')")
 		sky+=("$(echo ${days[$i]} | jq -r '.weather[0].main')")
+
+		i=$(($i + 1))
 	done
 else
 	city=$(echo $weather | jq -r '.name')
@@ -226,10 +235,10 @@ fi
 function epoch_to_time {
 	if date -j -r $1 +"%r" > /dev/null 2>&1; then
 		# BSD
-		ret=$(date -j -r $1 +"%b %d %r")
+		ret=$(date -j -r $1 +"$timeformat")
 	else
 		# GNU
-		ret=$(date -d @$1 +"%b %d %r")
+		ret=$(date -d @$1 +"$timeformat")
 	fi
 	echo $ret
 }
@@ -332,7 +341,9 @@ function get_icon {
 if [ $forecast != 0 ]
 then
 	output="$background$text $city forecast $text$delimiter "
-	for i in $(seq 0 $(($forecast-1)))
+	
+	i=0
+	while [ $i -lt $forecast ]
 	do
 		icon=""
 		if [ $symbols = true ]
@@ -344,6 +355,8 @@ then
 		then
 			output="$output$dashes "
 		fi
+
+		i=$(($i + 1))
 	done
 	output="$output\033[0m"
 	echo -e "$output"

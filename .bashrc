@@ -15,6 +15,7 @@ export HISTCONTROL=ignoredups
 export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
 
 export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$HOME:$PATH
+[[ -d "$HOME/anaconda/" ]] && export PATH="/Users/ian/anaconda/bin:$PATH" #anaconda scientific python
 
 if [ -f `brew --prefix`/etc/bash_completion ]; then
 	source `brew --prefix`/etc/bash_completion
