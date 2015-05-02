@@ -27,21 +27,20 @@ antigen bundles <<EOBUNDLES
 	zsh-users/zsh-syntax-highlighting
 EOBUNDLES
 
-#antigen theme "$HOME/.dotfiles/steeef2.zsh-theme"
-#antigen theme "$HOME/.dotfiles/wild-cherry.zsh-theme"
-antigen theme mashaal/wild-cherry zsh/wild-cherry.zsh-theme
 #antigen theme smt
+#antigen theme "$HOME/.dotfiles/steeef2.zsh-theme"
+antigen theme mashaal/wild-cherry zsh/wild-cherry.zsh-theme
+
 antigen apply
 
 export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin
-[[ -d '/Volumes/Mac/Users/ian/' ]] && MYHD='/Volumes/Mac/Users/ian/'
-[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA=/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
-[[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
-[[ -e "$DF_BASE/config" ]] && source "$DF_BASE/config"
-[[ -d '/Applications/Araxis Merge.app/' ]] && export PATH=$PATH:/Applications/Araxis\ Merge.app/Contents/Utilities
-[[ -d "$HOME/anaconda/" ]] && export PATH="/Users/ian/anaconda/bin:$PATH" #anaconda scientific python
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" # Load RVM function
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+[[ -d "/Volumes/Mac/Users/ian/" ]] && MYHD='/Volumes/Mac/Users/ian/'
+[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home"
+[[ -d "/Applications/Araxis Merge.app/" ]] && export PATH="$PATH:/Applications/Araxis Merge.app/Contents/Utilities"
+[[ -d "$HOME/anaconda/" ]] && export PATH="$HOME/anaconda/bin:$PATH" #anaconda scientific python
+[[ -d "/usr/local/Cellar/apache-spark/1.3.0/libexec" ]] && export SPARK_HOME="/usr/local/Cellar/apache-spark/1.3.0/libexec"
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM function
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && export PATH="$HOME/.rvm/bin:$PATH" # Add RVM to PATH for scripting
 
 export EDITOR='vim'
 export BZR_EDITOR='vim'
@@ -49,5 +48,8 @@ export BZR_EDITOR='vim'
 export MANPAGER='less -X'
 DIRSTACKSIZE=12 #pushd stacksize
 setopt autopushd pushdminus pushdsilent
+
+[[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
+[[ -e "$DF_BASE/config" ]] && source "$DF_BASE/config"
 
 [[ -f "$DF_BASE/bin/ansiweather" ]] && $DF_BASE/bin/ansiweather

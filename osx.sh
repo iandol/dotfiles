@@ -57,7 +57,7 @@ defaults write NSGlobalDomain NSWindowResizeTime -float 0.001
 
 # Speed up dock autohide animation
 defaults write com.apple.Dock autohide-delay -float 0.1
-defaults write com.apple.dock autohide-time-modifier -float 0.4; killall Dock
+defaults write com.apple.dock autohide-time-modifier -float 0.1
 
 # Automatically hide and show the Dock
 defaults write com.apple.dock autohide -bool true
