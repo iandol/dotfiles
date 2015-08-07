@@ -24,29 +24,29 @@ fail "===> No FODT file present!" unless filename =~ /fodt$/ and File.exists?(fi
 File.open(filename, "r+") do |f|
 	fout = []
 	linenum = 0
-	re = [ /svg:width="95%"/, #use more space for frames
+	re = [
+		/svg:width="95%"/, #use more space for frames
 		/style:print-content="false"/, #Fix PDF generation not including images
-		/style:font-name="Courier New"/, #kill courier new
-		/style:font-name-asian="Courier New"/,#kill courier new
-		/style:font-name-complex="Courier New"/,#kill courier new
+		/Courier New/,
 		/<style:paragraph-properties fo:margin-left="0\.3937in"/, #quotations
 		/                               fo:text-align="justify"/, #quotations
 		/<text:p text:style-name="Horizontal_20_Line"\/>/, #kill HR
 		/<text:h text:outline-level="0">/,
 		/text:bullet-char=""/,
-		/<style:header><text:h text:outline-level="2">Bibliography<\/text:h><\/style:header><\/style:master-page>/ ]
-	rep = ['style:rel-width="100%"',
+		/<style:header><text:h text:outline-level="2">Bibliography<\/text:h><\/style:header><\/style:master-page>/
+	]
+	rep = [
+		'svg:width="100%"', #style:rel-width="100%"
 		'style:print-content="true"',
-		'style:font-name="Menlo"',
-		'style:font-name-asian="Menlo"',
-		'style:font-name-complex="Menlo"',
+		'Menlo',
 		'<style:text-properties fo:font-style="italic" style:font-style-complex="italic"/><style:paragraph-properties fo:margin-left="0.3937in"',
 		'fo:text-align="left"',
 		'',
 		'<text:h text:outline-level="0">',
 		'text:bullet-char="•"',
-		'</style:master-page>']
-	
+		'</style:master-page>'
+	]
+
 	lines = f.readlines
 
 	lines.each do |line|

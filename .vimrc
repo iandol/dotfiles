@@ -1,8 +1,7 @@
 call pathogen#infect()
-set background=dark     " Assume a dark background
-let g:solarized_termtrans = 1
-"colorscheme solarized
-set mouse=a                 " automatically enable mouse usage
+set background=dark           " Assume a dark background
+let g:solarized_termtrans = 1 "colorscheme solarized
+set mouse=a                   " automatically enable mouse usage
 scriptencoding utf-8
 set history=1000 
 set ignorecase                  " case insensitive search

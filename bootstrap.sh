@@ -7,7 +7,7 @@ printf 'Let us bootstrap Homebrew if not present ... '
 if [ -e /usr/local/bin/brew ]; then
 	printf 'Homebrew is present!\n'
 else
-	ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 	printf 'Homebrew installed...\n'
 fi
 
@@ -19,6 +19,7 @@ if [ -d ~/.dotfiles/ ]; then
 	printf ' .dotfiles are present! \n'
 else	
 	git clone https://github.com/iandol/dotfiles.git ~/.dotfiles
+	chown -R $USER ~/.dotfiles
 	printf 'we cloned a new .dotfiles...\n'
 fi
 
@@ -26,21 +27,27 @@ printf 'Setting up the symbolic links at: '
 date
 printf '...\n'
 printf '\e[32m'
-ln -siv ~/.dotfiles/.zshrc ~
-ln -siv ~/.dotfiles/.bashrc ~
-ln -siv ~/.dotfiles/.bash_profile ~
+ln -siv ~/.dotfiles/.zshrc ~ 
+chown $USER ~/.zshrc
+ln -siv ~/.dotfiles/.bashrc ~ 
+chown $USER ~/.bashrc
+ln -siv ~/.dotfiles/.bash_profile ~ 
+chown $USER ~/.bash_profile
 ln -siv ~/.dotfiles/.vimrc ~
+chown $USER ~/.vimrc
 ln -siv ~/.dotfiles/.vim/ ~/.vim
+chown -R $USER ~/.vim
 printf '\e[36m'
 
 printf 'Will check for a functional Antigen...\n'
 if [ -d ~/.oh-my-zsh/ ]; then
-	printf '\t...Goint to replace oh-my-zsh with antigen... '
+	printf '\t...Going to replace oh-my-zsh with antigen... '
 	rm -rf ~/.oh-my-zsh/
 fi
 if [ ! -d ~/.antigen/ ]; then
 	printf '\tInstalling Antigen...\n'
 	git clone https://github.com/zsh-users/antigen.git ~/.antigen
+	chown -R $USER ~/.antigen
 	source "$HOME/.antigen/antigen.zsh"
 	antigen use oh-my-zsh
 	antigen bundle zsh-users/zsh-syntax-highlighting
@@ -48,15 +55,18 @@ if [ ! -d ~/.antigen/ ]; then
 	antigen apply
 else
 	printf '\tAntigen already installed...\n'
+	chown $USER ~/.antigen
 fi
 
 printf 'Linking some bin files in ~/bin/: \n'
 printf '\e[32m'
 if [ -d ~/bin/ ]; then
 	ln -sv ~/.dotfiles/bin/* ~/bin
+	chown -R $USER ~/bin/*
 else
 	mkdir ~/bin/
 	ln -sv ~/.dotfiles/bin/* ~/bin
+	chown -R $USER ~/bin/*
 fi
 printf '\e[36m\n\n'
 

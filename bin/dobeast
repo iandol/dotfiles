@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ -d ~/Desktop/The\ Beast_mmd/ ]; then
+	olddir=$(pwd)
+	cd ~/Desktop/The\ Beast_mmd/
+	rm -rf The\ BeastPARSE.fodt
+	~/bin/fodtparse.rb The\ Beast.md
+	echo "================================="
+	open The\ BeastPARSE.fodt
+	cd olddir
+	unset olddir
+fi
