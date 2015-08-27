@@ -38,6 +38,7 @@ export PATH=~/bin:/usr/local/bin:/usr/local/sbin:~:/usr/bin:/bin:/usr/sbin:/sbin
 [[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home"
 [[ -d "/Applications/Araxis Merge.app/" ]] && export PATH="$PATH:/Applications/Araxis Merge.app/Contents/Utilities"
 [[ -d "$HOME/anaconda/" ]] && export PATH="$HOME/anaconda/bin:$PATH" #anaconda scientific python
+[[ -d "/Library/TeX/texbin" ]] && export PATH="/Library/TeX/texbin:$PATH" #MacTeX
 [[ -d "/usr/local/Cellar/apache-spark/1.3.0/libexec" ]] && export SPARK_HOME="/usr/local/Cellar/apache-spark/1.3.0/libexec"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM function
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && export PATH="$HOME/.rvm/bin:$PATH" # Add RVM to PATH for scripting
