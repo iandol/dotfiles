@@ -12,7 +12,7 @@ else
 fi
 
 #make sure our minimum packages are installed
-brew install git figlet jq &> /dev/null 
+brew install git figlet archey jq &> /dev/null 
 
 printf 'Let us bootstrap .dotfiles if not present ... '
 if [ -d ~/.dotfiles/ ]; then
