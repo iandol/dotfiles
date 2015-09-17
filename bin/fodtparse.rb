@@ -22,8 +22,6 @@ end
 fail "===> No FODT file present!" unless filename =~ /fodt$/ and File.exists?(filename)
 #binding.pry #use PRY to examine state
 File.open(filename, "r+") do |f|
-	fout = []
-	linenum = 0
 	re = [
 		/svg:width="95%"/, #use more space for frames
 		/style:print-content="false"/, #Fix PDF generation not including images
@@ -33,8 +31,7 @@ File.open(filename, "r+") do |f|
 		/<text:p text:style-name="Horizontal_20_Line"\/>/, #kill HR
 		/<text:h text:outline-level="0">/,
 		/text:bullet-char=""/,
-		/<style:header><text:h text:outline-level="2">Bibliography<\/text:h><\/style:header><\/style:master-page>/
-	]
+		/<style:header><text:h text:outline-level="2">Bibliography<\/text:h><\/style:header><\/style:master-page>/	]
 	rep = [
 		'svg:width="100%"', #style:rel-width="100%"
 		'style:print-content="true"',
@@ -44,24 +41,39 @@ File.open(filename, "r+") do |f|
 		'',
 		'<text:h text:outline-level="0">',
 		'text:bullet-char="•"',
-		'</style:master-page>'
-	]
-
+		'</style:master-page>'	]
+	footnoteRE = /<\/text:note>/
+	
+	fout = []
+	linenum = 0
+	collapse = false
+	nFootnotes = 0
 	lines = f.readlines
-
 	lines.each do |line|
-	linenum += 1
-		renum = 0
-		re.each do |regex|
-			if line=~regex
-				line.gsub!(regex,rep[renum])
-				puts ">>" + linenum.to_s + ":" + renum.to_s + " = " + line
+		linenum += 1
+		if line=~footnoteRE
+			collapse = true
+			nFootnotes += 1
+			line = ''
+		else
+			renum = 0
+			if collapse == true
+				line = "<\/text:note>" + line
+				puts ">>" + linenum.to_s + ": Collapsed footnote"
 			end
-			renum += 1
+			re.each do |regex|
+				if line=~regex
+					line.gsub!(regex,rep[renum])
+					puts ">>" + linenum.to_s + ":" + renum.to_s + " = " + line
+				end
+				renum += 1
+			end
+			collapse = false
 		end
 		fout.push(line)
 	end
 
+	puts "# of Footnotes: " + nFootnotes.to_s
 	puts "TOTAL Lines: " + linenum.to_s
 	puts "OUT Lines:" + fout.length.to_s
 
