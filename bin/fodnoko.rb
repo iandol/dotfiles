@@ -12,7 +12,9 @@ File.open(filename, "r+") do |f|
 
 	a = 1
 	@doc.xpath("//style:style").each do | style |
-		puts a.to_s + ": " + style.to_s
+		puts "::::" + a.to_s + "::::"
+		puts style.to_s
+		puts "======="
 		puts style
 		puts
 		puts

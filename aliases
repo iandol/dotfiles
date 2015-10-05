@@ -12,7 +12,7 @@ alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
 alias sudo='sudo '
 
 #manage bash/zsh
-alias edit='mate -w'
+alias edit='subl -w'
 alias reloadbash='source ~/.bashrc'
 alias reloadzsh='source ~/.zshrc'
 alias editbash='edit ~/.bashrc ~/.bash_profile ~/.dotfiles/env ~/.dotfiles/config ~/.dotfiles/aliases && reloadbash'
@@ -154,10 +154,8 @@ function update() {
 	brew upgrade
 	brew cleanup -f
 
-	printf '\n\n---> Updating Antigen...\n'
-	[ -e "$HOME/.antigen" ] && antigen selfupdate
-	[ -e "$HOME/.antigen" ] && upgrade_oh_my_zsh
-	[ -e "$HOME/.antigen" ] && antigen update
+	[ -e "$HOME/.antigen" ] && printf '\n\n---> Updating Antigen...\n'
+	[ -e "$HOME/.antigen" ] && antigen selfupdate; upgrade_oh_my_zsh; antigen update; antigen cleanup --force
 }
 
 function updatePTB() {

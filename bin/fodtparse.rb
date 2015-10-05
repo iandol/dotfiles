@@ -1,17 +1,20 @@
-#!/usr/bin/env ruby -w
+#!/usr/bin/env ruby
 #require "profile"
 #require "pry"
+#require "byebug"
 
+puts "===> Parsing FODT using Ruby V." + RUBY_VERSION
 infilename = ARGV[0]
-fail "Please specify an existing file!" unless infilename and File.exists?(infilename)
-
+fail "Please specify an existing file!" unless infilename and File.exist?(infilename)
+#byebug
+#require 'debug'
 #=========check if .md file is passed, if so parse it to fodt
 ismd =  /\.md$/
 if infilename =~ ismd
 	puts "===> Converting MD to FODT..."
 	c = `which mmd2odf`.sub!(/\n$/," ") + infilename.sub(/ /,"\\ ") #build command
 	puts "===> Command to execute: " + c
-	x = system(c)
+	x = system(c) #run the system command
 	puts "===> Check for FODT file..."
 	filename = infilename.sub(ismd,".fodt")
 	puts "===> New filename: " + filename
@@ -19,29 +22,35 @@ else
 	filename = infilename
 end
 
-fail "===> No FODT file present!" unless filename =~ /fodt$/ and File.exists?(filename)
+fail "===> No FODT file present!" unless filename =~ /fodt$/ and File.exist?(filename)
 #binding.pry #use PRY to examine state
 File.open(filename, "r+") do |f|
 	re = [
 		/svg:width="95%"/, #use more space for frames
 		/style:print-content="false"/, #Fix PDF generation not including images
-		/Courier New/,
+		/Courier New/, #better monospace font!!!
 		/<style:paragraph-properties fo:margin-left="0\.3937in"/, #quotations
 		/                               fo:text-align="justify"/, #quotations
 		/<text:p text:style-name="Horizontal_20_Line"\/>/, #kill HR
-		/<text:h text:outline-level="0">/,
-		/text:bullet-char=""/,
-		/<style:header><text:h text:outline-level="2">Bibliography<\/text:h><\/style:header><\/style:master-page>/	]
+		/text:bullet-char=""/, #unknown character
+		/<style:header><text:h text:outline-level="2">Bibliography<\/text:h><\/style:header><\/style:master-page>/,
+		/<draw:text-box><text:p><draw:frame text:anchor-type="as-char"/, #add style to figure
+		/<office:styles>/, #inject figure styles
+		/<text:p>([[[:alnum:]][[:space:]]]+)<text:sequence text:name="Figure"/	
+	]
 	rep = [
-		'svg:width="100%"', #style:rel-width="100%"
-		'style:print-content="true"',
+		'svg:width="100%" style:rel-width="100%"', #style:rel-width="100%"
+		'fo:margin-left="0cm" fo:margin-right="0cm"',
 		'Menlo',
-		'<style:text-properties fo:font-style="italic" style:font-style-complex="italic"/><style:paragraph-properties fo:margin-left="0.3937in"',
+		'<style:text-properties fo:font-style="italic" style:font-style-complex="italic"/><style:paragraph-properties fo:margin-left="1cm"',
 		'fo:text-align="left"',
 		'',
-		'<text:h text:outline-level="0">',
 		'text:bullet-char="•"',
-		'</style:master-page>'	]
+		'</style:master-page>',	
+		'<draw:text-box><text:p text:style-name="FigureWithCaption"><draw:frame text:anchor-type="as-char"',
+		'<office:styles><style:style style:name="Caption" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"><style:paragraph-properties fo:margin-top="0.1cm" fo:margin-bottom="0.1cm" style:contextual-spacing="false" text:number-lines="false" text:line-number="0" /></style:style><style:style style:name="FigureCaption" style:family="paragraph" style:parent-style-name="Caption" style:class="extra"></style:style><style:style style:name="Figure" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"><style:paragraph-properties text:number-lines="false" text:line-number="0" /></style:style><style:style style:name="FigureWithCaption" style:family="paragraph" style:parent-style-name="Figure" style:class="extra"><style:paragraph-properties text:number-lines="false" text:line-number="0" fo:text-align="center" fo:keep-with-next="always" /></style:style>',
+		'<text:p text:style-name="FigureCaption">\1<text:sequence text:name="Figure"'
+	]
 	footnoteRE = /<\/text:note>/
 	
 	fout = []

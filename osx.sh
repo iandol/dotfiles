@@ -24,7 +24,7 @@ defaults write NSGlobalDomain AppleMetricUnits -bool true
 ###############################################################################
 
 # Set F8 as delete
-defaults write com.apple.finder NSUserKeyEquivalents -dict-add "Move to Trash" "\\Uf70b"
+defaults write NSGlobalDomain NSUserKeyEquivalents -dict-add "Move to Trash" "\\Uf70b"
 
 # Expand save panel by default
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
