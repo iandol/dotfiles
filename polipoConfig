@@ -1,0 +1,9 @@
+logFile="~/polipo.log"
+dnsNameServer=8.8.8.8
+displayName="Polipus"
+diskCacheFilePermissions=0775
+diskCacheDirectoryPermissions=0775
+disableIndexing=false
+disableServersList=false
+proxyName="DiogenesProxy"
+relaxTransparency=maybe

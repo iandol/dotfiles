@@ -73,7 +73,7 @@ File.open(filename, "r+") do |f|
 			re.each do |regex|
 				if line=~regex
 					line.gsub!(regex,rep[renum])
-					puts ">>" + linenum.to_s + ":" + renum.to_s + " = " + line
+					puts ">>" + linenum.to_s + ":" + renum.to_s + " = " + rep[renum].to_s
 				end
 				renum += 1
 			end

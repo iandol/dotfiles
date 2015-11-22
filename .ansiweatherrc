@@ -1,0 +1,16 @@
+symbols:true
+location:London,UK
+units:metric
+forecast:0
+daylight:true
+
+# Text and Colors
+background:\033[40m
+text:\033[36;1m
+data:\033[33;1m
+delimiter:\033[35m▷
+dashes:\033[34m|
+greeting_text:•
+wind_text:Wnd
+humidity_text:Hmd
+pressure_text:Prs
