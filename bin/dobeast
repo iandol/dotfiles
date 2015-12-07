@@ -8,7 +8,7 @@ if [ -d ~/Desktop/Beast_mmd/ ]; then
 	[[ -f "The BeastPARSE.fodt" ]] && rm -rf The\ BeastPARSE.fodt; echo "Delete The BeastPARSE.fodt"
 	[[ -f "BeastPandoc.odt" ]] && rm -rf BeastPandoc.odt; echo "Delete BeastPandoc.odt"
 	echo "=================================PARSING MMD"
-	~/bin/fodtparse.rb The\ Beast.md
+	~/bin/fodtparse The\ Beast.md
 	echo "=================================PANDOC OPTION"
 	[[ -e `which pandoc` ]] && pandoc The\ Beast.md --from markdown_mmd+implicit_figures+subscript+superscript-all_symbols_escapable -o BeastPandoc.odt
 	echo "=================================OPENING DOCS"

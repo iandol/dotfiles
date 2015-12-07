@@ -12,7 +12,8 @@ fail "Please specify an existing file!" unless infilename and File.exist?(infile
 ismd =  /\.md$/
 if infilename =~ ismd
 	puts "===> Converting MD to FODT..."
-	c = `which mmd2odf`.sub!(/\n$/," ") + infilename.sub(/ /,"\\ ") #build command
+	#c = `which mmd2odf`.sub!(/\n$/," ") + infilename.sub(/ /,"\\ ") #build command
+	c = "multimarkdown -b -t odf " + infilename.sub(/ /,"\\ ") #build command
 	puts "===> Command to execute: " + c
 	x = system(c) #run the system command
 	puts "===> Check for FODT file..."
@@ -21,8 +22,8 @@ if infilename =~ ismd
 else
 	filename = infilename
 end
-
 fail "===> No FODT file present!" unless filename =~ /fodt$/ and File.exist?(filename)
+
 #binding.pry #use PRY to examine state
 File.open(filename, "r+") do |f|
 	re = [
@@ -33,7 +34,7 @@ File.open(filename, "r+") do |f|
 		/                               fo:text-align="justify"/, #quotations
 		/<text:p text:style-name="Horizontal_20_Line"\/>/, #kill HR
 		/text:bullet-char=""/, #unknown character
-		/<style:header><text:h text:outline-level="2">Bibliography<\/text:h><\/style:header><\/style:master-page>/,
+		/<style:header><text:h text:outline-level="2">Bibliography<\/text:h><\/style:header>/, #remove rogue bibliography
 		/<draw:text-box><text:p><draw:frame text:anchor-type="as-char"/, #add style to figure
 		/<office:styles>/, #inject figure styles
 		/<text:p>([[[:alnum:]][[:space:]]]+)<text:sequence text:name="Figure"/	
@@ -46,12 +47,12 @@ File.open(filename, "r+") do |f|
 		'fo:text-align="left"',
 		'',
 		'text:bullet-char="•"',
-		'</style:master-page>',	
+		'',	
 		'<draw:text-box><text:p text:style-name="FigureWithCaption"><draw:frame text:anchor-type="as-char"',
 		'<office:styles><style:style style:name="Caption" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"><style:paragraph-properties fo:margin-top="0.1cm" fo:margin-bottom="0.1cm" style:contextual-spacing="false" text:number-lines="false" text:line-number="0" /></style:style><style:style style:name="FigureCaption" style:family="paragraph" style:parent-style-name="Caption" style:class="extra"></style:style><style:style style:name="Figure" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"><style:paragraph-properties text:number-lines="false" text:line-number="0" /></style:style><style:style style:name="FigureWithCaption" style:family="paragraph" style:parent-style-name="Figure" style:class="extra"><style:paragraph-properties text:number-lines="false" text:line-number="0" fo:text-align="center" fo:keep-with-next="always" /></style:style>',
 		'<text:p text:style-name="FigureCaption">\1<text:sequence text:name="Figure"'
 	]
-	footnoteRE = /<\/text:note>/
+	footnoteRE = /^<\/text:note>$/
 	
 	fout = []
 	linenum = 0
@@ -73,7 +74,7 @@ File.open(filename, "r+") do |f|
 			re.each do |regex|
 				if line=~regex
 					line.gsub!(regex,rep[renum])
-					puts ">>" + linenum.to_s + ":" + renum.to_s + " = " + rep[renum].to_s
+					puts ">>>" + linenum.to_s + ":" + renum.to_s + " = " + rep[renum].to_s
 				end
 				renum += 1
 			end
@@ -82,7 +83,7 @@ File.open(filename, "r+") do |f|
 		fout.push(line)
 	end
 
-	puts "# of Footnotes: " + nFootnotes.to_s
+	puts "# of Collapsable Footnotes: " + nFootnotes.to_s
 	puts "TOTAL Lines: " + linenum.to_s
 	puts "OUT Lines:" + fout.length.to_s
 
