@@ -1,13 +1,10 @@
 #!/usr/bin/env ruby
-#require "profile"
-#require "pry"
-#require "byebug"
+# fodtparse is a simple script to fix several MMD > FOTD errors, using regex replace loop
 
 puts "===> Parsing FODT using Ruby V." + RUBY_VERSION
 infilename = ARGV[0]
 fail "Please specify an existing file!" unless infilename and File.exist?(infilename)
-#byebug
-#require 'debug'
+
 #=========check if .md file is passed, if so parse it to fodt
 ismd =  /\.md$/
 if infilename =~ ismd
@@ -22,9 +19,8 @@ if infilename =~ ismd
 else
 	filename = infilename
 end
-fail "===> No FODT file present!" unless filename =~ /fodt$/ and File.exist?(filename)
 
-#binding.pry #use PRY to examine state
+fail "===> No FODT file present!" unless filename =~ /fodt$/ and File.exist?(filename)
 File.open(filename, "r+") do |f|
 	re = [
 		/svg:width="95%"/, #use more space for frames
