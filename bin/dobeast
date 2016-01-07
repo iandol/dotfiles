@@ -1,19 +1,45 @@
-#!/bin/sh
+#!/bin/zsh
+echo "=================================SETUP"
+echo "Path is " $PATH
+echo "User is " $USER
+echo "Home is " $HOME
+echo "Shell is " $SHELL
+echo "fodtparse is at " `which fodtparse`
+echo "=================================PREPARE MD to ODT Conversion"
+olddir=$(pwd)
 
-if [ -d ~/Desktop/Beast_mmd/ ]; then
-	olddir=$(pwd)
-	cd ~/Desktop/Beast_mmd/
-	echo "=================================DELETE OLD VERSIONS"
-	[[ -f "The Beast.fodt" ]] && rm -rf Beast.fodt; echo "Delete The Beast.fodt"
-	[[ -f "The BeastPARSE.fodt" ]] && rm -rf BeastPARSE.fodt; echo "Delete The BeastPARSE.fodt"
-	[[ -f "BeastPandoc.odt" ]] && rm -rf BeastPandoc.odt; echo "Delete BeastPandoc.odt"
-	echo "=================================PARSING MMD to FODT"
-	~/bin/fodtparse Beast.md
-	echo "=================================TRYING PANDOC PARSE TOO"
-	[[ -e `which pandoc` ]] && pandoc Beast.md --from markdown_mmd+tex_math_dollars+pipe_tables+implicit_figures+subscript+superscript-all_symbols_escapable -o BeastPandoc.odt
-	echo "=================================OPENING DOCUMENT"
-	[[ -f "The BeastPARSE.fodt" ]] && open BeastPARSE.fodt &
-	#[[ -f "BeastPandoc.odt" ]] && open BeastPandoc.odt &
-	cd $olddir
-	unset olddir
+if [[ $olddir =~ 'Beast_mmd' ]]; then
+	echo "===> We are in the right directory"
+else
+	cd /Users/ian/Desktop/Beast_mmd/
 fi
+
+echo "=================================DELETE OLD VERSIONS"
+[[ -f "Beast.fodt" ]] && rm -rf Beast.fodt | echo "Delete The Beast.fodt"
+[[ -f "BeastPARSE.fodt" ]] && rm -rf BeastPARSE.fodt | echo "Delete The BeastPARSE.fodt"
+[[ -f "BeastPandoc.odt" ]] && rm -rf BeastPandoc.odt | echo "Delete BeastPandoc.odt"
+
+echo "=================================PARSING MMD to FODT"
+if [[ -f "Beast.md" ]]; then
+	 fodtparse Beast.md >parse.log 2>&1
+	 	if [[ $? > 0 ]]; then
+			echo "=================================FODTPARSE FAIL"
+			exit 1
+		fi
+ else
+	 echo "=================================BEAST.MD NOT PRESENT"
+	 exit 1
+fi
+
+echo "=================================TRYING PANDOC PARSE TOO"
+[[ -e `which pandoc` ]] && pandoc Beast.md --from markdown_mmd+tex_math_dollars+pipe_tables+implicit_figures+subscript+superscript-all_symbols_escapable -o BeastPandoc.odt
+
+echo "=================================TRY OPENING DOCUMENT"
+if [[ -f "BeastPARSE.fodt" ]]; then
+	echo "===> Opening parsed FODT file"
+	 open BeastPARSE.fodt
+else
+	 echo "===>Can't find parsed FODT file"
+fi
+cd $olddir
+unset olddir

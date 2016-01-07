@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
+#encoding: utf-8
 # fodtparse is a simple script to fix several MMD > FOTD errors, using regex replace loop
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
 
-puts "===> Parsing FODT using Ruby V." + RUBY_VERSION
+puts "===> Parsing FODT using Ruby V.#{RUBY_VERSION}"
 infilename = ARGV[0]
 fail "Please specify an existing file!" unless infilename and File.exist?(infilename)
 
@@ -9,11 +12,12 @@ fail "Please specify an existing file!" unless infilename and File.exist?(infile
 ismd =  /\.md$/
 if infilename =~ ismd
 	puts "===> Converting MD to FODT..."
-	#c = `which mmd2odf`.sub!(/\n$/," ") + infilename.sub(/ /,"\\ ") #build command
 	c = "multimarkdown -b -t odf " + infilename.sub(/ /,"\\ ") #build command
-	puts "===> Command to execute: " + c
-	x = system(c) #run the system command
-	puts "===> Check for FODT file..."
+	puts "===> Command to execute: #{c}"
+	system(c) #run the system command
+	if $?.exitstatus > 0
+		exit 1
+	end
 	filename = infilename.sub(ismd,".fodt")
 	puts "===> New filename: " + filename
 else
@@ -30,10 +34,11 @@ File.open(filename, "r+") do |f|
 		/                               fo:text-align="justify"/, #quotations
 		/<text:p text:style-name="Horizontal_20_Line"\/>/, #kill HR
 		/text:bullet-char=""/, #unknown character
+		/<style:text-properties fo:font-family="starbats" style:font-charset="x-symbol"\/>/,
 		/<style:header><text:h text:outline-level="2">Bibliography<\/text:h><\/style:header>/, #remove rogue bibliography
 		/<draw:text-box><text:p><draw:frame text:anchor-type="as-char"/, #add style to figure
 		/<office:styles>/, #inject figure styles
-		/<text:p>([[[:alnum:]][[:space:]]]+)<text:sequence text:name="Figure"/	
+		/<text:p>([[[:alnum:]][[:space:]]]+)<text:sequence text:name="Figure"/
 	]
 	rep = [
 		'svg:width="100%" style:rel-width="100%"', #style:rel-width="100%"
@@ -43,13 +48,14 @@ File.open(filename, "r+") do |f|
 		'fo:text-align="left"',
 		'',
 		'text:bullet-char="•"',
-		'',	
+		'',
+		'',
 		'<draw:text-box><text:p text:style-name="FigureWithCaption"><draw:frame text:anchor-type="as-char"',
 		'<office:styles><style:style style:name="Caption" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"><style:paragraph-properties fo:margin-top="0.1cm" fo:margin-bottom="0.1cm" style:contextual-spacing="false" text:number-lines="false" text:line-number="0" /></style:style><style:style style:name="FigureCaption" style:family="paragraph" style:parent-style-name="Caption" style:class="extra"></style:style><style:style style:name="Figure" style:family="paragraph" style:parent-style-name="Standard" style:class="extra"><style:paragraph-properties text:number-lines="false" text:line-number="0" /></style:style><style:style style:name="FigureWithCaption" style:family="paragraph" style:parent-style-name="Figure" style:class="extra"><style:paragraph-properties text:number-lines="false" text:line-number="0" fo:text-align="center" fo:keep-with-next="always" /></style:style>',
 		'<text:p text:style-name="FigureCaption">\1<text:sequence text:name="Figure"'
 	]
 	footnoteRE = /^<\/text:note>$/
-	
+
 	fout = []
 	linenum = 0
 	collapse = false
@@ -85,7 +91,7 @@ File.open(filename, "r+") do |f|
 
 	newfilename = filename.gsub(/\.fodt/,'PARSE.fodt')
 	File.open(newfilename, "w") do |ff|
-		puts "Trying to write output to " + newfilename
+		puts "===> Trying to write output to " + newfilename
 		fout.each do |line|
 			ff.puts(line)
 		end
