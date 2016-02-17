@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+#encoding: utf-8
+# simply add labels equal to the record number for Bookends -> Endnote exports
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
+puts "===> Parsing XML using Ruby V.#{RUBY_VERSION}"
+infilename = ARGV[0]
+fail "Please specify an existing file!" unless infilename and File.exist?(infilename)
+
+File.open(infilename, "r+") do |f|
+	fout = []
+	recNum = %r[(<rec-number>(\d+)</rec-number>)]
+	repNum = '<rec-number>\2</rec-number><label><style face="normal" size="100%">\2</style></label>'
+	lines = f.readlines
+	lines.each do |line|
+		newline = line.gsub!(recNum,repNum)
+		fout.push(newline)
+	end
+	newfilename = infilename.gsub(/\.xml/,'PARSE.xml')
+	File.open(newfilename, "w") do |ff|
+		puts "===> Trying to write output to " + newfilename
+		fout.each do |line|
+			ff.puts(line)
+		end
+	end
+end
