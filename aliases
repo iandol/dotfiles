@@ -114,19 +114,19 @@ function update() {
 		printf '\n\n---> Updating DOTFILES...\n'
 		cd ~/.dotfiles
 		git pull
-	 gst
+		gst
 	fi
 	if [ -d ~/Code/opticka/.git ]; then
 		printf '\n\n---> Updating OPTICKA...\n'
 		cd ~/Code/opticka
 		git pull
-	 gst
+		gst
 	fi
 	if [ -d ~/Code/spikes/.git ]; then
 		printf '\n\n---> Updating SPIKES...\n'
 		cd ~/Code/spikes
 		git pull
-	 gst
+		gst
 	fi
 	if [ -d ~/Code/Psychtoolbox-3/.git ]; then
 		printf '\n\n---> Updating PTB...\n'
@@ -141,10 +141,16 @@ function update() {
 		printf '\n\n---> Updating FIELDTRIP...\n'
 		cd ~/Code/fieldtrip
 		git pull
-	if [ -n $(git remote | grep upstream) ]; then
-		printf '\t\t---> Fetching upstream FIELDTRIP...\n'
-		git fetch upstream
+		if [ -n $(git remote | grep upstream) ]; then
+			printf '\t\t---> Fetching upstream FIELDTRIP...\n'
+			git fetch upstream
+		fi
 	fi
+	if [ -d ~/Documents/MATLAB/gramm/.git ]; then
+		printf '\n\n---> Updating GRAMM...\n'
+		cd ~/Documents/MATLAB/gramm/
+		git pull
+		gst
 	fi
 	cd olddir
 	unset olddir
@@ -152,7 +158,7 @@ function update() {
 	printf '\n\n---> Updating homebrew...\n'
 	brew update
 	brew upgrade
-	brew cleanup -f
+	brew cleanup -f && brew cask cleanup
 
 	[ -e "$HOME/.antigen" ] && printf '\n\n---> Updating Antigen...\n'
 	[ -e "$HOME/.antigen" ] && antigen selfupdate; upgrade_oh_my_zsh; antigen update; antigen cleanup --force

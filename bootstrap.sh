@@ -7,12 +7,12 @@ printf 'Let us bootstrap Homebrew if not present ... '
 if [ -e /usr/local/bin/brew ]; then
 	printf 'Homebrew is present!\n'
 else
-	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 	printf 'Homebrew installed...\n'
 fi
 
 #make sure our minimum packages are installed
-brew install git figlet archey jq &> /dev/null 
+brew install git figlet archey jq diff-so-fancy pandoc &> /dev/null 
 
 printf 'Let us bootstrap .dotfiles if not present ... '
 if [ -d ~/.dotfiles/ ]; then
@@ -94,6 +94,8 @@ if [ -f $(which git) ]; then
 	git config --global color.interactive true
 	git config --global color.status true
 	git config --global credential.helper osxkeychain
+	git config --global pager.diff "diff-so-fancy | less --tabs=4 -RFX"
+	git config --global pager.show "diff-so-fancy | less --tabs=4 -RFX"
 else
 	printf 'GIT is not installed, use command line tools or install homebrew...\n'
 fi
