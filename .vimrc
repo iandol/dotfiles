@@ -1,10 +1,11 @@
 call pathogen#infect()
+call pathogen#helptags()
 set background=dark           " Assume a dark background
 let g:solarized_termtrans = 1 "colorscheme solarized
 set mouse=a                   " automatically enable mouse usage
 set encoding=utf-8            " The encoding displayed.
 set fileencoding=utf-8        " The encoding written to file.
-set history=1000 
+set history=1000
 set ignorecase                  " case insensitive search
 set smartcase                   " case sensitive when uc present
 set wildmenu                    " show list instead of just completing

@@ -3,8 +3,11 @@ cd ~
 printf "\n\n--->>> Bootstrap terminal setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
 
+xcode-select --install
+chflags nohidden ~/Library
+
 printf 'Let us bootstrap Homebrew if not present ... '
-if [ -e /usr/local/bin/brew ]; then
+if [[ -e /usr/local/bin/brew ]]; then
 	printf 'Homebrew is present!\n'
 else
 	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -12,12 +15,12 @@ else
 fi
 
 #make sure our minimum packages are installed
-brew install git figlet archey jq diff-so-fancy pandoc &> /dev/null 
+brew install git figlet archey jq diff-so-fancy pandoc &> /dev/null
 
 printf 'Let us bootstrap .dotfiles if not present ... '
-if [ -d ~/.dotfiles/ ]; then
+if [[ -d ~/.dotfiles/ ]]; then
 	printf ' .dotfiles are present! \n'
-else	
+else
 	git clone https://github.com/iandol/dotfiles.git ~/.dotfiles
 	chown -R $USER ~/.dotfiles
 	printf 'we cloned a new .dotfiles...\n'
@@ -27,11 +30,11 @@ printf 'Setting up the symbolic links at: '
 date
 printf '...\n'
 printf '\e[32m'
-ln -siv ~/.dotfiles/.zshrc ~ 
+ln -siv ~/.dotfiles/.zshrc ~
 chown $USER ~/.zshrc
-ln -siv ~/.dotfiles/.bashrc ~ 
+ln -siv ~/.dotfiles/.bashrc ~
 chown $USER ~/.bashrc
-ln -siv ~/.dotfiles/.bash_profile ~ 
+ln -siv ~/.dotfiles/.bash_profile ~
 chown $USER ~/.bash_profile
 ln -siv ~/.dotfiles/.vimrc ~
 chown $USER ~/.vimrc

@@ -27,8 +27,6 @@ antigen bundles <<EOBUNDLES
 	zsh-users/zsh-syntax-highlighting
 EOBUNDLES
 
-#antigen theme smt
-#antigen theme "$HOME/.dotfiles/steeef2.zsh-theme"
 antigen theme mashaal/wild-cherry zsh/wild-cherry.zsh-theme
 
 antigen apply
