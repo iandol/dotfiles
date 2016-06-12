@@ -38,8 +38,8 @@ alias operalog='/Applications/Opera.app/Contents/MacOS/Opera -profilinglog ~/Des
 alias startvnc='sudo echo -n enabled > /Library/Preferences/com.apple.ScreenSharing.launchd'
 alias airscan="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s"
 
-alias kernel64='sudo systemsetup -setkernelbootarchitecture x86_64'
-alias kernel32='sudo systemsetup -setkernelbootarchitecture i386'
+#alias kernel64='sudo systemsetup -setkernelbootarchitecture x86_64'
+#alias kernel32='sudo systemsetup -setkernelbootarchitecture i386'
 
 # Checksums
 alias md2='openssl md2'
@@ -109,7 +109,7 @@ alias flushdns="sudo discoveryutil udnsflushcaches; sudo discoveryutil mdnsflush
 
 # Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
-	olddir=$(pwd)
+	myolddir=$(pwd)
 	if [ -d ~/.dotfiles ]; then
 		printf '\n\n---> Updating DOTFILES...\n'
 		cd ~/.dotfiles
@@ -152,8 +152,8 @@ function update() {
 		git pull
 		gst
 	fi
-	cd olddir
-	unset olddir
+	cd $myolddir
+	unset $myolddir
 
 	printf '\n\n---> Updating homebrew...\n'
 	brew update
@@ -177,7 +177,9 @@ function updatePTB() {
 }
 
 function updateAll() {
+	printf '\n\n---> General Code Updates...\n'
 	update
+	updatePTB
 	printf '\n\n---> Checking OS X updates...\n'
 	sudo softwareupdate --list
 	printf '\n---> Update finished...\n'
