@@ -11,11 +11,16 @@ if [[ -e /usr/local/bin/brew ]]; then
 	printf 'Homebrew is present!\n'
 else
 	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+	brew tap homebrew/science
 	printf 'Homebrew installed...\n'
+	brew tap caskroom/cask
+	brew tap caskroom/fonts
+	printf 'Added Caskroom to Homebrew...\n'
 fi
 
 #make sure our minimum packages are installed
-brew install git figlet archey jq diff-so-fancy pandoc &> /dev/null
+brew install git figlet archey jq diff-so-fancy pandoc pandoc-citeproc multimarkdown zsh-completions exodriver &> /dev/null/
+brew cask install font-fira-code font-hack font-hasklig font-input font-monoid &> /dev/null/
 
 printf 'Let us bootstrap .dotfiles if not present ... '
 if [[ -d ~/.dotfiles/ ]]; then

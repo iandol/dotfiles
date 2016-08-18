@@ -1,3 +1,20 @@
----
-  lang: eng-gb
----
+---  
+author: Ian Max Andolina  
+affiliation: Institute of Neuroscience, CAS  
+documentclass: article  
+mainfont: "Dolly Pro"  
+sansfont: "Graublau Sans"  
+monofont: "Fira Code"  
+CJKmainfont: "Arial Unicode MS"  
+fontsize: 16  
+linestretch: 1.25
+toc: 1  
+lang: en-GB  
+papersize: A4  
+geometry:  
+    - margin=2cm  
+#polyglossia-lang:  
+#    options: variant=british  
+#    name: english  
+---  
+
