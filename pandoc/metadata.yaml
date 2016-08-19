@@ -1,14 +1,16 @@
 ---  
 author: Ian Max Andolina  
 affiliation: Institute of Neuroscience, CAS  
-documentclass: article  
-mainfont: "Dolly Pro"  
+documentclass: report  
+mainfont: "Greta Text Pro"  
 sansfont: "Graublau Sans"  
 monofont: "Fira Code"  
 CJKmainfont: "Arial Unicode MS"  
 fontsize: 16  
-linestretch: 1.25
+linestretch: 1.3  
 toc: 1  
+titlesec: 0  
+maketitle: 1  
 lang: en-GB  
 papersize: A4  
 geometry:  
@@ -17,4 +19,3 @@ geometry:
 #    options: variant=british  
 #    name: english  
 ---  
-
