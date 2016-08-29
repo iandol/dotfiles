@@ -19,7 +19,7 @@ else
 fi
 
 #make sure our minimum packages are installed
-brew install git figlet archey jq diff-so-fancy pandoc pandoc-citeproc multimarkdown zsh-completions exodriver &> /dev/null/
+brew install zsh-completions git figlet archey jq ansiweather diff-so-fancy pandoc pandoc-citeproc multimarkdown libusb exodriver &> /dev/null/
 brew cask install font-fira-code font-hack font-hasklig font-input font-monoid &> /dev/null/
 
 printf 'Let us bootstrap .dotfiles if not present ... '

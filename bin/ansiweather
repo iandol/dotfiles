@@ -2,13 +2,14 @@
 
 ###############################################################################
 #                                                                             #
-# AnsiWeather 1.06 (c) by Frederic Cambus 2013-2015                           #
+# AnsiWeather 1.08                                                            #
+# Copyright (c) 2013-2016, Frederic Cambus                                    #
 # https://github.com/fcambus/ansiweather                                      #
 #                                                                             #
-# Created: 2013/08/29                                                         #
-# Last Updated: 2015/10/30                                                    #
+# Created: 2013-08-29                                                         #
+# Last Updated: 2016-07-26                                                    #
 #                                                                             #
-# AnsiWeather is released under the BSD 3-Clause license.                     #
+# AnsiWeather is released under the BSD 2-Clause license.                     #
 # See LICENSE file for details.                                               #
 #                                                                             #
 ###############################################################################
@@ -67,7 +68,8 @@ if [ "$usage" = true ]
 then
 	printf "%s\n" \
 		"" \
-		"AnsiWeather 1.06 (c) by Frederic Cambus 2013-2015" \
+		"AnsiWeather 1.08" \
+		"Copyright (c) 2013-2016, Frederic Cambus" \
 		"" \
 		"USAGE: ansiweather [options]" \
 		"" \
@@ -83,7 +85,7 @@ then
 		"	-k OpenWeatherMap API key" \
 		"	-h Display usage" \
 		"" \
-		"EXAMPLES: ansiweather -l Moscow,RU -u metric -s true -f 5 -d true" \
+		"EXAMPLES: ansiweather -l Rzeszow,PL -u metric -s true -f 5 -d true" \
 		""
 	exit
 fi
@@ -96,14 +98,14 @@ jqpath=$(which jq)
 if [ "$jqpath" = "" ]
 then
 	echo "ERROR : Cannot find jq binary"
-	exit
+	exit 69 # EX_UNAVAILABLE
 fi
 
 bcpath=$(which bc)
 if [ "$bcpath" = "" ]
 then
 	echo "ERROR : Cannot find bc binary"
-	exit
+	exit 69 # EX_UNAVAILABLE
 fi
 
 
@@ -113,7 +115,7 @@ fi
 # OpenWeatherMap API key
 [ -z "$api_key" ] && api_key=$(get_config "api_key" || echo "85a4e3c55b73909f42c6a23ec35b7147")
 
-# Location : example "Moscow,RU"
+# Location : example "Rzeszow,PL"
 [ -z "$location" ] && location=$(get_config "location" || echo "Rzeszow,PL")
 
 # System of Units : "metric" or "imperial"
@@ -154,6 +156,7 @@ humidity_text=$(get_config "humidity_text" || echo "Humidity")
 pressure_text=$(get_config "pressure_text" || echo "Pressure")
 sunrise_text=$(get_config "sunrise_text" || echo "Sunrise")
 sunset_text=$(get_config "sunset_text" || echo "Sunset")
+forecast_text=$(get_config "forecast_text" || echo "forecast")
 
 
 
@@ -188,7 +191,7 @@ fi
 if [ -z "$weather" ]
 then
 	echo "ERROR : Cannot fetch weather data"
-	exit
+	exit 75 # EX_TEMPFAIL
 fi
 
 status_code=$(echo "$weather" | jq -r '.cod' 2>/dev/null)
@@ -196,7 +199,7 @@ status_code=$(echo "$weather" | jq -r '.cod' 2>/dev/null)
 if [ "$status_code" != 200 ]
 then
 	echo "ERROR : Cannot fetch weather data for the given location"
-	exit
+	exit 69 # EX_UNAVAILABLE
 fi
 
 
@@ -358,7 +361,7 @@ get_icon() {
 
 if [ "$forecast" != 0 ]
 then
-	output="$background$text $city forecast $text$delimiter "
+	output="$background$text $city $forecast_text $text$delimiter "
 
 	i=0
 	while [ $i -lt "$forecast" ]
@@ -398,7 +401,7 @@ fi
 
 if [ "$ansi" = true ]
 then
-	/usr/bin/printf "$output\033[0m\n"
+	env printf "$output\033[0m\n"
 else
-	/usr/bin/printf "$output\n" | sed "s/$(printf '\033')\[[0-9;]*m//g"
+	env printf "$output\n" | sed "s/$(printf '\033')\[[0-9;]*m//g"
 fi
