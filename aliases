@@ -128,6 +128,12 @@ function update() {
 		git pull
 		gst
 	fi
+	if [ -d ~/Code/AfterImage/.git ]; then
+		printf '\n\n---> Updating AFTERIMAGE...\n'
+		cd ~/Code/AfterImage
+		git pull
+		gst
+	fi
 	if [ -d ~/Code/Psychtoolbox-3/.git ]; then
 		printf '\n\n---> Updating PTB...\n'
 		cd ~/Code/Psychtoolbox-3
