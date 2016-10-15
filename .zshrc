@@ -50,5 +50,4 @@ setopt autopushd pushdminus pushdsilent
 
 [[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 [[ -f $(which archey) ]] && archey -c || source "$DF_BASE/config"
-
-[[ -f "$DF_BASE/bin/ansiweather" ]] && $DF_BASE/bin/ansiweather
+[[ -f $(which ansiweather) ]] && ansiweather

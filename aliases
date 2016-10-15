@@ -12,6 +12,11 @@ alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
 alias sudo='sudo '
 
 #manage bash/zsh
+if [[ $OSTYPE == 'darwin'* ]]; then 
+	alias edit='mate -w'; #prefer textmate
+else
+	alias edit='vim -w';
+fi
 alias edit='mate -w'
 alias reloadbash='source ~/.bashrc'
 alias reloadzsh='source ~/.zshrc'
@@ -173,13 +178,13 @@ function update() {
 function updatePTB() {
 	cd ~/Code/Psychtoolbox-3
 	git fetch upstream
-	git merge upstream/master
+	git merge --ff-only upstream/master
 	cd ~/Code/fieldtrip
 	git fetch upstream
 	git checkout master
-	git merge upstream/master
+	git merge --ff-only upstream/master
 	git checkout plexon
-	git merge master
+	git merge --ff-only master
 }
 
 function updateAll() {
