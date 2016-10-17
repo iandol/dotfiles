@@ -15,9 +15,8 @@ alias sudo='sudo '
 if [[ $OSTYPE == 'darwin'* ]]; then 
 	alias edit='mate -w'; #prefer textmate
 else
-	alias edit='vim -w';
+	alias edit='vim';
 fi
-alias edit='mate -w'
 alias reloadbash='source ~/.bashrc'
 alias reloadzsh='source ~/.zshrc'
 alias editbash='edit ~/.bashrc ~/.bash_profile ~/.dotfiles/env ~/.dotfiles/config ~/.dotfiles/aliases && reloadbash'

@@ -1,6 +1,6 @@
 source ~/.dotfiles/env
 source ~/.dotfiles/aliases
-source ~/.dotfiles/config
+[[ $OSTYPE = 'darwin'* ]] && source ~/.dotfiles/config
 
 # Make vim the default editor
 export EDITOR="vim"

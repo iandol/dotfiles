@@ -3,24 +3,28 @@ cd ~
 printf "\n\n--->>> Bootstrap terminal setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
 
-xcode-select --install
-chflags nohidden ~/Library
-
-printf 'Let us bootstrap Homebrew if not present ... '
-if [[ -e /usr/local/bin/brew ]]; then
-	printf 'Homebrew is present!\n'
-else
-	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-	brew tap homebrew/science
-	printf 'Homebrew installed...\n'
-	brew tap caskroom/cask
-	brew tap caskroom/fonts
-	printf 'Added Caskroom to Homebrew...\n'
+#try to install homebrew on macOS
+if [[ $OSTYPE == 'darwin'* ]]; then
+	xcode-select --install
+	chflags nohidden ~/Library
+	printf 'Let us bootstrap Homebrew if not present ... '
+	if [[ -e /usr/local/bin/brew ]]; then
+		printf 'Homebrew is present!\n'
+	else
+		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+		brew tap homebrew/science
+		printf 'Homebrew installed...\n'
+		brew tap caskroom/cask
+		brew tap caskroom/fonts
+		printf 'Added Caskroom to Homebrew...\n'
+	fi
 fi
 
 #make sure our minimum packages are installed
-brew install zsh-completions git figlet archey jq ansiweather diff-so-fancy pandoc pandoc-citeproc multimarkdown libusb exodriver &> /dev/null/
-brew cask install font-fira-code font-hack font-hasklig font-input font-monoid &> /dev/null/
+if [[ -e /usr/local/bin/brew ]]; then
+	brew install zsh-completions git figlet archey jq ansiweather diff-so-fancy pandoc pandoc-citeproc multimarkdown libusb exodriver &> /dev/null/
+	brew cask install font-fira-code font-hack font-hasklig font-input font-monoid &> /dev/null/
+fi
 
 printf 'Let us bootstrap .dotfiles if not present ... '
 if [[ -d ~/.dotfiles/ ]]; then
@@ -35,6 +39,10 @@ printf 'Setting up the symbolic links at: '
 date
 printf '...\n'
 printf '\e[32m'
+[[ -e ~/.bashrc ]] && cp ~/.bashrc ~/.bashrc.bak
+[[ -e ~/.bash_profile ]] && cp ~/.bash_profile ~/.bash_profile.bak
+[[ -e ~/.zshrc ]] && cp ~/.zshrc ~/.zshrc.bak
+
 ln -siv ~/.dotfiles/.zshrc ~
 chown $USER ~/.zshrc
 ln -siv ~/.dotfiles/.bashrc ~
@@ -66,24 +74,26 @@ else
 	chown $USER ~/.antigen
 fi
 
-printf 'Linking some bin files in ~/bin/: \n'
-printf '\e[32m'
-if [ -d ~/bin/ ]; then
-	ln -sv ~/.dotfiles/bin/* ~/bin
-	chown -R $USER ~/bin/*
-else
-	mkdir ~/bin/
-	ln -sv ~/.dotfiles/bin/* ~/bin
-	chown -R $USER ~/bin/*
-fi
-printf '\e[36m\n\n'
+if [ $OSTYPE == 'darwin'* ]; then
+	printf 'Linking some bin files in ~/bin/: \n'
+	printf '\e[32m'
+	if [ -d ~/bin/ ]; then
+		ln -sv ~/.dotfiles/bin/* ~/bin
+		chown -R $USER ~/bin/*
+	else
+		mkdir ~/bin/
+		ln -sv ~/.dotfiles/bin/* ~/bin
+		chown -R $USER ~/bin/*
+	fi
+	printf '\e[36m\n\n'
 
-printf 'Do you want to set up OS X defaults? (y / n):  '
-read ans
-if [ $ans == 'y' ]; then
-	echo 'Enter password for setup command:'
-	sudo echo -n "..."
-	zsh ~/.dotfiles/osx.sh
+	printf 'Do you want to set up OS X defaults? (y / n):  '
+	read ans
+	if [ $ans == 'y' ]; then
+		echo 'Enter password for setup command:'
+		sudo echo -n "..."
+		zsh ~/.dotfiles/osx.sh
+	fi
 fi
 
 if [ -f $(which git) ]; then
@@ -107,6 +117,7 @@ if [ -f $(which git) ]; then
 else
 	printf 'GIT is not installed, use command line tools or install homebrew...\n'
 fi
+
 printf 'Switching to use ZSH...\n'
 chsh -s /bin/zsh && source ~/.zshrc
 printf '\n\n--->>> All Done...\n'
