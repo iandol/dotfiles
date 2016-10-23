@@ -15,7 +15,7 @@ set nowrap                      " wrap long lines
 set autoindent                  " indent at the same level of the previous line
 set shiftwidth=2                " use indents of 2 spaces
 "set expandtab                   " tabs are spaces, not tabs
-set tabstop=2                   " an indentation every four columns
+set tabstop=2                   " an indentation every 2 columns
 set softtabstop=2               " let backspace delete indent
 set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
 set nocompatible

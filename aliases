@@ -1,6 +1,7 @@
 alias la="ls -alGhF"
+alias las="ls -alGhFeLH"
 alias ll='ls -alFGh'
-alias dir='ls -alf'
+alias dir='ls -alfG'
 alias cls='clear; ls'
 alias l.='ls -d .[^.]*' #only show .dot files
 alias grep="grep --color=auto"
@@ -177,13 +178,13 @@ function update() {
 function updatePTB() {
 	cd ~/Code/Psychtoolbox-3
 	git fetch upstream
-	git merge --ff-only upstream/master
+	git merge upstream/master
 	cd ~/Code/fieldtrip
 	git fetch upstream
 	git checkout master
 	git merge --ff-only upstream/master
 	git checkout plexon
-	git merge --ff-only master
+	git merge master
 }
 
 function updateAll() {
