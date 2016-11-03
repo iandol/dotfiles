@@ -12,6 +12,9 @@ alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
 # Enable aliases to be sudo’ed
 alias sudo='sudo '
 
+# remove quarantine attribute from a file
+alias noquarantine='xattr -d com.apple.quarantine '
+
 #manage bash/zsh
 if [[ $OSTYPE == 'darwin'* ]]; then 
 	alias edit='mate -w'; #prefer textmate
