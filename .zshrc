@@ -37,8 +37,8 @@ antigen apply
 [[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 [[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
 [[ -d "/usr/local/Cellar/apache-spark/1.6.0/libexec" ]] && export SPARK_HOME="/usr/local/Cellar/apache-spark/1.6.0/libexec" # apache spark
-[[ -d "/Applications/MATLAB_R2015b.app/bin/" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2015b.app/bin/matlab" && path+=("/Applications/MATLAB_R2015b.app/bin") # matlab
-[[ -f "/Applications/MATLAB_R2015b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2015b.app/bin/maci64/mlint" ~/bin/mlint # matlab
+[[ -d "/Applications/MATLAB_R2016b.app/bin/" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2016b.app/bin/matlab" && path+=("/Applications/MATLAB_R2016b.app/bin") # matlab
+[[ -f "/Applications/MATLAB_R2016b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2016b.app/bin/maci64/mlint" ~/bin/mlint # matlab
 [[ -d "$HOME/anaconda3/" ]] && path=("$HOME/anaconda3/bin" $path) # anaconda scientific python
 
 export EDITOR='vim'

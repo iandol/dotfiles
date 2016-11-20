@@ -1,7 +1,7 @@
 ---  
-author: Ian Max Andolina  
+#author: Ian Max Andolina  
 affiliation: Institute of Neuroscience, CAS  
-documentclass: report  
+documentclass: memoir  
 mainfont: "Greta Text Pro"  
 sansfont: "Graublau Sans"  
 monofont: "Fira Code"  
@@ -13,6 +13,7 @@ titlesec:
 maketitle: 1  
 twocolumn:  
 link-citations: true #used with pandoc citeproc  
+notes-after-punctuation: false  
 lang: en-GB  
 papersize: A4  
 geometry:  
