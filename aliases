@@ -142,6 +142,12 @@ function update() {
 		git pull
 		gst
 	fi
+	if [ -d ~/Code/Pinna/.git ]; then
+		printf '\n\n---> Updating PINNA...\n'
+		cd ~/Code/Pinna
+		git pull
+		gst
+	fi
 	if [ -d ~/Code/Psychtoolbox-3/.git ]; then
 		printf '\n\n---> Updating PTB...\n'
 		cd ~/Code/Psychtoolbox-3
