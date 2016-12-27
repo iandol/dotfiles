@@ -1,6 +1,19 @@
-alias la="ls -alGhF@"
+if [[ $OSTYPE == 'darwin'* ]]; then 
+	alias la="ls -alGhF"
+	alias las="ls -alGhFeLH"
+	alias ll="ls -alFGh"
+	alias dir='ls -alfG'
+	alias cls='clear; ls'
+	alias l.='ls -d .[^.]*' #only show .dot files
+else
+	alias ls='ls --color=auto'
+	alias ll='ls -alF'
+	alias la='ls -A'
+	alias l='ls -CF'
+fi
+alias la="ls -alGhF"
 alias las="ls -alGhFeLH"
-alias ll='ls -alFGh@'
+alias ll="ls -alFGh"
 alias dir='ls -alfG'
 alias cls='clear; ls'
 alias l.='ls -d .[^.]*' #only show .dot files
@@ -118,55 +131,55 @@ alias flushdns="sudo discoveryutil udnsflushcaches; sudo discoveryutil mdnsflush
 # Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
 	myolddir=$(pwd)
-	if [ -d ~/.dotfiles ]; then
+	if [[ -d ~/.dotfiles ]]; then
 		printf '\n\n---> Updating DOTFILES...\n'
 		cd ~/.dotfiles
 		git pull
-		gst
+		git status
 	fi
-	if [ -d ~/Code/opticka/.git ]; then
+	if [[ -d ~/Code/opticka/.git ]]; then
 		printf '\n\n---> Updating OPTICKA...\n'
 		cd ~/Code/opticka
 		git pull
-		gst
+		git status
 	fi
-	if [ -d ~/Code/spikes/.git ]; then
+	if [[ -d ~/Code/spikes/.git ]]; then
 		printf '\n\n---> Updating SPIKES...\n'
 		cd ~/Code/spikes
 		git pull
-		gst
+		git status
 	fi
-	if [ -d ~/Code/AfterImage/.git ]; then
+	if [[ -d ~/Code/AfterImage/.git ]]; then
 		printf '\n\n---> Updating AFTERIMAGE...\n'
 		cd ~/Code/AfterImage
 		git pull
-		gst
+		git status
 	fi
-	if [ -d ~/Code/Pinna/.git ]; then
+	if [[ -d ~/Code/Pinna/.git ]]; then
 		printf '\n\n---> Updating PINNA...\n'
 		cd ~/Code/Pinna
 		git pull
-		gst
+		git status
 	fi
-	if [ -d ~/Code/Psychtoolbox-3/.git ]; then
+	if [[ -d ~/Code/Psychtoolbox-3/.git ]]; then
 		printf '\n\n---> Updating PTB...\n'
 		cd ~/Code/Psychtoolbox-3
 		git pull
-	if [ -n $(git remote | grep upstream) ]; then
+	if [[ -n $(git remote | grep upstream) ]]; then
 		printf '\t\t---> Fetching upstream PTB...\n'
 		git fetch upstream
 	fi
 	fi
-	if [ -d ~/Code/fieldtrip ]; then
+	if [[ -d ~/Code/fieldtrip ]]; then
 		printf '\n\n---> Updating FIELDTRIP...\n'
 		cd ~/Code/fieldtrip
 		git pull
-		if [ -n $(git remote | grep upstream) ]; then
+		if [[ -n $(git remote | grep upstream) ]]; then
 			printf '\t\t---> Fetching upstream FIELDTRIP...\n'
 			git fetch upstream
 		fi
 	fi
-	if [ -d ~/Documents/MATLAB/gramm/.git ]; then
+	if [[ -d ~/Documents/MATLAB/gramm/.git ]]; then
 		printf '\n\n---> Updating GRAMM...\n'
 		cd ~/Documents/MATLAB/gramm/
 		git pull
@@ -180,8 +193,8 @@ function update() {
 	brew upgrade
 	brew cleanup -f && brew cask cleanup
 
-	[ -e "$HOME/.antigen" ] && printf '\n\n---> Updating Antigen...\n'
-	[ -e "$HOME/.antigen" ] && antigen selfupdate; upgrade_oh_my_zsh; antigen update; antigen cleanup --force
+	[[ -e "$HOME/.antigen" ]] && printf '\n\n---> Updating Antigen...\n'
+	[[ -e "$HOME/.antigen" ]] && antigen selfupdate; upgrade_oh_my_zsh; antigen update; antigen cleanup --force
 }
 
 function updatePTB() {
