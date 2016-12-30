@@ -23,7 +23,6 @@ antigen bundles <<EOBUNDLES
 	brew
 	brew-cask
 	git
-	rand-quote
 	history
 	command-not-found
 	zsh-users/zsh-syntax-highlighting
@@ -33,26 +32,24 @@ EOBUNDLES
 antigen theme mashaal/wild-cherry zsh/wild-cherry.zsh-theme
 antigen apply
 
-[[ -d "/Volumes/Mac/Users/ian/" ]] && MYHD='/Volumes/Mac/Users/ian/' # old external HD
-[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home" # use installed JAVA
-[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
-[[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
-[[ -d "/usr/local/Cellar/apache-spark/1.6.0/libexec" ]] && export SPARK_HOME="/usr/local/Cellar/apache-spark/1.6.0/libexec" # apache spark
-[[ -d "/Applications/MATLAB_R2016b.app/bin/" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2016b.app/bin/matlab" && path+=("/Applications/MATLAB_R2016b.app/bin") # matlab
-[[ -f "/Applications/MATLAB_R2016b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2016b.app/bin/maci64/mlint" ~/bin/mlint # matlab
-[[ -d "$HOME/anaconda3/" ]] && path=("$HOME/anaconda3/bin" $path) # anaconda scientific python
-
 export EDITOR='vim'
 export MANPAGER='less -X' # don't clear after quitting man
 DIRSTACKSIZE=12 # pushd stacksize
 setopt autopushd pushdminus pushdsilent
 
-[[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
-[[ -f $(which archey) ]] && archey -c
-[[ -f $(which ansiweather) ]] && ansiweather
+[[ -d "/Volumes/Mac/Users/ian/" ]] && MYHD='/Volumes/Mac/Users/ian/' # old external HD
+[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home" # use installed JAVA
+[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
+[[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
+[[ -d "/Applications/MATLAB_R2016b.app/bin/" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2016b.app/bin/matlab" && path=("/Applications/MATLAB_R2016b.app/bin" $path) # matlab
+[[ -f "/Applications/MATLAB_R2016b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2016b.app/bin/maci64/mlint" ~/bin/mlint # matlab
+[[ -d "$HOME/anaconda3/" ]] && path=("$HOME/anaconda3/bin" $path) # anaconda scientific python
 
+[[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 [[ -d "$HOME/.rvm/bin" ]] && path=("$HOME/.rvm/bin" $path) # Add RVM to PATH for scripting
 export path
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-#echo "\n====> $PATH\n"
+[[ -f $(which swiftenv) ]] && eval "$(swiftenv init -)"
+[[ -f $(which archey) ]] && archey -c -o
+[[ -f $(which ansiweather) ]] && ansiweather
