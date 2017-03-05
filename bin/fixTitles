@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+import sys
+import re
+import click
+
+isTitle = re.compile('^title = ')
+isProtect = re.compile('LGN|dLGN|V1|V2|V3|V4|mGluR|glow|no')
+
+@click.command()
+#@click.option('--input', prompt='File to parse', help='The BibTeX file to parse')
+#@click.argument('file', type=click.Path(exists=True))
+@click.argument('input')
+@click.argument('output')
+
+def parse(input, output):
+    """Parse a Bibtex File to protect keywords."""
+    click.echo('\n === Will attempt to parse %s!\n\n' % input)
+    with open(input, 'r') as in_file, open(output, 'w') as out_file:
+        for line in in_file:
+            if isTitle.search(line):
+                if isProtect.search(line):
+                    m = isProtect.search(line)
+                    click.echo(m[0])
+                    out_file.write(m[0] + '\n')
+
+
+#---------------------------------------------------
+if __name__ == '__main__':
+    parse()

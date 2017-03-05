@@ -185,6 +185,12 @@ function update() {
 		git pull
 		gst
 	fi
+	if [[ -d ~/Code/CPServer/.git ]]; then
+		printf '\n\n---> Updating CP...\n'
+		cd ~/Code/CPServer/
+		git pull
+		gst
+	fi
 	cd $myolddir
 	unset $myolddir
 
