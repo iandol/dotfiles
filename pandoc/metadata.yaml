@@ -1,6 +1,11 @@
 ---  
 #author: Ian Max Andolina  
 affiliation: Institute of Neuroscience, CAS  
+bibliography:  ~/.pandoc/refs.bib
+citation-style: ~/.pandoc/cerebral-cortex.csl
+reference-section-title:  References
+link-citations: true #used with pandoc citeproc  
+notes-after-punctuation: false  
 documentclass: memoir  
 mainfont: "Greta Text Pro"  
 sansfont: "Graublau Sans"  
@@ -12,13 +17,11 @@ toc: 1
 titlesec:  
 maketitle: 1  
 twocolumn:  
-link-citations: true #used with pandoc citeproc  
-notes-after-punctuation: false  
 lang: en-GB  
 papersize: A4  
 geometry:  
     - margin=2cm  
-#polyglossia-lang:  
-#    options: variant=british  
-#    name: english  
+polyglossia-lang:  
+    options: variant=british  
+    name: english  
 ---  
