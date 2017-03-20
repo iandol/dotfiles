@@ -187,7 +187,7 @@ function update() {
 	fi
 	if [[ -d ~/Code/CPServer/.git ]]; then
 		printf '\n\n---> Updating CP...\n'
-		cd ~/Code/CPServer/
+		cd ~/Code/CPServer
 		git pull
 		gst
 	fi
