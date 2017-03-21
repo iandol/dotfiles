@@ -117,7 +117,7 @@ on run argv
 	else
 		-- this is if there are neither	
 		-- this does all groups in a Manuscripts folder if nothing else is specified
-		set myGroupsToExport to "Last 100"
+		set myGroupsToExport to "Manuscripts/"
 		
 		-- Export to folder script is in by default if nothing specified
 		------------------------------------------------------------------
@@ -151,18 +151,48 @@ on run argv
 		-- from: http://stackoverflow.com/questions/3780985/how-do-i-write-to-a-text-file-using-applescript
 		set myFile to open for access (myPath & (myGroup as string)) & ".bib" with write permission
 		
-		tell application "Bookends"
-			-- get a list of all unique reference IDs in the specified group
-			set myList to «event ToySRUID» myGroup as string
-			
-			-- get the full formatted bibtex entry for each of those references
-			set myBibTex to «event ToySGUID» myList given «class RRTF»:"false", string:"bibtex"
-		end tell
-		
-		-- write out as UTF-8
-		-- from: http://macscripter.net/viewtopic.php?id=24534
-		write myBibTex to myFile as «class utf8»
+		try
+			tell application "Bookends"
+				-- get a list of all unique reference IDs in the specified group 
+				set myListString to «event ToySRUID» myGroup as string
+				-- convert to list 
+				set oldDelim to AppleScript's text item delimiters
+				set AppleScript's text item delimiters to return
+				set myList to text items of myListString
+				set AppleScript's text item delimiters to oldDelim
+				
+				-- iterate through list writing each entry
+				repeat with a from 1 to length of myList
+					set theCurrentListItem to item a of myList
+					-- get the full formatted bibtex entry for each of those references
+					set myBibTex to «event ToySGUID» theCurrentListItem given «class RRTF»:"false", string:"bibtex"
+					-- write out as UTF-8
+					-- from: http://macscripter.net/viewtopic.php?id=24534
+					write myBibTex to myFile as «class utf8»
+				end repeat
+				
+			end tell
+
+		on error
+			try
+				close access myFile
+			end try
+			return false
+		end try
+
 		close access myFile
+		
+		-- use tr to replace mac line endings with unix line endings
+		set fixLineEndings to ("cat \"" & (myGroup as string) & ".bib\"" & " | tr \"
+\" \"
+\" > temp.bib; mv temp.bib \"" & (myGroup as string) & ".bib\"" as string)
+		
+		if DEBUG then
+			return fixLineEndings
+		else
+			do shell script fixLineEndings
+		end if
+		
 	end repeat
 	
 	if DEBUG then

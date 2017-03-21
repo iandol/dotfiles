@@ -1,8 +1,8 @@
 ---  
 #author: Ian Max Andolina  
 affiliation: Institute of Neuroscience, CAS  
-bibliography:  ~/.pandoc/refs.bib
-citation-style: ~/.pandoc/cerebral-cortex.csl
+bibliography:  /Users/ian/.pandoc/Core.bib
+citation-style: /Users/ian/.pandoc/cerebral-cortex.csl
 reference-section-title:  References
 link-citations: true #used with pandoc citeproc  
 notes-after-punctuation: false  
