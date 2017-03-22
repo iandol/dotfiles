@@ -118,7 +118,7 @@ on run argv
 	else
 		-- this is if there are neither	
 		-- this does all groups in a Manuscripts folder if nothing else is specified
-		set myGroupsToExport to "Last 100"
+		set myGroupsToExport to "Manuscripts/"
 		
 		-- Export to folder script is in by default if nothing specified
 		------------------------------------------------------------------
@@ -141,79 +141,76 @@ on run argv
 	if DEBUG then
 		-- set output string based on parsed input parameters or defaults
 		set AppleScript's text item delimiters to ", "
-		set output to ("Pattern for groups to export: " & myGroupsToExport & "
-" & "Path to export to: " & myPath & "
-" & "Groups exported: " & myGroupArray as string)
+		set output to ("Pattern for groups to export: " & myGroupsToExport & return & "Path to export to: " & myPath & return & "Groups exported: " & myGroupArray as string)
 		set AppleScript's text item delimiters to oldDelimiters -- change back to default
 	end if
 	
 	-- loop over each folder matching the pattern and export each to a bibtex file
 	repeat with myGroup in myGroupArray
+		set thisFileName to (myPath & (myGroup as string) & ".bib")
 		-- from: http://stackoverflow.com/questions/3780985/how-do-i-write-to-a-text-file-using-applescript
-		set myFile to open for access (myPath & (myGroup as string)) & ".bib" with write permission
+		set myFile to open for access thisFileName with write permission
 		
 		
 		try
 			tell application "Bookends"
-				set myListString to «event ToySRUID» myGroup as string -- get a list of all unique reference IDs in the specified group 
-			end tell
-			
-			-- convert to list 
-			set AppleScript's text item delimiters to return
-			set myList to text items of myListString
-			
-			-- set up the loop to batch fetch sets of references
-			set steps to 1
-			set listLength to length of myList
-			set nLoop to round (listLength / steps) rounding up
-			set thisLoop to 1
-			
-			-- iterate through list writing each entry
-			repeat while thisLoop is less than or equal to nLoop
+				-- get a list of all unique reference IDs in the specified group 
+				set myListString to «event ToySRUID» myGroup as string
 				
-				-- set the batch index range
-				set startindex to (steps * thisLoop) - (steps - 1)
-				set endindex to (steps * thisLoop)
-				if endindex is greater than listLength then
-					set endindex to listLength
-				end if
+				-- convert to list 
+				set AppleScript's text item delimiters to return
+				set myList to text items of myListString
 				
-				-- select current batch of items
-				set thisListItems to items startindex thru endindex of myList
-				set thisList to thisListItems as string
+				-- set up the loop to batch fetch sets of references, 
+				-- in theory this should be more efficient, 
+				-- and saves around 1-2 seconds per 1000 exported
+				set steps to 25
+				set listLength to length of myList
+				set nLoop to round (listLength / steps) rounding up
+				set thisLoop to 1
 				
-				-- fetch the BibTeX
-				tell application "Bookends"
+				-- iterate through list writing each entry
+				repeat while thisLoop is less than or equal to nLoop
+					-- set the batch index range
+					set startindex to (steps * thisLoop) - (steps - 1)
+					set endindex to (steps * thisLoop)
+					if endindex is greater than listLength then
+						set endindex to listLength
+					end if
+					
+					-- select current batch of items
+					set thisListItems to items startindex thru endindex of myList
+					set thisList to thisListItems as string
+					
+					-- fetch the BibTeX
 					set myBibTex to «event ToySGUID» thisList given «class RRTF»:"false", string:"bibtex"
-				end tell
-				-- write out as UTF-8, from: http://macscripter.net/viewtopic.php?id=24534
-				write myBibTex to myFile as «class utf8»
-				
-				-- update the loop number
-				set thisLoop to thisLoop + 1
-				
-			end repeat
-			
+					-- write out as UTF-8, from: http://macscripter.net/viewtopic.php?id=24534
+					write myBibTex to myFile as «class utf8»
+					
+					-- update the loop number
+					set thisLoop to thisLoop + 1
+					
+				end repeat
+			end tell
 		on error
-			
 			try
 				close access myFile
 				set AppleScript's text item delimiters to oldDelimiters
 			end try
-			
 			return false
-			
 		end try
 		
 		close access myFile
 		set AppleScript's text item delimiters to oldDelimiters
 		
+		-- use tr to replace mac line endings with unix line endings
+		set fixLineEndings to ("cat \"" & thisFileName & "\"" & " | tr \"\\015\" \"\\012\" > $TMPDIR/temp.bib; mv $TMPDIR/temp.bib \"" & thisFileName & "\"" as string)
+		
+		do shell script fixLineEndings
+		
 	end repeat
 	
 	if DEBUG then
-		return output
-	else
-		return true
+		return (output & return & "Line ends fixed using: " & fixLineEndings)
 	end if
-	
 end run
