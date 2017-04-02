@@ -172,14 +172,15 @@ on run argv
 				end repeat
 				
 			end tell
-
+			
 		on error
 			try
 				close access myFile
+				set AppleScript's text item delimiters to oldDelimiters
 			end try
 			return false
 		end try
-
+		
 		close access myFile
 		
 		-- use tr to replace mac line endings with unix line endings
