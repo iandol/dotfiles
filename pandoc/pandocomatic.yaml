@@ -1,0 +1,40 @@
+templates:
+  test:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: docx
+      standalone: true
+      dpi: 300
+      toc: false
+      mathjax: true
+      reference_docx: /Users/ian/.pandoc/custom-reference.docx
+    postprocessors: []
+  paper-with-references:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: docx
+      standalone: true
+      filter: /usr/local/bin/pandoc-citeproc
+      bibliography: /Users/ian/.pandoc/core.bib
+      csl: /Users/ian/.pandoc/apa.csl
+      reference_docx: /Users/ian/.pandoc/custom-reference.docx
+      dpi: 300
+      toc: false
+      toc-depth: 3
+      mathjax: true
+      base_header_level: 1
+    postprocessors: []
+  paper-no-references:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: docx
+      standalone: true
+      reference_docx: /Users/ian/.pandoc/custom-reference.docx
+      toc: false
+      toc-depth: 3
+      mathjax: true
+      base_header_level: 1
+    postprocessors: []
