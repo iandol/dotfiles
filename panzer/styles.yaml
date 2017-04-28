@@ -1,0 +1,67 @@
+####################################################
+#           Base - parent of all styles            #
+####################################################
+
+base:
+  all:
+    metadata:
+      bibliography: "/Users/ian/.pandoc/core.bib"  
+      csl: "/Users/ian/.pandoc/apa.csl"
+    commandline:
+      smart: true
+      standalone: true
+      dpi: "`300`"
+      number-sections: false
+      table-of-contents: false
+      atx-headers: true
+  latex:
+    metadata:
+      lang: en-GB
+      papersize: A4
+      documentclass: "article"
+      fontsize: 16pt  
+      linestretch: 1.75  
+    commandline:
+      latex-engine: "`xelatex`"
+  docx:
+    commandline:
+      reference-docx: "`/Users/ian/.pandoc/custom-reference.docx`"
+
+##########################################
+#               Article                  #
+##########################################
+
+article:
+  parent:
+    - base
+  all:
+    metadata:
+      disclaimer: false
+  latex:
+      #template: "/Users/ian/.pandoc/custom.latex"
+      metadata:
+        documentclass: "memoir"
+        mainfont: "Greta Text Pro"  
+        sansfont: "Graublau Sans"  
+        monofont: "Fira Code"  
+        CJKmainfont: "Arial Unicode MS"
+      commandline:
+        table-of-contents: true
+      filter: 
+        - run: pandoc-citeproc
+  html5:
+      template: "/Users/ian/.pandoc/custom.html"
+      commandline:
+        #include-in-header: "`/Users/ian/.pandoc/custom.css`"
+        css: "`/Users/ian/.pandoc/custom.css`"
+        self-contained: true
+      filter: 
+        - run: pandoc-citeproc
+  docx:
+      commandline:
+        reference-docx: "`/Users/ian/.pandoc/custom-reference.docx`"
+        table-of-contents: false
+      filter: 
+        - run: pandoc-citeproc
+
+

@@ -3,14 +3,15 @@ templates:
     preprocessors: []
     pandoc:
       from: markdown
-      to: docx
+      to: html5
       standalone: true
+      bibliography: /Users/ian/.pandoc/core.bib
+      csl: /Users/ian/.pandoc/apa.csl
+      filter: /usr/local/bin/pandoc-citeproc
       dpi: 300
       toc: false
-      mathjax: true
-      reference_docx: /Users/ian/.pandoc/custom-reference.docx
     postprocessors: []
-  paper-with-references:
+  paper-with-refs-docx:
     preprocessors: []
     pandoc:
       from: markdown
@@ -26,7 +27,7 @@ templates:
       mathjax: true
       base_header_level: 1
     postprocessors: []
-  paper-no-references:
+  paper-no-refs-docx:
     preprocessors: []
     pandoc:
       from: markdown
@@ -38,3 +39,4 @@ templates:
       mathjax: true
       base_header_level: 1
     postprocessors: []
+

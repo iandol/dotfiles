@@ -1,5 +1,4 @@
-%!TEX TS-program = xelatex
-\documentclass[$if(fontsize)$$fontsize$,$endif$$if(twocolumn)$twocolumn,$endif$$if(lang)$$babel-lang$,$endif$$if(papersize)$$papersize$paper,$endif$$for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
+\documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$babel-lang$,$endif$$if(papersize)$$papersize$paper,$endif$$for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
 $if(beamerarticle)$
 \usepackage{beamerarticle} % needs to be loaded first
 $endif$
@@ -120,7 +119,7 @@ $if(listings)$
 \usepackage{listings}
 $endif$
 $if(lhs)$
-\lstnewenvironment{code}{\lstset{language=Ruby,basicstyle=\small\ttfamily}}{}
+\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
 $endif$
 $if(highlighting-macros)$
 $highlighting-macros$
@@ -129,14 +128,6 @@ $if(tables)$
 \usepackage{longtable,booktabs}
 % Fix footnotes in tables (requires footnote package)
 \IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{long table}}{}
-$endif$
-$if(titlesec)$
-\usepackage{titlesec}
-\titleformat{\section}
-  {\titlerule
-    \vspace{.8ex}%
-    \normalfont\itshape}
-  {\thesection.}{.5em}{}
 $endif$
 $if(graphics)$
 \usepackage{graphicx,grffile}
@@ -232,9 +223,7 @@ $endif$
 
 \begin{document}
 $if(title)$
-  $if(maketitle)$
-    \maketitle
-  $endif$
+\maketitle
 $endif$
 $if(abstract)$
 \begin{abstract}
