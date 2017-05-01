@@ -7,6 +7,8 @@ base:
     metadata:
       bibliography: "/Users/ian/.pandoc/core.bib"  
       csl: "/Users/ian/.pandoc/apa.csl"
+      notes-after-punctuation: false
+      link-citations: true
     commandline:
       smart: true
       standalone: true
@@ -25,43 +27,49 @@ base:
       latex-engine: "`xelatex`"
   docx:
     commandline:
-      reference-docx: "`/Users/ian/.pandoc/custom-reference.docx`"
+      reference-docx: "`/Users/ian/.pandoc/templates/custom-reference.docx`"
 
 ##########################################
 #               Article                  #
 ##########################################
 
 article:
-  parent:
-    - base
+  parent: base
   all:
     metadata:
       disclaimer: false
   latex:
-      #template: "/Users/ian/.pandoc/custom.latex"
+      template: "/Users/ian/.pandoc/templates/custom.latex"
       metadata:
-        documentclass: "memoir"
+        documentclass: "article"
         mainfont: "Greta Text Pro"  
         sansfont: "Graublau Sans"  
         monofont: "Fira Code"  
         CJKmainfont: "Arial Unicode MS"
       commandline:
         table-of-contents: true
+        number-sections: true
       filter: 
         - run: pandoc-citeproc
   html5:
-      template: "/Users/ian/.pandoc/custom.html"
+      template: /Users/ian/.pandoc/templates/custom.html
       commandline:
         #include-in-header: "`/Users/ian/.pandoc/custom.css`"
-        css: "`/Users/ian/.pandoc/custom.css`"
+        css: "`/Users/ian/.pandoc/templates/custom.css`"
         self-contained: true
       filter: 
         - run: pandoc-citeproc
   docx:
       commandline:
-        reference-docx: "`/Users/ian/.pandoc/custom-reference.docx`"
+        reference-docx: "`/Users/ian/.pandoc/templates/custom-reference.docx`"
         table-of-contents: false
       filter: 
         - run: pandoc-citeproc
+  odt:
+    commandline:
+      reference-odt: "`/Users/ian/.pandoc/templates/custom-reference.odt`"
+      table-of-contents: false
+    filter: 
+      - run: pandoc-citeproc
 
 

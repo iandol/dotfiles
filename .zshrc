@@ -49,6 +49,8 @@ setopt autopushd pushdminus pushdsilent
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 [[ -d "$HOME/.rvm/bin" ]] && path=("$HOME/.rvm/bin" $path) # Add RVM to PATH for scripting
 export path
+[[ -f "/usr/local/bin/rbenv" ]] && eval "$(rbenv init -)"
+
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 [[ -f $(which swiftenv) ]] && eval "$(swiftenv init -)"
 [[ -f $(which archey) ]] && archey -c -o

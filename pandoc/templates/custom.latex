@@ -11,6 +11,8 @@ $if(linestretch)$
 \usepackage{setspace}
 \setstretch{$linestretch$}
 $endif$
+\usepackage{caption}
+\captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
 \usepackage{fixltx2e} % provides \textsubscript

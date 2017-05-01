@@ -6,6 +6,27 @@ body {
 /* For smart quotes */
 q { quotes: "“" "”" "‘" "’"; }
 
+header {
+  margin: 0;
+  border-left: 7px solid rgb(90%,90%,90%);
+  padding: 1em 10% 1em 10%;
+  }
+
+p.author {
+  font-weight: bold;
+}
+
+h1.title {
+  font-size: 3em;
+}
+
+div#refs p {
+  font-size: 0.9em;
+  line-height: 1em;
+  border-left: 5px solid rgb(90%,90%,90%);
+  padding-left: 10px;
+}
+
 /* Override section behavior.
  * We only want the top-level <section> to have padding.
  * This makes it easier to work with --section-divs. */

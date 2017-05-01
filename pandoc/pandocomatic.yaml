@@ -1,42 +1,160 @@
 templates:
-  test:
+#######################################
+  paper-with-refs-pdf:
     preprocessors: []
     pandoc:
       from: markdown
-      to: html5
+      to: latex
+      latex-engine: "xelatex"
       standalone: true
+      filter: pandoc-citeproc
       bibliography: /Users/ian/.pandoc/core.bib
       csl: /Users/ian/.pandoc/apa.csl
-      filter: /usr/local/bin/pandoc-citeproc
+      metadata: 
+        - "mainfont='Greta Text Pro'"  
+        - "sansfont='Graublau Sans'"  
+        - "monofont='Fira Code'"  
+        - "CJKmainfont='Arial Unicode MS'"
+        - "lang='en-GB'"  
+        - "papersize='A4'"  
+        - "documentclass='article'"
+        - "fontsize='12pt'"
+        - "linestretch='1.75'"
+        - "geometry='margin=4cm'"
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"  
+      template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
-      toc: false
+      toc: true
+      toc-depth: 4
+      base-header-level: 1
     postprocessors: []
+#######################################
   paper-with-refs-docx:
     preprocessors: []
     pandoc:
       from: markdown
       to: docx
       standalone: true
-      filter: /usr/local/bin/pandoc-citeproc
+      filter: pandoc-citeproc
       bibliography: /Users/ian/.pandoc/core.bib
       csl: /Users/ian/.pandoc/apa.csl
-      reference_docx: /Users/ian/.pandoc/custom-reference.docx
+      reference-docx: /Users/ian/.pandoc/templates/custom-reference.docx
       dpi: 300
       toc: false
-      toc-depth: 3
-      mathjax: true
-      base_header_level: 1
+      toc-depth: 4
+      base-header-level: 1
+      metadata: 
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"
     postprocessors: []
+#######################################
+  paper-with-refs-odt:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: odt
+      standalone: true
+      filter: pandoc-citeproc
+      bibliography: /Users/ian/.pandoc/core.bib
+      csl: /Users/ian/.pandoc/apa.csl
+      reference-odt: /Users/ian/.pandoc/templates/custom-reference.odt
+      dpi: 300
+      toc: false
+      toc-depth: 4
+      base-header-level: 1
+      metadata: 
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"
+    postprocessors: []
+#######################################
+  paper-with-refs-html:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: html5
+      standalone: true
+      number-sections: true
+      section-divs: true
+      filter: pandoc-citeproc
+      bibliography: /Users/ian/.pandoc/core.bib
+      csl: /Users/ian/.pandoc/apa.csl
+      template: /Users/ian/.pandoc/templates/custom.html
+      css: "/Users/ian/.pandoc/templates/custom.css"
+      self-contained: true
+      dpi: 300
+      toc: true
+      toc-depth: 4
+      base-header-level: 1
+      metadata: 
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"
+    postprocessors: []
+#######################################
   paper-no-refs-docx:
     preprocessors: []
     pandoc:
       from: markdown
       to: docx
       standalone: true
-      reference_docx: /Users/ian/.pandoc/custom-reference.docx
+      reference-docx: /Users/ian/.pandoc/templates/custom-reference.docx
       toc: false
-      toc-depth: 3
+      base-header-level: 1
+    postprocessors: []
+#######################################
+  paper-no-refs-odt:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: odt
+      standalone: true
+      reference-docx: /Users/ian/.pandoc/templates/custom-reference.odt
+      toc: false
+      base-header-level: 1
+    postprocessors: []
+#######################################
+  test:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: html5
+      standalone: true
+      css: "/Users/ian/.pandoc/templates/custom.css"
+      self-contained: true
       mathjax: true
-      base_header_level: 1
+      dpi: 300
+      toc: false
+    postprocessors: []
+#######################################
+  test-pdf:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: pdf
+      latex-engine: "xelatex"
+      standalone: true
+      toc: true
+      metadata: 
+        - "lang='en-GB'"  
+        - "papersize='A4'"  
+        - "documentclass='article'"
+        - "fontsize='16pt'"
+        - "linestretch='1.75'"
+    postprocessors: []
+#######################################
+  test-latex:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: latex
+      latex-engine: "xelatex"
+      standalone: true
+      toc: true
+      metadata: 
+        - "lang='en-GB'"  
+        - "papersize='A4'"  
+        - "documentclass='article'"
+        - "fontsize='16pt'"
+        - "linestretch='1.75'"
     postprocessors: []
 
