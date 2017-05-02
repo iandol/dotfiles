@@ -39,7 +39,7 @@ templates:
       filter: pandoc-citeproc
       bibliography: /Users/ian/.pandoc/core.bib
       csl: /Users/ian/.pandoc/apa.csl
-      reference-docx: /Users/ian/.pandoc/templates/custom-reference.docx
+      reference-docx: /Users/ian/.pandoc/templates/custom.docx
       dpi: 300
       toc: false
       toc-depth: 4
@@ -58,7 +58,7 @@ templates:
       filter: pandoc-citeproc
       bibliography: /Users/ian/.pandoc/core.bib
       csl: /Users/ian/.pandoc/apa.csl
-      reference-odt: /Users/ian/.pandoc/templates/custom-reference.odt
+      reference-odt: /Users/ian/.pandoc/templates/custom.odt
       dpi: 300
       toc: false
       toc-depth: 4
@@ -97,7 +97,7 @@ templates:
       from: markdown
       to: docx
       standalone: true
-      reference-docx: /Users/ian/.pandoc/templates/custom-reference.docx
+      reference-docx: /Users/ian/.pandoc/templates/custom.docx
       toc: false
       base-header-level: 1
     postprocessors: []
@@ -108,7 +108,7 @@ templates:
       from: markdown
       to: odt
       standalone: true
-      reference-docx: /Users/ian/.pandoc/templates/custom-reference.odt
+      reference-docx: /Users/ian/.pandoc/templates/custom.odt
       toc: false
       base-header-level: 1
     postprocessors: []

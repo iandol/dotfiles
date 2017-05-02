@@ -1,17 +1,25 @@
 #!/usr/bin/env swift
 import Foundation
 
+let processEnv = ProcessInfo.processInfo.environment
+let path: String! = processEnv["PATH"]
+
 @discardableResult
 func shell(_ args: String...) -> Int32 {
     let task = Process()
     task.launchPath = "/usr/bin/env"
     task.arguments = args
+    task.environment = processEnv
     task.launch()
     task.waitUntilExit()
     return task.terminationStatus
 }
 
-print("Hello World")
+
+print("Hello World\n===============")
+print(processEnv)
+print("PATH\n===============")
+print(path)
 shell("echo","-n","-----Simple ls-----")
 shell("echo")
 shell("ls")
@@ -20,3 +28,5 @@ shell("echo")
 shell("ls", "-a","-l","-H","-@")
 shell("echo","\n-----Pandoc version-----")
 shell("pandoc","--version")
+shell("echo","\n-----Pandocomatic version-----")
+shell("pandocomatic","--version")
