@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-STDERR.puts "---PATH: " + `echo $PATH`
-`export DROOPY=12`
-`export PATH=$HOME/.rbenv/shims:/usr/local/bin:$HOME/bin:$PATH`
+STDERR.puts "---PATH: " + `echo $PATH 2>&1`
+`export DROOPY=12 2>&1`
+`export PATH=$HOME/.rbenv/shims:/usr/local/bin:$HOME/bin:$PATH 2>&1`
 if $?.exitstatus > 0
   STDERR.puts "I failed to export PATH, I am very sorry :'(" 
 end

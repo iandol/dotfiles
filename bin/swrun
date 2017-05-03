@@ -1,8 +1,12 @@
 #!/usr/bin/env swift
 import Foundation
 
-let processEnv = ProcessInfo.processInfo.environment
-let path: String! = processEnv["PATH"]
+var processEnv = ProcessInfo.processInfo.environment
+var path: String! = processEnv["PATH"] 
+
+path = "/usr/local/bin:/Users/ian/anaconda3/bin:" + path
+
+processEnv["PATH"] = path
 
 @discardableResult
 func shell(_ args: String...) -> Int32 {
@@ -15,18 +19,16 @@ func shell(_ args: String...) -> Int32 {
     return task.terminationStatus
 }
 
-
-print("Hello World\n===============")
-print(processEnv)
-print("PATH\n===============")
-print(path)
-shell("echo","-n","-----Simple ls-----")
-shell("echo")
-shell("ls")
-shell("echo","-n","-----Full ls-----")
+shell("echo","-n","\n\n============Swift Run Test=============")
+shell("echo","-n","\n-----Full ls-----")
 shell("echo")
 shell("ls", "-a","-l","-H","-@")
 shell("echo","\n-----Pandoc version-----")
 shell("pandoc","--version")
 shell("echo","\n-----Pandocomatic version-----")
 shell("pandocomatic","--version")
+
+print("ENV\n===============")
+print(processEnv)
+print("PATH\n===============")
+print(path)
