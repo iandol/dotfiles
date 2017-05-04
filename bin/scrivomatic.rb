@@ -3,59 +3,48 @@
 require 'open3' # ruby standard library class to handle stderr and stdout
 require 'optparse' # ruby standard option parser
 require 'pp' #pretty print
-require 'pry'
+#require 'pry'
 
 class Scrivomatic
-  attr_accessor :options, :input, :output, :path, :verbose
+  attr_accessor :options
   attr_reader :version
   VER = '1.0.1'
   OPTIONS = Struct.new(:input,:output,:path,:verbose)
   
   def initialize # set up class
     puts "Initialising Scrivomatic..."
-    self.options = OPTIONS.new(nil,nil,nil,nil)
-    self.input = self.options[:input]
-    self.output = self.options[:output]
-    self.path = self.options[:path]
-    self.verbose = false
-    self.version = VER
+    @options = OPTIONS.new(nil,nil,nil,nil)
+    @version = VER
   end
   
   def parseInputs(arg)
     optparse = OptionParser.new do|opts|
-      opts.banner = "Usage: Scrivomatic V" + self.version + " -i FILE -o file -p path [options]"
-      
-      self.input = self.options[:input]
+      opts.banner = "Usage: Scrivomatic V" + @version + " -i FILE -o file -p path [options]"
+
       opts.on("-i", "--input FILE", "Input file") do |v|
         puts "Computing input"
-        self.options[:input] = v
-        self.input = v
+        @options[:input] = v
       end
       
-      self.output = self.options[:output]
       opts.on("-o", "--output file", "Output file") do |v|
         puts "Computing output"
-        self.options[:output] = v
-        self.output = v
+        @options[:output] = v
       end
       
-      self.path = self.options[:path]
       opts.on("-p", "--path dirpath", "Path to append") do |v|
         puts "Computing output"
-        self.options[:path] = v
-        self.path = v
+        @options[:path] = v
       end
       
-      self.options[:verbose] = false
+
       opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
         puts "Setting verbose"
-        self.options[:verbose] = v
-        self.verbose = v
+        @options[:verbose] = v
       end
       
       opts.on("-h", "--help", "Prints this help") do
         puts "Calling help"
-        puts self.optparse
+        puts optparse
         exit
       end
     end # end OptionParser
@@ -74,8 +63,7 @@ scr.parseInputs(ARGV)
 
 puts "=========scr======="
 pp scr
-puts scr.input
-puts "=======optparse:======="
+#puts "=======optparse:======="
 #puts scr.optparse
 puts "=======Options:======="
 pp scr.options
