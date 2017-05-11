@@ -8,12 +8,32 @@ q { quotes: "“" "”" "‘" "’"; }
 
 header {
   margin: 0;
+  margin-bottom: 2em;
   border-left: 7px solid rgb(90%,90%,90%);
   padding: 1em 10% 1em 10%;
   }
 
 p.author {
   font-weight: bold;
+  margin: [0 1em 0 0];
+  display: inline-block;
+}
+
+p {
+  text-align: justify;
+  line-height: 1.5em;
+  max-width: 1000px;
+  margin: auto;
+  margin-bottom:1em;
+}
+
+figure img {
+  max-width: 100%;
+}
+
+figcaption {
+  font-family: "Graublau sans", "Avenir Next", sans-serif;
+  line-height: 1.25em;
 }
 
 h1.title {

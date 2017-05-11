@@ -1,3 +1,7 @@
+settings:
+  recursive: true
+  follow-symlinks: false
+  skip: ['.*', 'pandocomatic.yaml']
 templates:
 #######################################
   paper-with-refs-pdf:
@@ -7,7 +11,9 @@ templates:
       to: latex
       latex-engine: "xelatex"
       standalone: true
-      filter: pandoc-citeproc
+      filter: 
+        - pandoc-citeproc
+        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/core.bib
       csl: /Users/ian/.pandoc/apa.csl
       metadata: 
@@ -18,7 +24,7 @@ templates:
         - "lang='en-GB'"  
         - "papersize='A4'"  
         - "documentclass='article'"
-        - "fontsize='12pt'"
+        - "fontsize='14pt'"
         - "linestretch='1.75'"
         - "geometry='margin=4cm'"
         - "notes-after-punctuation=false"  
@@ -36,7 +42,9 @@ templates:
       from: markdown
       to: docx
       standalone: true
-      filter: pandoc-citeproc
+      filter: 
+        - pandoc-citeproc
+        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/core.bib
       csl: /Users/ian/.pandoc/apa.csl
       reference-docx: /Users/ian/.pandoc/templates/custom.docx
@@ -55,7 +63,9 @@ templates:
       from: markdown
       to: odt
       standalone: true
-      filter: pandoc-citeproc
+      filter: 
+        - pandoc-citeproc
+        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/core.bib
       csl: /Users/ian/.pandoc/apa.csl
       reference-odt: /Users/ian/.pandoc/templates/custom.odt
@@ -76,7 +86,9 @@ templates:
       standalone: true
       number-sections: true
       section-divs: true
-      filter: pandoc-citeproc
+      filter: 
+        - pandoc-citeproc
+        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/core.bib
       csl: /Users/ian/.pandoc/apa.csl
       template: /Users/ian/.pandoc/templates/custom.html
@@ -96,6 +108,8 @@ templates:
     pandoc:
       from: markdown
       to: docx
+      filter: 
+        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       standalone: true
       reference-docx: /Users/ian/.pandoc/templates/custom.docx
       toc: false
@@ -107,6 +121,8 @@ templates:
     pandoc:
       from: markdown
       to: odt
+      filter: 
+        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       standalone: true
       reference-docx: /Users/ian/.pandoc/templates/custom.odt
       toc: false
@@ -130,7 +146,8 @@ templates:
     preprocessors: []
     pandoc:
       from: markdown
-      to: pdf
+      to: latex
+      output: "test-pdf.pdf"
       latex-engine: "xelatex"
       standalone: true
       toc: true

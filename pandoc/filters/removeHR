@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+#encoding: utf-8
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
+DEBUG = false
+if DEBUG
+	require 'byebug/core'
+	require 'byebug'
+	Byebug.wait_connection = true
+	Byebug.start_server('localhost', 1048)
+	byebug
+end
+
+require "paru/filter"
+
+Paru::Filter.run do 
+	with "HorizontalRule" do |rule|
+		if rule.has_parent? then
+			rule.parent.delete(rule)
+		else
+			rule.outer_markdown = ""
+		end
+	end
+end
