@@ -156,7 +156,7 @@ function update() {
 		git status
 	fi
 	if [[ -d ~/Code/pandocomatic/.git ]]; then
-		printf '\n\n---> Updating SCRIVOMATIC...\n'
+		printf '\n\n---> Updating PANDOCOMATIC...\n'
 		cd ~/Code/pandocomatic
 		git pull
 		git status
@@ -222,13 +222,15 @@ function update() {
 function updatePTB() {
 	printf '\n---> Merging PTB...\n'
 	cd ~/Code/Psychtoolbox-3
+	git pull
 	git fetch upstream
 	git merge upstream/master
 	printf '\n\n---> Merging Fieldtrip MASTER...\n'
 	cd ~/Code/fieldtrip
+	git pull
 	git fetch upstream
 	git checkout master
-	git merge --ff-only upstream/master
+	git merge upstream/master
 	printf '\n\n---> Merging Fieldtrip PLEXON...\n'
 	git checkout plexon
 	git merge master

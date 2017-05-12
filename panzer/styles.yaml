@@ -6,7 +6,7 @@ base:
   all:
     metadata:
       bibliography: "/Users/ian/.pandoc/Core.bib"  
-      csl: "/Users/ian/.pandoc/apa.csl"
+      csl: "/Users/ian/.pandoc/csl/apa.csl"
       notes-after-punctuation: false
       link-citations: true
     commandline:
