@@ -16,7 +16,7 @@ templates:
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa.csl
+      csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
       metadata: 
         - "mainfont='Greta Text Pro'"  
         - "sansfont='Graublau Sans'"  
@@ -46,8 +46,8 @@ templates:
       filter: 
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-      bibliography: /Users/ian/.pandoc/core.bib
-      csl: /Users/ian/.pandoc/csl/apa.csl
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
       reference-docx: /Users/ian/.pandoc/templates/custom.docx
       dpi: 300
       toc: false
@@ -67,8 +67,8 @@ templates:
       filter: 
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-      bibliography: /Users/ian/.pandoc/core.bib
-      csl: /Users/ian/.pandoc/csl/apa.csl
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
       reference-odt: /Users/ian/.pandoc/templates/custom.odt
       dpi: 300
       toc: false
@@ -90,8 +90,8 @@ templates:
       filter: 
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-      bibliography: /Users/ian/.pandoc/core.bib
-      csl: /Users/ian/.pandoc/csl/apa.csl
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
       template: /Users/ian/.pandoc/templates/custom.html
       css: "/Users/ian/.pandoc/templates/custom.css"
       self-contained: true

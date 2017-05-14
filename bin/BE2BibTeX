@@ -87,6 +87,9 @@ on theSplit(theString, theDelimiter, theExportText)
 end theSplit
 
 on run argv
+	--start time
+	set originalT to (time of (current date))
+	
 	-- store default delimiters
 	set oldDelimiters to AppleScript's text item delimiters
 	
@@ -205,8 +208,9 @@ on run argv
 		do shell script fixLineEndings
 		
 		if DEBUG then
-			return output & "
-" & "Line ends fixed using: " & fixLineEndings
+			set newT to (time of (current date))
+			set newT to newT - originalT
+			return output & "\n" & "Line ends fixed using: " & fixLineEndings & "\nIt took " & newT & " seconds"
 		end if
 		
 		set AppleScript's text item delimiters to oldDelimiters
