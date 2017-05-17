@@ -94,7 +94,7 @@ on run argv
 	set oldDelimiters to AppleScript's text item delimiters
 	
 	-- default: no DEBUG output
-	set DEBUG to true
+	set DEBUG to false
 	
 	-- crude check for existance of command line arguments
 	if argv contains "DEBUG" then

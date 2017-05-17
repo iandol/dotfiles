@@ -9,7 +9,38 @@ templates:
     pandoc:
       from: markdown
       to: pdf
-      output: test.pdf
+      latex-engine: "xelatex"
+      standalone: true
+      filter: 
+        - pandoc-citeproc
+        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
+      metadata: 
+        - "mainfont='Greta Text Pro'"  
+        - "sansfont='Graublau Sans'"  
+        - "monofont='Fira Code'"  
+        - "CJKmainfont='Arial Unicode MS'"
+        - "lang='en-GB'"  
+        - "papersize='A4'"  
+        - "documentclass='article'"
+        - "fontsize='16pt'"
+        - "linestretch='1.7'"
+        - "geometry='margin=3cm'"
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"  
+      template: /Users/ian/.pandoc/templates/custom.latex
+      dpi: 300
+      toc: true
+      toc-depth: 4
+      base-header-level: 1
+    postprocessors: []
+#######################################
+  paper-with-refs-latex:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: latex
       latex-engine: "xelatex"
       standalone: true
       filter: 
@@ -55,7 +86,7 @@ templates:
       base-header-level: 1
       metadata: 
         - "notes-after-punctuation=false"  
-        - "link-citations=true"
+        - "link-citations=false"
     postprocessors: []
 #######################################
   paper-with-refs-odt:
@@ -101,7 +132,7 @@ templates:
       base-header-level: 1
       metadata: 
         - "notes-after-punctuation=false"  
-        - "link-citations=true"
+        - "link-citations=false"
     postprocessors: []
 #######################################
   paper-no-refs-docx:
