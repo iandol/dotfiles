@@ -17,14 +17,19 @@ templates:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
       metadata: 
-        - "mainfont='Greta Text Pro'"  
+        - "mainfont='Greta Sans Std'"  
+        - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
         - "sansfont='Graublau Sans'"  
+        - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
         - "monofont='Fira Code'"  
         - "CJKmainfont='Arial Unicode MS'"
+        - "linkcolor=Mahogany"
+        - "citecolor=Sepia"
+        - "urlcolor=BrickRed"
         - "lang='en-GB'"  
         - "papersize='A4'"  
         - "documentclass='article'"
-        - "fontsize='16pt'"
+        - "fontsize='17pt'"
         - "linestretch='1.7'"
         - "geometry='margin=3cm'"
         - "notes-after-punctuation=false"  
@@ -49,14 +54,19 @@ templates:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
       metadata: 
-        - "mainfont='Greta Text Pro'"  
+        - "mainfont='Greta Sans Std'"  
+        - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
         - "sansfont='Graublau Sans'"  
+        - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
         - "monofont='Fira Code'"  
         - "CJKmainfont='Arial Unicode MS'"
+        - "linkcolor=Mahogany"
+        - "citecolor=Sepia"
+        - "urlcolor=BrickRed"
         - "lang='en-GB'"  
         - "papersize='A4'"  
         - "documentclass='article'"
-        - "fontsize='16pt'"
+        - "fontsize='17pt'"
         - "linestretch='1.7'"
         - "geometry='margin=3cm'"
         - "notes-after-punctuation=false"  
