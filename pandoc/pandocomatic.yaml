@@ -15,7 +15,7 @@ templates:
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
         - "mainfont='Greta Sans Std'"  
         - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
@@ -29,8 +29,8 @@ templates:
         - "lang='en-GB'"  
         - "papersize='A4'"  
         - "documentclass='article'"
-        - "fontsize='17pt'"
-        - "linestretch='1.7'"
+        - "fontsize='12pt'"
+        - "linestretch='1.75'"
         - "geometry='margin=3cm'"
         - "notes-after-punctuation=false"  
         - "link-citations=true"  
@@ -52,7 +52,7 @@ templates:
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
         - "mainfont='Greta Sans Std'"  
         - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
@@ -66,8 +66,8 @@ templates:
         - "lang='en-GB'"  
         - "papersize='A4'"  
         - "documentclass='article'"
-        - "fontsize='17pt'"
-        - "linestretch='1.7'"
+        - "fontsize='12pt'"
+        - "linestretch='1.75'"
         - "geometry='margin=3cm'"
         - "notes-after-punctuation=false"  
         - "link-citations=true"  
@@ -88,7 +88,7 @@ templates:
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
       reference-docx: /Users/ian/.pandoc/templates/custom.docx
       dpi: 300
       toc: false
@@ -109,7 +109,7 @@ templates:
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
       reference-odt: /Users/ian/.pandoc/templates/custom.odt
       dpi: 300
       toc: false
@@ -132,7 +132,7 @@ templates:
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/cerebral-cortex.csl
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
       template: /Users/ian/.pandoc/templates/custom.html
       css: "/Users/ian/.pandoc/templates/custom.css"
       self-contained: true
@@ -188,8 +188,7 @@ templates:
     preprocessors: []
     pandoc:
       from: markdown
-      to: latex
-      output: "test-pdf.pdf"
+      to: pdf
       latex-engine: "xelatex"
       standalone: true
       toc: true
@@ -197,7 +196,7 @@ templates:
         - "lang='en-GB'"  
         - "papersize='A4'"  
         - "documentclass='article'"
-        - "fontsize='16pt'"
+        - "fontsize='12pt'"
         - "linestretch='1.75'"
     postprocessors: []
 #######################################
@@ -213,7 +212,7 @@ templates:
         - "lang='en-GB'"  
         - "papersize='A4'"  
         - "documentclass='article'"
-        - "fontsize='16pt'"
+        - "fontsize='12pt'"
         - "linestretch='1.75'"
     postprocessors: []
 
