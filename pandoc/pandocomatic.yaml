@@ -76,7 +76,8 @@ templates:
       toc: true
       toc-depth: 4
       base-header-level: 1
-    postprocessors: []
+    postprocessors: 
+      - 'postprocessors/fixarrows.rb'
 #######################################
   paper-with-refs-docx:
     preprocessors: []

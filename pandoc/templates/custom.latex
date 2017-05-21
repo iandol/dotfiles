@@ -50,8 +50,10 @@ $if(mathfont)$
     \setmathfont(Digits,Latin,Greek)[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
 $endif$
 $if(CJKmainfont)$
-    \usepackage{xeCJK}
-    \setCJKmainfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
+    \ifxetex
+      \usepackage{xeCJK}
+      \setCJKmainfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
+    \fi
 $endif$
   % use cambria to fix some font substitution problems for e.g. ⬄
   \newfontfamily\fixfont[Numbers=OldStyle,Numbers=Proportional]{Cambria}
