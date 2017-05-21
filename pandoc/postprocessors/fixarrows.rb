@@ -3,7 +3,7 @@
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
-DEBUG = true
+DEBUG = false
 if DEBUG
 	PORT = 8991 
 	require 'byebug/core'
@@ -14,6 +14,14 @@ if DEBUG
 	byebug
 end
 
-input = STDIN.gets
-output = input.gsub(/⬄/, "{\fixfont⬄}")
-return
+input = $stdin.read
+output = input.gsub(/⬄/, '{\\fixfont⬄}')
+output.gsub!(/([\s\(\[\{])mt([\s\.\)\]\}])/i, '\1MT\2')
+output.gsub!(/([\s\(\[\{])lgn([\s\.\)\]\}])/i, '\1LGN\2')
+output.gsub!(/([\s\(\[\{])v1([\s\.\)\]\}])/i, '\1V1\2')
+output.gsub!(/([\s\(\[\{])v2([\s\.\)\]\}])/i, '\1V2\2')
+output.gsub!(/([\s\(\[\{])v3([\s\.\)\]\}])/i, '\1V3\2')
+output.gsub!(/([\s\(\[\{])v4([\s\.\)\]\}])/i, '\1V4\2')
+output.gsub!(/\\begin\{quote\}/, '\begin{quote}\n\emph{')
+output.gsub!(/\\end\{quote\}/, '}\n\end{quote}')
+puts output
