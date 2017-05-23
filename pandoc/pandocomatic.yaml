@@ -17,12 +17,13 @@ templates:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
-        - "mainfont='Greta Sans Std'"  
+        - "classoption=twoside"
+        - "mainfont='Greta Text Pro'"  
         - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
         - "sansfont='Graublau Sans'"  
         - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
         - "monofont='Fira Code'"  
-        - "CJKmainfont='Arial Unicode MS'"
+        - "CJKmainfont='PingFang SC'"
         - "linkcolor=Mahogany"
         - "citecolor=Sepia"
         - "urlcolor=BrickRed"
@@ -30,8 +31,8 @@ templates:
         - "papersize='A4'"  
         - "documentclass='article'"
         - "fontsize='12pt'"
-        - "linestretch='1.75'"
-        - "geometry='margin=3cm'"
+        - "linestretch='1.65'"
+        - "geometry='margin=2cm'"
         - "notes-after-punctuation=false"  
         - "link-citations=true"  
       template: /Users/ian/.pandoc/templates/custom.latex
@@ -40,7 +41,7 @@ templates:
       toc-depth: 4
       base-header-level: 1
     postprocessors: 
-      - 'postprocessors/fixarrows.rb'
+      - 'postprocessors/fixlatex.rb'
 #######################################
   paper-with-refs-latex:
     preprocessors: []
@@ -55,12 +56,13 @@ templates:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
-        - "mainfont='Greta Sans Std'"  
+        - "classoption=twoside"
+        - "mainfont='Greta Text Pro'"  
         - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
         - "sansfont='Graublau Sans'"  
         - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
         - "monofont='Fira Code'"  
-        - "CJKmainfont='Arial Unicode MS'"
+        - "CJKmainfont='PingFang SC'"
         - "linkcolor=Mahogany"
         - "citecolor=Sepia"
         - "urlcolor=BrickRed"
@@ -69,7 +71,7 @@ templates:
         - "documentclass='article'"
         - "fontsize='12pt'"
         - "linestretch='1.75'"
-        - "geometry='margin=3cm'"
+        - "geometry='margin=2cm'"
         - "notes-after-punctuation=false"  
         - "link-citations=true"  
       template: /Users/ian/.pandoc/templates/custom.latex
@@ -78,7 +80,7 @@ templates:
       toc-depth: 4
       base-header-level: 1
     postprocessors: 
-      - 'postprocessors/fixarrows.rb'
+      - 'postprocessors/fixlatex.rb'
 #######################################
   paper-with-refs-docx:
     preprocessors: []
@@ -91,7 +93,7 @@ templates:
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      reference-docx: /Users/ian/.pandoc/templates/custom.docx
+      reference-docx: /Users/ian/.pandoc/templates/custom-greta.docx
       dpi: 300
       toc: false
       toc-depth: 4

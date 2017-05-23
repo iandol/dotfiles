@@ -13,6 +13,8 @@ $if(linestretch)$
 \usepackage{setspace}
 \setstretch{$linestretch$}
 $endif$
+\usepackage{xcolor}
+\usepackage{titlesec}
 \usepackage{caption}
 \captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment
 \usepackage{amssymb,amsmath}
@@ -57,6 +59,13 @@ $if(CJKmainfont)$
 $endif$
   % use cambria to fix some font substitution problems for e.g. ⬄
   \newfontfamily\fixfont[Numbers=OldStyle,Numbers=Proportional]{Cambria}
+  % customise titles
+  \definecolor{Sepia}{rgb}{.4,.1,.1}
+  \definecolor{Mahogany}{rgb}{.6,.2,.2}
+  \definecolor{BrickRed}{rgb}{.7,.3,.3}
+  \titleformat*{\section}{\LARGE\bfseries\itshape\center\sffamily\color{Sepia}}
+  \titleformat*{\subsection}{\Large\bfseries\itshape\sffamily\color{Sepia}}
+  \titleformat*{\subsubsection}{\itshape\sffamily}
 \fi
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}

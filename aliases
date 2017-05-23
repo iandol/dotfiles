@@ -158,11 +158,13 @@ function update() {
 	if [[ -d ~/Code/pandocomatic/.git ]]; then
 		printf '\n\n---> Updating PANDOCOMATIC...\n'
 		cd ~/Code/pandocomatic
+		git checkout master
 		git pull
 		git status
 		if [[ -n $(git remote | grep upstream) ]]; then
 			printf '\t\t---> Fetching upstream...\n'
 			git fetch upstream
+			git merge --ff-only -stat upstream/master
 		fi
 	fi
 	if [[ -d ~/Code/AfterImage/.git ]]; then
@@ -183,7 +185,7 @@ function update() {
 		git pull
 		if [[ -n $(git remote | grep upstream) ]]; then
 			printf '\t\t---> Fetching upstream PTB...\n'
-			git fetch upstream
+			git fetch -v upstream
 		fi
 	fi
 	if [[ -d ~/Code/fieldtrip ]]; then

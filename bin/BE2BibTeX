@@ -131,7 +131,6 @@ on run argv
 	tell application "Bookends"
 		-- get a list of all groups in open library
 		set allGroups to «event ToySRGPN» given «class PATH»:"true"
-		
 		-- split up those groups into elements of an array
 		-- 'return' here, as the middle parameter, is the return or newline character
 		set myGroupArray to my theSplit(allGroups, return, myGroupsToExport)
@@ -148,9 +147,15 @@ on run argv
 	
 	-- loop over each folder matching the pattern and export each to a bibtex file
 	repeat with myGroup in myGroupArray
-		set thisFileName to (myPath & (myGroup as string) & ".bib")
+		set thisFile to (myPath & (myGroup as string) & ".bib") as POSIX file
+		set quotedName to quoted form of POSIX path of thisFile
+		tell application "Finder"
+			if exists thisFile then
+				delete thisFile
+			end if
+		end tell
 		-- from: http://stackoverflow.com/questions/3780985/how-do-i-write-to-a-text-file-using-applescript
-		set myFile to open for access thisFileName with write permission
+		set myFile to open for access thisFile with write permission
 		
 		try
 			tell application "Bookends"
@@ -202,15 +207,17 @@ on run argv
 		
 		close access myFile
 		
-		-- use tr to replace mac line endings with unix line endings
-		set fixLineEndings to ("cat \"" & thisFileName & "\"" & " | tr \"\\015\" \"\\012\" > $TMPDIR/temp.bib; mv $TMPDIR/temp.bib \"" & thisFileName & "\"" as string)
-		
-		do shell script fixLineEndings
+		--run our special code to enforce case in titles
+		set fixCase to ("fixCase.rb " & quotedName)
+		set ssout to do shell script fixCase
 		
 		if DEBUG then
 			set newT to (time of (current date))
-			set newT to newT - originalT
-			return output & "\n" & "Line ends fixed using: " & fixLineEndings & "\nIt took " & newT & " seconds"
+			set diffT to newT - originalT
+			return output & "
+" & ssout & "
+
+Bookends BiBTeX export took " & diffT & " seconds in total"
 		end if
 		
 		set AppleScript's text item delimiters to oldDelimiters
