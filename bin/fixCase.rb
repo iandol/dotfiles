@@ -24,7 +24,7 @@ infilename = ARGV[0]
 out =  "===> Parsing BiBTeX file #{infilename} "
 fail "Please specify an existing file!" unless infilename and File.exist?(infilename)
 
-#only wrap IF it is already uppercase
+#only wrap with {} IF it is already this case
 keepCase = [
 	"ON",
 	"OFF",
@@ -38,7 +38,7 @@ keepCase = [
 	"P", #parvocellular
 ]
 
-# always force to be uppercase
+# always force to be a certain case
 enforceCase = [
 	"V1",
 	"V2",
@@ -66,6 +66,8 @@ enforceCase = [
 	"GABAergic",
 	"LGN",
 	"dLGN",
+	"DREADD",
+	"tDCS",
 	"EEG",
 	"AAV",
 	"TMS",

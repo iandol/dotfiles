@@ -82,6 +82,44 @@ templates:
     postprocessors: 
       - 'postprocessors/fixlatex.rb'
 #######################################
+  paper-with-refs-memoir:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: latex
+      latex-engine: "xelatex"
+      standalone: true
+      filter: 
+        - pandoc-citeproc
+        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      metadata: 
+        - "classoption=twoside"
+        - "mainfont='Greta Text Pro'"  
+        - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
+        - "sansfont='Graublau Sans'"  
+        - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
+        - "monofont='Fira Code'"  
+        - "CJKmainfont='PingFang SC'"
+        - "linkcolor=Mahogany"
+        - "citecolor=Sepia"
+        - "urlcolor=BrickRed"
+        - "lang='en-GB'"  
+        - "papersize='A4'"  
+        - "documentclass='memoir'"
+        - "fontsize='12pt'"
+        - "geometry='margin=2cm'"
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"  
+      template: /Users/ian/.pandoc/templates/custom-memoir.latex
+      dpi: 300
+      toc: true
+      toc-depth: 4
+      base-header-level: 1
+    postprocessors: 
+      - 'postprocessors/fixlatex.rb'
+#######################################
   paper-with-refs-docx:
     preprocessors: []
     pandoc:
