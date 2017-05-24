@@ -72,7 +72,9 @@ enforceCase = [
 	"MEG",
 	"2D",
 	"3D",
-	"HMAX"]
+	"HMAX",
+	"R-CNN",
+	"DCNN"]
 
 temp_file = Tempfile.new('foo')
 
