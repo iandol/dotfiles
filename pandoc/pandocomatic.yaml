@@ -14,7 +14,6 @@ templates:
       filter: 
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-        - /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
@@ -54,7 +53,6 @@ templates:
       filter: 
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-        - /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
