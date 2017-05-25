@@ -1,5 +1,5 @@
 body { 
-	font-family: "Graublau Slab", "Avenir Next", sans-serif;
+	font-family: "Graublau Sans", "Avenir Next", sans-serif;
 	font-size: 120%;
 	margin: 20px auto 20px auto;
 	max-width: 1000px;
@@ -8,6 +8,7 @@ body {
 q { quotes: "“" "”" "‘" "’"; }
 
 header {
+	font-family: "Graublau Slab", "Avenir Next", sans-serif;
 	margin: 0;
 	margin-bottom: 2em;
 	border-left: 7px solid rgb(90%,90%,90%);
@@ -32,7 +33,7 @@ figure img {
 }
 
 figcaption {
-	font-family: "Graublau sans", "Avenir Next", sans-serif;
+	font-family: "Graublau Sans", "Greta Sans Std", "Avenir Next", sans-serif;
 	line-height: 1.25em;
 }
 

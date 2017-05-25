@@ -4,7 +4,7 @@ settings:
   skip: ['.*', 'pandocomatic.yaml']
 templates:
 #######################################
-  paper-with-refs-pdf:
+  pdf-with-refs:
     preprocessors: []
     pandoc:
       from: markdown
@@ -14,6 +14,7 @@ templates:
       filter: 
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
+        - /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
@@ -43,7 +44,7 @@ templates:
     postprocessors: 
       - 'postprocessors/fixlatex.rb'
 #######################################
-  paper-with-refs-latex:
+  latex-with-refs:
     preprocessors: []
     pandoc:
       from: markdown
@@ -53,6 +54,7 @@ templates:
       filter: 
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
+        - /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
@@ -82,7 +84,59 @@ templates:
     postprocessors: 
       - 'postprocessors/fixlatex.rb'
 #######################################
-  paper-with-refs-memoir:
+  latex-ieee:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: latex
+      latex-engine: "xelatex"
+      standalone: true
+      filter: 
+        - pandoc-citeproc
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      metadata: 
+        - "papersize='letter'"  
+        - "fontsize='10pt'"
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"  
+      template: /Users/ian/.pandoc/templates/ieee.latex
+      dpi: 300
+      toc: true
+      toc-depth: 4
+      base-header-level: 1
+    postprocessors: []
+#######################################
+  latex-eisvogel:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: latex
+      latex-engine: "xelatex"
+      standalone: true
+      filter: 
+        - pandoc-citeproc
+        - /Users/ian/.pandoc/filters/addToday
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      metadata: 
+        - "fontsize='10pt'"
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"  
+        - "lang=en-GB"
+        - "titlepage=true"
+        - "titlepage-color=06386e"
+        - "titlepage-text-color=ffffff"
+        - "titlepage-rule-color=ffffff"
+        - "titlepage-rule-height=1"
+      template: /Users/ian/.pandoc/templates/eisvogel.latex
+      dpi: 300
+      toc: true
+      toc-depth: 4
+      base-header-level: 1
+    postprocessors: []
+#######################################
+  memoir-with-refs:
     preprocessors: []
     pandoc:
       from: markdown
@@ -120,7 +174,7 @@ templates:
     postprocessors: 
       - 'postprocessors/fixlatex.rb'
 #######################################
-  paper-with-refs-docx:
+  docx-with-refs:
     preprocessors: []
     pandoc:
       from: markdown
@@ -141,7 +195,7 @@ templates:
         - "link-citations=false"
     postprocessors: []
 #######################################
-  paper-with-refs-odt:
+  odt-with-refs:
     preprocessors: []
     pandoc:
       from: markdown
@@ -162,7 +216,7 @@ templates:
         - "link-citations=true"
     postprocessors: []
 #######################################
-  paper-with-refs-html:
+  html-with-refs:
     preprocessors: []
     pandoc:
       from: markdown
@@ -187,7 +241,29 @@ templates:
         - "link-citations=false"
     postprocessors: []
 #######################################
-  paper-no-refs-docx:
+  tufte:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: html5
+      standalone: true
+      filter: 
+        - pandoc-citeproc
+        - pandoc-sidenote
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      template: /Users/ian/.pandoc/templates/tufte.html5
+      css: "/Users/ian/.pandoc/templates/tufte.css"
+      css: "/Users/ian/.pandoc/templates/tuftepandoc.css"
+      self-contained: true
+      dpi: 300
+      base-header-level: 1
+      metadata: 
+        - "notes-after-punctuation=false"  
+        - "link-citations=false"
+    postprocessors: []
+#######################################
+  docx-no-refs:
     preprocessors: []
     pandoc:
       from: markdown
@@ -200,7 +276,7 @@ templates:
       base-header-level: 1
     postprocessors: []
 #######################################
-  paper-no-refs-odt:
+  odt-no-refs:
     preprocessors: []
     pandoc:
       from: markdown
@@ -257,4 +333,3 @@ templates:
         - "fontsize='12pt'"
         - "linestretch='1.75'"
     postprocessors: []
-

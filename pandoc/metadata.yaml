@@ -1,25 +1,25 @@
 ---
 bibliography:  /Users/ian/.pandoc/Core.bib
-citation-style: /Users/ian/.pandoc/csl/apa.csl
+citation-style: /Users/ian/.pandoc/csl/apa-ian.csl
 reference-section-title:  References
-link-citations: true #used with pandoc citeproc  
-notes-after-punctuation: false  
-documentclass: memoir  
-mainfont: "Greta Text Pro"  
-sansfont: "Graublau Sans"  
-monofont: "Fira Code"  
-CJKmainfont: "Arial Unicode MS"  
-fontsize: 16  
-linestretch: 1.75  
-toc: 1  
-titlesec:  
-maketitle: 1  
-twocolumn:  
-lang: en-GB  
-papersize: A4  
-geometry:  
-  - margin=3cm  
-polyglossia-lang:  
-  options: variant=british  
-  name: english  
+link-citations: true #used with pandoc citeproc
+notes-after-punctuation: false
+documentclass: "article"
+mainfont: "Greta Text Pro"
+sansfont: "Graublau Sans"
+monofont: "Fira Code"
+CJKmainfont: "PingFang SC"
+fontsize: 12pt
+linestretch: 1.75
+toc:
+titlesec:
+maketitle: 1
+twocolumn:
+lang: en-GB
+papersize: A4
+geometry:
+  - margin=3cm
+polyglossia-lang:
+  options: variant=british
+  name: english
 ---
