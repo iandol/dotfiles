@@ -82,6 +82,30 @@ templates:
     postprocessors: 
       - 'postprocessors/fixlatex.rb'
 #######################################
+  latex-eisvogel:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: latex
+      standalone: true
+      filter: 
+        - pandoc-citeproc
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      metadata: 
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"
+        - "lang=en-GB"
+        - "colorlinks=true"
+        - "titlepage=true"
+        - "titlepage-color=16386E"
+        - "titlepage-text-color=ffffff"
+        - "titlepage-rule-color=ffffff"
+        - "titlepage-rule-height=1"
+      template: /Users/ian/.pandoc/templates/eisvogel.latex
+      base-header-level: 1
+    postprocessors: []
+#######################################
   latex-ieee:
     preprocessors: []
     pandoc:
@@ -99,35 +123,6 @@ templates:
         - "notes-after-punctuation=false"  
         - "link-citations=true"  
       template: /Users/ian/.pandoc/templates/ieee.latex
-      dpi: 300
-      toc: true
-      toc-depth: 4
-      base-header-level: 1
-    postprocessors: []
-#######################################
-  latex-eisvogel:
-    preprocessors: []
-    pandoc:
-      from: markdown
-      to: latex
-      latex-engine: "xelatex"
-      standalone: true
-      filter: 
-        - pandoc-citeproc
-        - /Users/ian/.pandoc/filters/addToday
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      metadata: 
-        - "fontsize='10pt'"
-        - "notes-after-punctuation=false"  
-        - "link-citations=true"  
-        - "lang=en-GB"
-        - "titlepage=true"
-        - "titlepage-color=06386e"
-        - "titlepage-text-color=ffffff"
-        - "titlepage-rule-color=ffffff"
-        - "titlepage-rule-height=1"
-      template: /Users/ian/.pandoc/templates/eisvogel.latex
       dpi: 300
       toc: true
       toc-depth: 4
