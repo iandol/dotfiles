@@ -15,7 +15,7 @@ $if(linestretch)$
 $endif$
 \usepackage{xcolor}
 \usepackage{titlesec}
-\usepackage{caption}
+\usepackage[font={small,sffamily,it}]{caption}
 \captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}

@@ -82,7 +82,7 @@ templates:
     postprocessors: 
       - 'postprocessors/fixlatex.rb'
 #######################################
-  latex-eisvogel:
+  eisvogel:
     preprocessors: []
     pandoc:
       from: markdown
@@ -94,15 +94,17 @@ templates:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
-        - "notes-after-punctuation=false"  
-        - "link-citations=true"
-        - "lang=en-GB"
-        - "colorlinks=true"
         - "titlepage=true"
         - "titlepage-color=16386E"
         - "titlepage-text-color=ffffff"
         - "titlepage-rule-color=ffffff"
         - "titlepage-rule-height=1"
+        - "linkcolor=Mahogany"
+        - "citecolor=Sepia"
+        - "urlcolor=BrickRed"
+        - "fontsize='12pt'"
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"
       template: /Users/ian/.pandoc/templates/eisvogel.latex
       base-header-level: 1
     postprocessors: []
