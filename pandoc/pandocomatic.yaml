@@ -90,6 +90,7 @@ templates:
       standalone: true
       filter: 
         - pandoc-citeproc
+        - /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
@@ -115,6 +116,7 @@ templates:
       standalone: true
       filter: 
         - pandoc-citeproc
+        - /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
@@ -125,6 +127,28 @@ templates:
       template: /Users/ian/.pandoc/templates/ieee.latex
       dpi: 300
       toc: true
+      toc-depth: 4
+      base-header-level: 1
+    postprocessors: []
+#######################################
+  latex-scholar:
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: latex
+      latex-engine: "xelatex"
+      standalone: true
+      filter: 
+        - pandoc-citeproc
+        - /Users/ian/.pandoc/filters/addToday
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      metadata: 
+        - "fontsize='10pt'"
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"  
+        - "lang=en-GB"
+      template: /Users/ian/.pandoc/templates/pandoc-scholar.latex
       toc-depth: 4
       base-header-level: 1
     postprocessors: []
@@ -241,19 +265,12 @@ templates:
       to: html5
       standalone: true
       filter: 
-        - pandoc-citeproc
         - pandoc-sidenote
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
       template: /Users/ian/.pandoc/templates/tufte.html5
-      css: "/Users/ian/.pandoc/templates/tufte.css"
-      css: "/Users/ian/.pandoc/templates/tuftepandoc.css"
-      self-contained: true
-      dpi: 300
-      base-header-level: 1
-      metadata: 
-        - "notes-after-punctuation=false"  
-        - "link-citations=false"
+      css: 
+        - "/Users/ian/.pandoc/templates/tufte.css"
+        - "/Users/ian/.pandoc/templates/tuftepandoc.css"
+      #self-contained: true
     postprocessors: []
 #######################################
   docx-no-refs:
