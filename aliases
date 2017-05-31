@@ -30,7 +30,7 @@ alias noquarantine='xattr -d com.apple.quarantine '
 
 #manage bash/zsh
 if [[ $OSTYPE == 'darwin'* ]]; then 
-	alias edit='mate -w'; #prefer textmate
+	alias edit='subl -w'; #prefer textmate
 else
 	alias edit='vim';
 fi
