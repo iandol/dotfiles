@@ -94,20 +94,26 @@ templates:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
+        - "mainfont='Greta Sans Std'"  
+        - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
+        - "sansfont='Graublau Slab'"  
+        - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
+        - "monofont='Fira Code'"  
         - "titlepage=true"
-        - "titlepage-color=773322"
+        - "titlepage-color=BB5544"
         - "titlepage-text-color=FFFFFF"
         - "titlepage-rule-color=FFFFFF"
-        - "titlepage-rule-height=1"
+        - "titlepage-rule-height=5"
         - "linkcolor=Mahogany"
         - "citecolor=Sepia"
         - "urlcolor=BrickRed"
-        - "fontsize='10pt'"
+        - "fontsize='11pt'"
         - "notes-after-punctuation=false"  
         - "link-citations=true"
+        - "nonumberfigures=true"
       template: /Users/ian/.pandoc/templates/eisvogel.latex
       base-header-level: 1
-    postprocessors: []
+    postprocessors: ['postprocessors/fixlatex.rb']
 #######################################
   latex-ieee:
     preprocessors: []

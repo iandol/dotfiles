@@ -240,10 +240,10 @@ $endfor$
 
 $if(title)$
 \usepackage{titling}
-\pretitle{\begin{flushright}\LARGE\sffamily} 
-\posttitle{\par\end{flushright}\vskip 0.5em} 
-\predate{\begin{flushleft}\large\scshape} 
-\postdate{\par\end{flushleft}}
+\pretitle{\begin{center}\LARGE\sffamily} 
+\posttitle{\par\end{center}\vskip 0.5em} 
+\predate{\begin{flushright}\large\scshape} 
+\postdate{\par\end{flushright}}
 \title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
 $endif$
 $if(subtitle)$
