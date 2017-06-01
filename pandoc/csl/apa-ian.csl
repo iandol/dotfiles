@@ -626,7 +626,7 @@
       <key macro="author"/>
       </sort>
     <layout prefix="(" suffix=")" delimiter="; ">
-      <group delimiter=", ">
+      <group delimiter=" ">
         <text macro="author-short"/>
         <text macro="issued-year"/>
         <text macro="citation-locator"/>

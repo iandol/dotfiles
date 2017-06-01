@@ -13,13 +13,9 @@ $if(linestretch)$
 \usepackage{setspace}
 \setstretch{$linestretch$}
 $endif$
-\usepackage{xcolor}
-\usepackage{titlesec}
-\usepackage[font={small,sffamily,it}]{caption}
-\captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
-%\usepackage{fixltx2e} % provides \textsubscript
+\usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
   \usepackage[utf8]{inputenc}
@@ -27,11 +23,15 @@ $if(euro)$
   \usepackage{eurosym}
 $endif$
 \else % if luatex or xelatex
+$if(mathspec)$
   \ifxetex
     \usepackage{mathspec}
   \else
-    \usepackage{fontspec}
+    \usepackage{unicode-math}
   \fi
+$else$
+  \usepackage{unicode-math}
+$endif$
   \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
 $for(fontfamilies)$
   \newfontfamily{$fontfamilies.name$}[$fontfamilies.options$]{$fontfamilies.font$}
@@ -49,24 +49,34 @@ $if(monofont)$
     \setmonofont[Mapping=tex-ansi$if(monofontoptions)$,$for(monofontoptions)$$monofontoptions$$sep$,$endfor$$endif$]{$monofont$}
 $endif$
 $if(mathfont)$
+$if(mathspec)$
+  \ifxetex
     \setmathfont(Digits,Latin,Greek)[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
+  \else
+    \setmathfont[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
+  \fi
+$else$
+  \setmathfont[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
+$endif$
 $endif$
 $if(CJKmainfont)$
-    \ifxetex
-      \usepackage{xeCJK}
-      \setCJKmainfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
-    \fi
+  \ifxetex
+    \usepackage{xeCJK}
+    \setCJKmainfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
+  \fi
 $endif$
-  % use cambria to fix some font substitution problems for e.g. ⬄
-  \newfontfamily\fixfont[Numbers=OldStyle,Numbers=Proportional]{Cambria}
-  % customise titles
-  \definecolor{Sepia}{rgb}{.4,.1,.1}
-  \definecolor{Mahogany}{rgb}{.6,.2,.2}
-  \definecolor{BrickRed}{rgb}{.7,.3,.3}
-  \titleformat*{\section}{\LARGE\bfseries\itshape\center\sffamily\color{Sepia}}
-  \titleformat*{\subsection}{\Large\bfseries\itshape\sffamily\color{Sepia}}
-  \titleformat*{\subsubsection}{\itshape\sffamily}
 \fi
+% use cambria to fix some font substitution problems for e.g. ⬄
+\newfontfamily\fixfont[Numbers=OldStyle,Numbers=Proportional]{Cambria}
+% customise titles
+\usepackage{xcolor}
+\usepackage{titlesec}
+\definecolor{Sepia}{rgb}{.4,.1,.1}
+\definecolor{Mahogany}{rgb}{.6,.2,.2}
+\definecolor{BrickRed}{rgb}{.7,.3,.3}
+\titleformat*{\section}{\LARGE\bfseries\itshape\center\sffamily\color{Sepia}}
+\titleformat*{\subsection}{\Large\bfseries\itshape\sffamily\color{Sepia}}
+\titleformat*{\subsubsection}{\itshape\sffamily}
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
@@ -74,6 +84,19 @@ $endif$
 \usepackage[$for(microtypeoptions)$$microtypeoptions$$sep$,$endfor$]{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
+\usepackage[format=hang,labelfont=bf,font={small,it}]{caption}
+$if(nonumberfigures)$
+\captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment
+$endif$
+$if(indent)$
+$else$
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+$endif$
 \PassOptionsToPackage{hyphens}{url} % url is loaded by hyperref
 $if(verbatim-in-note)$
 \usepackage{fancyvrb}
@@ -108,20 +131,6 @@ $endif$
 $if(geometry)$
 \usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
 $endif$
-$if(lang)$
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
-  \usepackage[shorthands=off,$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
-$if(babel-newcommands)$
-  $babel-newcommands$
-$endif$
-\else
-  \usepackage{polyglossia}
-  \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
-$for(polyglossia-otherlangs)$
-  \setotherlanguage[$polyglossia-otherlangs.options$]{$polyglossia-otherlangs.name$}
-$endfor$
-\fi
-$endif$
 $if(natbib)$
 \usepackage{natbib}
 \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
@@ -134,6 +143,7 @@ $endfor$
 $endif$
 $if(listings)$
 \usepackage{listings}
+\newcommand{\passthrough}[1]{#1}
 $endif$
 $if(lhs)$
 \lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
@@ -159,21 +169,12 @@ $if(graphics)$
 $endif$
 $if(links-as-notes)$
 % Make links footnotes instead of hotlinks:
-\renewcommand{\href}[2]{#2\footnote{\url{#1}}}
+\DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
 $endif$
 $if(strikeout)$
 \usepackage[normalem]{ulem}
 % avoid problems with \sout in headers with hyperref:
 \pdfstringdefDisableCommands{\renewcommand{\sout}{}}
-$endif$
-$if(indent)$
-$else$
-\IfFileExists{parskip.sty}{%
-\usepackage{parskip}
-}{% else
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-}
 $endif$
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
 \providecommand{\tightlist}{%
@@ -193,6 +194,21 @@ $else$
 \ifx\subparagraph\undefined\else
 \let\oldsubparagraph\subparagraph
 \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+$endif$
+$if(lang)$
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[shorthands=off,$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
+$if(babel-newcommands)$
+  $babel-newcommands$
+$endif$
+\else
+  % load polyglossia as late as possible as it *could* call bidi if RTL lang (e.g. Hebrew or Arabic)
+  \usepackage{polyglossia}
+  \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
+$for(polyglossia-otherlangs)$
+  \setotherlanguage[$polyglossia-otherlangs.options$]{$polyglossia-otherlangs.name$}
+$endfor$
 \fi
 $endif$
 $if(dir)$
@@ -223,6 +239,11 @@ $header-includes$
 $endfor$
 
 $if(title)$
+\usepackage{titling}
+\pretitle{\begin{flushright}\LARGE\sffamily} 
+\posttitle{\par\end{flushright}\vskip 0.5em} 
+\predate{\begin{flushleft}\large\scshape} 
+\postdate{\par\end{flushleft}}
 \title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
 $endif$
 $if(subtitle)$
@@ -242,8 +263,11 @@ $endif$
 $if(title)$
 \maketitle
 $endif$
+$if(institute)$
+\textsf{$for(institute)$$institute$$sep$  \&  $endfor$}
+$endif$
 $if(abstract)$
-\begin{abstract}
+\begin{abstract}\singlespacing
 $abstract$
 \end{abstract}
 $endif$
