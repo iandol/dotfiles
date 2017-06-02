@@ -4,6 +4,45 @@ settings:
   skip: ['.*', 'pandocomatic.yaml']
 templates:
 #######################################
+  latex-with-refs:
+    preprocessors: ['preprocessors/removeAffiliations.rb']
+    pandoc:
+      from: markdown
+      to: latex
+      standalone: true
+      filter: 
+        - pandoc-citeproc
+        #- /Users/ian/.pandoc/filters/add_today.rb #add date metadata
+        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      metadata: 
+        - "classoption=twoside"
+        - "mainfont='Greta Text Pro'"  
+        - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
+        - "sansfont='Graublau Sans'"  
+        - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
+        - "monofont='Fira Code'"  
+        - "CJKmainfont='PingFang SC'"
+        - "linkcolor=Mahogany"
+        - "citecolor=Sepia"
+        - "urlcolor=BrickRed"
+        - "lang='en-GB'"  
+        - "papersize='A4'"  
+        - "documentclass='article'"
+        - "fontsize='10pt'"
+        - "linestretch='1.5'"
+        - "geometry='margin=2cm'"
+        - "notes-after-punctuation=false"  
+        - "link-citations=true"  
+        - "nonumberfigures=true"
+      template: /Users/ian/.pandoc/templates/custom.latex
+      dpi: 300
+      toc: true
+      toc-depth: 4
+      base-header-level: 1
+    postprocessors: ['postprocessors/fixlatex.rb']
+#######################################
   pdf-with-refs:
     preprocessors: ['preprocessors/removeAffiliations.rb']
     pandoc:
@@ -44,44 +83,6 @@ templates:
     postprocessors: 
       - 'postprocessors/fixlatex.rb'
 #######################################
-  latex-with-refs:
-    preprocessors: ['preprocessors/removeAffiliations.rb']
-    pandoc:
-      from: markdown
-      to: latex
-      standalone: true
-      filter: 
-        - pandoc-citeproc
-        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      metadata: 
-        - "classoption=twoside"
-        - "mainfont='Greta Text Pro'"  
-        - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "sansfont='Graublau Sans'"  
-        - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "monofont='Fira Code'"  
-        - "CJKmainfont='PingFang SC'"
-        - "linkcolor=Mahogany"
-        - "citecolor=Sepia"
-        - "urlcolor=BrickRed"
-        - "lang='en-GB'"  
-        - "papersize='A4'"  
-        - "documentclass='article'"
-        - "fontsize='10pt'"
-        - "linestretch='1.5'"
-        - "geometry='margin=2cm'"
-        - "notes-after-punctuation=false"  
-        - "link-citations=true"  
-        - "nonumberfigures=true"
-      template: /Users/ian/.pandoc/templates/custom.latex
-      dpi: 300
-      toc: true
-      toc-depth: 4
-      base-header-level: 1
-    postprocessors: ['postprocessors/fixlatex.rb']
-#######################################
   eisvogel:
     preprocessors: ['preprocessors/removeAffiliations.rb']
     pandoc:
@@ -90,7 +91,7 @@ templates:
       standalone: true
       filter: 
         - pandoc-citeproc
-        - /Users/ian/.pandoc/filters/addToday
+        #- /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
@@ -124,7 +125,7 @@ templates:
       standalone: true
       filter: 
         - pandoc-citeproc
-        - /Users/ian/.pandoc/filters/addToday
+        #- /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
@@ -148,7 +149,7 @@ templates:
       standalone: true
       filter: 
         - pandoc-citeproc
-        - /Users/ian/.pandoc/filters/addToday
+        #- /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
