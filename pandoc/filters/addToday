@@ -1,22 +1,18 @@
 #!/usr/bin/env ruby
-DEBUG = false
-if DEBUG
-	PORT = 8991 
-	require 'byebug/core'
-	require 'byebug'
-	STDOUT.puts "\n!!!---DEBUG Server started on localhost:#{PORT} @ " + Time.now.to_s
-	Byebug.wait_connection = true
-	Byebug.start_server('localhost', PORT)
-	byebug
-end
 
-require "paru/filter"
-require "date"
+require 'paru/filter'
+require 'date'
+require 'ruby-prof'
 
+RubyProf.start
 Paru::Filter.run do 
-    metadata.yaml <<-YAML
+metadata.yaml <<-YAML
 ---
 date: #{Date.today.to_s}
 ...
-    YAML
+YAML
 end
+result = RubyProf.stop
+
+printer = RubyProf::MultiPrinter.new(result)
+printer.print(:path => ".", :profile => "addToday")

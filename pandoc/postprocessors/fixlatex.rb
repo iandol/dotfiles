@@ -32,7 +32,7 @@ output.gsub!(/\bv3\b/i, 'V3')
 output.gsub!(/\bv4\b/i, 'V4')
 output.gsub!(/\\begin\{quote\}/, '\begin{quote}\emph{')
 output.gsub!(/\\end\{quote\}/, '}\end{quote}')
-output.gsub!(/\\label{references}/, '\label{references}\singlespacing')
+output.gsub!(/\\label{references}/, '\label{references}\setstretch{0.8}')
 
 if DEBUG
 	tend = Time.now - tstart

@@ -63,11 +63,12 @@ $if(CJKmainfont)$
   \ifxetex
     \usepackage{xeCJK}
     \setCJKmainfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
+    \setCJKsansfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
   \fi
 $endif$
 \fi
 % use cambria to fix some font substitution problems for e.g. ⬄
-\newfontfamily\fixfont[Numbers=OldStyle,Numbers=Proportional]{Cambria}
+\newfontfamily\fixfont[Numbers=Proportional]{Cambria}
 % customise titles
 \usepackage{xcolor}
 \usepackage{titlesec}
@@ -264,11 +265,11 @@ $if(title)$
 \maketitle
 $endif$
 $if(institute)$
-\textsf{$for(institute)$$institute$$sep$  \&  $endfor$}
+\textsf{\emph{$for(institute)$$institute$$sep$  \&  $endfor$}}
 $endif$
 $if(abstract)$
 \begin{abstract}\singlespacing
-$abstract$
+\textsf{$abstract$}
 \end{abstract}
 $endif$
 
