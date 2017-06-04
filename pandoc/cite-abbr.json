@@ -1,0 +1,16 @@
+{
+  "default": {
+    "container-title": {
+      "Annual Review of Neuroscience": "Annu. Rev. Neurosci.",
+      "Annual Review of Visual Science": "Annu. Rev. Vis. Sci.",
+      "Current Biology": "Curr. Biol.",
+      "Journal of Comparative Neurology": "J. Comp. Neurol.",
+      "Journal of Neuroscience": "J. Neurosci.",
+      "Journal of the Optical Society of America A: Optics, Image Science, Vision": "J Opt Soc Am A Opt Image Sci Vis",
+      "Nature Neuroscience": "Nat. Neurosci.",
+      "Proceedings of the National Academy of Sciences USA": "Proc. Natl. Acad. Sci. USA",
+      "Scientific Reports": "Sci. Rep.",
+      "Trends in Cognitive Science": "Trends Cog. Sci."
+    }
+  }
+}

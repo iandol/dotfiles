@@ -16,6 +16,7 @@ templates:
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       metadata: 
         - "classoption=twoside"
         - "mainfont='Greta Text Pro'"  
@@ -58,6 +59,7 @@ templates:
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       metadata: 
         - "classoption=twoside"
         - "mainfont='Greta Text Pro'"  
@@ -72,8 +74,8 @@ templates:
         - "linkcolor=Mahogany"
         - "citecolor=Sepia"
         - "urlcolor=BrickRed"
-        - "lang='en-GB'"  
-        - "papersize='A4'"  
+        - "lang='en-GB'"
+        - "papersize='A4'"
         - "documentclass='article'"
         - "fontsize='11pt'"
         - "linestretch='1.5'"
@@ -100,12 +102,14 @@ templates:
         #- /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       metadata: 
-        - "mainfont='Greta Sans Std'"  
+        - "mainfont='Greta Sans Std'"
         - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "sansfont='Graublau Slab'"  
+        - "sansfont='Graublau Slab'"
         - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "monofont='Fira Code'"  
+        - "monofont='Fira Code'"
+        - "lang='en-GB'"
         - "titlepage=true"
         - "titlepage-color=BB5544"
         - "titlepage-text-color=FFFFFF"
@@ -115,7 +119,7 @@ templates:
         - "citecolor=Sepia"
         - "urlcolor=BrickRed"
         - "fontsize='11pt'"
-        - "notes-after-punctuation=false"  
+        - "notes-after-punctuation=false"
         - "link-citations=true"
         - "nonumberfigures=true"
       template: /Users/ian/.pandoc/templates/eisvogel.latex
@@ -134,8 +138,9 @@ templates:
         #- /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       metadata: 
-        - "papersize='letter'"  
+        - "papersize='A4'"  
         - "fontsize='10pt'"
         - "notes-after-punctuation=false"  
         - "link-citations=true"  
@@ -158,6 +163,7 @@ templates:
         #- /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       metadata: 
         - "fontsize='10pt'"
         - "notes-after-punctuation=false"  
@@ -180,6 +186,7 @@ templates:
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       metadata: 
         - "classoption=twoside"
         - "mainfont='Greta Text Pro'"  
@@ -217,6 +224,7 @@ templates:
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       reference-docx: /Users/ian/.pandoc/templates/custom-greta.docx
       dpi: 300
       toc: false
@@ -238,6 +246,7 @@ templates:
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       reference-odt: /Users/ian/.pandoc/templates/custom.odt
       dpi: 300
       toc: false
@@ -261,6 +270,7 @@ templates:
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       template: /Users/ian/.pandoc/templates/custom.html
       css: "/Users/ian/.pandoc/templates/custom.css"
       self-contained: true
