@@ -77,7 +77,8 @@ $endif$
 \definecolor{BrickRed}{rgb}{.7,.3,.3}
 \titleformat*{\section}{\LARGE\bfseries\itshape\center\sffamily\color{Sepia}}
 \titleformat*{\subsection}{\Large\bfseries\itshape\sffamily\color{Sepia}}
-\titleformat*{\subsubsection}{\large\itshape\sffamily\color{Sepia}}
+\titleformat*{\subsubsection}{\large\bfseries\itshape\sffamily\color{Mahogany}}
+%\titleformat*{\subssububsection}{\large\itshape\sffamily}
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available

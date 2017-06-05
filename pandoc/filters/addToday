@@ -2,17 +2,11 @@
 
 require 'paru/filter'
 require 'date'
-#require 'ruby-prof'
 
-#RubyProf.start
 Paru::Filter.run do 
-metadata.yaml <<~YAML
+metadata.yaml <<-YAML
 ---
 date: #{Date.today.to_s}
 ...
 YAML
 end
-#result = RubyProf.stop
-
-#printer = RubyProf::MultiPrinter.new(result)
-#printer.print(:path => ".", :profile => "addToday")
