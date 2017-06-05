@@ -30,7 +30,7 @@ alias noquarantine='xattr -d com.apple.quarantine '
 
 #manage bash/zsh
 if [[ $OSTYPE == 'darwin'* ]]; then 
-	alias edit='subl -w'; #prefer textmate
+	alias edit='subl -w'; #prefer sublime text
 else
 	alias edit='vim';
 fi
@@ -70,6 +70,7 @@ alias mdc2='openssl mdc2'
 alias rmd160='openssl rmd160'
 alias sha='openssl sha'
 alias sha1='openssl sha1'
+alias sha256sum='shasum --algorithm 256'
 
 # Download - it downloads the specified file
 alias dl='curl -C - -O'
@@ -216,6 +217,9 @@ function update() {
 	brew update
 	brew upgrade
 	brew cleanup -f && brew cask cleanup
+
+	[[ -f $(which rbenv) ]] && printf '\n\n---> Rehash RBENV...\n'
+	[[ -f $(which rbenv) ]] && rbenv rehash
 
 	[[ -e "$HOME/.antigen" ]] && printf '\n\n---> Updating Antigen...\n'
 	[[ -e "$HOME/.antigen" ]] && antigen selfupdate; upgrade_oh_my_zsh; antigen update; antigen cleanup --force

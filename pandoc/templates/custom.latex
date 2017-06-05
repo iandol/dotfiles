@@ -77,7 +77,7 @@ $endif$
 \definecolor{BrickRed}{rgb}{.7,.3,.3}
 \titleformat*{\section}{\LARGE\bfseries\itshape\center\sffamily\color{Sepia}}
 \titleformat*{\subsection}{\Large\bfseries\itshape\sffamily\color{Sepia}}
-\titleformat*{\subsubsection}{\itshape\sffamily}
+\titleformat*{\subsubsection}{\large\itshape\sffamily\color{Sepia}}
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
@@ -241,10 +241,10 @@ $endfor$
 
 $if(title)$
 \usepackage{titling}
-\pretitle{\begin{center}\LARGE\sffamily} 
-\posttitle{\par\end{center}\vskip 0.5em} 
-\predate{\begin{flushright}\large\scshape} 
-\postdate{\par\end{flushright}}
+\pretitle{\begin{center}\LARGE\sffamily\bfseries\itshape} 
+\posttitle{\par\end{center}} 
+\predate{\begin{center}\scshape\sffamily{Date: }} 
+\postdate{\par\end{center}}
 \title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
 $endif$
 $if(subtitle)$
@@ -265,11 +265,11 @@ $if(title)$
 \maketitle
 $endif$
 $if(institute)$
-\textsf{\emph{$for(institute)$$institute$$sep$  \&  $endfor$}}
+\vskip -2em\textsf{\emph{$for(institute)$$institute$$sep$  \&  $endfor$}}
 $endif$
 $if(abstract)$
-\begin{abstract}\singlespacing
-\textsf{$abstract$}
+\begin{abstract}
+\vskip -2em\singlespacing\noindent\textsf{$abstract$}
 \end{abstract}
 $endif$
 

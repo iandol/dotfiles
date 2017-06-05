@@ -12,11 +12,10 @@ templates:
       standalone: true
       filter: 
         - pandoc-citeproc
-        #- /Users/ian/.pandoc/filters/add_today.rb #add date metadata
+        - /Users/ian/.pandoc/filters/addToday #add date metadata
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       metadata: 
         - "classoption=twoside"
         - "mainfont='Greta Text Pro'"  
@@ -43,7 +42,7 @@ templates:
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
       toc: true
-      toc-depth: 4
+      toc-depth: 2
       base-header-level: 1
     postprocessors: ['postprocessors/fixlatex.rb']
 #######################################
@@ -53,13 +52,13 @@ templates:
       from: markdown
       to: pdf
       latex-engine: "xelatex"
-      standalone: true
+      standalone: "true"
       filter: 
         - pandoc-citeproc
+        - /Users/ian/.pandoc/filters/addToday
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       metadata: 
         - "classoption=twoside"
         - "mainfont='Greta Text Pro'"  
@@ -99,7 +98,7 @@ templates:
       standalone: true
       filter: 
         - pandoc-citeproc
-        #- /Users/ian/.pandoc/filters/addToday
+        - /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
@@ -135,10 +134,9 @@ templates:
       standalone: true
       filter: 
         - pandoc-citeproc
-        #- /Users/ian/.pandoc/filters/addToday
+        - /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       metadata: 
         - "papersize='A4'"  
         - "fontsize='10pt'"
@@ -160,7 +158,7 @@ templates:
       standalone: true
       filter: 
         - pandoc-citeproc
-        #- /Users/ian/.pandoc/filters/addToday
+        - /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json

@@ -16,12 +16,8 @@ source "$ZSHA_BASE/antigen.zsh"
 antigen use oh-my-zsh
 antigen bundles <<EOBUNDLES
 	nyan
-	ruby
 	osx
-	forklift
 	marked2
-	brew
-	brew-cask
 	git
 	history
 	command-not-found
@@ -32,7 +28,7 @@ EOBUNDLES
 antigen theme mashaal/wild-cherry zsh/wild-cherry.zsh-theme
 antigen apply
 
-export EDITOR='vim'
+export EDITOR='subl -w'
 export MANPAGER='less -X' # don't clear after quitting man
 DIRSTACKSIZE=12 # pushd stacksize
 setopt autopushd pushdminus pushdsilent
@@ -41,9 +37,10 @@ setopt autopushd pushdminus pushdsilent
 [[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home" # use installed JAVA
 [[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 [[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
-[[ -d "/Applications/MATLAB_R2016b.app/bin/" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2016b.app/bin/matlab" && path=("/Applications/MATLAB_R2016b.app/bin" $path) # matlab
-[[ -f "/Applications/MATLAB_R2016b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2016b.app/bin/maci64/mlint" ~/bin/mlint # matlab
+[[ -d "/Applications/MATLAB_R2017a.app/bin/" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2017a.app/bin/matlab" && path=("/Applications/MATLAB_R2017a.app/bin" $path) # matlab
+[[ -f "/Applications/MATLAB_R2017a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2017a.app/bin/maci64/mlint" ~/bin/mlint # matlab
 [[ -d "$HOME/anaconda3/" ]] && path=("$HOME/anaconda3/bin" $path) # anaconda scientific python
+[[ -d "$HOME/miniconda3/" ]] && path=("$HOME/miniconda3/bin" $path) # anaconda scientific python
 [[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=(/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin $path)
 
 [[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"

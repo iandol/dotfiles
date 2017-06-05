@@ -22,8 +22,8 @@ fi
 
 #make sure our minimum packages are installed
 if [[ -e /usr/local/bin/brew ]]; then
-	brew install zsh-completions git figlet archey jq ansiweather diff-so-fancy pandoc pandoc-citeproc multimarkdown libusb exodriver &> /dev/null/
-	brew cask install font-fira-code font-hack font-hasklig font-input font-monoid &> /dev/null/
+	brew install zsh-completions git figlet archey jq ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver &> /dev/null/
+	brew cask install font-fira-code font-hack font-hasklig font-input font-source-code-pro font-source-sans-pro imageoptim tex-live-utility &> /dev/null/
 fi
 
 printf 'Let us bootstrap .dotfiles if not present ... '
@@ -117,6 +117,7 @@ if [ -f $(which git) ]; then
 else
 	printf 'GIT is not installed, use command line tools or install homebrew...\n'
 fi
+
 
 printf 'Switching to use ZSH...\n'
 chsh -s /bin/zsh && source ~/.zshrc

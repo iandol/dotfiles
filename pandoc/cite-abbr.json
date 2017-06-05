@@ -6,11 +6,13 @@
       "Current Biology": "Curr. Biol.",
       "Journal of Comparative Neurology": "J. Comp. Neurol.",
       "Journal of Neuroscience": "J. Neurosci.",
-      "Journal of the Optical Society of America A: Optics, Image Science, Vision": "J Opt Soc Am A Opt Image Sci Vis",
-      "Nature Neuroscience": "Nat. Neurosci.",
+      "Journal of the Optical Society of America A": "J. Opt. Soc. Am. A",
+      "Nature Neuroscience": "Nat. Rev. Neurosci.",
+      "Nature Reviews Neuroscience": "Nat. Neurosci.",
       "Proceedings of the National Academy of Sciences USA": "Proc. Natl. Acad. Sci. USA",
       "Scientific Reports": "Sci. Rep.",
-      "Trends in Cognitive Science": "Trends Cog. Sci."
+      "Trends in Cognitive Sciences": "Trends Cog. Sci.",
+      "Philosophical Transactions of the Royal Society B": "Phil. Trans. R. Soc. B"
     }
   }
 }
