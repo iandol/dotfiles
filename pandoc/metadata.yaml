@@ -6,14 +6,13 @@ link-citations: true #used with pandoc citeproc
 notes-after-punctuation: false
 documentclass: "article"
 mainfont: "Greta Text Pro"
-sansfont: "Graublau Sans"
+sansfont: "Graublau Sans" 
 monofont: "Fira Code"
 CJKmainfont: "PingFang SC"
-fontsize: 12pt
+fontsize: 11pt
 linestretch: 1.75
 toc:
 titlesec:
-maketitle: 1
 twocolumn:
 lang: en-GB
 papersize: A4
@@ -22,4 +21,4 @@ geometry:
 polyglossia-lang:
   options: variant=british
   name: english
----
+...
