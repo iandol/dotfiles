@@ -52,3 +52,4 @@ export PATH
 [[ -f $(which rbenv) ]] && eval "$(rbenv init -)"
 [[ -f $(which archey) ]] && archey -c -o
 [[ -f $(which ansiweather) ]] && ansiweather
+echo "💡:CTRL+w,k,u: 🔪 | CTRL+r: 🔍 | d & cd #: 🚀"

@@ -16,13 +16,13 @@ templates:
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      metadata: 
+      metadata:
         - "classoption=twoside"
-        - "mainfont='Greta Text Pro'"  
+        - "mainfont='Greta Text Pro'"
         - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "sansfont='Graublau Sans'"  
+        - "sansfont='Graublau Sans'"
         - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "monofont='Fira Code'"  
+        - "monofont='Fira Code'"
         - "mathfont='Cambria Math'"
         - "mathfontoptions='math-style=ISO,bold-style=ISO'"
         - "CJKmainfont='PingFang SC'"
@@ -30,8 +30,8 @@ templates:
         - "linkcolor=Mahogany"
         - "citecolor=Sepia"
         - "urlcolor=BrickRed"
-        - "lang='en-GB'"  
-        - "papersize='A4'"  
+        - "lang='en-GB'"
+        - "papersize='A4'"
         - "documentclass='article'"
         - "fontsize='11pt'"
         - "linestretch='1.5'"
@@ -39,11 +39,12 @@ templates:
         - "notes-after-punctuation=false"  
         - "link-citations=true"  
         - "nonumberfigures=true"
+        - "lof="
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
-      toc: true
-      toc-depth: 2
-      base-header-level: 1
+      table-of-contents:
+      toc-depth: 4
+      base-header-level: 2
     postprocessors: ['postprocessors/fixlatex.rb']
 #######################################
   pdf-with-refs:
@@ -84,7 +85,7 @@ templates:
         - "nonumberfigures=true"
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
-      toc: true
+      table-of-contents: true
       toc-depth: 4
       base-header-level: 1
     postprocessors: 
@@ -122,6 +123,8 @@ templates:
         - "link-citations=true"
         - "nonumberfigures=true"
       template: /Users/ian/.pandoc/templates/eisvogel.latex
+      table-of-contents: true
+      toc-depth: 4
       base-header-level: 1
     postprocessors: ['postprocessors/fixlatex.rb']
 #######################################
@@ -144,7 +147,7 @@ templates:
         - "link-citations=true"  
       template: /Users/ian/.pandoc/templates/ieee.latex
       dpi: 300
-      toc: true
+      table-of-contents:
       toc-depth: 4
       base-header-level: 1
     postprocessors: []
@@ -205,7 +208,7 @@ templates:
         - "link-citations=true"  
       template: /Users/ian/.pandoc/templates/custom-memoir.latex
       dpi: 300
-      toc: true
+      table-of-contents: true
       toc-depth: 4
       base-header-level: 1
     postprocessors: 
@@ -225,7 +228,7 @@ templates:
       citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       reference-docx: /Users/ian/.pandoc/templates/custom-greta.docx
       dpi: 300
-      toc: false
+      table-of-contents:
       toc-depth: 4
       base-header-level: 1
       metadata: 
@@ -247,7 +250,7 @@ templates:
       citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       reference-odt: /Users/ian/.pandoc/templates/custom.odt
       dpi: 300
-      toc: false
+      table-of-contents:
       toc-depth: 4
       base-header-level: 1
       metadata: 
@@ -273,7 +276,7 @@ templates:
       css: "/Users/ian/.pandoc/templates/custom.css"
       self-contained: true
       dpi: 300
-      toc: true
+      table-of-contents:
       toc-depth: 4
       base-header-level: 1
       metadata: 
@@ -293,7 +296,7 @@ templates:
       css: 
         - "/Users/ian/.pandoc/templates/tufte.css"
         - "/Users/ian/.pandoc/templates/tuftepandoc.css"
-      #self-contained: true
+      self-contained: true
     postprocessors: []
 #######################################
   docx-no-refs:
@@ -305,7 +308,8 @@ templates:
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       standalone: true
       reference-docx: /Users/ian/.pandoc/templates/custom.docx
-      toc: false
+      table-of-contents:
+      toc-depth: 4
       base-header-level: 1
     postprocessors: []
 #######################################
@@ -318,7 +322,8 @@ templates:
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       standalone: true
       reference-docx: /Users/ian/.pandoc/templates/custom.odt
-      toc: false
+      table-of-contents:
+      toc-depth: 4
       base-header-level: 1
     postprocessors: []
 #######################################
@@ -331,8 +336,6 @@ templates:
       css: "/Users/ian/.pandoc/templates/custom.css"
       self-contained: true
       mathjax: true
-      dpi: 300
-      toc: false
     postprocessors: []
 #######################################
   test-pdf:
@@ -342,7 +345,6 @@ templates:
       to: pdf
       latex-engine: "xelatex"
       standalone: true
-      toc: true
       metadata: 
         - "lang='en-GB'"  
         - "papersize='A4'"  
@@ -358,7 +360,6 @@ templates:
       to: latex
       latex-engine: "xelatex"
       standalone: true
-      toc: true
       metadata: 
         - "lang='en-GB'"  
         - "papersize='A4'"  

@@ -2,6 +2,7 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	alias la="ls -alGhF"
 	alias las="ls -alGhFeLH"
 	alias ll="ls -alFGh"
+	alias llm="ls -alFGh@"
 	alias dir='ls -alfG'
 	alias cls='clear; ls'
 	alias l.='ls -d .[^.]*' #only show .dot files
@@ -26,11 +27,14 @@ alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
 alias sudo='sudo '
 
 # remove quarantine attribute from a file
-alias noquarantine='xattr -d com.apple.quarantine '
+if [[ $OSTYPE == 'darwin'* ]]; then 
+	alias noquarantine='xattr -d com.apple.quarantine '
+fi
 
 #manage bash/zsh
-if [[ $OSTYPE == 'darwin'* ]]; then 
+if [[ -f $(which subl) ]]; then 
 	alias edit='subl -w'; #prefer sublime text
+	alias s='subl';
 else
 	alias edit='vim';
 fi
@@ -45,22 +49,54 @@ alias usebash='chsh -s /bin/bash && reloadbash'
 alias tu='top -o cpu' # cpu
 alias tm='top -o vsize' # memory
 
-alias lock="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
-alias stfu="osascript -e 'set volume output muted true'"
-alias pumpitup="sudo osascript -e 'set volume 10'"
-alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
+if [[ $OSTYPE == 'darwin'* ]]; then 
+	alias lock="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
+	alias stfu="osascript -e 'set volume output muted true'"
+	alias pumpitup="sudo osascript -e 'set volume 10'"
+	alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
+	alias findbig='sudo -v; sudo find -xf /.Trashes /Volumes /Library /private /Temp* -type f -size +200000 -print0 | sudo xargs -0 ls -lohdSr'
+	alias measurebig='for f in /Volumes /.Spotlight* /.Trashes /Library/Logs /private/ {var/{log,spool,db,vm,tmp},tmp} /Temp*; do sudo du -hsx "$f"; done'
+	alias lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
+	alias lsrebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -v -kill -r -domain local -domain system -domain user'
+	alias profop='sudo fs_usage -w -f filesys -e Terminal Parallels mds nmbd Dock WindowServer ATSServer Quicksilver > ~/Desktop/operafs.txt' #profile opera file system usage
+	alias operalog='/Applications/Opera.app/Contents/MacOS/Opera -profilinglog ~/Desktop/opera.txt &'
+	alias startvnc='sudo echo -n enabled > /Library/Preferences/com.apple.ScreenSharing.launchd'
+	alias airscan="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s"
+	#alias kernel64='sudo systemsetup -setkernelbootarchitecture x86_64'
+	#alias kernel32='sudo systemsetup -setkernelbootarchitecture i386'
 
-alias findbig='sudo -v; sudo find -xf /.Trashes /Volumes /Library /private /Temp* -type f -size +200000 -print0 | sudo xargs -0 ls -lohdSr'
-alias measurebig='for f in /Volumes /.Spotlight* /.Trashes /Library/Logs /private/ {var/{log,spool,db,vm,tmp},tmp} /Temp*; do sudo du -hsx "$f"; done'
-alias lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
-alias lsrebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -v -kill -r -domain local -domain system -domain user'
-alias profop='sudo fs_usage -w -f filesys -e Terminal Parallels mds nmbd Dock WindowServer ATSServer Quicksilver > ~/Desktop/operafs.txt' #profile opera file system usage
-alias operalog='/Applications/Opera.app/Contents/MacOS/Opera -profilinglog ~/Desktop/opera.txt &'
-alias startvnc='sudo echo -n enabled > /Library/Preferences/com.apple.ScreenSharing.launchd'
-alias airscan="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s"
+	#Some hardcore maintainance
+	alias rebuildkexts="sudo touch /System/Library/Extensions"
+	alias rebuilddyld="sudo update_dyld_shared_cache -force"
 
-#alias kernel64='sudo systemsetup -setkernelbootarchitecture x86_64'
-#alias kernel32='sudo systemsetup -setkernelbootarchitecture i386'
+	# Flush DNS cache
+	alias flushdnsolder="sudo dscacheutil -flushcache"
+	alias flushdnsmavericks="dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+	alias flushdns="sudo discoveryutil udnsflushcaches; sudo discoveryutil mdnsflushcache"
+
+	#useful info
+	alias mymemory="top -l 1 | awk '/(pagein|Mem)/'; vm_stat"
+	alias kext3="kextstat | grep -v com.apple" #find 3rd party kernel extensions
+	alias mydisplay="ioreg -lw0 | grep IODisplayEDID | sed \"/[^<]*</s///\" | xxd -p -r | strings -6" #find id of display
+	alias whywakeme="syslog | grep -i \"Wake reason =\"" #find why the machine woke up
+	alias powerlog="pmset -g pslog" #log of active power/sleep info
+
+	# Empty the Trash on all mounted volumes and the main HDD
+	# Also, clear Apple’s System Logs to improve shell startup speed
+	alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl"
+
+	#Clean font caches
+	alias fontclean="sudo atsutil databases -remove"
+
+	# Show/hide hidden files in Finder
+	alias show="defaults write com.apple.Finder AppleShowAllFiles -bool true && killall Finder"
+	alias hide="defaults write com.apple.Finder AppleShowAllFiles -bool false && killall Finder"
+
+	# Hide/show all desktop icons (useful when presenting)
+	alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+	alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+fi
 
 # Checksums
 alias md2='openssl md2'
@@ -89,47 +125,17 @@ alias whois="whois -h whois-servers.net"
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
-#Some hardcore maintainance
-alias rebuildkexts="sudo touch /System/Library/Extensions"
-alias rebuilddyld="sudo update_dyld_shared_cache -force"
-
 # File size
 alias fs="stat -f \"%z bytes\""
 
 # ROT13-encode text. Works for decoding, too! ;)
 alias rot13='tr a-zA-Z n-za-mN-ZA-M'
 
-# Empty the Trash on all mounted volumes and the main HDD
-# Also, clear Apple’s System Logs to improve shell startup speed
-alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl"
-
-#Clean font caches
-alias fontclean="sudo atsutil databases -remove"
-
-# Show/hide hidden files in Finder
-alias show="defaults write com.apple.Finder AppleShowAllFiles -bool true && killall Finder"
-alias hide="defaults write com.apple.Finder AppleShowAllFiles -bool false && killall Finder"
-
-# Hide/show all desktop icons (useful when presenting)
-alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
-
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 
-#useful info
-alias mymemory="top -l 1 | awk '/(pagein|Mem)/'; vm_stat"
-alias kext3="kextstat | grep -v com.apple" #find 3rd party kernel extensions
-alias mydisplay="ioreg -lw0 | grep IODisplayEDID | sed \"/[^<]*</s///\" | xxd -p -r | strings -6" #find id of display
-alias whywakeme="syslog | grep -i \"Wake reason =\"" #find why the machine woke up
-alias powerlog="pmset -g pslog" #log of active power/sleep info
 
-# Flush DNS cache
-alias flushdnsolder="sudo dscacheutil -flushcache"
-alias flushdnsmavericks="dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
-alias flushdns="sudo discoveryutil udnsflushcaches; sudo discoveryutil mdnsflushcache"
-
-# Get OS X Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
+# Get Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
 	myolddir=$(pwd)
 	if [[ -d ~/.dotfiles ]]; then

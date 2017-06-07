@@ -3,10 +3,10 @@
 require "paru/filter"
 
 Paru::Filter.run do 
-	with "Header" do |h|
-		text = p.inner_markdown
-		first_line = text.slice(0, END_CAPITAL).upcase
-		rest = text.slice(END_CAPITAL, text.size)
-		p.inner_markdown = first_line + rest
-	end
+  with "Header" do |h|
+    text = p.inner_markdown
+    first_line = text.slice(0, END_CAPITAL).upcase
+    rest = text.slice(END_CAPITAL, text.size)
+    p.inner_markdown = first_line + rest
+  end
 end
