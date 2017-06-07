@@ -445,7 +445,7 @@
       <if type="article-journal article-magazine" match="any">
         <group prefix=", " delimiter=", ">
           <group>
-            <text variable="volume" font-style="italic"/>
+            <text variable="volume" font-style="bold"/>
             <text variable="issue" prefix="(" suffix=")"/>
           </group>
           <text variable="page"/>

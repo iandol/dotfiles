@@ -15,7 +15,6 @@ $if(linestretch)$
 $endif$
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
   \usepackage[utf8]{inputenc}
@@ -78,7 +77,7 @@ $endif$
 \titleformat*{\section}{\LARGE\bfseries\itshape\center\sffamily\color{Sepia}}
 \titleformat*{\subsection}{\Large\bfseries\itshape\sffamily\color{Sepia}}
 \titleformat*{\subsubsection}{\large\bfseries\itshape\sffamily\color{Mahogany}}
-%\titleformat*{\subssububsection}{\large\itshape\sffamily}
+%\titleformat*{\subsubsubsection}{\large\itshape\sffamily}
 % use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
@@ -86,7 +85,7 @@ $endif$
 \usepackage[$for(microtypeoptions)$$microtypeoptions$$sep$,$endfor$]{microtype}
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\usepackage[format=hang,labelfont=bf,font={small,it}]{caption}
+\usepackage[format=hang,labelfont=bf,labelsep=endash,font={sf,small}]{caption}
 $if(nonumberfigures)$
 \captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment
 $endif$
@@ -266,11 +265,11 @@ $if(title)$
 \maketitle
 $endif$
 $if(institute)$
-\vskip -2em\textsf{\emph{$for(institute)$$institute$$sep$  \&  $endfor$}}
+\vspace{-2em}textsf{\emph{$for(institute)$$institute$$sep$  \&  $endfor$}}
 $endif$
 $if(abstract)$
 \begin{abstract}
-\vskip -2em\singlespacing\noindent\textsf{$abstract$}
+\vspace{-2em}\singlespacing\noindent\textsf{$abstract$}
 \end{abstract}
 $endif$
 

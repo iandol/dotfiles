@@ -1,14 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'paru/filter'
-# require 'ruby-prof'
 
-# RubyProf.start
-Paru::Filter.run do 
-
+Paru::Filter.run do
 end
-
-# result = RubyProf.stop
-
-# printer = RubyProf::MultiPrinter.new(result)
-# printer.print(:path => ".", :profile => "ParuFilterNOOP")
