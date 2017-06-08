@@ -42,7 +42,7 @@ templates:
         - "lof="
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
-      table-of-contents:
+      table-of-contents: false
       toc-depth: 4
       base-header-level: 2
     postprocessors: ['postprocessors/fixlatex.rb']
@@ -147,7 +147,7 @@ templates:
         - "link-citations=true"  
       template: /Users/ian/.pandoc/templates/ieee.latex
       dpi: 300
-      table-of-contents:
+      table-of-contents: false
       toc-depth: 4
       base-header-level: 1
     postprocessors: []
@@ -171,7 +171,6 @@ templates:
         - "link-citations=true"  
         - "lang=en-GB"
       template: /Users/ian/.pandoc/templates/pandoc-scholar.latex
-      toc-depth: 4
       base-header-level: 1
     postprocessors: []
 #######################################
@@ -228,7 +227,7 @@ templates:
       citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       reference-docx: /Users/ian/.pandoc/templates/custom-greta.docx
       dpi: 300
-      table-of-contents:
+      table-of-contents: false
       toc-depth: 4
       base-header-level: 1
       metadata: 
@@ -250,7 +249,7 @@ templates:
       citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       reference-odt: /Users/ian/.pandoc/templates/custom.odt
       dpi: 300
-      table-of-contents:
+      table-of-contents: false
       toc-depth: 4
       base-header-level: 1
       metadata: 

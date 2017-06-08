@@ -241,9 +241,9 @@ $endfor$
 
 $if(title)$
 \usepackage{titling}
-\pretitle{\begin{center}\LARGE\sffamily\bfseries\itshape} 
+\pretitle{\begin{center}\setstretch{1}\LARGE\sffamily\bfseries\itshape} 
 \posttitle{\par\end{center}} 
-\predate{\begin{center}\scshape\sffamily{Date: }} 
+\predate{\begin{center}\sffamily} 
 \postdate{\par\end{center}}
 \title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
 $endif$
@@ -258,7 +258,9 @@ $if(institute)$
 \providecommand{\institute}[1]{}
 \institute{$for(institute)$$institute$$sep$ \and $endfor$}
 $endif$
+$if(date)$
 \date{$date$}
+$endif$
 
 \begin{document}
 $if(title)$

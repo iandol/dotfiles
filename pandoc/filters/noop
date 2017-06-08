@@ -1,6 +1,20 @@
 #!/usr/bin/env ruby
+require 'pry'
+pry_in = IO.new(IO.sysopen("/dev/tty", "r+"))
+Pry.config.input = pry_in
 
 require 'paru/filter'
 
 Paru::Filter.run do
+  #binding.pry
+  if metadata.has?('author')
+    a = metadata.get('author')
+    a.children.each do | c |
+      if c.type == "MetaInlines"
+        
+      elsif c.type == "MetaMap"
+        
+      end
+    end
+  end
 end
