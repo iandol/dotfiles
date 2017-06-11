@@ -43,13 +43,13 @@ setopt autopushd pushdminus pushdsilent
 [[ -d "$HOME/miniconda3/" ]] && path=("$HOME/miniconda3/bin" $path) # anaconda scientific python
 [[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=(/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin $path)
 
-[[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
-
 export PATH
 
 [[ -f $(which swiftenv) ]] && eval "$(swiftenv init -)"
 [[ -f $(which rbenv) ]] && eval "$(rbenv init -)"
 [[ -f $(which archey) ]] && archey -c -o
 [[ -f $(which ansiweather) ]] && ansiweather
+[[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
+
 echo "💡:CTRL+w,k,u: 🔪 | CTRL+r: 🔍 | d & cd #: 🚀"
