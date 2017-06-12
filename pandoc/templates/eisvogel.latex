@@ -374,7 +374,7 @@ $endif$
 %
 % captions
 %
-\usepackage[font={small,it}]{caption}
+\usepackage[format=hang,labelfont=bf,labelsep=endash,font={sf,small}]{caption}
 $if(nonumberfigures)$
 \captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment
 $endif$

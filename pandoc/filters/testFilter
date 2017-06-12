@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+# require 'byebug/core'
+# require 'byebug'
+# PORT = 8989
+# warn "\n!!!DEBUG Server started: localhost:#{PORT} @ " + Time.now.to_s + "\n\n"
+# Byebug.wait_connection = true
+# Byebug.start_server('127.0.0.1', PORT)
+require 'paru/filter'
+
+testkey = 'author'
+
+Paru::Filter.run do
+  if metadata.has_key?(testkey)
+    #byebug
+    nau = nil
+    au = metadata[testkey]
+    if au.is_a?(String)
+        warn "It's a string"
+        nau = [Hash["name" => au]]
+    elsif au.is_a?(Array)
+        warn "It's an array"
+        if au[0].is_a?(String)
+          nau = Array.new(au.length) {Hash.new}
+          au.each_index {|i| nau[i] = Hash["name" => au[i]]}
+        end
+    elsif au.is_a?(Hash)
+        warn "It's a hash"
+    else
+      warn "Who know's what it is?"
+    end
+    if not nau.nil?
+      metadata[testkey] = nau
+    end
+  end
+end
