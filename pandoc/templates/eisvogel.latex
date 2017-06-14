@@ -270,11 +270,11 @@ $if(subtitle)$
 \subtitle{$subtitle$}
 $endif$
 $if(author)$
-\author{$for(author)$$author$$sep$ \and $endfor$}
+\author{$for(author.name)$$author.name$$sep$ \and $endfor$}
 $endif$
 $if(institute)$
 \providecommand{\institute}[1]{}
-\institute{$for(institute)$$institute$$sep$ \& $endfor$}
+\institute{$for(institute)$$institute$$sep$ \and $endfor$}
 $endif$
 \date{$date$}
 
@@ -381,13 +381,14 @@ $endif$
 \newcommand{\imglabel}[1]{\textbf{\textit{(#1)}}}
 
 %
-% sans-serif font as default font for text
-% Source Sans Pro for headings
+% Source Sans Pro as the de­fault font fam­ily
 % Source Code Pro for monospace text
 %
-%\renewcommand*{\familydefault}{\sfdefault}
-%\usepackage[osf,otf]{sourcesanspro}
-%\usepackage[scaled=.95]{sourcecodepro}
+% 'default' option sets the default 
+% font family to Source Sans Pro, not \sfdefault.
+%
+%\usepackage[default]{sourcesanspro}
+%\usepackage{sourcecodepro}
 
 %
 % heading font
@@ -417,10 +418,20 @@ $endif$
 %
 % tables
 %
-\usepackage{booktabs} % needed for midrule
+$if(tables)$
 \usepackage{tabularx}
 \renewcommand{\arraystretch}{1.6} % table spacing
 
+%
+% tables alternate row colors
+% https://tex.stackexchange.com/questions/61747/how-to-apply-alternate-row-coloring-in-a-longtable-in-lyx
+%
+\definecolor{table-gray}{HTML}{F5F5F5}
+\let\oldlongtable\longtable
+\let\endoldlongtable\endlongtable
+\renewenvironment{longtable}{\rowcolors{2}{white}{table-gray}\oldlongtable} {
+\endoldlongtable}
+$endif$
 
 %
 % remove paragraph indention
@@ -549,6 +560,7 @@ $if(institute)$
 \vskip 2em
 \setstretch{1}
 \textsf{\emph{$for(institute)$$institute$$sep$  \\  $endfor$}}
+\includegraphics[width = 40mm]{VPMLogoWhite.png}
 \vfill
 $endif$
 }

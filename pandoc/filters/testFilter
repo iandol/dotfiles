@@ -8,28 +8,27 @@
 require 'paru/filter'
 
 testkey = 'author'
+insertKey = 'name'
 
 Paru::Filter.run do
   if metadata.has_key?(testkey)
-    #byebug
     nau = nil
     au = metadata[testkey]
     if au.is_a?(String)
-        warn "It's a string"
-        nau = [Hash["name" => au]]
+        warn 'It is a string'
+        nau = [ Hash[ insertKey => au ] ]
     elsif au.is_a?(Array)
-        warn "It's an array"
+        warn 'It is an array'
         if au[0].is_a?(String)
           nau = Array.new(au.length) {Hash.new}
-          au.each_index {|i| nau[i] = Hash["name" => au[i]]}
+          au.each_index { |i| nau[i] = Hash[ insertKey => au[i] ] }
         end
-    elsif au.is_a?(Hash)
-        warn "It's a hash"
-    else
-      warn "Who know's what it is?"
+      else
+        warn 'Who knows?'
     end
     if not nau.nil?
       metadata[testkey] = nau
     end
+    stop!
   end
 end

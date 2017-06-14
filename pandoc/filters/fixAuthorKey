@@ -19,5 +19,6 @@ Paru::Filter.run do
     if not nau.nil?
       metadata[testkey] = nau
     end
+    stop!
   end
 end
