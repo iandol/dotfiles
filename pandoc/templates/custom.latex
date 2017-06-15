@@ -113,6 +113,9 @@ $endif$
 $if(author-meta)$
             pdfauthor={$author-meta$},
 $endif$
+$if(subject)$
+            pdfsubject={$subject$},
+$endif$
 $if(keywords)$
             pdfkeywords={$for(keywords)$$keywords$$sep$, $endfor$},
 $endif$
@@ -252,7 +255,7 @@ $if(subtitle)$
 \subtitle{$subtitle$}
 $endif$
 $if(author)$
-\author{$for(author)$$author$$sep$ \and $endfor$}
+\author{$for(author)$$author.name$$author.affiliation$$sep$ \and $endfor$}
 $endif$
 $if(institute)$
 \providecommand{\institute}[1]{}
@@ -267,7 +270,7 @@ $if(title)$
 \maketitle
 $endif$
 $if(institute)$
-\vspace{-2em}textsf{\emph{$for(institute)$$institute$$sep$  \&  $endfor$}}
+\vspace{-2em}\textsf{\emph{$for(institute)$$institute$$sep$\quad\&\quad$endfor$}}
 $endif$
 $if(abstract)$
 \begin{abstract}

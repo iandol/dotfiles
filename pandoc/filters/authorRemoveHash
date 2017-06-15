@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require 'paru/filter'
+
+testKey = 'author'
+pKey = 'pandocomatic-fileinfo'
+nameKey = 'name'
+affKey = 'affiliation'
+
+Paru::Filter.run do
+  if metadata.key?(testKey) & metadata.key?(pKey) & metadata[pKey]['to'].match(/docx/)
+    newAuthor = nil
+    au = metadata[testKey]
+    if au.is_a?(Array)
+      if au[0].is_a?(Hash) #just an array of strings, turn to array of hashes
+        newAuthor = Array.new(au.length)
+        au.each_index { |i| 
+          if au[i].key?(nameKey)
+            if au[i].key?(affKey)
+              newAuthor[i] = au[i][nameKey] + au[i][affKey]
+            else
+              newAuthor[i] = au[i][nameKey]
+            end
+          end
+        }
+      end
+    elsif au.is_a?(Hash) #single name: John Doe author
+      newAuthor = Array.new(au.length)
+      newAuthor[0] = au[nameKey]
+    end
+    if not newAuthor.nil?
+      metadata[testKey] = newAuthor
+    end
+  end
+  stop!
+end
