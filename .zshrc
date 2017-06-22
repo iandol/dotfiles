@@ -41,7 +41,7 @@ setopt autopushd pushdminus pushdsilent
 [[ -f "/Applications/MATLAB_R2017a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2017a.app/bin/maci64/mlint" ~/bin/mlint # matlab
 [[ -d "$HOME/anaconda3/" ]] && path=("$HOME/anaconda3/bin" $path) # anaconda scientific python
 [[ -d "$HOME/miniconda3/" ]] && path=("$HOME/miniconda3/bin" $path) # anaconda scientific python
-[[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=(/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin $path)
+[[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=("/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" $path)
 
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 export PATH
@@ -49,7 +49,7 @@ export PATH
 [[ -f $(which swiftenv) ]] && eval "$(swiftenv init -)"
 [[ -f $(which rbenv) ]] && eval "$(rbenv init -)"
 [[ -f $(which archey) ]] && archey -c -o
-[[ -f $(which ansiweather) ]] && ansiweather
+#[[ -f $(which ansiweather) ]] && ansiweather
 [[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 
 echo "💡:CTRL+w,k,u: 🔪 | CTRL+r: 🔍 | d & cd #: 🚀"

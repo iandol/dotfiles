@@ -14,7 +14,7 @@ templates:
         - /Users/ian/.pandoc/filters/testFilter
 #######################################
   latex-with-refs:
-    preprocessors: ['preprocessors/removeAffiliations.rb']
+    preprocessors: ['preprocessors/removeAffiliations']
     pandoc:
       from: markdown
       to: latex
@@ -40,7 +40,6 @@ templates:
         - "citecolor=Sepia"
         - "urlcolor=BrickRed"
         - "lang='en-GB'"
-        - "papersize='A4'"
         - "documentclass='article'"
         - "fontsize='11pt'"
         - "linestretch='1.5'"
@@ -54,19 +53,19 @@ templates:
       table-of-contents: false
       toc-depth: 4
       base-header-level: 2
-    postprocessors: ['postprocessors/fixlatex.rb']
+    postprocessors: ['postprocessors/fixLaTeX']
 #######################################
   pdf-with-refs:
-    preprocessors: ['preprocessors/removeAffiliations.rb']
+    preprocessors: ['preprocessors/removeAffiliations']
     pandoc:
       from: markdown
       to: pdf
-      standalone: true
       latex-engine: "xelatex"
+      standalone: true
       filter: 
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/addToday #add date metadata
-        #- /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
+        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
         - /Users/ian/.pandoc/filters/authorToName #convert author to author: name: affiliation:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
@@ -85,7 +84,6 @@ templates:
         - "citecolor=Sepia"
         - "urlcolor=BrickRed"
         - "lang='en-GB'"
-        - "papersize='A4'"
         - "documentclass='article'"
         - "fontsize='11pt'"
         - "linestretch='1.5'"
@@ -99,10 +97,10 @@ templates:
       table-of-contents: false
       toc-depth: 4
       base-header-level: 2
-    postprocessors: ['postprocessors/fixlatex.rb']
+    postprocessors: ['postprocessors/fixLaTeX']
 #######################################
   eisvogel:
-    preprocessors: ['preprocessors/removeAffiliations.rb']
+    preprocessors: ['preprocessors/removeAffiliations']
     pandoc:
       from: markdown
       to: latex
@@ -120,6 +118,8 @@ templates:
         - "sansfont='Graublau Slab'"
         - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
         - "monofont='Fira Code'"
+        - "mathfont='Cambria Math'"
+        - "mathfontoptions='math-style=ISO,bold-style=ISO'"
         - "lang='en-GB'"
         - "titlepage=true"
         - "titlepage-color=BB5544"
@@ -137,7 +137,7 @@ templates:
       table-of-contents: true
       toc-depth: 4
       base-header-level: 1
-    postprocessors: ['postprocessors/fixlatex.rb']
+    postprocessors: ['postprocessors/fixLaTeX']
 #######################################
   latex-ieee:
     preprocessors: []
@@ -148,11 +148,9 @@ templates:
       standalone: true
       filter: 
         - pandoc-citeproc
-        - /Users/ian/.pandoc/filters/addToday
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       metadata: 
-        - "papersize='A4'"  
         - "fontsize='10pt'"
         - "notes-after-punctuation=false"  
         - "link-citations=true"  
@@ -161,7 +159,7 @@ templates:
       table-of-contents: false
       toc-depth: 4
       base-header-level: 1
-    postprocessors: []
+    postprocessors: ['postprocessors/fixLaTeX']
 #######################################
   latex-scholar:
     preprocessors: []
@@ -173,9 +171,9 @@ templates:
       filter: 
         - pandoc-citeproc
         - /Users/ian/.pandoc/filters/addToday
+        - /Users/ian/.pandoc/filters/authorToName
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       metadata: 
         - "fontsize='10pt'"
         - "notes-after-punctuation=false"  
@@ -222,7 +220,7 @@ templates:
       toc-depth: 4
       base-header-level: 1
     postprocessors: 
-      - 'postprocessors/fixlatex.rb'
+      - 'postprocessors/fixLaTeX'
 #######################################
   docx-with-refs:
     preprocessors: []
@@ -332,7 +330,7 @@ templates:
       filter: 
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       standalone: true
-      reference-docx: /Users/ian/.pandoc/templates/custom.odt
+      reference-odt: /Users/ian/.pandoc/templates/custom.odt
       table-of-contents:
       toc-depth: 4
       base-header-level: 1

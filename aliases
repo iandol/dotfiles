@@ -172,8 +172,8 @@ function update() {
 		git status
 		if [[ -n $(git remote | grep upstream) ]]; then
 			printf '\t\t---> Fetching upstream...\n'
-			git fetch upstream
-			git merge --ff-only -stat upstream/master
+			git fetch -v upstream
+			git merge -s patience --ff-only -stat upstream/master
 		fi
 	fi
 	if [[ -d ~/Code/AfterImage/.git ]]; then
@@ -209,7 +209,7 @@ function update() {
 		git pull
 		if [[ -n $(git remote | grep upstream) ]]; then
 			printf '\t\t---> Fetching upstream FIELDTRIP...\n'
-			git fetch upstream
+			git fetch -v upstream
 		fi
 	fi
 	if [[ -d ~/Documents/MATLAB/gramm/.git ]]; then
@@ -232,8 +232,7 @@ function update() {
 	brew upgrade
 	brew cleanup -f && brew cask cleanup
 
-	[[ -f $(which rbenv) ]] && printf '\n\n---> Rehash RBENV...\n'
-	[[ -f $(which rbenv) ]] && rbenv rehash
+	[[ -f $(which rbenv) ]] && rbenv rehash; printf '\n\n---> Rehash RBENV...\n'
 
 	[[ -e "$HOME/.antigen" ]] && printf '\n\n---> Updating Antigen...\n'
 	[[ -e "$HOME/.antigen" ]] && antigen selfupdate; upgrade_oh_my_zsh; antigen update; antigen cleanup --force

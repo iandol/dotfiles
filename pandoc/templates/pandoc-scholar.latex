@@ -1,3 +1,5 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8 Unicode
 \documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$babel-lang$,$endif$$if(papersize)$$papersize$paper,$endif$$for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
 $if(beamerarticle)$
 \usepackage{beamerarticle} % needs to be loaded first
@@ -76,9 +78,9 @@ $if(keywords)$
 $endif$
 $if(colorlinks)$
             colorlinks=true,
-            linkcolor=$if(linkcolor)$$linkcolor$$else$Maroon$endif$,
-            citecolor=$if(citecolor)$$citecolor$$else$Blue$endif$,
-            urlcolor=$if(urlcolor)$$urlcolor$$else$Blue$endif$,
+            linkcolor=$if(linkcolor)$$linkcolor$$else$Mahogany$endif$,
+            citecolor=$if(citecolor)$$citecolor$$else$Sepia$endif$,
+            urlcolor=$if(urlcolor)$$urlcolor$$else$BrickRed$endif$,
 $else$
             pdfborder={0 0 0},
 $endif$
@@ -203,12 +205,49 @@ $if(subtitle)$
 $endif$
 \usepackage{authblk}
 $for(author)$
-\author[$for(author.institute_indices)$$author.institute_indices$$sep$,$endfor$]{$author.name$}
+\author[$for(author.institute_indices)$%
+  $author.institute_indices$%
+  $sep$,$endfor$]{%
+  $author.name$%
+  $if(author.correspondence)$$if(author.email)$%
+  \textsuperscript{@\,}%
+  $endif$$endif$%
+  $if(author.equal_contributor)$
+  \textsuperscript{$if(equal_contributor_symbol)$$equal_contributor_symbol$$else$*$endif$\,}%
+  $endif$%
+}
 $endfor$
 $for(institute)$
 \affil[$institute.index$]{$institute.name$}
 $endfor$
 \date{$date$}
+
+\makeatletter
+\def\@maketitle{%
+  \newpage \null \vskip 2em
+  \begin {center}%
+    \let \footnote \thanks
+         {\LARGE \@title \par}%
+         \vskip 1.5em%
+                {\large \lineskip .5em%
+                  \begin {tabular}[t]{c}%
+                    \@author
+                  \end {tabular}\par}%
+                $if(has_equal_contributors)$
+                \vskip 0.5em{\textsuperscript{$if(equal_contributor_symbol)$$equal_contributor_symbol$$else$*$endif$}\,%
+                  These authors contributed equally to this work.}
+                $endif$
+                $if(has_correspondence)$
+                \vskip 0.2em{\textsuperscript{@}\,Correspondence:
+                  $for(author)$$if(author.correspondence)$$if(author.email)$
+                  $author.name$ <$author.email$>\\
+                  $endif$$endif$$endfor$}%
+                %$endif$
+                \vskip 1em{\large \@date}%
+  \end {center}%
+  \par
+  \vskip 1.5em}
+\makeatother
 
 \begin{document}
 
