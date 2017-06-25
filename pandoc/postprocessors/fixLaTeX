@@ -17,7 +17,7 @@ if DEBUG
 end
 
 input = $stdin.read
-output = input.gsub(/⬄/, '{\fixfont⬄}')
+output = input.gsub(/⬄/, '{\\fixfont⬄}')
 output.gsub!(/⇨/, '{\\fixfont⇨}')
 output.gsub!(/⇦/, '{\\fixfont⇦}')
 output.gsub!(/\bmt\b/i, 'MT')

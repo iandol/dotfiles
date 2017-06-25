@@ -50,8 +50,7 @@ templates:
         - "lof="
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
-      table-of-contents: false
-      toc-depth: 4
+      toc:
       base-header-level: 2
     postprocessors: ['postprocessors/fixLaTeX']
 #######################################
@@ -94,7 +93,7 @@ templates:
         - "lof="
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
-      table-of-contents: false
+      table-of-contents:
       toc-depth: 4
       base-header-level: 2
     postprocessors: ['postprocessors/fixLaTeX']

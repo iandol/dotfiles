@@ -173,7 +173,7 @@ function update() {
 		if [[ -n $(git remote | grep upstream) ]]; then
 			printf '\t\t---> Fetching upstream...\n'
 			git fetch -v upstream
-			git merge -s patience --ff-only -stat upstream/master
+			git merge -s octopus --ff-only -stat upstream/master
 		fi
 	fi
 	if [[ -d ~/Code/AfterImage/.git ]]; then
@@ -235,17 +235,19 @@ function update() {
 	[[ -f $(which rbenv) ]] && rbenv rehash; printf '\n\n---> Rehash RBENV...\n'
 
 	[[ -e "$HOME/.antigen" ]] && printf '\n\n---> Updating Antigen...\n'
-	[[ -e "$HOME/.antigen" ]] && antigen selfupdate; upgrade_oh_my_zsh; antigen update; antigen cleanup --force
+	[[ -e "$HOME/.antigen" ]] && antigen selfupdate; upgrade_oh_my_zsh; antigen update; antigen cleanup
 }
 
 function updatePTB() {
 	printf '\n---> Merging PTB...\n'
 	cd ~/Code/Psychtoolbox-3
+	git checkout master
 	git pull
 	git fetch upstream
 	git merge upstream/master
 	printf '\n\n---> Merging Fieldtrip MASTER...\n'
 	cd ~/Code/fieldtrip
+	git checkout master
 	git pull
 	git fetch upstream
 	git checkout master
