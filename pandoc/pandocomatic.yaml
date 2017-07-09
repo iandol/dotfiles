@@ -10,8 +10,9 @@ templates:
       to: markdown
       output: out.md
       standalone: true
-      filter: 
-        - /Users/ian/.pandoc/filters/testFilter
+      filter: /Users/ian/.pandoc/filters/testFilter
+    metadata:
+        author: John Doe
 #######################################
   latex-with-refs:
     preprocessors: ['preprocessors/removeAffiliations']
@@ -25,33 +26,33 @@ templates:
         - /Users/ian/.pandoc/filters/authorToName #convert author to author: name: affiliation:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      metadata:
-        - "classoption=twoside"
-        - "mainfont='Greta Text Pro'"
-        - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "sansfont='Graublau Sans'"
-        - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "monofont='Fira Code'"
-        - "mathfont='Cambria Math'"
-        - "mathfontoptions='math-style=ISO,bold-style=ISO'"
-        - "CJKmainfont='PingFang SC'"
-        - "CJKsansfont='Heiti SC'"
-        - "linkcolor=Mahogany"
-        - "citecolor=Sepia"
-        - "urlcolor=BrickRed"
-        - "lang='en-GB'"
-        - "documentclass='article'"
-        - "fontsize='11pt'"
-        - "linestretch='1.5'"
-        - "geometry='margin=2cm'"
-        - "notes-after-punctuation=false"  
-        - "link-citations=true"  
-        - "nonumberfigures=true"
-        - "lof="
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
-      toc:
+      toc: false
       base-header-level: 2
+    metadata:
+      classoption: twoside
+      mainfont: 'Greta Text Pro'
+      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      sansfont: 'Graublau Sans'
+      sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      monofont: 'Fira Code'
+      mathfont: 'Cambria Math'
+      mathfontoptions: 'math-style=ISO,bold-style=ISO'
+      CJKmainfont: 'PingFang SC'
+      CJKsansfont: 'Heiti SC'
+      linkcolor: Mahogany
+      citecolor: Sepia
+      urlcolor: BrickRed
+      lang: 'en-GB'
+      documentclass: 'article'
+      fontsize: '11pt'
+      linestretch: '1.5'
+      geometry: 'margin=2cm'
+      notes-after-punctuation: false
+      link-citations: true 
+      nonumberfigures: true
+      lof: false
     postprocessors: ['postprocessors/fixLaTeX']
 #######################################
   pdf-with-refs:
@@ -68,34 +69,34 @@ templates:
         - /Users/ian/.pandoc/filters/authorToName #convert author to author: name: affiliation:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      metadata:
-        - "classoption=twoside"
-        - "mainfont='Greta Text Pro'"
-        - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "sansfont='Graublau Sans'"
-        - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "monofont='Fira Code'"
-        - "mathfont='Cambria Math'"
-        - "mathfontoptions='math-style=ISO,bold-style=ISO'"
-        - "CJKmainfont='PingFang SC'"
-        - "CJKsansfont='Heiti SC'"
-        - "linkcolor=Mahogany"
-        - "citecolor=Sepia"
-        - "urlcolor=BrickRed"
-        - "lang='en-GB'"
-        - "documentclass='article'"
-        - "fontsize='11pt'"
-        - "linestretch='1.5'"
-        - "geometry='margin=2cm'"
-        - "notes-after-punctuation=false"  
-        - "link-citations=true"  
-        - "nonumberfigures=true"
-        - "lof="
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
       table-of-contents:
       toc-depth: 4
       base-header-level: 2
+    metadata:
+      classoption: twoside
+      mainfont: 'Greta Text Pro'
+      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      sansfont: 'Graublau Sans'
+      sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      monofont: 'Fira Code'
+      mathfont: 'Cambria Math'
+      mathfontoptions: 'math-style=ISO,bold-style=ISO'
+      CJKmainfont: 'PingFang SC'
+      CJKsansfont: 'Heiti SC'
+      linkcolor: Mahogany
+      citecolor: Sepia
+      urlcolor: BrickRed
+      lang: 'en-GB'
+      documentclass: 'article'
+      fontsize: '11pt'
+      linestretch: '1.5'
+      geometry: 'margin=2cm'
+      notes-after-punctuation: false
+      link-citations: true 
+      nonumberfigures: true
+      lof: false
     postprocessors: ['postprocessors/fixLaTeX']
 #######################################
   eisvogel:
@@ -111,31 +112,31 @@ templates:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
-      metadata: 
-        - "mainfont='Greta Sans Std'"
-        - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "sansfont='Graublau Slab'"
-        - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "monofont='Fira Code'"
-        - "mathfont='Cambria Math'"
-        - "mathfontoptions='math-style=ISO,bold-style=ISO'"
-        - "lang='en-GB'"
-        - "titlepage=true"
-        - "titlepage-color=BB5544"
-        - "titlepage-text-color=FFFFFF"
-        - "titlepage-rule-color=FFFFFF"
-        - "titlepage-rule-height=5"
-        - "linkcolor=Mahogany"
-        - "citecolor=Sepia"
-        - "urlcolor=BrickRed"
-        - "fontsize='11pt'"
-        - "notes-after-punctuation=false"
-        - "link-citations=true"
-        - "nonumberfigures=true"
       template: /Users/ian/.pandoc/templates/eisvogel.latex
       table-of-contents: true
       toc-depth: 4
       base-header-level: 1
+    metadata: 
+      mainfont: 'Greta Sans Std'
+      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      sansfont: 'Graublau Slab'
+      sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      monofont: 'Fira Code'
+      mathfont: 'Cambria Math'
+      mathfontoptions: 'math-style=ISO,bold-style=ISO'
+      lang: 'en-GB'
+      titlepage: true
+      titlepage-color: BB5544
+      titlepage-text-color: FFFFFF
+      titlepage-rule-color: FFFFFF
+      titlepage-rule-height: 5
+      linkcolor: Mahogany
+      citecolor: Sepia
+      urlcolor: BrickRed
+      fontsize: '11pt'
+      notes-after-punctuation: false
+      link-citations: true
+      nonumberfigures: true
     postprocessors: ['postprocessors/fixLaTeX']
 #######################################
   latex-ieee:
@@ -149,15 +150,15 @@ templates:
         - pandoc-citeproc
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      metadata: 
-        - "fontsize='10pt'"
-        - "notes-after-punctuation=false"  
-        - "link-citations=true"  
       template: /Users/ian/.pandoc/templates/ieee.latex
       dpi: 300
       table-of-contents: false
       toc-depth: 4
       base-header-level: 1
+    metadata: 
+      fontsize: '10pt'
+      notes-after-punctuation: false
+      link-citations: true
     postprocessors: ['postprocessors/fixLaTeX']
 #######################################
   latex-scholar:
@@ -165,7 +166,6 @@ templates:
     pandoc:
       from: markdown
       to: latex
-      latex-engine: "xelatex"
       standalone: true
       filter: 
         - pandoc-citeproc
@@ -173,13 +173,13 @@ templates:
         - /Users/ian/.pandoc/filters/authorToName
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      metadata: 
-        - "fontsize='10pt'"
-        - "notes-after-punctuation=false"  
-        - "link-citations=true"  
-        - "lang=en-GB"
       template: /Users/ian/.pandoc/templates/pandoc-scholar.latex
       base-header-level: 1
+    metadata: 
+      fontsize: '10pt'
+      notes-after-punctuation: false
+      link-citations: true
+      lang: en-GB
     postprocessors: []
 #######################################
   memoir-with-refs:
@@ -195,29 +195,34 @@ templates:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
-      metadata: 
-        - "classoption=twoside"
-        - "mainfont='Greta Text Pro'"  
-        - "mainfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "sansfont='Graublau Sans'"  
-        - "sansfontoptions='Numbers=OldStyle,Numbers=Proportional'"
-        - "monofont='Fira Code'"  
-        - "CJKmainfont='PingFang SC'"
-        - "linkcolor=Mahogany"
-        - "citecolor=Sepia"
-        - "urlcolor=BrickRed"
-        - "lang='en-GB'"  
-        - "papersize='A4'"  
-        - "documentclass='memoir'"
-        - "fontsize='12pt'"
-        - "geometry='margin=2cm'"
-        - "notes-after-punctuation=false"  
-        - "link-citations=true"  
       template: /Users/ian/.pandoc/templates/custom-memoir.latex
       dpi: 300
       table-of-contents: true
       toc-depth: 4
       base-header-level: 1
+    metadata:
+      classoption: twoside
+      mainfont: 'Greta Text Pro'
+      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      sansfont: 'Graublau Sans'
+      sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      monofont: 'Fira Code'
+      mathfont: 'Cambria Math'
+      mathfontoptions: 'math-style=ISO,bold-style=ISO'
+      CJKmainfont: 'PingFang SC'
+      CJKsansfont: 'Heiti SC'
+      linkcolor: Mahogany
+      citecolor: Sepia
+      urlcolor: BrickRed
+      lang: 'en-GB'
+      documentclass: 'memoir'
+      fontsize: '11pt'
+      linestretch: '1.5'
+      geometry: 'margin=2cm'
+      notes-after-punctuation: false
+      link-citations: true 
+      nonumberfigures: true
+      lof: false
     postprocessors: 
       - 'postprocessors/fixLaTeX'
 #######################################
@@ -239,9 +244,9 @@ templates:
       table-of-contents: false
       toc-depth: 4
       base-header-level: 1
-      metadata: 
-        - "notes-after-punctuation=false"  
-        - "link-citations=false"
+    metadata: 
+      notes-after-punctuation: false 
+      link-citations: false
     postprocessors: []
 #######################################
   odt-with-refs:
@@ -261,9 +266,9 @@ templates:
       table-of-contents: false
       toc-depth: 4
       base-header-level: 1
-      metadata: 
-        - "notes-after-punctuation=false"  
-        - "link-citations=true"
+    metadata: 
+      notes-after-punctuation: false 
+      link-citations: false
     postprocessors: []
 #######################################
   html-with-refs:
@@ -287,9 +292,9 @@ templates:
       table-of-contents:
       toc-depth: 4
       base-header-level: 1
-      metadata: 
-        - "notes-after-punctuation=false"  
-        - "link-citations=false"
+    metadata: 
+      notes-after-punctuation: false 
+      link-citations: false
     postprocessors: []
 #######################################
   tufte:
@@ -348,17 +353,20 @@ templates:
 #######################################
   test-pdf:
     preprocessors: []
+    
     pandoc:
       from: markdown
       to: pdf
       latex-engine: "xelatex"
       standalone: true
-      metadata: 
-        - "lang='en-GB'"  
-        - "papersize='A4'"  
-        - "documentclass='article'"
-        - "fontsize='12pt'"
-        - "linestretch='1.75'"
+
+    metadata: 
+      lang: 'en-GB'
+      papersize: 'A4' 
+      documentclass: 'article'
+      fontsize: '12pt'
+      linestretch: '1.75'
+
     postprocessors: []
 #######################################
   test-latex:
@@ -368,10 +376,12 @@ templates:
       to: latex
       latex-engine: "xelatex"
       standalone: true
-      metadata: 
-        - "lang='en-GB'"  
-        - "papersize='A4'"  
-        - "documentclass='article'"
-        - "fontsize='12pt'"
-        - "linestretch='1.75'"
+
+    metadata: 
+      lang: 'en-GB'
+      papersize: 'A4' 
+      documentclass: 'article'
+      fontsize: '12pt'
+      linestretch: '1.75'
+
     postprocessors: []
