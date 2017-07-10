@@ -69,6 +69,7 @@ templates:
         - /Users/ian/.pandoc/filters/authorToName #convert author to author: name: affiliation:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
       table-of-contents:
@@ -111,10 +112,8 @@ templates:
         - /Users/ian/.pandoc/filters/authorToName
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       template: /Users/ian/.pandoc/templates/eisvogel.latex
       table-of-contents: true
-      toc-depth: 4
       base-header-level: 1
     metadata: 
       mainfont: 'Greta Sans Std'
@@ -239,10 +238,9 @@ templates:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
-      reference-docx: /Users/ian/.pandoc/templates/custom-greta.docx
+      reference-doc: /Users/ian/.pandoc/templates/custom-greta.docx
       dpi: 300
       table-of-contents: false
-      toc-depth: 4
       base-header-level: 1
     metadata: 
       notes-after-punctuation: false 
