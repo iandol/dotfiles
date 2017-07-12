@@ -76,7 +76,8 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	# Flush DNS cache
 	alias flushdnsolder="sudo dscacheutil -flushcache"
 	alias flushdnsmavericks="dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
-	alias flushdns="sudo discoveryutil udnsflushcaches; sudo discoveryutil mdnsflushcache"
+	alias flushdnsold="sudo discoveryutil udnsflushcaches; sudo discoveryutil mdnsflushcache"
+	alias flushdns="sudo killall -HUP mDNSResponder;sudo killall mDNSResponderHelper;sudo dscacheutil -flushcache;say macOS DNS cache cleared"
 
 	#useful info
 	alias mymemory="top -l 1 | awk '/(pagein|Mem)/'; vm_stat"
@@ -138,6 +139,25 @@ alias rot13='tr a-zA-Z n-za-mN-ZA-M'
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 
+function setproxy() {
+	if [[ $# == 0 ]]; then
+		unset http_proxy
+		unset https_proxy
+		git config --global --unset http.proxy
+		git config --global --unset https.proxy
+	elif [[ $# == 1 ]]; then
+		export http_proxy="$1"
+		export https_proxy=$http_proxy
+		git config --global http.proxy "http://$http_proxy"
+		git config --global https.proxy "http://$https_proxy"
+	elif [[ $# == 2 ]]; then
+		export http_proxy="$1"
+		export https_proxy="$2"
+		git config --global http.proxy "http://$http_proxy"
+		git config --global https.proxy "http://$https_proxy"
+	fi
+	echo "setproxy = HTTP = $http_proxy | HTTPS = $https_proxy"
+}
 
 # Get Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
@@ -218,13 +238,13 @@ function update() {
 		printf '\n\n---> Updating GRAMM...\n'
 		cd ~/Documents/MATLAB/gramm/
 		git pull
-		gst
+		git status
 	fi
 	if [[ -d ~/Code/CPServer/.git ]]; then
 		printf '\n\n---> Updating CP...\n'
 		cd ~/Code/CPServer
 		git pull
-		gst
+		git status
 	fi
 	cd $myolddir
 	unset $myolddir
@@ -288,26 +308,6 @@ function listTCP() {
 		tok=$1
 	fi
 	sudo lsof -i TCP -P | grep -i "$tok"
-}
-
-function setproxy() {
-	if [[ $# == 0 ]]; then
-		unset http_proxy
-		unset https_proxy
-		git config --global --unset http.proxy
-		git config --global --unset https.proxy
-	elif [[ $# == 1 ]]; then
-		export http_proxy="$1"
-		export https_proxy=$http_proxy
-		git config --global http.proxy "http://$http_proxy"
-		git config --global https.proxy "http://$https_proxy"
-	elif [[ $# == 2 ]]; then
-		export http_proxy="$1"
-		export https_proxy="$2"
-		git config --global http.proxy "http://$http_proxy"
-		git config --global https.proxy "http://$https_proxy"
-	fi
-	echo "setproxy = HTTP = $http_proxy | HTTPS = $https_proxy"
 }
 
 function define() {

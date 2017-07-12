@@ -15,20 +15,21 @@ templates:
         author: John Doe
 #######################################
   latex-with-refs:
+    setup: []
     preprocessors: ['preprocessors/removeAffiliations']
     pandoc:
       from: markdown
       to: latex
       standalone: true
       filter: 
-        - pandoc-citeproc
+        - pandoc-citeproc #process citations
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
         - /Users/ian/.pandoc/filters/authorToName #convert author to author: name: affiliation:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
-      toc: false
+      table-of-contents: true
       base-header-level: 2
     metadata:
       classoption: twoside
@@ -54,8 +55,10 @@ templates:
       nonumberfigures: true
       lof: false
     postprocessors: ['postprocessors/fixLaTeX']
+    cleanup: []
 #######################################
   pdf-with-refs:
+    setup: []
     preprocessors: ['preprocessors/removeAffiliations']
     pandoc:
       from: markdown
@@ -63,18 +66,17 @@ templates:
       latex-engine: "xelatex"
       standalone: true
       filter: 
-        - pandoc-citeproc
+        - pandoc-citeproc #process citations
         - /Users/ian/.pandoc/filters/addToday #add date metadata
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
         - /Users/ian/.pandoc/filters/authorToName #convert author to author: name: affiliation:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
+      #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
-      table-of-contents:
-      toc-depth: 4
-      base-header-level: 2
+      table-of-contents: false
+      base-header-level: 1
     metadata:
       classoption: twoside
       mainfont: 'Greta Text Pro'
@@ -99,22 +101,24 @@ templates:
       nonumberfigures: true
       lof: false
     postprocessors: ['postprocessors/fixLaTeX']
+    cleanup: ['latexmk -c']
 #######################################
   eisvogel:
+    setup: []
     preprocessors: ['preprocessors/removeAffiliations']
     pandoc:
       from: markdown
       to: latex
       standalone: true
       filter: 
-        - pandoc-citeproc
-        - /Users/ian/.pandoc/filters/addToday
-        - /Users/ian/.pandoc/filters/authorToName
+        - pandoc-citeproc #process citations
+        - /Users/ian/.pandoc/filters/addToday #add date metadata
+        - /Users/ian/.pandoc/filters/authorToName  #convert author to author: name: affiliation:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       template: /Users/ian/.pandoc/templates/eisvogel.latex
       table-of-contents: true
-      base-header-level: 1
+      base-header-level: 2
     metadata: 
       mainfont: 'Greta Sans Std'
       mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
@@ -128,7 +132,7 @@ templates:
       titlepage-color: BB5544
       titlepage-text-color: FFFFFF
       titlepage-rule-color: FFFFFF
-      titlepage-rule-height: 5
+      titlepage-rule-height: 4
       linkcolor: Mahogany
       citecolor: Sepia
       urlcolor: BrickRed
@@ -137,8 +141,10 @@ templates:
       link-citations: true
       nonumberfigures: true
     postprocessors: ['postprocessors/fixLaTeX']
+    cleanup: []
 #######################################
   latex-ieee:
+    setup: []
     preprocessors: []
     pandoc:
       from: markdown
@@ -146,7 +152,7 @@ templates:
       latex-engine: "xelatex"
       standalone: true
       filter: 
-        - pandoc-citeproc
+        - pandoc-citeproc #process citations
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       template: /Users/ian/.pandoc/templates/ieee.latex
@@ -159,17 +165,19 @@ templates:
       notes-after-punctuation: false
       link-citations: true
     postprocessors: ['postprocessors/fixLaTeX']
+    cleanup: []
 #######################################
   latex-scholar:
+    setup: []
     preprocessors: []
     pandoc:
       from: markdown
       to: latex
       standalone: true
       filter: 
-        - pandoc-citeproc
-        - /Users/ian/.pandoc/filters/addToday
-        - /Users/ian/.pandoc/filters/authorToName
+        - pandoc-citeproc #process citations
+        - /Users/ian/.pandoc/filters/addToday #add date metadata
+        - /Users/ian/.pandoc/filters/authorToName  #convert author to author: name: affiliation:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       template: /Users/ian/.pandoc/templates/pandoc-scholar.latex
@@ -180,16 +188,18 @@ templates:
       link-citations: true
       lang: en-GB
     postprocessors: []
+    cleanup: []
 #######################################
   memoir-with-refs:
+    setup: []
     preprocessors: []
     pandoc:
       from: markdown
       to: latex
       latex-engine: "xelatex"
       standalone: true
-      filter: 
-        - pandoc-citeproc
+      filter:
+        - pandoc-citeproc #process citations
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
@@ -224,15 +234,17 @@ templates:
       lof: false
     postprocessors: 
       - 'postprocessors/fixLaTeX'
+    cleanup: []
 #######################################
   docx-with-refs:
+    setup: []
     preprocessors: []
     pandoc:
       from: markdown
       to: docx
       standalone: true
       filter: 
-        - pandoc-citeproc
+        - pandoc-citeproc #process citations
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
         - /Users/ian/.pandoc/filters/authorRemoveHash #remove name: affiliation:
       bibliography: /Users/ian/.pandoc/Core.bib
@@ -246,15 +258,32 @@ templates:
       notes-after-punctuation: false 
       link-citations: false
     postprocessors: []
+    cleanup: []
+######################################
+  docx:
+    setup: []
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: docx
+      standalone: true
+      filter: 
+        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
+        - /Users/ian/.pandoc/filters/authorRemoveHash #remove name: affiliation:
+      reference-doc: /Users/ian/.pandoc/templates/custom.docx
+      dpi: 300
+    postprocessors: []
+    cleanup: []
 #######################################
   odt-with-refs:
+    setup: []
     preprocessors: []
     pandoc:
       from: markdown
       to: odt
       standalone: true
       filter: 
-        - pandoc-citeproc
+        - pandoc-citeproc #process citations
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
@@ -268,8 +297,10 @@ templates:
       notes-after-punctuation: false 
       link-citations: false
     postprocessors: []
+    cleanup: []
 #######################################
   html-with-refs:
+    setup: []
     preprocessors: []
     pandoc:
       from: markdown
@@ -278,7 +309,7 @@ templates:
       number-sections: true
       section-divs: true
       filter: 
-        - pandoc-citeproc
+        - pandoc-citeproc #process citations
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
@@ -294,8 +325,10 @@ templates:
       notes-after-punctuation: false 
       link-citations: false
     postprocessors: []
+    cleanup: []
 #######################################
   tufte:
+    setup: []
     preprocessors: []
     pandoc:
       from: markdown
@@ -309,8 +342,10 @@ templates:
         - "/Users/ian/.pandoc/templates/tuftepandoc.css"
       self-contained: true
     postprocessors: []
+    cleanup: []
 #######################################
   docx-no-refs:
+    setup: []
     preprocessors: []
     pandoc:
       from: markdown
@@ -323,8 +358,10 @@ templates:
       toc-depth: 4
       base-header-level: 1
     postprocessors: []
+    cleanup: []
 #######################################
   odt-no-refs:
+    setup: []
     preprocessors: []
     pandoc:
       from: markdown
@@ -337,8 +374,10 @@ templates:
       toc-depth: 4
       base-header-level: 1
     postprocessors: []
+    cleanup: []
 #######################################
   test:
+    setup: []
     preprocessors: []
     pandoc:
       from: markdown
@@ -350,6 +389,7 @@ templates:
     postprocessors: []
 #######################################
   test-pdf:
+    setup: []
     preprocessors: []
     
     pandoc:
@@ -366,8 +406,11 @@ templates:
       linestretch: '1.75'
 
     postprocessors: []
+    cleanup: []
+    
 #######################################
   test-latex:
+    setup: []
     preprocessors: []
     pandoc:
       from: markdown
@@ -383,3 +426,6 @@ templates:
       linestretch: '1.75'
 
     postprocessors: []
+    cleanup: []
+    
+    
