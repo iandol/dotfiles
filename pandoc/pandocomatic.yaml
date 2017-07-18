@@ -12,7 +12,7 @@ templates:
       standalone: true
       filter: /Users/ian/.pandoc/filters/testFilter
     metadata:
-        author: John Doe
+        author: Joanna Doe
 #######################################
   latex-with-refs:
     setup: []
@@ -27,6 +27,7 @@ templates:
         - /Users/ian/.pandoc/filters/authorToName #convert author to author: name: affiliation:
       bibliography: /Users/ian/.pandoc/Core.bib
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
       table-of-contents: true
@@ -58,207 +59,50 @@ templates:
     cleanup: []
 #######################################
   pdf-with-refs:
-    setup: []
-    preprocessors: ['preprocessors/removeAffiliations']
+    extends: 'latex-with-refs'
     pandoc:
-      from: markdown
       to: pdf
       latex-engine: "xelatex"
       standalone: true
-      filter: 
-        - pandoc-citeproc #process citations
-        - /Users/ian/.pandoc/filters/addToday #add date metadata
-        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-        - /Users/ian/.pandoc/filters/authorToName #convert author to author: name: affiliation:
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
-      template: /Users/ian/.pandoc/templates/custom.latex
-      dpi: 300
-      table-of-contents: false
-      base-header-level: 1
-    metadata:
-      classoption: twoside
-      mainfont: 'Greta Text Pro'
-      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
-      sansfont: 'Graublau Sans'
-      sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
-      monofont: 'Fira Code'
-      mathfont: 'Cambria Math'
-      mathfontoptions: 'math-style=ISO,bold-style=ISO'
-      CJKmainfont: 'PingFang SC'
-      CJKsansfont: 'Heiti SC'
-      linkcolor: Mahogany
-      citecolor: Sepia
-      urlcolor: BrickRed
-      lang: 'en-GB'
-      documentclass: 'article'
-      fontsize: '11pt'
-      linestretch: '1.5'
-      geometry: 'margin=2cm'
-      notes-after-punctuation: false
-      link-citations: true 
-      nonumberfigures: true
-      lof: false
-    postprocessors: ['postprocessors/fixLaTeX']
     cleanup: ['latexmk -c']
 #######################################
   eisvogel:
-    setup: []
-    preprocessors: ['preprocessors/removeAffiliations']
+    extends: 'latex-with-refs'
     pandoc:
-      from: markdown
-      to: latex
-      standalone: true
-      filter: 
-        - pandoc-citeproc #process citations
-        - /Users/ian/.pandoc/filters/addToday #add date metadata
-        - /Users/ian/.pandoc/filters/authorToName  #convert author to author: name: affiliation:
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
       template: /Users/ian/.pandoc/templates/eisvogel.latex
       table-of-contents: true
       base-header-level: 2
     metadata: 
-      mainfont: 'Greta Sans Std'
-      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
-      sansfont: 'Graublau Slab'
-      sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
-      monofont: 'Fira Code'
-      mathfont: 'Cambria Math'
-      mathfontoptions: 'math-style=ISO,bold-style=ISO'
-      lang: 'en-GB'
       titlepage: true
       titlepage-color: BB5544
       titlepage-text-color: FFFFFF
       titlepage-rule-color: FFFFFF
       titlepage-rule-height: 4
-      linkcolor: Mahogany
-      citecolor: Sepia
-      urlcolor: BrickRed
-      fontsize: '11pt'
-      notes-after-punctuation: false
-      link-citations: true
-      nonumberfigures: true
-    postprocessors: ['postprocessors/fixLaTeX']
-    cleanup: []
 #######################################
   latex-ieee:
-    setup: []
+    extends: 'latex-with-refs'
     preprocessors: []
     pandoc:
-      from: markdown
-      to: latex
-      latex-engine: "xelatex"
-      standalone: true
-      filter: 
-        - pandoc-citeproc #process citations
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
       template: /Users/ian/.pandoc/templates/ieee.latex
-      dpi: 300
-      table-of-contents: false
-      toc-depth: 4
-      base-header-level: 1
     metadata: 
       fontsize: '10pt'
-      notes-after-punctuation: false
-      link-citations: true
-    postprocessors: ['postprocessors/fixLaTeX']
-    cleanup: []
 #######################################
   latex-scholar:
-    setup: []
-    preprocessors: []
+    extends: 'latex-with-refs'
     pandoc:
-      from: markdown
-      to: latex
-      standalone: true
-      filter: 
-        - pandoc-citeproc #process citations
-        - /Users/ian/.pandoc/filters/addToday #add date metadata
-        - /Users/ian/.pandoc/filters/authorToName  #convert author to author: name: affiliation:
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
       template: /Users/ian/.pandoc/templates/pandoc-scholar.latex
-      base-header-level: 1
     metadata: 
       fontsize: '10pt'
-      notes-after-punctuation: false
-      link-citations: true
-      lang: en-GB
-    postprocessors: []
-    cleanup: []
 #######################################
   memoir-with-refs:
-    setup: []
-    preprocessors: []
+    extends: 'latex-with-refs'
     pandoc:
-      from: markdown
-      to: latex
-      latex-engine: "xelatex"
-      standalone: true
-      filter:
-        - pandoc-citeproc #process citations
-        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       template: /Users/ian/.pandoc/templates/custom-memoir.latex
-      dpi: 300
       table-of-contents: true
       toc-depth: 4
       base-header-level: 1
     metadata:
-      classoption: twoside
-      mainfont: 'Greta Text Pro'
-      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
-      sansfont: 'Graublau Sans'
-      sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
-      monofont: 'Fira Code'
-      mathfont: 'Cambria Math'
-      mathfontoptions: 'math-style=ISO,bold-style=ISO'
-      CJKmainfont: 'PingFang SC'
-      CJKsansfont: 'Heiti SC'
-      linkcolor: Mahogany
-      citecolor: Sepia
-      urlcolor: BrickRed
-      lang: 'en-GB'
       documentclass: 'memoir'
-      fontsize: '11pt'
-      linestretch: '1.5'
-      geometry: 'margin=2cm'
-      notes-after-punctuation: false
-      link-citations: true 
-      nonumberfigures: true
-      lof: false
-    postprocessors: 
-      - 'postprocessors/fixLaTeX'
-    cleanup: []
-#######################################
-  docx-with-refs:
-    setup: []
-    preprocessors: []
-    pandoc:
-      from: markdown
-      to: docx
-      standalone: true
-      filter: 
-        - pandoc-citeproc #process citations
-        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-        - /Users/ian/.pandoc/filters/authorRemoveHash #remove name: affiliation:
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
-      reference-doc: /Users/ian/.pandoc/templates/custom-greta.docx
-      dpi: 300
-      table-of-contents: false
-      base-header-level: 1
-    metadata: 
-      notes-after-punctuation: false 
-      link-citations: false
-    postprocessors: []
-    cleanup: []
 ######################################
   docx:
     setup: []
@@ -272,32 +116,32 @@ templates:
         - /Users/ian/.pandoc/filters/authorRemoveHash #remove name: affiliation:
       reference-doc: /Users/ian/.pandoc/templates/custom.docx
       dpi: 300
-    postprocessors: []
-    cleanup: []
-#######################################
-  odt-with-refs:
-    setup: []
-    preprocessors: []
-    pandoc:
-      from: markdown
-      to: odt
-      standalone: true
-      filter: 
-        - pandoc-citeproc #process citations
-        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
-      reference-odt: /Users/ian/.pandoc/templates/custom.odt
-      dpi: 300
       table-of-contents: false
       toc-depth: 4
       base-header-level: 1
+    postprocessors: []
+    cleanup: []
+#######################################
+  docx-with-refs:
+    extends: 'docx'
+    pandoc:
+      filter: 
+        - pandoc-citeproc #process citations
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
+      reference-doc: /Users/ian/.pandoc/templates/custom-greta.docx
     metadata: 
       notes-after-punctuation: false 
       link-citations: false
     postprocessors: []
     cleanup: []
+#######################################
+  odt-with-refs:
+    extends: 'docx-with-refs'
+    pandoc:
+      to: odt
+      reference-doc: /Users/ian/.pandoc/templates/custom.odt
 #######################################
   html-with-refs:
     setup: []
@@ -344,38 +188,6 @@ templates:
     postprocessors: []
     cleanup: []
 #######################################
-  docx-no-refs:
-    setup: []
-    preprocessors: []
-    pandoc:
-      from: markdown
-      to: docx
-      filter: 
-        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-      standalone: true
-      reference-docx: /Users/ian/.pandoc/templates/custom.docx
-      table-of-contents:
-      toc-depth: 4
-      base-header-level: 1
-    postprocessors: []
-    cleanup: []
-#######################################
-  odt-no-refs:
-    setup: []
-    preprocessors: []
-    pandoc:
-      from: markdown
-      to: odt
-      filter: 
-        - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-      standalone: true
-      reference-odt: /Users/ian/.pandoc/templates/custom.odt
-      table-of-contents:
-      toc-depth: 4
-      base-header-level: 1
-    postprocessors: []
-    cleanup: []
-#######################################
   test:
     setup: []
     preprocessors: []
@@ -391,23 +203,19 @@ templates:
   test-pdf:
     setup: []
     preprocessors: []
-    
     pandoc:
       from: markdown
       to: pdf
       latex-engine: "xelatex"
       standalone: true
-
     metadata: 
       lang: 'en-GB'
       papersize: 'A4' 
       documentclass: 'article'
       fontsize: '12pt'
       linestretch: '1.75'
-
     postprocessors: []
     cleanup: []
-    
 #######################################
   test-latex:
     setup: []
@@ -417,15 +225,11 @@ templates:
       to: latex
       latex-engine: "xelatex"
       standalone: true
-
     metadata: 
       lang: 'en-GB'
       papersize: 'A4' 
       documentclass: 'article'
       fontsize: '12pt'
       linestretch: '1.75'
-
     postprocessors: []
     cleanup: []
-    
-    

@@ -27,7 +27,7 @@ alias ping="ping -c 5" # ping 5 times ‘by default’
 # Enable aliases to be sudo’ed
 alias sudo='sudo '
 
-alias installTeX='sudo tlmgr install latexmk csquotes pagecolor relsize ucharcat sectsty titling titlesec preprint'
+alias installTeX='sudo tlmgr install abstract latexmk csquotes pagecolor relsize ucharcat sectsty titling titlesec preprint'
 
 # remove quarantine attribute from a file
 if [[ $OSTYPE == 'darwin'* ]]; then 
