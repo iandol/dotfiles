@@ -4,17 +4,20 @@ settings:
   skip: ['.*', 'pandocomatic.yaml']
 templates:
 #######################################
-  test-markdown:
+  refs:
     pandoc:
-      from: markdown
-      to: markdown
-      output: out.md
       standalone: true
-      filter: /Users/ian/.pandoc/filters/testFilter
+      filter: 
+        - pandoc-citeproc #process citations
+      bibliography: /Users/ian/.pandoc/Core.bib
+      csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
     metadata:
-        author: Joanna Doe
+      notes-after-punctuation: false
+      link-citations: true 
 #######################################
   latex-with-refs:
+    extends: ['refs']
     setup: []
     preprocessors: ['preprocessors/removeAffiliations']
     pandoc:
@@ -22,12 +25,8 @@ templates:
       to: latex
       standalone: true
       filter: 
-        - pandoc-citeproc #process citations
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
         - /Users/ian/.pandoc/filters/authorToName #convert author to author: name: affiliation:
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       template: /Users/ian/.pandoc/templates/custom.latex
       dpi: 300
       table-of-contents: true
@@ -51,8 +50,6 @@ templates:
       fontsize: '11pt'
       linestretch: '1.5'
       geometry: 'margin=2cm'
-      notes-after-punctuation: false
-      link-citations: true 
       nonumberfigures: true
       lof: false
     postprocessors: ['postprocessors/fixLaTeX']
@@ -116,20 +113,12 @@ templates:
         - /Users/ian/.pandoc/filters/authorRemoveHash #remove name: affiliation:
       reference-doc: /Users/ian/.pandoc/templates/custom.docx
       dpi: 300
-      table-of-contents: false
-      toc-depth: 4
-      base-header-level: 1
     postprocessors: []
     cleanup: []
 #######################################
   docx-with-refs:
-    extends: 'docx'
+    extends: ['refs','docx']
     pandoc:
-      filter: 
-        - pandoc-citeproc #process citations
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       reference-doc: /Users/ian/.pandoc/templates/custom-greta.docx
     metadata: 
       notes-after-punctuation: false 
@@ -144,6 +133,7 @@ templates:
       reference-doc: /Users/ian/.pandoc/templates/custom.odt
 #######################################
   html-with-refs:
+    extends: ['refs']
     setup: []
     preprocessors: []
     pandoc:
@@ -153,21 +143,14 @@ templates:
       number-sections: true
       section-divs: true
       filter: 
-        - pandoc-citeproc #process citations
         - /Users/ian/.pandoc/filters/removeHR #remove horizontal rules
-      bibliography: /Users/ian/.pandoc/Core.bib
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
-      citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
       template: /Users/ian/.pandoc/templates/custom.html
       css: "/Users/ian/.pandoc/templates/custom.css"
       self-contained: true
       dpi: 300
-      table-of-contents:
+      table-of-contents: false
       toc-depth: 4
       base-header-level: 1
-    metadata: 
-      notes-after-punctuation: false 
-      link-citations: false
     postprocessors: []
     cleanup: []
 #######################################
@@ -180,7 +163,7 @@ templates:
       standalone: true
       filter: 
         - pandoc-sidenote
-      template: /Users/ian/.pandoc/templates/tufte.html5
+      template: "/Users/ian/.pandoc/templates/tufte.html5"
       css: 
         - "/Users/ian/.pandoc/templates/tufte.css"
         - "/Users/ian/.pandoc/templates/tuftepandoc.css"
@@ -189,8 +172,6 @@ templates:
     cleanup: []
 #######################################
   test:
-    setup: []
-    preprocessors: []
     pandoc:
       from: markdown
       to: html5
@@ -198,11 +179,18 @@ templates:
       css: "/Users/ian/.pandoc/templates/custom.css"
       self-contained: true
       mathjax: true
-    postprocessors: []
+#######################################
+  test-markdown:
+    pandoc:
+      from: markdown
+      to: markdown
+      output: out.md
+      standalone: true
+      filter: "/Users/ian/.pandoc/filters/testFilter"
+    metadata:
+        author: Joanna Doe
 #######################################
   test-pdf:
-    setup: []
-    preprocessors: []
     pandoc:
       from: markdown
       to: pdf
@@ -214,12 +202,8 @@ templates:
       documentclass: 'article'
       fontsize: '12pt'
       linestretch: '1.75'
-    postprocessors: []
-    cleanup: []
 #######################################
   test-latex:
-    setup: []
-    preprocessors: []
     pandoc:
       from: markdown
       to: latex
@@ -231,5 +215,3 @@ templates:
       documentclass: 'article'
       fontsize: '12pt'
       linestretch: '1.75'
-    postprocessors: []
-    cleanup: []
