@@ -16,8 +16,7 @@ templates:
       notes-after-punctuation: false
       link-citations: true 
 #######################################
-  latex-with-refs:
-    extends: ['refs']
+  latex:
     setup: []
     preprocessors: ['preprocessors/removeAffiliations']
     pandoc:
@@ -54,6 +53,13 @@ templates:
       lof: false
     postprocessors: ['postprocessors/fixLaTeX']
     cleanup: []
+#######################################
+  latex-with-refs:
+    extends: ['latex','refs']
+    pandoc:
+      from: markdown
+      to: latex
+      standalone: true
 #######################################
   pdf-with-refs:
     extends: 'latex-with-refs'
@@ -119,7 +125,7 @@ templates:
   docx-with-refs:
     extends: ['refs','docx']
     pandoc:
-      reference-doc: /Users/ian/.pandoc/templates/custom-greta.docx
+      reference-doc: /Users/ian/.pandoc/templates/custom.docx
     metadata: 
       notes-after-punctuation: false 
       link-citations: false
