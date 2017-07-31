@@ -23,6 +23,7 @@ antigen bundles <<EOBUNDLES
 	command-not-found
 	zsh-users/zsh-syntax-highlighting
 	zsh-users/zsh-autosuggestions
+  zsh-users/zsh-completions
 EOBUNDLES
 #antigen theme smt
 antigen theme mashaal/wild-cherry zsh/wild-cherry.zsh-theme
