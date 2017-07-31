@@ -4,6 +4,9 @@
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
 
+# the job of this preproceccer is to convert endnote citations to pandoc citations.
+# It assumes your BibTeX keys are authorYear and will not be able to handle collisions
+# as endnote uses unique IDs which cannot be used in the bib file easily.
 input = $stdin.read
 # this regex matches {Letter ... Number} should get endnote refs but not overmatch, replace with brackets
 output = input.gsub(/(?:\{)([\p{Alpha}][^\}]+?)(?:(?<=[0-9])\})/, '[\1]')
