@@ -18,12 +18,18 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 		brew tap caskroom/fonts
 		printf 'Added Caskroom to Homebrew...\n'
 	fi
-fi
-
-#make sure our minimum packages are installed
-if [[ -e /usr/local/bin/brew ]]; then
-	brew install zsh-completions git figlet archey jq ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver &> /dev/null/
-	brew cask install font-fira-code font-hack font-hasklig font-input font-source-code-pro font-source-sans-pro imageoptim tex-live-utility &> /dev/null/
+	#make sure our minimum packages are installed
+	if [[ -e /usr/local/bin/brew ]]; then
+		brew install zsh-completions git figlet archey jq ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver &> /dev/null/
+		brew cask install font-fira-code font-hack font-hasklig font-input font-source-code-pro font-source-sans-pro imageoptim tex-live-utility &> /dev/null/
+	fi
+else
+	printf 'Assume we are setting up a Ubuntu machine\n'
+	sudo apt-get install git figlet jq ansiweather
+	mkdir -p ~/bin
+	cd ~/bin
+	wget https://raw.githubusercontent.com/djmelik/archey/master/archey
+	chmod 755 archey
 fi
 
 printf 'Let us bootstrap .dotfiles if not present ... '

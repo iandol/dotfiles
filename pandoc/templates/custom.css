@@ -1,3 +1,8 @@
+@page { 
+  size: A4;
+   margin: 2cm;
+}
+
 body { 
 	font-family: "Graublau Sans", "Avenir Next", sans-serif;
 	font-size: 120%;
