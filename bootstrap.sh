@@ -25,11 +25,8 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	fi
 else
 	printf 'Assume we are setting up a Ubuntu machine\n'
-	sudo apt-get install git figlet jq ansiweather
+	sudo apt-get install zsh vim git figlet jq ansiweather
 	mkdir -p ~/bin
-	cd ~/bin
-	wget https://raw.githubusercontent.com/djmelik/archey/master/archey
-	chmod 755 archey
 fi
 
 printf 'Let us bootstrap .dotfiles if not present ... '
