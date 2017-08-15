@@ -25,8 +25,11 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	fi
 else
 	printf 'Assume we are setting up a Ubuntu machine\n'
-	sudo apt-get install zsh vim git figlet jq ansiweather
+	sudo apt-get install zsh vim git figlet jq ansiweather freeglut 
 	mkdir -p ~/bin
+  cd ~/bin
+  wget https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy
+  chmod 755 ~/bin/diff-so-fancy
 fi
 
 printf 'Let us bootstrap .dotfiles if not present ... '
@@ -114,7 +117,9 @@ if [ -f $(which git) ]; then
 	git config --global color.grep true
 	git config --global color.interactive true
 	git config --global color.status true
-	git config --global credential.helper osxkeychain
+  if [ $OSTYPE == 'darwin'* ]; then
+  	git config --global credential.helper osxkeychain
+  fi
 	git config --global pager.diff "diff-so-fancy | less --tabs=4 -RFX"
 	git config --global pager.show "diff-so-fancy | less --tabs=4 -RFX"
 else
