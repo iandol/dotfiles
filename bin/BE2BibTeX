@@ -1,8 +1,8 @@
 #!/usr/bin/osascript
 
 (*
-Script written by Naupaka Zimmerman
-March 17, 2017
+Script originally written by Naupaka Zimmerman, modified by iandol
+August 10, 2017
 
 MIT License
 
@@ -56,37 +56,30 @@ It will also work with the name of just a single specific group.
 Based on code from this page: 
 http://erikslab.com/2007/08/31/applescript-how-to-split-a-string/
 *)
-on theSplit(theString, theDelimiter, theExportText)
-	-- save delimiters to restore old settings
-	set currentDelimiters to AppleScript's text item delimiters
-	
+on theSplit(allGroups, theDelimiter, myGroups)
 	-- set delimiters to delimiter to be used
 	set AppleScript's text item delimiters to theDelimiter
-	
 	-- create the array
-	set theGroupArray to every text item of theString
-	
-	-- restore the old setting
-	set AppleScript's text item delimiters to currentDelimiters
-	
-	-- return the result
+	set groupArray to every text item of allGroups
 	set theSelectedList to {}
-	repeat with myGroup in theGroupArray
-		if ((myGroup as string) contains theExportText) then
-			
-			-- use sed to strip out all folder names from the group name returned from bookends
-			-- this leaves only group name 
-			set thecommandstring to "echo \"" & myGroup & "\"| sed \"s/.*\\/\\(.*\\)/\\1/\"" as string
-			set sedResult to do shell script thecommandstring
-			
-			-- if there's a match, append parsed group name onto end of list
-			set end of theSelectedList to sedResult
-		end if
+	repeat with currentGroup in myGroups
+		repeat with thisGroup in groupArray
+			if ((thisGroup as string) contains (currentGroup as string)) then
+				-- use sed to strip out all folder names from the group name returned from bookends
+				-- this leaves only group name 
+				set thecommandstring to "echo \"" & thisGroup & "\"| sed \"s/.*\\/\\(.*\\)/\\1/\"" as string
+				set sedResult to do shell script thecommandstring
+				-- if there's a match, append parsed group name onto end of list
+				set end of theSelectedList to sedResult
+			end if
+		end repeat
 	end repeat
 	return theSelectedList
 end theSplit
 
 on run argv
+	--version
+	set myVersion to 1.11
 	--start time
 	set originalT to (time of (current date))
 	
@@ -139,10 +132,9 @@ on run argv
 	if DEBUG then
 		-- set output string based on parsed input parameters or defaults
 		set AppleScript's text item delimiters to ", "
-		set output to ("Pattern for groups to export: " & myGroupsToExport & "
-" & "Path to export to: " & myPath & "
-" & "Groups exported: " & myGroupArray as string)
+		set output to ("Pattern for groups to export: " & myGroupsToExport & return & "Path to export to: " & myPath & return & "Groups exported: " & myGroupArray as string)
 		set AppleScript's text item delimiters to oldDelimiters -- change back to default
+		set ssout to ""
 	end if
 	
 	-- loop over each folder matching the pattern and export each to a bibtex file
@@ -151,7 +143,7 @@ on run argv
 		set quotedName to quoted form of POSIX path of thisFile
 		tell application "Finder"
 			if exists thisFile then
-				delete thisFile
+				delete thisFile --we have to delete the file first, as open for access does not!
 			end if
 		end tell
 		-- from: http://stackoverflow.com/questions/3780985/how-do-i-write-to-a-text-file-using-applescript
@@ -209,19 +201,14 @@ on run argv
 		
 		--run our special code to enforce case in titles
 		set fixCase to ("fixCase.rb " & quotedName)
-		set ssout to do shell script fixCase
-		
-		if DEBUG then
-			set newT to (time of (current date))
-			set diffT to newT - originalT
-			return output & "
-" & ssout & "
-
-Bookends BiBTeX export took " & diffT & " seconds in total"
-		end if
-		
-		set AppleScript's text item delimiters to oldDelimiters
+		set ssout to ssout & (do shell script fixCase)
 		
 	end repeat
+
+	if DEBUG then
+		set newT to (time of (current date))
+		set diffT to newT - originalT
+		return output & newline & ssout & newline & "Bookends BiBTeX export took " & diffT & " seconds in total"
+	end if
 	
 end run

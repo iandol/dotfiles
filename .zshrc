@@ -44,6 +44,7 @@ setopt autopushd pushdminus pushdsilent
 [[ -d "$HOME/miniconda3/" ]] && path=("$HOME/miniconda3/bin" $path) # anaconda scientific python
 [[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=("/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" $path)
 
+[[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 export PATH
 
@@ -53,4 +54,4 @@ export PATH
 #[[ -f $(which ansiweather) ]] && ansiweather
 [[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 
-echo "💡:CTRL+w,k,u: 🔪 | CTRL+r: 🔍 | d & cd #: 🚀"
+echo "💡:CTRL+w,k,u: 🔪 | CTRL+r|s: 🔍 | d & cd #: 🚀"

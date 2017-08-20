@@ -141,6 +141,7 @@ alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.ar
 
 function setproxy() {
 	if [[ $# == 0 ]]; then
+    echo "Will unset the proxy..."
 		unset http_proxy
 		unset https_proxy
 		git config --global --unset http.proxy
