@@ -29,11 +29,6 @@ alias sudo='sudo '
 
 alias installTeX='sudo tlmgr install abstract latexmk csquotes pagecolor relsize ucharcat sectsty titling titlesec preprint'
 
-# remove quarantine attribute from a file
-if [[ $OSTYPE == 'darwin'* ]]; then 
-	alias noquarantine='xattr -d com.apple.quarantine '
-fi
-
 #manage bash/zsh
 if [[ -f $(which subl) ]]; then 
 	alias edit='subl -w'; #prefer sublime text
@@ -53,6 +48,7 @@ alias tu='top -o cpu' # cpu
 alias tm='top -o vsize' # memory
 
 if [[ $OSTYPE == 'darwin'* ]]; then 
+  alias noquarantine='xattr -d com.apple.quarantine '
 	alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
 	alias lock="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 	alias stfu="osascript -e 'set volume output muted true'"
@@ -63,8 +59,6 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	alias lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
 	alias lsrebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -v -kill -r -domain local -domain system -domain user'
 	alias profop='sudo fs_usage -w -f filesys -e Terminal Parallels mds nmbd Dock WindowServer ATSServer Quicksilver > ~/Desktop/operafs.txt' #profile opera file system usage
-	alias operalog='/Applications/Opera.app/Contents/MacOS/Opera -profilinglog ~/Desktop/opera.txt &'
-	alias startvnc='sudo echo -n enabled > /Library/Preferences/com.apple.ScreenSharing.launchd'
 	alias airscan="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s"
 	#alias kernel64='sudo systemsetup -setkernelbootarchitecture x86_64'
 	#alias kernel32='sudo systemsetup -setkernelbootarchitecture i386'
@@ -100,6 +94,14 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	# Hide/show all desktop icons (useful when presenting)
 	alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 	alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+  function sharescreen() {
+    sudo defaults write /var/db/launchd.db/com.apple.launchd/overrides.plist com.apple.screensharing -dict Disabled -bool false
+    sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist
+  }
+  function sharescreenstop() {
+    sudo launchctl unload /System/Library/LaunchDaemons/com.apple.screensharing.plist
+  }
 
 fi
 
