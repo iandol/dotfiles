@@ -8,7 +8,7 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	alias l.='ls -d .[^.]*' #only show .dot files
 else
 	alias ls='ls --color=auto'
-	alias ll='ls -alF'
+	alias ll='ls -AFlh'
 	alias la='ls -A'
 	alias l='ls -CF'
 fi
