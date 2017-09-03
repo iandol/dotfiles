@@ -8,7 +8,7 @@ templates:
     pandoc:
       standalone: true
       filter: 'pandoc-citeproc' #process citations
-      bibliography: /Users/ian/.pandoc/Core.bib
+      bibliography: /Users/ian/.pandoc/Core.json
       csl: /Users/ian/.pandoc/csl/apa-ian.csl
       #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
     metadata:

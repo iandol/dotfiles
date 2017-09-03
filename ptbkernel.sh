@@ -15,5 +15,5 @@ echo "\n\nTrying to load new driver (this may fail on Yosemite, will need to cha
 sudo kextload -b PsychtoolboxKernelDriver
 kextstat -b PsychtoolboxKernelDriver
 read -p "prompt"
-echo "\n\nSetting kext override loading for Yosemite+ (boot-args='kext-dev-mode=1'); reboot if this is the first time you do this"
-sudo nvram boot-args="-v"
+#echo "\n\nSetting kext override loading for Yosemite+ (boot-args='kext-dev-mode=1'); reboot if this is the first time you do this"
+#sudo nvram boot-args="-v"

@@ -1,5 +1,5 @@
 ---
-bibliography:  /Users/ian/.pandoc/Core.bib
+bibliography:  /Users/ian/.pandoc/Core.json
 citation-style: /Users/ian/.pandoc/csl/apa-ian.csl
 reference-section-title:  References
 link-citations: true #used with pandoc citeproc
