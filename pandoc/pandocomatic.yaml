@@ -168,6 +168,7 @@ templates:
     pandoc:
       from: markdown
       to: html5
+      section-divs: true
       standalone: true
       filter: 
         - pandoc-sidenote

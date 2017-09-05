@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# testing filter, uses byebug to remote debug
+
 require 'byebug/core'
 require 'byebug'
 PORT = 8990

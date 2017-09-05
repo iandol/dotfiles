@@ -12,7 +12,7 @@ input = $stdin.read
 output = input.gsub(/(?:\{)([\p{Alpha}][^\}]+?)(?:(?<=[0-9])\})/, '[\1]')
 #this converts to @authorYear pandoc format
 output.gsub!(/([\p{Alpha}][\p{Alnum}\s-]+)(?:,\s)(\d{4})(?:\s#\d+)/) { | str | str = "@" + $1.tr(' ', '').downcase + $2 }
-#this combines adjacent pandoc refs tigether
+#this combines adjacent pandoc refs together
 output.gsub!(/\]\[@(?=\p{Alpha})/) { | str | str = "; @" }
 
 puts output
