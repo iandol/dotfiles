@@ -7,9 +7,9 @@ templates:
   refs:
     pandoc:
       standalone: true
-      filter: 'pandoc-citeproc' #process citations
-      bibliography: /Users/ian/.pandoc/Core.json
-      csl: /Users/ian/.pandoc/csl/apa-ian.csl
+      filter: pandoc-citeproc #process citations
+      bibliography: Core.json
+      csl: csl/apa-ian.csl
       #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
     metadata:
       notes-after-punctuation: false
@@ -23,9 +23,9 @@ templates:
       to: latex
       standalone: true
       filter: 
-        - '/Users/ian/.pandoc/filters/removeHR' #remove horizontal rules
-        - '/Users/ian/.pandoc/filters/authorToName' #convert author to author: name: affiliation:
-      template: '/Users/ian/.pandoc/templates/custom.latex'
+        - filters/removeHR #remove horizontal rules
+        - filters/authorToName #convert author to author: name: affiliation:
+      template: templates/custom.latex
       dpi: 300
       table-of-contents: true
       base-header-level: 2
@@ -71,7 +71,7 @@ templates:
   eisvogel:
     extends: 'latex-with-refs'
     pandoc:
-      template: /Users/ian/.pandoc/templates/eisvogel.latex
+      template: templates/eisvogel.latex
       table-of-contents: true
       base-header-level: 2
     metadata: 
@@ -85,21 +85,21 @@ templates:
     extends: 'latex-with-refs'
     preprocessors: []
     pandoc:
-      template: /Users/ian/.pandoc/templates/ieee.latex
+      template: templates/ieee.latex
     metadata: 
       fontsize: '10pt'
 #######################################
   latex-scholar:
     extends: 'latex-with-refs'
     pandoc:
-      template: /Users/ian/.pandoc/templates/pandoc-scholar.latex
+      template: templates/pandoc-scholar.latex
     metadata: 
       fontsize: '10pt'
 #######################################
   memoir-with-refs:
     extends: 'latex-with-refs'
     pandoc:
-      template: '/Users/ian/.pandoc/templates/custom-memoir.latex'
+      template: templates/custom-memoir.latex
       table-of-contents: true
       toc-depth: 4
       base-header-level: 1
@@ -114,9 +114,9 @@ templates:
       to: docx
       standalone: true
       filter: 
-        - '/Users/ian/.pandoc/filters/removeHR' #remove horizontal rules
-        - '/Users/ian/.pandoc/filters/authorRemoveHash' #remove name: affiliation:
-      reference-doc: '/Users/ian/.pandoc/templates/custom.docx'
+        - 'filters/removeHR' #remove horizontal rules
+        - 'filters/authorRemoveHash' #remove name: affiliation:
+      reference-doc: 'templates/custom.docx'
       dpi: 300
     postprocessors: []
     cleanup: []
@@ -128,7 +128,7 @@ templates:
   docx-with-refs:
     extends: ['refs','docx']
     pandoc:
-      reference-doc: '/Users/ian/.pandoc/templates/custom.docx'
+      reference-doc: 'templates/custom.docx'
     metadata: 
       notes-after-punctuation: false 
       link-citations: false
@@ -139,7 +139,7 @@ templates:
     extends: 'docx-with-refs'
     pandoc:
       to: odt
-      reference-doc: '/Users/ian/.pandoc/templates/custom.odt'
+      reference-doc: 'templates/custom.odt'
 #######################################
   html-with-refs:
     extends: ['refs']
@@ -151,9 +151,9 @@ templates:
       standalone: true
       number-sections: true
       section-divs: true
-      filter: '/Users/ian/.pandoc/filters/removeHR' #remove horizontal rules
-      template: '/Users/ian/.pandoc/templates/custom.html'
-      css: '/Users/ian/.pandoc/templates/custom.css'
+      filter: 'filters/removeHR' #remove horizontal rules
+      template: 'templates/custom.html'
+      css: 'templates/custom.css'
       self-contained: true
       dpi: 300
       table-of-contents: false
@@ -172,10 +172,10 @@ templates:
       standalone: true
       filter: 
         - pandoc-sidenote
-      template: '/Users/ian/.pandoc/templates/tufte.html5'
+      template: 'templates/tufte.html5'
       css: 
-        - '/Users/ian/.pandoc/templates/tufte.css'
-        - '/Users/ian/.pandoc/templates/tuftepandoc.css'
+        - 'templates/tufte.css'
+        - 'templates/tuftepandoc.css'
       self-contained: true
     postprocessors: []
     cleanup: []
@@ -185,7 +185,7 @@ templates:
       from: markdown
       to: html5
       standalone: true
-      css: '/Users/ian/.pandoc/templates/custom.css'
+      css: 'templates/custom.css'
       self-contained: true
       mathjax: true
 #######################################
@@ -195,7 +195,7 @@ templates:
       to: markdown
       output: out.md
       standalone: true
-      filter: '/Users/ian/.pandoc/filters/testFilter'
+      filter: 'filters/testFilter'
     metadata:
         author: Joanna Doe
 #######################################
