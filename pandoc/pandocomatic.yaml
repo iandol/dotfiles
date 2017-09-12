@@ -10,14 +10,47 @@ templates:
       filter: pandoc-citeproc #process citations
       bibliography: Core.json
       csl: csl/apa-ian.csl
-      #citation-abbreviations: /Users/ian/.pandoc/cite-abbr.json
+      #citation-abbreviations: cite-abbr.json
     metadata:
       notes-after-punctuation: false
       link-citations: true 
+######################################
+  docx:
+    setup: []
+    preprocessors: []
+    pandoc:
+      from: markdown
+      to: docx
+      standalone: true
+      filter: 
+        - 'filters/removeHR' #remove horizontal rules
+        - 'filters/authorRemoveHash' #remove name: affiliation:
+      reference-doc: 'templates/custom.docx'
+      dpi: 300
+    postprocessors: []
+    cleanup: []
+#######################################
+  docx-convert-endnote:
+    extends: ['refs','docx']
+    preprocessors: ['preprocessors/convertEndnoteRefs']
+#######################################
+  docx-with-refs:
+    extends: ['refs','docx']
+#######################################
+  docx-with-refs-no-links:
+    extends: ['refs','docx']
+    metadata: 
+      link-citations: false
+#######################################
+  odt-with-refs:
+    extends: 'docx-with-refs'
+    pandoc:
+      to: odt
+      reference-doc: 'templates/custom.odt'
 #######################################
   latex:
     setup: []
-    preprocessors: ['preprocessors/removeAffiliations']
+    preprocessors: ['preprocessors/removeAffiliations'] #LaTeX generates this from metadata unlike Word, so remove it from document for LaTeX compile
     pandoc:
       from: markdown
       to: latex
@@ -27,7 +60,6 @@ templates:
         - filters/authorToName #convert author to author: name: affiliation:
       template: templates/custom.latex
       dpi: 300
-      table-of-contents: true
       base-header-level: 2
     metadata:
       classoption: twoside
@@ -58,13 +90,18 @@ templates:
     pandoc:
       from: markdown
       to: latex
-      standalone: true
+#######################################
+  latex-with-toc:
+    extends: ['latex','refs']
+    pandoc:
+      table-of-contents: true
+      #toc-depth: 4
 #######################################
   pdf-with-refs:
     extends: 'latex-with-refs'
     pandoc:
       to: pdf
-      latex-engine: 'xelatex'
+      pdf-engine: 'xelatex'
       standalone: true
     cleanup: ['latexmk -c']
 #######################################
@@ -83,7 +120,6 @@ templates:
 #######################################
   latex-ieee:
     extends: 'latex-with-refs'
-    preprocessors: []
     pandoc:
       template: templates/ieee.latex
     metadata: 
@@ -101,50 +137,12 @@ templates:
     pandoc:
       template: templates/custom-memoir.latex
       table-of-contents: true
-      toc-depth: 4
+      #toc-depth: 4
       base-header-level: 1
     metadata:
       documentclass: 'memoir'
 ######################################
-  docx:
-    setup: []
-    preprocessors: []
-    pandoc:
-      from: markdown
-      to: docx
-      standalone: true
-      filter: 
-        - 'filters/removeHR' #remove horizontal rules
-        - 'filters/authorRemoveHash' #remove name: affiliation:
-      reference-doc: 'templates/custom.docx'
-      dpi: 300
-    postprocessors: []
-    cleanup: []
-#######################################
-  docx-convert-endnote:
-    extends: ['refs','docx']
-    preprocessors: ['preprocessors/convertEndnoteRefs']
-#######################################
-  docx-with-refs:
-    extends: ['refs','docx']
-    pandoc:
-      reference-doc: 'templates/custom.docx'
-    metadata: 
-      notes-after-punctuation: false 
-      link-citations: false
-    postprocessors: []
-    cleanup: []
-#######################################
-  odt-with-refs:
-    extends: 'docx-with-refs'
-    pandoc:
-      to: odt
-      reference-doc: 'templates/custom.odt'
-#######################################
-  html-with-refs:
-    extends: ['refs']
-    setup: []
-    preprocessors: []
+  html:
     pandoc:
       from: markdown
       to: html5
@@ -154,32 +152,44 @@ templates:
       filter: 'filters/removeHR' #remove horizontal rules
       template: 'templates/custom.html'
       css: 'templates/custom.css'
-      self-contained: true
       dpi: 300
       table-of-contents: false
       toc-depth: 4
       base-header-level: 1
-    postprocessors: []
-    cleanup: []
+######################################
+  html-pdf:
+    extends: ['html']
+    pandoc:
+      to: pdf
+      pdf-engine: prince
+      pdf-engine-opts: 
+        - '--page-size=A4'
+        - '--page-margin=20mm'
+#######################################
+  html-self-contained:
+    extends: ['html']
+    pandoc:
+      self-contained: true
+#######################################
+  html-with-refs:
+    extends: ['refs','html']
 #######################################
   tufte:
-    setup: []
-    preprocessors: []
     pandoc:
       from: markdown
       to: html5
       section-divs: true
       standalone: true
-      filter: 
-        - pandoc-sidenote
+      filter: pandoc-sidenote
       template: 'templates/tufte.html5'
       css: 
         - 'templates/tufte.css'
         - 'templates/tuftepandoc.css'
       self-contained: true
-    postprocessors: []
-    cleanup: []
 #######################################
+  tufte-with-refs:
+    extends: ['refs','tufte']
+#######################################VARIOUS TEST TEMPLATES
   test:
     pandoc:
       from: markdown
@@ -188,7 +198,6 @@ templates:
       css: 'templates/custom.css'
       self-contained: true
       mathjax: true
-#######################################
   test-markdown:
     pandoc:
       from: markdown
@@ -198,7 +207,6 @@ templates:
       filter: 'filters/testFilter'
     metadata:
         author: Joanna Doe
-#######################################
   test-pdf:
     pandoc:
       from: markdown
@@ -211,12 +219,10 @@ templates:
       documentclass: 'article'
       fontsize: '12pt'
       linestretch: '1.75'
-#######################################
   test-latex:
     pandoc:
       from: markdown
       to: latex
-      latex-engine: 'xelatex'
       standalone: true
     metadata: 
       lang: 'en-GB'
@@ -224,3 +230,4 @@ templates:
       documentclass: 'article'
       fontsize: '12pt'
       linestretch: '1.75'
+

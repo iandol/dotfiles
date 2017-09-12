@@ -18,10 +18,11 @@ if DEBUG
 end
 
 input = $stdin.read
-# fix unicode arrows
+# fix some unicode character issues
 output = input.gsub(/⬄/, '{\\fixfont⬄}')
 output.gsub!(/⇨/, '{\\fixfont⇨}')
 output.gsub!(/⇦/, '{\\fixfont⇦}')
+output.gsub!(/‐/, '-') # replace hyphen with hyphen-minus
 # ensure correct titlecase
 output.gsub!(/\bmt\b/i, 'MT')
 output.gsub!(/\bteo\b/i, 'TEO')
