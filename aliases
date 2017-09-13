@@ -189,6 +189,12 @@ function update() {
 		git pull
 		git status
 	fi
+  if [[ -d ~/Code/bookends-tools/.git ]]; then
+    printf '\n\n---> Updating BOOKENDS-TOOLS...\n'
+    cd ~/Code/bookends-tools
+    git pull
+    git status
+  fi
 	if [[ -d ~/Code/pandocomatic/.git ]]; then
 		printf '\n\n---> Updating PANDOCOMATIC...\n'
 		cd ~/Code/pandocomatic
@@ -201,6 +207,18 @@ function update() {
 			git merge -s octopus --ff-only -stat upstream/master
 		fi
 	fi
+    if [[ -d ~/Code/paru/.git ]]; then
+    printf '\n\n---> Updating PARU...\n'
+    cd ~/Code/paru
+    git checkout master
+    git pull
+    git status
+    if [[ -n $(git remote | grep upstream) ]]; then
+      printf '\t\t---> Fetching upstream...\n'
+      git fetch -v upstream
+      git merge -s octopus --ff-only -stat upstream/master
+    fi
+  fi
 	if [[ -d ~/Code/AfterImage/.git ]]; then
 		printf '\n\n---> Updating AFTERIMAGE...\n'
 		cd ~/Code/AfterImage
@@ -252,10 +270,12 @@ function update() {
 	cd $myolddir
 	unset $myolddir
 
-	printf '\n\n---> Updating homebrew...\n'
-	brew update
-	brew upgrade
-	brew cleanup -f && brew cask cleanup
+  if [[ $OSTYPE == 'darwin'* ]]; then 
+  	printf '\n\n---> Updating homebrew...\n'
+  	brew update
+  	brew upgrade
+  	brew cleanup -f && brew cask cleanup
+  fi
 
 	[[ -f $(which rbenv) ]] && rbenv rehash; printf '\n\n---> Rehash RBENV...\n'
 
@@ -277,7 +297,7 @@ function updatePTB() {
 	git fetch upstream
 	git checkout master
 	git merge upstream/master
-	printf '\n\n---> Merging Fieldtrip PLEXON...\n'
+	printf '\n\n---> Merging Fieldtrip MASTER -> PLEXON...\n'
 	git checkout plexon
 	git merge master
 }
