@@ -50,7 +50,7 @@ export PATH
 
 [[ -f $(which swiftenv) ]] && eval "$(swiftenv init -)"
 [[ -f $(which rbenv) ]] && eval "$(rbenv init -)"
-[[ -f $(which archey) ]] && archey -c -o
+#[[ -f $(which archey) ]] && archey -c -o
 #[[ -f $(which ansiweather) ]] && ansiweather
 [[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 

@@ -7,16 +7,14 @@ require 'tempfile'
 require 'fileutils'
 
 if ARGV[-1] == 'DEBUG' # Enable remote debugger
-	require 'byebug/core'
-	require 'byebug'
-	PORT = 8989 
-	STDOUT.puts "\n!!!---DEBUG Server started on localhost:#{PORT} @ " + Time.now.to_s + "\n\n"
-	Byebug.wait_connection = true
-	Byebug.start_server('127.0.0.1', PORT)
-	SDEBUG = true # scrivomatic debug
-	CDEBUG = false # tool debug
-	ARGV.pop
-	byebug
+  require 'byebug/core'
+  require 'byebug'
+  PORT = 8989
+  STDOUT.puts "\n!!!---DEBUG Server started on localhost:#{PORT} @ " + Time.now.to_s + "\n\n"
+  Byebug.wait_connection = true
+  Byebug.start_server('127.0.0.1', PORT)
+  ARGV.pop
+  byebug
 end
 
 tstart = Time.now
@@ -24,22 +22,31 @@ infilename = ARGV[0]
 out =  "===> Parsing BiBTeX file #{infilename} "
 fail "Please specify an existing file!" unless infilename and File.exist?(infilename)
 
-#only wrap with {} IF it is already this case
+format = ARGV[1]
+if format.nil? || !(format =~ /(bib|json)/)
+	format = 'bib'
+end
+
+#only wrap with {} IF the word is already the case in this list
 keepCase = [
 	"ON",
 	"OFF",
 	"BETA",
 	"GAMMA",
 	"ALPHA",
-	"X",
-	"Y",
-	"W",
+	"X", #X cells
+	"Y", #Y cells
+	"W", #W cells
 	"M", #magnocellular
 	"P", #parvocellular
 ]
 
-# always force to be a certain case
+# always force this word to be a certain case
 enforceCase = [
+	"X-cell",
+	"Y-cell",
+	"X-cells",
+	"Y-cells",
 	"V1",
 	"V2",
 	"V3",
@@ -67,6 +74,7 @@ enforceCase = [
 	"LGN",
 	"dLGN",
 	"DREADD",
+	"ROC",
 	"tDCS",
 	"EEG",
 	"AAV",
@@ -76,19 +84,36 @@ enforceCase = [
 	"3D",
 	"HMAX",
 	"R-CNN",
-	"DCNN"]
+	"DCNN",
+	"NCC"]
 
-temp_file = Tempfile.new('foo')
+temp_file = Tempfile.new('fixcase')
+case format 
+when /bib/
+	titleRegex = /^title/
+when /json/
+	titleRegex = /\s*"title": /
+end
 
 begin
 	File.open(infilename, 'r') do |file|
 		file.each_line("\r") do |line|
-			if line.match(/^title/)
+			if line.match(titleRegex)
 				keepCase.each do | k |
-					line.gsub!(/\b#{k}\b/,"{#{k}}") #case sensitive
+					case format
+					when /bib/
+						line.gsub!(/\b#{k}\b/,"{#{k}}") #case sensitive
+					when /json/
+						line.gsub!(/\b#{k}\b/,"<span class=\"nocase\">#{k}</span>") #case sensitive
+					end
 				end
 				enforceCase.each do | e |
-					line.gsub!(/\b#{e}\b/i,"{#{e}}") #case insensitive
+					case format
+					when /bib/
+						line.gsub!(/\b#{e}\b/i,"{#{e}}") #case insensitive
+					when /json/
+						line.gsub!(/\b#{e}\b/i,"<span class=\"nocase\">#{e}</span>") #case sensitive
+					end
 				end
 			end
 			line.gsub!(/\r+$/, "\n")

@@ -204,7 +204,7 @@ function update() {
 		if [[ -n $(git remote | grep upstream) ]]; then
 			printf '\t\t---> Fetching upstream...\n'
 			git fetch -v upstream
-			git merge -s octopus --ff-only -stat upstream/master
+			git merge --ff-only -v upstream/master
 		fi
 	fi
     if [[ -d ~/Code/paru/.git ]]; then
@@ -216,7 +216,7 @@ function update() {
     if [[ -n $(git remote | grep upstream) ]]; then
       printf '\t\t---> Fetching upstream...\n'
       git fetch -v upstream
-      git merge -s octopus --ff-only -stat upstream/master
+      git merge --ff-only -v upstream/master
     fi
   fi
 	if [[ -d ~/Code/AfterImage/.git ]]; then
@@ -289,7 +289,7 @@ function updatePTB() {
 	git checkout master
 	git pull
 	git fetch upstream
-	git merge upstream/master
+	git merge -v upstream/master
 	printf '\n\n---> Merging Fieldtrip MASTER...\n'
 	cd ~/Code/fieldtrip
 	git checkout master

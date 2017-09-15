@@ -5,30 +5,32 @@ settings:
 templates:
 #######################################
   refs:
+    setup: []
+    preprocessors: []
     pandoc:
       standalone: true
-      filter: pandoc-citeproc #process citations
-      bibliography: Core.json
+      filter: 
+        - pandoc-citeproc #process citations
+      bibliography: Core.json #JSON is faster than BIB
       csl: csl/apa-ian.csl
       #citation-abbreviations: cite-abbr.json
     metadata:
       notes-after-punctuation: false
       link-citations: true 
+    postprocessors: []
+    cleanup: []
 ######################################
   docx:
-    setup: []
-    preprocessors: []
     pandoc:
       from: markdown
       to: docx
       standalone: true
-      filter: 
+      filter:
+        add:
         - 'filters/removeHR' #remove horizontal rules
-        - 'filters/authorRemoveHash' #remove name: affiliation:
+        - 'filters/authorRemoveHash' #collapse down metadata "author: name: affiliation:" just to author:
       reference-doc: 'templates/custom.docx'
       dpi: 300
-    postprocessors: []
-    cleanup: []
 #######################################
   docx-convert-endnote:
     extends: ['refs','docx']
@@ -164,7 +166,7 @@ templates:
       pdf-engine: prince
       pdf-engine-opts: 
         - '--page-size=A4'
-        - '--page-margin=20mm'
+        - '--page-margin=15mm'
 #######################################
   html-self-contained:
     extends: ['html']
@@ -230,4 +232,17 @@ templates:
       documentclass: 'article'
       fontsize: '12pt'
       linestretch: '1.75'
-
+  test-ref:
+    pandoc:
+      standalone: true
+      filter: [pandoc-citeproc] #process citations
+      bibliography: Core.json #JSON is faster than BIB
+      csl: csl/apa-ian.csl
+  test-docx:
+    pandoc:
+      from: markdown
+      to: html5
+      filter: 
+        add: ['filters/removeHR']
+  test-out:
+    extends: ['test-ref','test-docx']
