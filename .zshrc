@@ -18,7 +18,6 @@ antigen bundles <<EOBUNDLES
 	nyan
 	osx
 	marked2
-	git
 	history
 	command-not-found
 	zsh-users/zsh-syntax-highlighting
@@ -35,19 +34,20 @@ DIRSTACKSIZE=12 # pushd stacksize
 setopt autopushd pushdminus pushdsilent
 
 [[ -d "/Volumes/Mac/Users/ian/" ]] && MYHD='/Volumes/Mac/Users/ian/' # old external HD
-[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home" # use installed JAVA
-[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
+#[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home" # use installed JAVA
+#[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 [[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
 [[ -d "/Applications/MATLAB_R2017a.app/bin/" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2017a.app/bin/matlab" && path=("/Applications/MATLAB_R2017a.app/bin" $path) # matlab
 [[ -f "/Applications/MATLAB_R2017a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2017a.app/bin/maci64/mlint" ~/bin/mlint # matlab
 [[ -d "$HOME/anaconda3/" ]] && path=("$HOME/anaconda3/bin" $path) # anaconda scientific python
 [[ -d "$HOME/miniconda3/" ]] && path=("$HOME/miniconda3/bin" $path) # anaconda scientific python
 [[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=("/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" $path)
-
 [[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
-export PATH
+export path
 
+#[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # RVM shell *as function*
+# export PATH="$PATH:$HOME/.rvm/bin"
 [[ -f $(which swiftenv) ]] && eval "$(swiftenv init -)"
 [[ -f $(which rbenv) ]] && eval "$(rbenv init -)"
 #[[ -f $(which archey) ]] && archey -c -o

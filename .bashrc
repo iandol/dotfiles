@@ -30,3 +30,5 @@ fi
 
 [[ -f $(which figlet) ]] && figlet "Tarako Hai!"
 [[ -f $(which rbenv) ]] && eval "$(rbenv init -)"
+
+# export PATH="$PATH:$HOME/.rvm/bin"
