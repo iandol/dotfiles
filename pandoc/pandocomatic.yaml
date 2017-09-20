@@ -3,14 +3,14 @@ settings:
   follow-symlinks: false
   skip: ['.*', 'pandocomatic.yaml']
 templates:
-#######################################
+##############################################################################
   refs:
     setup: []
     preprocessors: []
     pandoc:
       standalone: true
       filter: 
-        - pandoc-citeproc #process citations
+        - 'pandoc-citeproc' #process citations
       bibliography: Core.json #JSON is faster than BIB
       csl: csl/apa-ian.csl
       #citation-abbreviations: cite-abbr.json
@@ -19,39 +19,38 @@ templates:
       link-citations: true 
     postprocessors: []
     cleanup: []
-######################################
+##############################################################################
   docx:
     pandoc:
       from: markdown
       to: docx
       standalone: true
       filter:
-        add:
         - 'filters/removeHR' #remove horizontal rules
         - 'filters/authorRemoveHash' #collapse down metadata "author: name: affiliation:" just to author:
       reference-doc: 'templates/custom.docx'
       dpi: 300
-#######################################
+##############################################################################
   docx-convert-endnote:
-    extends: ['refs','docx']
-    preprocessors: ['preprocessors/convertEndnoteRefs']
-#######################################
+    extends: ['docx','refs']
+    preprocessors: 
+      add: ['preprocessors/convertEndnoteRefs']
+##############################################################################
   docx-with-refs:
-    extends: ['refs','docx']
-#######################################
+    extends: ['docx','refs']
+##############################################################################
   docx-with-refs-no-links:
-    extends: ['refs','docx']
+    extends: ['docx','refs']
     metadata: 
       link-citations: false
-#######################################
+##############################################################################
   odt-with-refs:
-    extends: 'docx-with-refs'
+    extends: ['docx-with-refs']
     pandoc:
       to: odt
       reference-doc: 'templates/custom.odt'
-#######################################
+##############################################################################
   latex:
-    setup: []
     preprocessors: ['preprocessors/removeAffiliations'] #LaTeX generates this from metadata unlike Word, so remove it from document for LaTeX compile
     pandoc:
       from: markdown
@@ -84,21 +83,17 @@ templates:
       geometry: 'margin=2cm'
       nonumberfigures: true
       lof: false
-    postprocessors: ['postprocessors/fixLaTeX']
-    cleanup: []
-#######################################
+    postprocessors: 'postprocessors/fixLaTeX'
+##############################################################################
   latex-with-refs:
     extends: ['latex','refs']
-    pandoc:
-      from: markdown
-      to: latex
-#######################################
+##############################################################################
   latex-with-toc:
     extends: ['latex','refs']
     pandoc:
       table-of-contents: true
-      #toc-depth: 4
-#######################################
+      toc-depth: 3
+##############################################################################
   pdf-with-refs:
     extends: 'latex-with-refs'
     pandoc:
@@ -106,7 +101,8 @@ templates:
       pdf-engine: 'xelatex'
       standalone: true
     cleanup: ['latexmk -c']
-#######################################
+##############################################################################
+# https://github.com/Wandmalfarbe/pandoc-latex-template
   eisvogel:
     extends: 'latex-with-refs'
     pandoc:
@@ -119,27 +115,28 @@ templates:
       titlepage-text-color: FFFFFF
       titlepage-rule-color: FFFFFF
       titlepage-rule-height: 4
-#######################################
+##############################################################################
   latex-ieee:
     extends: 'latex-with-refs'
     pandoc:
       template: templates/ieee.latex
     metadata: 
       fontsize: '10pt'
-#######################################
+##############################################################################
+# https://github.com/pandoc-scholar/pandoc-scholar
   latex-scholar:
     extends: 'latex-with-refs'
     pandoc:
       template: templates/pandoc-scholar.latex
     metadata: 
       fontsize: '10pt'
-#######################################
+##############################################################################
   memoir-with-refs:
     extends: 'latex-with-refs'
     pandoc:
       template: templates/custom-memoir.latex
       table-of-contents: true
-      #toc-depth: 4
+      toc-depth: 3
       base-header-level: 1
     metadata:
       documentclass: 'memoir'
@@ -149,55 +146,97 @@ templates:
       from: markdown
       to: html5
       standalone: true
-      number-sections: true
+      number-sections: false
       section-divs: true
-      filter: 'filters/removeHR' #remove horizontal rules
+      filter: ['filters/removeHR'] #remove horizontal rules
       template: 'templates/custom.html'
-      css: 'templates/custom.css'
+      css: ['templates/custom.css']
       dpi: 300
       table-of-contents: false
-      toc-depth: 4
+      toc-depth: 3
       base-header-level: 1
+######################################
+  html-refs:
+    extends: ['refs','html']
+    preprocessors: ['preprocessors/convertEndnoteRefs']
+######################################
+  html-scholar:
+    extends: ['refs','html']
+    preprocessors: ['preprocessors/convertEndnoteRefs']
+    pandoc:
+      template: 'templates/pandoc-scholar.html'
+      css: 'templates/pandoc-scholar.css'
+######################################
+  html-scholar-pdf:
+    extends: ['html-scholar']
+    pandoc:
+      to: pdf
+      pdf-engine: prince
+      pdf-engine-opt: ['--page-size=A4','--page-margin=10mm']
 ######################################
   html-pdf:
     extends: ['html']
     pandoc:
       to: pdf
       pdf-engine: prince
-      pdf-engine-opts: 
-        - '--page-size=A4'
-        - '--page-margin=15mm'
-#######################################
+      pdf-engine-opt: ['--page-size=A4']
+######################################
+  html-refs-pdf:
+    extends: ['refs','html']
+    preprocessors: ['preprocessors/convertEndnoteRefs']
+    pandoc:
+      to: pdf
+      pdf-engine: prince
+      pdf-engine-opt: ['--page-size=A4']
+##############################################################################
   html-self-contained:
-    extends: ['html']
+    extends: 'html'
     pandoc:
       self-contained: true
-#######################################
+##############################################################################
   html-with-refs:
     extends: ['refs','html']
-#######################################
+##############################################################################
   tufte:
     pandoc:
       from: markdown
       to: html5
       section-divs: true
       standalone: true
-      filter: pandoc-sidenote
+      filter: [pandoc-sidenote]
       template: 'templates/tufte.html5'
       css: 
         - 'templates/tufte.css'
         - 'templates/tuftepandoc.css'
       self-contained: true
-#######################################
+##############################################################################
   tufte-with-refs:
     extends: ['refs','tufte']
-#######################################VARIOUS TEST TEMPLATES
+##############################################################################
+  tufte-with-refs-pdf:
+    extends: ['refs','tufte']
+    pandoc:
+      to: pdf
+      pdf-engine: prince
+      pdf-engine-opt: ['--page-size=A4']
+##############################################################################
+  epub:
+    pandoc:
+      from: markdown
+      to: epub
+      standalone: true
+      self-contained: true
+    metadata:
+      stylesheet: epub.css
+      cover-image: templates/VPMLogoBlack.png
+##############################################################################
+# VARIOUS TEST TEMPLATES
   test:
     pandoc:
       from: markdown
       to: html5
       standalone: true
-      css: 'templates/custom.css'
+      css: ['templates/custom.css']
       self-contained: true
       mathjax: true
   test-markdown:
@@ -206,7 +245,7 @@ templates:
       to: markdown
       output: out.md
       standalone: true
-      filter: 'filters/testFilter'
+      filter: ['filters/testFilter']
     metadata:
         author: Joanna Doe
   test-pdf:

@@ -50,9 +50,20 @@ $if(title)$
 $if(subtitle)$
 <p class="subtitle">$subtitle$</p>
 $endif$
+
+<p class="author-list">
 $for(author)$
-<p class="author">$author$</p>
+  $if(author.last)$and $endif$<span property="author" typeof="Person">
+    $author.name$</span><sup>$if(author.affiliation)$$author.affiliation$$endif$$if(author.correspondence)$$if(author.email)$<a href="mailto:$author.email$">✉</a> $endif$$endif$$for(author.institute_indices)$$author.institute_indices$$sep$,$endfor$$if(author.equal_contributor)$,$if(equal_contributor_symbol)$$equal_contributor_symbol$$else$*$endif$$endif$</sup>$sep$,
 $endfor$
+</p>
+<div class="author_affiliations">
+$for(institute)$
+  <div class="affiliation"><sup>$institute.index$</sup>$institute.name$
+  $if(institute.address)$, $institute.address$$endif$
+  </div>
+$endfor$
+</div>
 $if(date)$
 <p class="date">$date$</p>
 $endif$
