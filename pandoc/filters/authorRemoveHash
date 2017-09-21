@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
-# this converts an author metadata field (seperate name & affiliation) into a format 
-# (Name^affiliation^) that the Word template can handle.
+# this converts an author metadata field
+# author:  [name: ..., affiliation:...]) into a format 
+# author: Name^affiliation^ that the Word templates can handle. 
+# This is because the Word templates do not have the flexibility 
+# the other formats do...
 require 'paru/filter'
 
 testKey = 'author'

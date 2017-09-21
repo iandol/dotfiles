@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'paru/filter'
-# this converts a simple author metadata field (i.e. Joanna Doe^1^) into seperate
-# name & affiliation metadata fields that are better parsed by LaTeX templates.
+# this converts a simple author metadata field (author: Joanna Doe^1^) into seperate
+# name & affiliation metadata fields that are better parsed by Pandoc templates.
 
 testKey = 'author'
 pKey = 'pandocomatic-fileinfo'

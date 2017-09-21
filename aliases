@@ -149,10 +149,14 @@ function setproxy() {
 		git config --global --unset http.proxy
 		git config --global --unset https.proxy
 	elif [[ $# == 1 ]]; then
-		export http_proxy="$1"
-		export https_proxy=$http_proxy
-		git config --global http.proxy "http://$http_proxy"
-		git config --global https.proxy "http://$https_proxy"
+		if [[ $1 == "-l" ]]; then
+			#just list what we already have see below
+		else
+			export http_proxy="$1"
+			export https_proxy=$http_proxy
+			git config --global http.proxy "http://$http_proxy"
+			git config --global https.proxy "http://$https_proxy"
+		fi
 	elif [[ $# == 2 ]]; then
 		export http_proxy="$1"
 		export https_proxy="$2"

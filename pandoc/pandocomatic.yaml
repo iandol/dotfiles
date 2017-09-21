@@ -28,6 +28,7 @@ templates:
       filter:
         - 'filters/removeHR' #remove horizontal rules
         - 'filters/authorRemoveHash' #collapse down metadata "author: name: affiliation:" just to author:
+        - 'filters/prependInstitute' #add affiliations if institute: metadata present
       reference-doc: 'templates/custom.docx'
       dpi: 300
 ##############################################################################

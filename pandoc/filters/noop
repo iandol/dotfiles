@@ -3,5 +3,5 @@
 require 'paru/filter'
 
 Paru::Filter.run do
-  #stop!
+  stop!
 end
