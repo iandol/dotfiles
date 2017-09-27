@@ -45,12 +45,11 @@ h2,h3,h4,h5,h6 {
 		font-size: 11px;
 		content: "Page " counter(page) " of " counter(pages);
 	}
-	}
 }
 
 p.author {
 	font-weight: bold;
-	margin: [0 1em 0 0];
+	margin: 0em 1em 0em 0em;
 	display: inline-block;
 }
 
@@ -73,11 +72,13 @@ figure {
 	text-align: initial;
 	vertical-align: top;
 	position: relative;
-	/*float: right;
-	width: 70%;*/
+	float: right;
+	width: 50%;
+	max-height:25cm;
 	font-size: 0.8em;
 	background: white;
 	overflow: hidden;
+	border: 1px solid #EEE;
 	box-shadow: 1px 1px 5px 0px #888;
 	padding: 5px;
 	margin: 0.5em 0em 1em 1em;
@@ -91,17 +92,20 @@ figure.nofloat {
 }
 
 figure img {
-	display: block;
+	display: inline-block;
+	vertical-align: top;
 	margin-left: auto;
 	margin-right: auto;
-	max-height: 24cm;
+	max-height: 70%;
 	max-width: 100%;
 }
 
 figcaption {
 	font-family: "Graublau Sans", "Greta Sans Std", "Avenir Next", sans-serif;
-	line-height: 1.1em;
+	line-height: 1em;
 }
+
+a { color: #500; }
 
 /*h1 {
 	position: running(header1)
