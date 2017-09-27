@@ -11,7 +11,7 @@ templates:
       standalone: true
       filter: 
         - 'pandoc-citeproc' #process citations
-      bibliography: Core.json #JSON is faster than BIB
+      bibliography: Core.json #JSON is faster than BibTeX
       csl: csl/apa-ian.csl
       #citation-abbreviations: cite-abbr.json
     metadata:
@@ -149,6 +149,7 @@ templates:
       standalone: true
       number-sections: false
       section-divs: true
+      mathjax: true
       filter: ['filters/removeHR'] #remove horizontal rules
       template: 'templates/custom.html'
       css: ['templates/custom.css']
@@ -190,7 +191,7 @@ templates:
       pdf-engine: prince
       pdf-engine-opt: ['--page-size=A4']
 ##############################################################################
-  html-self-contained:
+  html-selfcontained:
     extends: 'html'
     pandoc:
       self-contained: true
