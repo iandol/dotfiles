@@ -27,7 +27,7 @@ templates:
       standalone: true
       filter:
         - 'filters/removeHR' #remove horizontal rules
-        - 'filters/authorRemoveHash' #collapse down metadata "author: name: affiliation:" just to author:
+        - 'filters/authorSimplifyMetadata' #collapse down metadata "author: name: affiliation:" just to author:
         - 'filters/prependInstitute' #add affiliations if institute: metadata present
       reference-doc: 'templates/custom.docx'
       dpi: 300
@@ -150,7 +150,10 @@ templates:
       number-sections: false
       section-divs: true
       mathjax: true
-      filter: ['filters/removeHR'] #remove horizontal rules
+      filter: 
+        - 'filters/removeHR' #remove horizontal rules
+        - 'filters/authorSimplifyMetadata' #collapse down metadata "author: name: affiliation:" just to author:
+        - 'filters/prependInstitute' #add affiliations if institute: metadata present
       template: 'templates/custom.html'
       css: ['templates/custom.css']
       dpi: 300

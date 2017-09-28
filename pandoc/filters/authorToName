@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'paru/filter'
 # this converts a simple author metadata field (author: Joanna Doe^1^) into seperate
-# name & affiliation metadata fields that are better parsed by Pandoc templates.
+# name & affiliation metadata fields that are better parsed by most Pandoc templates.
 
 testKey = 'author'
 pKey = 'pandocomatic-fileinfo'
@@ -14,12 +14,12 @@ Paru::Filter.run do
     end
     newAuthor = nil
     au = metadata[testKey]
-    if au.is_a?(String) #just a name string, so we need to turn it to a hash
+    if au.is_a?(String) # just a name string, so we need to turn it to a hash
       newAuthor = [ Hash[ insertKey => au ] ]
     elsif au.is_a?(Array)
-      if au[0].is_a?(String) #just an array of strings, turn to array of hashes
+      if au[0].is_a?(String) # just an array of strings, turn to array of hashes
         newAuthor = Array.new(au.length) {Hash.new}
-        au.each_index { |i| 
+        au.each_index do |i|
           # we test if ^superscript^ content in the author, in which case it becomes the affiliation
           cp = au[i].match(/\^[\w\d\s\,§†\*]+\^/)
           if cp.nil?
@@ -27,7 +27,7 @@ Paru::Filter.run do
           else
             newAuthor[i] = Hash[ insertKey => cp.pre_match, 'affiliation' => cp.to_s ] 
           end
-        }
+        end
       end
     end
     if not newAuthor.nil?
