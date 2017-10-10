@@ -65,7 +65,7 @@ $endfor$
 </div>
 $endif$
 <div class="correspondence">
-<p><strong><sup>§</sup>&nbsp;Correspondence</strong>: $for(author)$$if(author.correspondence)$<span class="correspondence-item">$author.correspondence$</span> $endif$$endfor$</p>
+$for(author)$$if(author.correspondence)$<span class="correspondence-item">$author.correspondence$</span> $endif$ $endfor$
 </div>
 $if(date)$
 <p class="date">$date$</p>

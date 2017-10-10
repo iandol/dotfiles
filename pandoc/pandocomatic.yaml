@@ -45,6 +45,10 @@ templates:
     metadata: 
       link-citations: false
 ##############################################################################
+  docx-changes:
+    extends: ['docx','refs']
+    preprocessors: ['preprocessors/criticmarkup']
+##############################################################################
   odt-with-refs:
     extends: ['docx-with-refs']
     pandoc:
@@ -84,7 +88,7 @@ templates:
       geometry: 'margin=2cm'
       nonumberfigures: true
       lof: false
-    postprocessors: 'postprocessors/fixLaTeX'
+    postprocessors: ['postprocessors/fixLaTeX']
 ##############################################################################
   latex-with-refs:
     extends: ['latex','refs']
@@ -97,6 +101,15 @@ templates:
 ##############################################################################
   pdf-with-refs:
     extends: 'latex-with-refs'
+    pandoc:
+      to: pdf
+      pdf-engine: 'xelatex'
+      standalone: true
+    cleanup: ['latexmk -c']
+##############################################################################
+  pdf-with-refs-convert:
+    extends: 'latex-with-refs'
+    preprocessors: ['preprocessors/convertEndnoteRefs']
     pandoc:
       to: pdf
       pdf-engine: 'xelatex'
@@ -152,14 +165,17 @@ templates:
       mathjax: true
       filter: 
         - 'filters/removeHR' #remove horizontal rules
-        - 'filters/authorSimplifyMetadata' #collapse down metadata "author: name: affiliation:" just to author:
-        - 'filters/prependInstitute' #add affiliations if institute: metadata present
       template: 'templates/custom.html'
       css: ['templates/custom.css']
       dpi: 300
-      table-of-contents: false
+      table-of-contents: true
       toc-depth: 3
       base-header-level: 1
+    postprocessors: ['postprocessors/fixHTML']
+######################################
+  html-changes:
+    extends: ['html']
+    preprocessors: ['preprocessors/criticmarkup']
 ######################################
   html-refs:
     extends: ['refs','html']
@@ -185,6 +201,7 @@ templates:
       to: pdf
       pdf-engine: prince
       pdf-engine-opt: ['--page-size=A4']
+      toc: true
 ######################################
   html-refs-pdf:
     extends: ['refs','html']

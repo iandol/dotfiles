@@ -1,6 +1,6 @@
 body { 
 	font-family: "Graublau Sans", "Avenir Next", sans-serif;
-	font-size: 14px;
+	font-size: 16px;
 	margin: auto;
 	max-width: 29cm;
 }
@@ -14,7 +14,7 @@ header {
 	margin-bottom: 2em;
 	border-left: 7px solid rgb(90%,90%,90%);
 	padding: 1em 10% 1em 10%;
-	}
+}
 
 h1,h2,h3,h4,h5,h6 {
 	font-family: "Graublau Slab", "Avenir Next", sans-serif;
@@ -25,14 +25,32 @@ h2,h3,h4,h5,h6 {
 		margin-top: 1rem;
 }
 
+/*h1 {
+	position: running(header1)
+}*/
+h1.title {
+	/*position: running(title);*/
+	font-size: 3em;
+	line-height: 1.2em;
+}
+/*@page{
+	@top-left {
+		content: element(title);
+	}
+	@top-right {
+		content: element(header1);
+	}
+}*/
+
 @page { 
 	size: A4;
-	margin: 10mm;
+	margin: 25mm;
 	counter-increment: page;
 	/*prince-bleed: 5mm;
 	marks: crop cross;*/
 }
 @page:left {
+	margin-right: 35mm;
 	@bottom-left {
 		font-family: "Graublau Slab", "Avenir Next", sans-serif;
 		font-size: 11px;
@@ -40,6 +58,7 @@ h2,h3,h4,h5,h6 {
 	}
 }
 @page:right {
+	margin-left: 35mm;
 	@bottom-right {
 		font-family: "Graublau Slab", "Avenir Next", sans-serif;
 		font-size: 11px;
@@ -55,11 +74,25 @@ p.author {
 
 p {
 	text-align: justify;
-	line-height: 1.5em;
+	line-height: 1.75em;
 	margin: auto;
 	margin-bottom:1em;
 	padding-left: 1em;
-	padding-right: 1em;
+	padding-right: 5em;
+	z-index: 10;
+}
+
+blockquote {
+	font-family: "Greta Text Pro", "Avenir Next", sans-serif;
+	font-style: italic;
+}
+
+del {
+  background: #fae6e6;
+}
+
+ins {
+  background: #ecfce6
 }
 
 .annotation {
@@ -67,28 +100,70 @@ p {
 	color: #333;
 }
 
+.author_affiliations::before {
+	content: "Affiliations: ";
+	font-weight: bold;
+	color: grey;
+}
+
+.correspondence::before {
+	content: "§ correspondence: ";
+	font-weight: bold;
+	color: grey;
+}
+
+.correspondence-item {
+	display: inline-block;
+	margin-right: 10px;
+}
+
+aside::before, .comment::before {
+	content: "«";
+	font-weight: bold;
+	color: grey;
+}
+
+aside::after, .comment::after {
+	content: "»";
+	font-weight: bold;
+	color: grey;
+}
+
+aside, .comment {
+	background: #FFB;
+	color: #444;
+	opacity: 0.5;
+	z-index: -1;
+}
+
+aside:hover, .comment:hover {
+	
+}
+
 figure {
 	display: inline-block;
-	text-align: initial;
+	text-align: center;
 	vertical-align: top;
 	position: relative;
 	float: right;
-	width: 50%;
-	max-height:25cm;
-	font-size: 0.8em;
+	width: 70%;
+	font-size: 0.8rem;
 	background: white;
 	overflow: hidden;
+	border-radius: 5px;
 	border: 1px solid #EEE;
 	box-shadow: 1px 1px 5px 0px #888;
 	padding: 5px;
-	margin: 0.5em 0em 1em 1em;
+	margin: -1cm -1.5cm 1em 1em;
 }
 
 figure.nofloat {
-	/*display: inline-block;
-	text-align: initial;
+	float: none;
+	width: 100%;
+	display: inline-block;
+	text-align: center;
 	vertical-align: top;
-	position: relative;*/
+	position: relative;
 }
 
 figure img {
@@ -96,32 +171,16 @@ figure img {
 	vertical-align: top;
 	margin-left: auto;
 	margin-right: auto;
-	max-height: 70%;
-	max-width: 100%;
+	max-height: 24cm;
 }
 
 figcaption {
-	font-family: "Graublau Sans", "Greta Sans Std", "Avenir Next", sans-serif;
+	font-family: "Greta Sans Std", "Avenir Next", sans-serif;
 	line-height: 1em;
+	text-align: justify;
 }
 
 a { color: #500; }
-
-/*h1 {
-	position: running(header1)
-}*/
-h1.title {
-	/*position: running(title);*/
-	font-size: 3em;
-}
-/*@page{
-	@top-left {
-		content: element(title);
-	}
-	@top-right {
-		content: element(header1);
-	}
-}*/
 
 div#refs p {
 	font-size: 0.8em;

@@ -54,4 +54,4 @@ export path
 #[[ -f $(which ansiweather) ]] && ansiweather
 [[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 
-echo "💡:CTRL+w,k,u: 🔪 | CTRL+r|s: 🔍 | d & cd #: 🚀 | curl cheat.sh/?"
+echo "💡:CTRL+w,k,u: 🔪 | CTRL+r|s: 🔍 | d, cd - & cd #: 🚀 | curl cheat.sh/?"
