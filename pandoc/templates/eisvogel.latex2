@@ -6,7 +6,7 @@ $if(colorlinks)$
 \PassOptionsToPackage{dvipsnames,svgnames*,x11names*,table}{xcolor}
 $endif$
 %
-\documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$babel-lang$,$endif$$if(papersize)$$papersize$paper,$else$a4paper,$endif$$if(beamer)$ignorenonframetext,$if(handout)$handout,$endif$$if(aspectratio)$aspectratio=$aspectratio$,$endif$$endif$$for(classoption)$$classoption$$sep$,$endfor$]{scrartcl}
+\documentclass[$if(fontsize)$$fontsize$,$endif$$if(lang)$$babel-lang$,$endif$$if(papersize)$$papersize$paper,$else$a4paper,$endif$$if(beamer)$ignorenonframetext,$if(handout)$handout,$endif$$if(aspectratio)$aspectratio=$aspectratio$,$endif$$endif$$for(classoption)$$classoption$$sep$,$endfor$]{article}
 $if(beamer)$
 \setbeamertemplate{caption}[numbered]
 \setbeamertemplate{caption label separator}{: }
@@ -318,7 +318,9 @@ $if(subtitle)$
 \subtitle{$subtitle$}
 $endif$
 $if(author)$
-\author{$for(author)$$author$$sep$ \and $endfor$}
+$for(author)$
+\author{$author.name$}
+$endfor$
 $endif$
 $if(institute)$
 \providecommand{\institute}[1]{}
@@ -429,7 +431,10 @@ $endif$
 %
 % captions
 %
-\usepackage[font={small,it}]{caption}
+\usepackage[format=hang,labelfont=bf,labelsep=endash,font={sf,small}]{caption}
+$if(nonumberfigures)$
+\captionsetup[figure]{labelformat=empty}% redefines the caption setup of the figures environment
+$endif$
 \newcommand{\imglabel}[1]{\textbf{\textit{(#1)}}}
 
 %
@@ -439,8 +444,8 @@ $endif$
 % 'default' option sets the default 
 % font family to Source Sans Pro, not \sfdefault.
 %
-\usepackage[default]{sourcesanspro}
-\usepackage{sourcecodepro}
+%\usepackage[default]{sourcesanspro}
+%\usepackage{sourcecodepro}
 
 %
 % heading font
@@ -453,14 +458,14 @@ $endif$
 \usepackage{relsize}
 \usepackage{sectsty}
 \definecolor{almostblack}{RGB}{40,40,40}
-\allsectionsfont{\sffamily\color{almostblack}}
+\allsectionsfont{\textit\sffamily\color{almostblack}}
 
 %
 % variables for title and author
 %
 \usepackage{titling}
 \title{$title$}
-\author{$for(author)$$author$$sep$, $endfor$}
+\author{$for(author)$$author.name$$sep$ \& $endfor$}
 
 %
 % environment for boxes
@@ -557,14 +562,15 @@ $endif$
 %
 % header and footer
 %
+\definecolor{DarkGray}{rgb}{.4,.4,.4}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead{}
 \fancyfoot{}
-\lhead{$title$}
+\lhead{\footnotesize{}\color{DarkGray}$title$}
 \chead{}
-\rhead{$date$}
-\lfoot{$for(author)$$author$$sep$, $endfor$}
+\rhead{\footnotesize{}\color{DarkGray}$date$}
+\lfoot{\footnotesize{}\color{DarkGray}$for(author)$$author.name$$sep$, $endfor$}
 \cfoot{}
 \rfoot{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
@@ -596,20 +602,28 @@ $endif$
 \par
 \noindent
 
-{ \setstretch{1.4}
+{\setstretch{1.4}
 \vfill
-\noindent {\huge \textbf{\textsf{$title$}}}
+\noindent
+{\huge{\textsf{\textbf{\emph{$title$}}}}}
 $if(subtitle)$
 \vskip 1em
 {\Large \textsf{$subtitle$}}
 $endif$
 \vskip 2em
 \noindent
-{\Large \textsf{\uppercase{$for(author)$$author$$sep$, $endfor$}}
-\vfill
+{\Large{\textsf{\textbf{\uppercase{$for(author)$$author.name$$for(author.affiliation)$\textsuperscript{$author.affiliation$$if(author.correspondence)$§$endif$}$sep$,$endfor$$sep$, $endfor$}}}}}
+$if(institute)$
+\vskip 2em
+\setstretch{1}
+\textsf{\emph{$for(institute)$$institute$$sep$  \\  $endfor$}}
+$if(author)$
+\vskip 2em\textsf{\emph{$for(author)$$if(author.correspondence)$$author.correspondence$ $endif$$endfor$}
+$endif$
+$endif$
 }
 
-\textsf{$date$}}
+\textsf{$date$}
 \end{flushleft}
 \end{titlepage}
 \restoregeometry
@@ -625,7 +639,7 @@ $if(beamer)$
 $endif$
 $if(abstract)$
 \begin{abstract}
-$abstract$
+\noindent\textbf{Abstract: }$abstract$
 \end{abstract}
 $endif$
 $endif$
@@ -642,7 +656,7 @@ $if(beamer)$
 $else$
 {
 $if(colorlinks)$
-\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
+\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$black$endif$}
 $endif$
 \setcounter{tocdepth}{$toc-depth$}
 \tableofcontents

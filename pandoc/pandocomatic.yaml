@@ -19,6 +19,7 @@ templates:
       link-citations: true 
     postprocessors: []
     cleanup: []
+##############################################################################—DOCX
 ##############################################################################
   docx:
     pandoc:
@@ -32,11 +33,6 @@ templates:
       reference-doc: 'templates/custom.docx'
       dpi: 300
 ##############################################################################
-  docx-convert-endnote:
-    extends: ['docx','refs']
-    preprocessors: 
-      add: ['preprocessors/convertEndnoteRefs']
-##############################################################################
   docx-with-refs:
     extends: ['docx','refs']
 ##############################################################################
@@ -44,6 +40,11 @@ templates:
     extends: ['docx','refs']
     metadata: 
       link-citations: false
+##############################################################################
+  docx-endnote:
+    extends: ['docx','refs']
+    preprocessors: 
+      add: ['preprocessors/convertEndnoteRefs']
 ##############################################################################
   docx-changes:
     extends: ['docx','refs']
@@ -54,6 +55,7 @@ templates:
     pandoc:
       to: odt
       reference-doc: 'templates/custom.odt'
+##############################################################################—LATEX
 ##############################################################################
   latex:
     preprocessors: ['preprocessors/removeAffiliations'] #LaTeX generates this from metadata unlike Word, so remove it from document for LaTeX compile
@@ -130,6 +132,11 @@ templates:
       titlepage-rule-color: FFFFFF
       titlepage-rule-height: 4
 ##############################################################################
+# https://github.com/Wandmalfarbe/pandoc-latex-template
+  eisvogel-endnote:
+    extends: 'eisvogel'
+    preprocessors: ['preprocessors/convertEndnoteRefs']
+##############################################################################
   latex-ieee:
     extends: 'latex-with-refs'
     pandoc:
@@ -154,7 +161,8 @@ templates:
       base-header-level: 1
     metadata:
       documentclass: 'memoir'
-######################################
+##############################################################################—HTML
+##############################################################################
   html:
     pandoc:
       from: markdown
@@ -172,29 +180,29 @@ templates:
       toc-depth: 3
       base-header-level: 1
     postprocessors: ['postprocessors/fixHTML']
-######################################
+##############################################################################
   html-changes:
     extends: ['html']
     preprocessors: ['preprocessors/criticmarkup']
-######################################
+##############################################################################
   html-refs:
     extends: ['refs','html']
     preprocessors: ['preprocessors/convertEndnoteRefs']
-######################################
+##############################################################################
   html-scholar:
     extends: ['refs','html']
     preprocessors: ['preprocessors/convertEndnoteRefs']
     pandoc:
       template: 'templates/pandoc-scholar.html'
       css: 'templates/pandoc-scholar.css'
-######################################
+##############################################################################
   html-scholar-pdf:
     extends: ['html-scholar']
     pandoc:
       to: pdf
       pdf-engine: prince
       pdf-engine-opt: ['--page-size=A4','--page-margin=10mm']
-######################################
+##############################################################################
   html-pdf:
     extends: ['html']
     pandoc:
@@ -202,7 +210,7 @@ templates:
       pdf-engine: prince
       pdf-engine-opt: ['--page-size=A4']
       toc: true
-######################################
+##############################################################################
   html-refs-pdf:
     extends: ['refs','html']
     preprocessors: ['preprocessors/convertEndnoteRefs']
@@ -270,40 +278,3 @@ templates:
       filter: ['filters/testFilter']
     metadata:
         author: Joanna Doe
-  test-pdf:
-    pandoc:
-      from: markdown
-      to: pdf
-      latex-engine: 'xelatex'
-      standalone: true
-    metadata: 
-      lang: 'en-GB'
-      papersize: 'A4' 
-      documentclass: 'article'
-      fontsize: '12pt'
-      linestretch: '1.75'
-  test-latex:
-    pandoc:
-      from: markdown
-      to: latex
-      standalone: true
-    metadata: 
-      lang: 'en-GB'
-      papersize: 'A4' 
-      documentclass: 'article'
-      fontsize: '12pt'
-      linestretch: '1.75'
-  test-ref:
-    pandoc:
-      standalone: true
-      filter: [pandoc-citeproc] #process citations
-      bibliography: Core.json #JSON is faster than BIB
-      csl: csl/apa-ian.csl
-  test-docx:
-    pandoc:
-      from: markdown
-      to: html5
-      filter: 
-        add: ['filters/removeHR']
-  test-out:
-    extends: ['test-ref','test-docx']

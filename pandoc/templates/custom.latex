@@ -255,7 +255,7 @@ $if(subtitle)$
 \subtitle{$subtitle$}
 $endif$
 $if(author)$
-\author{$for(author)$$author.name$$author.affiliation$$sep$ \and $endfor$}
+\author{$for(author)$$author.name$\textsuperscript{$author.affiliation$$if(author.correspondence)$§$endif$}$sep$ \and $endfor$}
 $endif$
 $if(institute)$
 \providecommand{\institute}[1]{}
