@@ -58,7 +58,7 @@ templates:
 ##############################################################################—LATEX
 ##############################################################################
   latex:
-    preprocessors: ['preprocessors/removeAffiliations'] #LaTeX generates this from metadata unlike Word, so remove it from document for LaTeX compile
+    #preprocessors: ['preprocessors/removeAffiliations'] #LaTeX generates this from metadata unlike Word, so remove it from document for LaTeX compile
     pandoc:
       from: markdown
       to: latex
@@ -95,6 +95,10 @@ templates:
   latex-with-refs:
     extends: ['latex','refs']
 ##############################################################################
+  latex-endnote:
+    extends: 'latex-with-refs'
+    preprocessors: ['preprocessors/convertEndnoteRefs']
+##############################################################################
   latex-with-toc:
     extends: ['latex','refs']
     pandoc:
@@ -106,16 +110,14 @@ templates:
     pandoc:
       to: pdf
       pdf-engine: 'xelatex'
-      standalone: true
     cleanup: ['latexmk -c']
 ##############################################################################
-  pdf-with-refs-convert:
+  pdf-endnote:
     extends: 'latex-with-refs'
     preprocessors: ['preprocessors/convertEndnoteRefs']
     pandoc:
       to: pdf
       pdf-engine: 'xelatex'
-      standalone: true
     cleanup: ['latexmk -c']
 ##############################################################################
 # https://github.com/Wandmalfarbe/pandoc-latex-template

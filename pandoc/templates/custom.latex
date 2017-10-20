@@ -273,7 +273,7 @@ $if(institute)$
 \vspace{-2em}\textsf{\emph{$for(institute)$$institute$$sep$\quad\&\quad$endfor$}}
 $endif$
 $if(author)$
-\vspace{-2em}\textsf{\emph{$for(author)$$if(author.correspondence)$$author.correspondence$ $endif$$endfor$}
+\vspace{-2em}\textsf{\emph{$for(author)$$if(author.correspondence)$$author.correspondence$$endif$$sep$, $endfor$}}
 $endif$
 $if(abstract)$
 \begin{abstract}

@@ -135,7 +135,7 @@ end
 -- @section document
 
 --- A complete pandoc document
--- @function Panoc
+-- @function Pandoc
 -- @tparam      {Block,...} blocks      document content
 -- @tparam[opt] Meta        meta        document meta data
 function M.Pandoc(blocks, meta)
@@ -424,7 +424,7 @@ M.Image = M.Inline:create_constructor(
     attr = attr or M.Attr()
     return {c = {attr, caption, {src, title}}}
   end,
-  {"attributes", "caption", {"src", "title"}}
+  {{"identifier", "classes", "attributes"}, "caption", {"src", "title"}}
 )
 
 --- Create a LineBreak inline element
@@ -449,7 +449,7 @@ M.Link = M.Inline:create_constructor(
     attr = attr or M.Attr()
     return {c = {attr, content, {target, title}}}
   end,
-  {"attributes", "content", {"target", "title"}}
+  {{"identifier", "classes", "attributes"}, "content", {"target", "title"}}
 )
 
 --- Creates a Math element, either inline or displayed.
@@ -772,7 +772,7 @@ M.UpperAlpha = "UpperAlpha"
 -- `--from` command line option.
 -- @tparam      string markup the markup to be parsed
 -- @tparam[opt] string format format specification, defaults to "markdown".
--- @return Doc pandoc document
+-- @treturn Pandoc pandoc document
 -- @usage
 -- local org_markup = "/emphasis/"  -- Input to be read
 -- local document = pandoc.read(org_markup, "org")
@@ -782,12 +782,35 @@ M.UpperAlpha = "UpperAlpha"
 -- assert(block.content[1].t == "Emph")
 function M.read(markup, format)
   format = format or "markdown"
-  local pd = pandoc.__read(format, markup)
+  local pd = pandoc._read(format, markup)
   if type(pd) == "string" then
     error(pd)
   else
     return pd
   end
+end
+
+--- Runs command with arguments, passing it some input, and returns the output.
+-- @treturn string Output of command.
+-- @raise A table containing the keys `command`, `error_code`, and `output` is
+-- thrown if the command exits with a non-zero error code.
+-- @usage
+-- local ec, output = pandoc.pipe("sed", {"-e","s/a/b/"}, "abc")
+function M.pipe (command, args, input)
+  local ec, output = pandoc._pipe(command, args, input)
+  if ec ~= 0 then
+    err = setmetatable(
+      { command = command, error_code = ec, output = output},
+      { __tostring = function(e)
+          return "Error running " .. e.command
+            .. " (error code " .. e.error_code .. "): "
+            .. e.output
+        end
+      }
+    )
+    error(err)
+  end
+  return output
 end
 
 --- Use functions defined in the global namespace to create a pandoc filter.
