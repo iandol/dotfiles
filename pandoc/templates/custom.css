@@ -145,8 +145,8 @@ figure {
 	text-align: center;
 	vertical-align: top;
 	position: relative;
-	float: outside;
-	width: 65%;
+	/*float: outside;*/
+	width: 100%;
 	font-size: 0.8rem;
 	background: white;
 	overflow: visible;
@@ -172,7 +172,7 @@ figure img {
 	margin-left: auto;
 	margin-right: auto;
 	max-width: 100%;
-	max-height: 24cm;
+	max-height: 22cm;
 }
 
 figcaption {

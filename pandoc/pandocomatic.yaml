@@ -58,7 +58,8 @@ templates:
 ##############################################################################—LATEX
 ##############################################################################
   latex:
-    #preprocessors: ['preprocessors/removeAffiliations'] #LaTeX generates this from metadata unlike Word, so remove it from document for LaTeX compile
+    #LaTeX generates this from metadata unlike Word, so remove it from document for LaTeX compile
+    #preprocessors: ['preprocessors/removeAffiliations'] 
     pandoc:
       from: markdown
       to: latex
@@ -100,7 +101,7 @@ templates:
     preprocessors: ['preprocessors/convertEndnoteRefs']
 ##############################################################################
   latex-with-toc:
-    extends: ['latex','refs']
+    extends: 'latex-with-refs'
     pandoc:
       table-of-contents: true
       toc-depth: 3
@@ -113,8 +114,7 @@ templates:
     cleanup: ['latexmk -c']
 ##############################################################################
   pdf-endnote:
-    extends: 'latex-with-refs'
-    preprocessors: ['preprocessors/convertEndnoteRefs']
+    extends: 'latex-endnote'
     pandoc:
       to: pdf
       pdf-engine: 'xelatex'
@@ -124,7 +124,7 @@ templates:
   eisvogel:
     extends: 'latex-with-refs'
     pandoc:
-      template: templates/eisvogel.latex
+      template: templates/eisvogel.latex2
       table-of-contents: true
       base-header-level: 2
     metadata: 
@@ -251,6 +251,7 @@ templates:
       to: pdf
       pdf-engine: prince
       pdf-engine-opt: ['--page-size=A4']
+##############################################################################—EPUB
 ##############################################################################
   epub:
     pandoc:
@@ -261,6 +262,7 @@ templates:
     metadata:
       stylesheet: epub.css
       cover-image: templates/VPMLogoBlack.png
+##############################################################################—TEST
 ##############################################################################
 # VARIOUS TEST TEMPLATES
   test:
