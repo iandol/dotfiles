@@ -101,7 +101,7 @@ ins {
 }
 
 .author_affiliations::before {
-	content: "Affiliations: ";
+	content: "# Affiliations: ";
 	font-weight: bold;
 	color: grey;
 }
@@ -159,7 +159,6 @@ figure {
 
 figure.nofloat {
 	float: none;
-	width: 100%;
 	display: inline-block;
 	text-align: center;
 	vertical-align: top;
@@ -167,8 +166,6 @@ figure.nofloat {
 }
 
 figure img {
-	display: inline-block;
-	vertical-align: top;
 	margin-left: auto;
 	margin-right: auto;
 	max-width: 100%;
