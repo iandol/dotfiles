@@ -284,7 +284,7 @@ function update() {
 	[[ -f $(which rbenv) ]] && rbenv rehash; printf '\n\n---> Rehash RBENV...\n'
 
 	[[ -e "$HOME/.antigen" ]] && printf '\n\n---> Updating Antigen...\n'
-	[[ -e "$HOME/.antigen" ]] && antigen selfupdate; upgrade_oh_my_zsh; antigen update; antigen cleanup
+	[[ -e "$HOME/.antigen" ]] && antigen selfupdate; antigen update; antigen cleanup
 }
 
 function updatePTB() {

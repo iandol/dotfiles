@@ -124,7 +124,7 @@ templates:
   eisvogel:
     extends: 'latex-with-refs'
     pandoc:
-      template: templates/eisvogel.latex2
+      template: templates/eisvogel.latex
       table-of-contents: true
       base-header-level: 2
     metadata: 

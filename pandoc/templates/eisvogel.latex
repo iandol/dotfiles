@@ -318,9 +318,7 @@ $if(subtitle)$
 \subtitle{$subtitle$}
 $endif$
 $if(author)$
-$for(author)$
-\author{$author.name$}
-$endfor$
+\author{$for(author)$$author.name$$sep$ \and $endfor$}
 $endif$
 $if(institute)$
 \providecommand{\institute}[1]{}
@@ -444,8 +442,8 @@ $endif$
 % 'default' option sets the default 
 % font family to Source Sans Pro, not \sfdefault.
 %
-%\usepackage[default]{sourcesanspro}
-%\usepackage{sourcecodepro}
+\usepackage[default]{sourcesanspro}
+\usepackage{sourcecodepro}
 
 %
 % heading font
@@ -455,17 +453,18 @@ $endif$
 %
 % heading color
 %
-\usepackage{relsize}
-\usepackage{sectsty}
-\definecolor{almostblack}{RGB}{40,40,40}
-\allsectionsfont{\textit\sffamily\color{almostblack}}
+\definecolor{heading-color}{RGB}{40,40,40}
+\addtokomafont{section}{\color{heading-color}}
+% When using the classes report, scrreprt, book, 
+% scrbook or memoir, uncomment the following line.
+%\addtokomafont{chapter}{\color{heading-color}}
 
 %
 % variables for title and author
 %
 \usepackage{titling}
 \title{$title$}
-\author{$for(author)$$author.name$$sep$ \& $endfor$}
+\author{$for(author)$$author.name$$sep$, $endfor$}
 
 %
 % environment for boxes
@@ -604,8 +603,7 @@ $endif$
 
 {\setstretch{1.4}
 \vfill
-\noindent
-{\huge{\textsf{\textbf{\emph{$title$}}}}}
+\noindent {\huge{\textsf{\textbf{\emph{$title$}}}}}
 $if(subtitle)$
 \vskip 1em
 {\Large \textsf{$subtitle$}}
