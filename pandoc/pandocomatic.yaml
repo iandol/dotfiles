@@ -33,10 +33,10 @@ templates:
       reference-doc: 'templates/custom.docx'
       dpi: 300
 ##############################################################################
-  docx-with-refs:
+  docx-refs:
     extends: ['docx','refs']
 ##############################################################################
-  docx-with-refs-no-links:
+  docx-refs-no-links:
     extends: ['docx','refs']
     metadata: 
       link-citations: false
@@ -50,8 +50,8 @@ templates:
     extends: ['docx','refs']
     preprocessors: ['preprocessors/criticmarkup']
 ##############################################################################
-  odt-with-refs:
-    extends: ['docx-with-refs']
+  odt-refs:
+    extends: ['docx-refs']
     pandoc:
       to: odt
       reference-doc: 'templates/custom.odt'
@@ -103,7 +103,7 @@ templates:
   latex-with-toc:
     extends: 'latex-with-refs'
     pandoc:
-      table-of-contents: true
+      toc: true
       toc-depth: 3
 ##############################################################################
   pdf-with-refs:
@@ -122,10 +122,16 @@ templates:
 ##############################################################################
 # https://github.com/Wandmalfarbe/pandoc-latex-template
   eisvogel:
-    extends: 'latex-with-refs'
+    extends: 'refs'
     pandoc:
+      from: markdown
+      to: latex
+      standalone: true
+      filter: 
+        - filters/removeHR #remove horizontal rules
+      dpi: 300
       template: templates/eisvogel.latex
-      table-of-contents: true
+      toc: true
       base-header-level: 2
     metadata: 
       titlepage: true
@@ -133,6 +139,16 @@ templates:
       titlepage-text-color: FFFFFF
       titlepage-rule-color: FFFFFF
       titlepage-rule-height: 4
+      nonumberfigures: true
+      mainfont: 'Greta Sans Std'
+      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      sansfont: 'Graublau Sans'
+      sansfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      monofont: 'Fira Code'
+      mathfont: 'Cambria Math'
+      mathfontoptions: 'math-style=ISO,bold-style=ISO'
+      CJKmainfont: 'PingFang SC'
+      CJKsansfont: 'Heiti SC'
 ##############################################################################
 # https://github.com/Wandmalfarbe/pandoc-latex-template
   eisvogel-endnote:
@@ -158,7 +174,7 @@ templates:
     extends: 'latex-with-refs'
     pandoc:
       template: templates/custom-memoir.latex
-      table-of-contents: true
+      toc: true
       toc-depth: 3
       base-header-level: 1
     metadata:
@@ -178,7 +194,7 @@ templates:
       template: 'templates/custom.html'
       css: ['templates/custom.css']
       dpi: 300
-      table-of-contents: true
+      toc: true
       toc-depth: 3
       base-header-level: 1
     postprocessors: ['postprocessors/fixHTML']
@@ -188,6 +204,9 @@ templates:
     preprocessors: ['preprocessors/criticmarkup']
 ##############################################################################
   html-refs:
+    extends: ['refs','html']
+##############################################################################
+  html-endnote:
     extends: ['refs','html']
     preprocessors: ['preprocessors/convertEndnoteRefs']
 ##############################################################################
@@ -215,19 +234,19 @@ templates:
 ##############################################################################
   html-refs-pdf:
     extends: ['refs','html']
-    preprocessors: ['preprocessors/convertEndnoteRefs']
     pandoc:
       to: pdf
       pdf-engine: prince
       pdf-engine-opt: ['--page-size=A4']
 ##############################################################################
+  html-endnote-pdf:
+    extends: ['html-refs-pdf']
+    preprocessors: ['preprocessors/convertEndnoteRefs']
+##############################################################################
   html-selfcontained:
     extends: 'html'
     pandoc:
       self-contained: true
-##############################################################################
-  html-with-refs:
-    extends: ['refs','html']
 ##############################################################################
   tufte:
     pandoc:
@@ -242,10 +261,10 @@ templates:
         - 'templates/tuftepandoc.css'
       self-contained: true
 ##############################################################################
-  tufte-with-refs:
+  tufte-refs:
     extends: ['refs','tufte']
 ##############################################################################
-  tufte-with-refs-pdf:
+  tufte-refs-pdf:
     extends: ['refs','tufte']
     pandoc:
       to: pdf
