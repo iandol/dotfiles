@@ -107,7 +107,7 @@ ins {
 }
 
 .correspondence::before {
-	content: "§ correspondence: ";
+	content: "§ Correspondence: ";
 	font-weight: bold;
 	color: grey;
 }
@@ -120,25 +120,36 @@ ins {
 aside::before, .comment::before {
 	content: "«";
 	font-weight: bold;
-	color: grey;
+	color: #222;
 }
 
 aside::after, .comment::after {
 	content: "»";
 	font-weight: bold;
-	color: grey;
+	color: #222;
 }
 
 aside, .comment {
 	background: #FFB;
-	color: #444;
+	color: #222;
 	opacity: 0.5;
 	z-index: -1;
 }
 
-aside:hover, .comment:hover {
-	
+aside:hover, .comment:hover {  }
+
+div.info, div.warning {
+	font-size: 0.8rem
+	display: inline-block;
+	float: outside;
+	width: 30%;
+	padding: 5px;
+	background: #EEE;
+	border-radius: 10px;
+	border: 1px solid #DDD;
+	box-shadow: 1px 1px 5px 0px #888;
 }
+div.warning {background: #FAA;}
 
 figure {
 	display: inline-block;
