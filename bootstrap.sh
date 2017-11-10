@@ -5,7 +5,12 @@ printf '\e[36m'
 
 #try to install homebrew on macOS
 if [[ $OSTYPE == 'darwin'* ]]; then
-	xcode-select --install
+	if [[ ! -e /usr/bin/clang ]]
+		printf 'We will need to install Command-line tools ... '
+		xcode-select --install
+		printf 'Wait for it to finish then rerun bootstrap.sh ... '
+		exit 0
+	fi
 	chflags nohidden ~/Library
 	printf 'Let us bootstrap Homebrew if not present ... '
 	if [[ -e /usr/local/bin/brew ]]; then
@@ -20,8 +25,8 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	fi
 	#make sure our minimum packages are installed
 	if [[ -e /usr/local/bin/brew ]]; then
-		brew install zsh-completions git figlet archey jq ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver &> /dev/null/
-		brew cask install font-fira-code font-hack font-hasklig font-input font-source-code-pro font-source-sans-pro imageoptim tex-live-utility &> /dev/null/
+		brew install zsh-completions git figlet archey jq ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver &> /dev/null
+		brew cask install font-fira-code font-hack font-hasklig font-input font-source-code-pro font-source-sans-pro imageoptim tex-live-utility &> /dev/null
 	fi
 else
 	printf 'Assume we are setting up a Ubuntu machine\n'

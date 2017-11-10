@@ -266,7 +266,7 @@ function update() {
 		git status
 	fi
 	if [[ -d ~/Code/CPServer/.git ]]; then
-		printf '\n\n---> Updating CP...\n'
+		printf '\n\n---> Updating DCP...\n'
 		cd ~/Code/CPServer
 		git pull
 		git status

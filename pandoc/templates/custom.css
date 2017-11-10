@@ -1,5 +1,5 @@
 body { 
-	font-family: "Graublau Sans", "Avenir Next", sans-serif;
+	font-family: "Greta sans std", "Graublau Sans", "Avenir Next", sans-serif;
 	font-size: 16px;
 	margin: auto;
 	max-width: 29cm;
@@ -30,21 +30,27 @@ h2,h3,h4,h5,h6 {
 }*/
 h1.title {
 	/*position: running(title);*/
-	font-size: 3em;
-	line-height: 1.2em;
+	font-size: 2.5em;
+	line-height: 1.1em;
 }
 /*@page{
 	@top-left {
 		content: element(title);
+		font-size: 10px;
+		line-height: 10px
+		font-weight: normal;
 	}
 	@top-right {
 		content: element(header1);
+		font-size: 10px;
+		line-height: 10px
+		font-weight: normal;
 	}
 }*/
 
 @page { 
 	size: A4;
-	margin: 25mm;
+	margin: 20mm;
 	counter-increment: page;
 	/*prince-bleed: 5mm;
 	marks: crop cross;*/
@@ -78,7 +84,7 @@ p {
 	margin: auto;
 	margin-bottom:1em;
 	padding-left: 1em;
-	padding-right: 5em;
+	padding-right: 1em;
 	z-index: 10;
 }
 
@@ -118,13 +124,13 @@ ins {
 }
 
 aside::before, .comment::before {
-	content: "«";
+	content: "[";
 	font-weight: bold;
 	color: #222;
 }
 
 aside::after, .comment::after {
-	content: "»";
+	content: "]";
 	font-weight: bold;
 	color: #222;
 }
@@ -138,34 +144,39 @@ aside, .comment {
 
 aside:hover, .comment:hover {  }
 
-div.info, div.warning {
-	font-size: 0.8rem
-	display: inline-block;
-	float: outside;
-	width: 30%;
-	padding: 5px;
+div.info, div.todo, div.warning {
+	font-size: 0.7em;
+	line-height: 1em;
+	float: right;
+	width: 20%;
+	margin: 5px;
+	padding: 0;
 	background: #EEE;
-	border-radius: 10px;
+	border-radius: 5px;
 	border: 1px solid #DDD;
 	box-shadow: 1px 1px 5px 0px #888;
 }
-div.warning {background: #FAA;}
+div.info::before { content: "INFO: "; font-weight: bold; }
+div.todo::before { content: "TODO: "; font-weight: bold; }
+div.warning::before { content: "WARNING: "; font-weight: bold; }
+div.warning {background: #CCF;}
+div.warning {background: #FCC;}
+div.info p, div.todo p, div.warning p { padding: 0.25em; }
 
 figure {
 	display: inline-block;
 	text-align: center;
 	vertical-align: top;
-	position: relative;
 	/*float: outside;*/
-	width: 100%;
+	width: 98%;
 	font-size: 0.8rem;
 	background: white;
 	overflow: visible;
 	border-radius: 5px;
 	border: 1px solid #EEE;
-	box-shadow: 1px 1px 5px 0px #888;
+	box-shadow: 1px 1px 8px 0px #888;
 	padding: 5px;
-	margin: 5px;
+	margin: 0 0 0.5em 0;
 }
 
 figure.nofloat {
