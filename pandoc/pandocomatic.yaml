@@ -106,7 +106,7 @@ templates:
       toc: true
       toc-depth: 3
 ##############################################################################
-  pdf-with-refs:
+  pdf-refs:
     extends: 'latex-with-refs'
     pandoc:
       to: pdf

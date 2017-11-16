@@ -272,7 +272,7 @@ function update() {
 		git status
 	fi
 	cd $myolddir
-	unset $myolddir
+	unset myolddir
 
   if [[ $OSTYPE == 'darwin'* ]]; then 
   	printf '\n\n---> Updating homebrew...\n'
