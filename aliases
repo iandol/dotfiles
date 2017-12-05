@@ -166,6 +166,24 @@ function setproxy() {
 	echo "setproxy = HTTP = $http_proxy | HTTPS = $https_proxy"
 }
 
+# l(ist)ips Get local and WAN IP adddresses
+lips() {
+	local interface ip
+	for interface in $(networksetup -listallhardwareports | awk '/^Device: /{print $2}'); do
+		ip=$(ipconfig getifaddr $interface)
+		[ "$ip" != "" ] && break
+	done
+
+	local locip extip
+
+	[ "$ip" != "" ] && locip=$ip || locip="inactive"
+
+	ip=`dig +short myip.opendns.com @resolver1.opendns.com`
+	[ "$ip" != "" ] && extip=$ip || extip="inactive"
+
+	printf '%11s: %s\n%11s: %s\n' "Local IP" $locip "External IP" $extip
+}
+
 # Get Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
 	myolddir=$(pwd)
