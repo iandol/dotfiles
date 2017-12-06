@@ -106,6 +106,30 @@ templates:
       toc: true
       toc-depth: 3
 ##############################################################################
+  latex-letter:
+    pandoc:
+      from: markdown
+      to: latex
+      standalone: true
+      template: templates/letter.latex
+    metadata:
+      author: 
+        - Jonna Doe
+        - Institute of Cool
+      opening: To whom it may concern,
+      closing: Sincerely,
+      mainfont: 'Greta Sans Std'
+      mainfontoptions: 'Numbers=OldStyle,Numbers=Proportional'
+      signature-before: -8ex
+      signature-after: 0ex
+      closing-indentation: 0pt
+      links-as-notes: true
+      linkcolor: Mahogany
+      citecolor: Sepia
+      urlcolor: BrickRed
+      lang: 'en-GB'
+      geometry: 'margin=2cm'
+##############################################################################
   pdf-refs:
     extends: 'latex-with-refs'
     pandoc:

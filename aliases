@@ -27,7 +27,7 @@ alias ping="ping -c 5" # ping 5 times ‘by default’
 # Enable aliases to be sudo’ed
 alias sudo='sudo '
 
-alias installTeX='sudo tlmgr install abstract latexmk csquotes pagecolor relsize ucharcat sectsty titling titlesec preprint'
+alias installTeX='sudo tlmgr install abstract latexmk csquotes pagecolor relsize ucharcat sectsty titling titlesec preprint layouts glossaries tabulary soul xargs todonotes mfirstuc xfor datatool substr'
 
 #manage bash/zsh
 if [[ -f $(which subl) ]]; then 
@@ -142,28 +142,38 @@ alias rot13='tr a-zA-Z n-za-mN-ZA-M'
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 
 function setproxy() {
-	if [[ $# == 0 ]]; then
+	if [[ $# -eq 0 ]]; then
+
     echo "Will unset the proxy..."
 		unset http_proxy
 		unset https_proxy
 		git config --global --unset http.proxy
 		git config --global --unset https.proxy
-	elif [[ $# == 1 ]]; then
+		
+	elif [[ $# -eq 1 ]]; then
 		if [[ $1 == "-l" ]]; then
-			#just list what we already have see below
+
+			echo "Proxy settings: " 
+
 		else
+
+			echo "Proxy set: " 
 			export http_proxy="$1"
 			export https_proxy=$http_proxy
 			git config --global http.proxy "http://$http_proxy"
 			git config --global https.proxy "http://$https_proxy"
+
 		fi
-	elif [[ $# == 2 ]]; then
+	elif [[ $# -eq 2 ]]; then
+
+		echo "Proxy set: " 
 		export http_proxy="$1"
 		export https_proxy="$2"
 		git config --global http.proxy "http://$http_proxy"
 		git config --global https.proxy "http://$https_proxy"
+
 	fi
-	echo "setproxy = HTTP = $http_proxy | HTTPS = $https_proxy"
+	echo "PROXY: HTTP = $http_proxy | HTTPS = $https_proxy"
 }
 
 # Get Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
