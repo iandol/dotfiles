@@ -3,4 +3,5 @@
 .bzrignore
 *~
 .ruby-version
-
+Core.bib
+Core.json
