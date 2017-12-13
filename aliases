@@ -203,6 +203,12 @@ function update() {
 		git pull
 		git status
 	fi
+	if [[ -d ~/Code/dotpandoc/.git ]]; then
+		printf '\n\n---> Updating PANDOC DATA...\n'
+		cd ~/Code/dotpandoc
+		git pull
+		git status
+	fi
 	if [[ -d ~/Code/opticka/.git ]]; then
 		printf '\n\n---> Updating OPTICKA...\n'
 		cd ~/Code/opticka
