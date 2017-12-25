@@ -197,7 +197,7 @@ lips() {
 # Get Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
 	myolddir=$(pwd)
-	if [[ -d ~/.dotfiles ]]; then
+	if [[ -d ~/.dotfiles/.git ]]; then
 		printf '\n\n---> Updating DOTFILES...\n'
 		cd ~/.dotfiles
 		git pull
