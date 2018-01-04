@@ -5,7 +5,7 @@ printf '\e[36m'
 
 #try to install homebrew on macOS
 if [[ $OSTYPE == 'darwin'* ]]; then
-	if [[ ! -e /usr/bin/clang ]]
+	if [[ ! -e /usr/bin/clang ]]; then
 		printf 'We will need to install Command-line tools ... '
 		xcode-select --install
 		printf 'Wait for it to finish then rerun bootstrap.sh ... '

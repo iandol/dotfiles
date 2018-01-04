@@ -37,10 +37,15 @@ setopt autopushd pushdminus pushdsilent
 #[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home" # use installed JAVA
 #[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 [[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
-[[ -d "/Applications/MATLAB_R2017a.app/bin/" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2017a.app/bin/matlab" && path=("/Applications/MATLAB_R2017a.app/bin" $path) # matlab
-[[ -f "/Applications/MATLAB_R2017a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2017a.app/bin/maci64/mlint" ~/bin/mlint # matlab
-[[ -d "$HOME/anaconda3/" ]] && path=("$HOME/anaconda3/bin" $path) # anaconda scientific python
-[[ -d "$HOME/miniconda3/" ]] && path=("$HOME/miniconda3/bin" $path) # anaconda scientific python
+[[ -d "/Applications/MATLAB_R2017b.app/bin/" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2017b.app/bin/matlab" && path=("/Applications/MATLAB_R2017b.app/bin" $path) # matlab
+[[ -f "/Applications/MATLAB_R2017b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2017b.app/bin/maci64/mlint" ~/bin/mlint # matlab
+if [[ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
+  source $HOME/miniconda3/etc/profile.d/conda.sh # anaconda scientific python
+elif [[ -d "$HOME/miniconda3/" ]]; then
+  path=("$HOME/miniconda3/bin" $path) 
+elif [[ -d "$HOME/anaconda3/" ]]; then
+  path=("$HOME/anaconda3/bin" $path) 
+fi
 [[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=("/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" $path)
 [[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
