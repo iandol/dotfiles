@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 #encoding: utf-8
-Encoding.default_external = Encoding::UTF_8
-Encoding.default_internal = Encoding::UTF_8
 
 require 'tempfile'
 require 'fileutils'
@@ -19,13 +17,18 @@ end
 
 tstart = Time.now
 infilename = ARGV[0]
-out =  "===> Parsing BiBTeX file #{infilename} "
 fail "Please specify an existing file!" unless infilename and File.exist?(infilename)
 
 format = ARGV[1]
 if format.nil? || !(format =~ /(bib|json)/)
-	format = 'bib'
+	if infilename.match(/\.json$/)
+		format = 'json'
+	else
+		format = 'bib'
+	end
 end
+
+print "===> Parsing #{format} Bibliography file: #{infilename} ..."
 
 #only wrap with {} IF the word is already the case in this list
 keepCase = [
@@ -73,8 +76,10 @@ enforceCase = [
 	"GABAergic",
 	"LGN",
 	"dLGN",
+	"LFP",
 	"DREADD",
 	"ROC",
+	"fMRI",
 	"tDCS",
 	"EEG",
 	"AAV",
@@ -90,29 +95,33 @@ enforceCase = [
 temp_file = Tempfile.new('fixcase')
 case format 
 when /bib/
-	titleRegex = /^title/
+	titleRegex = /\s*title = /
+	lineSeparator = "\n"
 when /json/
 	titleRegex = /\s*"title": /
+	lineSeparator = "\n"
 end
 
 begin
 	File.open(infilename, 'r') do |file|
-		file.each_line("\r") do |line|
+		file.each_line(lineSeparator) do |line|
 			if line.match(titleRegex)
 				keepCase.each do | k |
+					r = /(?<=[\s\.\,\/\"\'\-\–\—])#{k}(?=[\s\.\,\/\"\'\-\–\—])/
 					case format
 					when /bib/
-						line.gsub!(/\b#{k}\b/,"{#{k}}") #case sensitive
+						line.gsub!(r, "{#{k}}") #case sensitive
 					when /json/
-						line.gsub!(/\b#{k}\b/,"<span class=\"nocase\">#{k}</span>") #case sensitive
+						line.gsub!(r, "<span class=\\\"nocase\\\">#{k}</span>") #case sensitive
 					end
 				end
 				enforceCase.each do | e |
+					r = /(?<=[\s\.\,\/\"\'\-\–\—])#{e}(?=[\s\.\,\/\"\'\-\–\—])/i
 					case format
 					when /bib/
-						line.gsub!(/\b#{e}\b/i,"{#{e}}") #case insensitive
+						line.gsub!(r, "{#{e}}") #case insensitive
 					when /json/
-						line.gsub!(/\b#{e}\b/i,"<span class=\"nocase\">#{e}</span>") #case sensitive
+						line.gsub!(r, "<span class=\\\"nocase\\\">#{e}</span>") #case sensitive
 					end
 				end
 			end
@@ -128,5 +137,4 @@ ensure
 end
 
 tend = Time.now - tstart
-out += "... parsing took " + tend.to_s + "s"
-puts out
+puts "... parsing took " + tend.to_s + "s"
