@@ -25,7 +25,7 @@ outfilename = 'convert_' + infilename
 
 temp_file = Tempfile.new('fixcase')
 
-tempCite = /(@{1})(\w{1,20}\d{4}\w{0,2})/
+tempCite = /(-?@{1})(\w{1,20}\d{4}\w{0,2})/
 lineSeparator = "\n"
 
 begin
