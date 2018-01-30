@@ -16,7 +16,6 @@ source "$ZSHA_BASE/antigen.zsh"
 antigen use oh-my-zsh
 antigen bundles <<EOBUNDLES
 	nyan
-	osx
 	marked2
 	history
 	command-not-found
@@ -55,7 +54,7 @@ export path
 # export PATH="$PATH:$HOME/.rvm/bin"
 [[ -f $(which swiftenv) ]] && eval "$(swiftenv init -)"
 [[ -f $(which rbenv) ]] && eval "$(rbenv init -)"
-#[[ -f $(which archey) ]] && archey -c -o
+[[ -f $(which archey) ]] && archey -c -o
 #[[ -f $(which ansiweather) ]] && ansiweather
 [[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 

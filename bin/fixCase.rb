@@ -8,7 +8,7 @@ if ARGV[-1] == 'DEBUG' # Enable remote debugger
   require 'byebug/core'
   require 'byebug'
   PORT = 8989
-  STDOUT.puts "\n!!!---DEBUG Server started on localhost:#{PORT} @ " + Time.now.to_s + "\n\n"
+  STDOUT.puts "\n!!!---BYEBUG on localhost:#{PORT} @ " + Time.now.to_s + "\n\n"
   Byebug.wait_connection = true
   Byebug.start_server('127.0.0.1', PORT)
   ARGV.pop
@@ -107,7 +107,7 @@ begin
 		file.each_line(lineSeparator) do |line|
 			if line.match(titleRegex)
 				keepCase.each do | k |
-					r = /(?<=[\s\.\,\/\"\'\-\–\—])#{k}(?=[\s\.\,\/\"\'\-\–\—])/
+					r = /(?<=[\s\.\,\/\"\'\-\u2013\u2014])#{k}(?=[\s\.\,\/\"\'\-\u2013\u2014])/
 					case format
 					when /bib/
 						line.gsub!(r, "{#{k}}") #case sensitive
@@ -116,7 +116,7 @@ begin
 					end
 				end
 				enforceCase.each do | e |
-					r = /(?<=[\s\.\,\/\"\'\-\–\—])#{e}(?=[\s\.\,\/\"\'\-\–\—])/i
+					r = /(?<=[\s\.\,\/\"\'\-\u2013\u2014])#{e}(?=[\s\.f\,\/\"\'\-\u2013\u2014])/i
 					case format
 					when /bib/
 						line.gsub!(r, "{#{e}}") #case insensitive
