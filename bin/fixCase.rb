@@ -4,17 +4,6 @@
 require 'tempfile'
 require 'fileutils'
 
-if ARGV[-1] == 'DEBUG' # Enable remote debugger
-  require 'byebug/core'
-  require 'byebug'
-  PORT = 8989
-  STDOUT.puts "\n!!!---BYEBUG on localhost:#{PORT} @ " + Time.now.to_s + "\n\n"
-  Byebug.wait_connection = true
-  Byebug.start_server('127.0.0.1', PORT)
-  ARGV.pop
-  byebug
-end
-
 tstart = Time.now
 infilename = ARGV[0]
 fail "Please specify an existing file!" unless infilename and File.exist?(infilename)
