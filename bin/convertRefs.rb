@@ -8,7 +8,7 @@ require 'fileutils'
 # beware this splits on \n so can't include them in the applescript itself
 def osascript(script)
 	cmd = ['osascript'] + script.split(/\n/).map { |line| ['-e', line] }.flatten
-	IO.popen(cmd) { |f| return f.gets }
+	IO.popen(cmd) { |f| return f.read }
 end
 
 tstart = Time.now
