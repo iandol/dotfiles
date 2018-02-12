@@ -79,20 +79,21 @@ enforceCase = [
 temp_file = Tempfile.new('fixcase')
 case format 
 when /bib/
-	titleRegex = /\s*title = /
+	titleRegex = /^\s*title = /
 	lineSeparator = "\n"
 when /json/
-	titleRegex = /\s*"title": /
+	titleRegex = /^\s*"title": /
 	lineSeparator = "\n"
 end
-boundary = '[«»\s\.\,\/\"\'\-\u2013\u2014]'
+boundary1 = '[«\s\/\{\[\"\'\-\u2013\u2014]'
+boundary2 = '[»\s\.\,[}\]\/\"\'\-\u2013\u2014]'
 
 begin
 	File.open(infilename, 'r') do |file|
 		file.each_line(lineSeparator) do |line|
 			if line.match(titleRegex)
 				keepCase.each do | k |
-					r = /(?<=#{boundary})#{k}(?=#{boundary})/
+					r = /(?<=#{boundary1})#{k}(?=#{boundary2})/
 					case format
 					when /bib/
 						line.gsub!(r, "{#{k}}") #case sensitive
@@ -101,7 +102,7 @@ begin
 					end
 				end
 				enforceCase.each do | e |
-					r = /(?<=#{boundary})#{e}(?=#{boundary})/i
+					r = /(?<=#{boundary1})#{e}(?=#{boundary2})/i
 					case format
 					when /bib/
 						line.gsub!(r, "{#{e}}") #case insensitive
