@@ -4,7 +4,7 @@ printf "\n\n--->>> Bootstrap terminal setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
 
 #try to install homebrew on macOS
-if [[ $OSTYPE == 'darwin'* ]]; then
+if [[ "$(uname -s)" = "Darwin" ]]; then
 	if [[ ! -e /usr/bin/clang ]]; then
 		printf 'We will need to install Command-line tools ... '
 		xcode-select --install
@@ -26,7 +26,7 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	#make sure our minimum packages are installed
 	if [[ -e /usr/local/bin/brew ]]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install zsh-completions rbenv ruby-build git figlet archey jq ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver 
+		brew install rbenv ruby-build git figlet archey jq fzy ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver 
 		brew cask install font-fira-code font-hack font-hasklig font-input font-source-code-pro font-source-sans-pro imageoptim tex-live-utility 
 	fi
 else
@@ -69,24 +69,22 @@ printf '\e[36m'
 
 printf 'Will check for a functional Antigen...\n'
 if [ -d ~/.oh-my-zsh/ ]; then
-	printf '\t...Going to replace oh-my-zsh with antigen... '
+	printf '\t...Going to replace oh-my-zsh with ZPlug... '
 	rm -rf ~/.oh-my-zsh/
 fi
-if [ ! -d ~/.antigen/ ]; then
-	printf '\tInstalling Antigen...\n'
-	git clone https://github.com/zsh-users/antigen.git ~/.antigen
-	chown -R $USER ~/.antigen
-	source "$HOME/.antigen/antigen.zsh"
-	antigen use oh-my-zsh
-	antigen bundle zsh-users/zsh-syntax-highlighting
-	antigen theme steeef
-	antigen apply
+if [ -d ~/.antigen/ ]; then
+	printf '\t...Going to replace antigen with ZPlug... '
+	rm -rf ~/.antigen/
+fi
+if [ ! -d ~/.zplug/ ]; then
+	printf '\t...Going to ... '
+	curl -sL https://github.com/zplug/installer/raw/master/installer.zsh | zsh
 else
 	printf '\tAntigen already installed...\n'
 	chown $USER ~/.antigen
 fi
 
-if [ $OSTYPE == 'darwin'* ]; then
+if [[ "$(uname -s)" = "Darwin" ]; then
 	printf 'Linking some bin files in ~/bin/: \n'
 	printf '\e[32m'
 	if [ -d ~/bin/ ]; then
@@ -134,6 +132,6 @@ fi
 
 
 printf 'Switching to use ZSH...\n'
-chsh -s /bin/zsh && source ~/.zshrc
+chsh -s $(which zsh) && source ~/.zshrc
 printf '\n\n--->>> All Done...\n'
 printf '\e[m'

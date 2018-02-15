@@ -9,28 +9,39 @@
 # Uncomment following line if you want red dots to be displayed while waiting for completion
 COMPLETION_WAITING_DOTS="true"
 
-export ZSHA_BASE="$HOME/.antigen"
 export DF_BASE="$HOME/.dotfiles"
 
-source "$ZSHA_BASE/antigen.zsh"
-antigen use oh-my-zsh
-antigen bundles <<EOBUNDLES
-	nyan
-	marked2
-	history
-	command-not-found
-	zsh-users/zsh-syntax-highlighting
-	zsh-users/zsh-autosuggestions
-  zsh-users/zsh-completions
-EOBUNDLES
-#antigen theme smt
-antigen theme mashaal/wild-cherry zsh/wild-cherry.zsh-theme
-antigen apply
+export ZPLUG_HOME=~/.zplug
+source $ZPLUG_HOME/init.zsh
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-history-substring-search"
+zplug "zsh-users/zsh-autosuggestions"
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+zplug "zdharma/history-search-multi-word"
+zplug "zdharma/fast-syntax-highlighting", defer:2
+# Load theme file
+#zplug 'dracula/zsh', as:theme
+#zplug "agkozak/agkozak-zsh-theme"
+#export AM_VERSIONS_PROMPT=(RUBY)
+#export USE_NERD_FONT=1
+#zplug "eendroroy/alien-minimal"
+export ALIEN_THEME="red"
+export USE_NERD_FONT=1
+zplug "eendroroy/alien"
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+  zplug install
+fi
+zplug load
 
 export EDITOR='subl -w'
 export MANPAGER='less -X' # don't clear after quitting man
 DIRSTACKSIZE=12 # pushd stacksize
 setopt autopushd pushdminus pushdsilent
+export HISTFILE="$HOME/.zsh_history"
+export HISTSIZE=99000
+export SAVEHIST=$HISTSIZE
 
 [[ -d "/Volumes/Mac/Users/ian/" ]] && MYHD='/Volumes/Mac/Users/ian/' # old external HD
 #[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home" # use installed JAVA

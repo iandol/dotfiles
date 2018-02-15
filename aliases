@@ -1,4 +1,4 @@
-if [[ $OSTYPE == 'darwin'* ]]; then 
+if [[ "$(uname -s)" = "Darwin" ]]; then 
 	alias la="ls -alGhF"
 	alias las="ls -alGhFeLH"
 	alias ll="ls -alFGh"
@@ -47,9 +47,8 @@ alias usebash='chsh -s $(which bash) && reloadbash'
 alias tu='top -o cpu' # cpu
 alias tm='top -o vsize' # memory
 
-if [[ $OSTYPE == 'darwin'* ]]; then 
-  alias noquarantine='xattr -d com.apple.quarantine '
-	alias ql="qlmanage -p 2>/dev/null" # preview a file using QuickLook
+if [[ "$(uname -s)" = "Darwin" ]]; then 
+	alias noquarantine='xattr -d com.apple.quarantine '
 	alias lock="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 	alias stfu="osascript -e 'set volume output muted true'"
 	alias pumpitup="sudo osascript -e 'set volume 10'"
@@ -62,6 +61,17 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	alias airscan="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s"
 	#alias kernel64='sudo systemsetup -setkernelbootarchitecture x86_64'
 	#alias kernel32='sudo systemsetup -setkernelbootarchitecture i386'
+	alias top='TERM=vt100 top'
+  alias reveal='open --reveal'
+  alias nitenite='exec pmset sleepnow'
+
+	# Quicklook and Spotlight
+  alias ql='qlmanage -p'
+  alias quicklook='qlmanage -p'
+  alias spotlighter='mdfind -onlyin `pwd`'
+
+	# `wifi on` to turn wifi on, and `wifi off` to turn it off
+	alias wifi="networksetup -setairportpower $(networksetup -listallhardwareports | grep -A 2 'Hardware Port: Wi-Fi' | grep 'Device:' | awk '{print $2}')"
 
 	#Some hardcore maintainance
 	alias rebuildkexts="sudo touch /System/Library/Extensions"
@@ -79,6 +89,7 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	alias mydisplay="ioreg -lw0 | grep IODisplayEDID | sed \"/[^<]*</s///\" | xxd -p -r | strings -6" #find id of display
 	alias whywakeme="syslog | grep -i \"Wake reason =\"" #find why the machine woke up
 	alias powerlog="pmset -g pslog" #log of active power/sleep info
+	alias batterypercent="pmset -g batt | egrep '([0-9]+\%).*' -o --colour=auto | cut -f1 -d';'"
 
 	# Empty the Trash on all mounted volumes and the main HDD
 	# Also, clear Apple’s System Logs to improve shell startup speed
@@ -88,20 +99,21 @@ if [[ $OSTYPE == 'darwin'* ]]; then
 	alias fontclean="sudo atsutil databases -remove"
 
 	# Show/hide hidden files in Finder
-	alias show="defaults write com.apple.Finder AppleShowAllFiles -bool true && killall Finder"
-	alias hide="defaults write com.apple.Finder AppleShowAllFiles -bool false && killall Finder"
+	alias show-dotfiles="defaults write com.apple.Finder AppleShowAllFiles -bool true && killall Finder"
+	alias hide-dotfiles="defaults write com.apple.Finder AppleShowAllFiles -bool false && killall Finder"
 
-	# Hide/show all desktop icons (useful when presenting)
-	alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-	alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+	# Hide/show all desktop icons for presenting
+	alias show-desktop-icons="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+	alias hide-desktop-icons="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 
-  function sharescreen() {
-    sudo defaults write /var/db/launchd.db/com.apple.launchd/overrides.plist com.apple.screensharing -dict Disabled -bool false
-    sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist
-  }
-  function sharescreenstop() {
-    sudo launchctl unload /System/Library/LaunchDaemons/com.apple.screensharing.plist
-  }
+
+	function sharescreen() {
+		sudo defaults write /var/db/launchd.db/com.apple.launchd/overrides.plist com.apple.screensharing -dict Disabled -bool false
+		sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist
+	}
+	function sharescreenstop() {
+		sudo launchctl unload /System/Library/LaunchDaemons/com.apple.screensharing.plist
+	}
 
 fi
 
@@ -144,7 +156,7 @@ alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.ar
 function setproxy() {
 	if [[ $# -eq 0 ]]; then
 
-    echo "Will unset the proxy..."
+		echo "Will unset the proxy..."
 		unset http_proxy
 		unset https_proxy
 		git config --global --unset http.proxy
@@ -203,6 +215,12 @@ function update() {
 		git pull
 		git status
 	fi
+	if [[ -d ~/.zplug/.git ]]; then
+		printf '\n\n---> Updating ZPLUG...\n'
+		cd ~/.zplug
+		git pull
+		git status
+	fi
 	if [[ -d ~/Code/dotpandoc/.git ]]; then
 		printf '\n\n---> Updating PANDOC DATA...\n'
 		cd ~/Code/dotpandoc
@@ -227,12 +245,12 @@ function update() {
 		git pull
 		git status
 	fi
-  if [[ -d ~/Code/bookends-tools/.git ]]; then
-    printf '\n\n---> Updating BOOKENDS-TOOLS...\n'
-    cd ~/Code/bookends-tools
-    git pull
-    git status
-  fi
+	if [[ -d ~/Code/bookends-tools/.git ]]; then
+		printf '\n\n---> Updating BOOKENDS-TOOLS...\n'
+		cd ~/Code/bookends-tools
+		git pull
+		git status
+	fi
 	if [[ -d ~/Code/pandocomatic/.git ]]; then
 		printf '\n\n---> Updating PANDOCOMATIC...\n'
 		cd ~/Code/pandocomatic
@@ -245,18 +263,18 @@ function update() {
 			git merge --ff-only -v upstream/master
 		fi
 	fi
-    if [[ -d ~/Code/paru/.git ]]; then
-    printf '\n\n---> Updating PARU...\n'
-    cd ~/Code/paru
-    git checkout master
-    git pull
-    git status
-    if [[ -n $(git remote | grep upstream) ]]; then
-      printf '\t\t---> Fetching upstream...\n'
-      git fetch -v upstream
-      git merge --ff-only -v upstream/master
-    fi
-  fi
+		if [[ -d ~/Code/paru/.git ]]; then
+		printf '\n\n---> Updating PARU...\n'
+		cd ~/Code/paru
+		git checkout master
+		git pull
+		git status
+		if [[ -n $(git remote | grep upstream) ]]; then
+			printf '\t\t---> Fetching upstream...\n'
+			git fetch -v upstream
+			git merge --ff-only -v upstream/master
+		fi
+	fi
 	if [[ -d ~/Code/AfterImage/.git ]]; then
 		printf '\n\n---> Updating AFTERIMAGE...\n'
 		cd ~/Code/AfterImage
@@ -308,17 +326,21 @@ function update() {
 	cd $myolddir
 	unset myolddir
 
-  if [[ $OSTYPE == 'darwin'* ]]; then 
-  	printf '\n\n---> Updating homebrew...\n'
-  	brew update
-  	brew upgrade
-  	brew cleanup -f && brew cask cleanup
-  fi
+	if [[ "$(uname -s)" = "Darwin" ]]; then 
+		printf '\n\n---> Updating homebrew...\n'
+		brew update
+		brew upgrade
+		brew cleanup -f && brew cask cleanup
+	fi
 
 	[[ -f $(which rbenv) ]] && rbenv rehash; printf '\n\n---> Rehash RBENV...\n'
 
 	[[ -e "$HOME/.antigen" ]] && printf '\n\n---> Updating Antigen...\n'
 	[[ -e "$HOME/.antigen" ]] && antigen selfupdate; antigen update; antigen cleanup
+
+	[[ -e "$HOME/.zplug" ]] && printf '\n\n---> Updating ZPLUG...\n'
+	[[ -e "$HOME/.zplug" ]] && zplug info; zplug list; zplug update
+
 }
 
 function updatePTB() {
