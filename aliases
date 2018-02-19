@@ -1,3 +1,4 @@
+#!/usr/bin/env zsh
 if [[ "$(uname -s)" = "Darwin" ]]; then 
 	alias la="ls -alGhF"
 	alias las="ls -alGhFeLH"
@@ -209,120 +210,25 @@ lips() {
 # Get Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
 	myolddir=$(pwd)
-	if [[ -d ~/.dotfiles/.git ]]; then
-		printf '\n\n---> Updating DOTFILES...\n'
-		cd ~/.dotfiles
-		git pull
-		git status
-	fi
-	if [[ -d ~/.zplug/.git ]]; then
-		printf '\n\n---> Updating ZPLUG...\n'
-		cd ~/.zplug
-		git pull
-		git status
-	fi
-	if [[ -d ~/Code/dotpandoc/.git ]]; then
-		printf '\n\n---> Updating PANDOC DATA...\n'
-		cd ~/Code/dotpandoc
-		git pull
-		git status
-	fi
-	if [[ -d ~/Code/opticka/.git ]]; then
-		printf '\n\n---> Updating OPTICKA...\n'
-		cd ~/Code/opticka
-		git pull
-		git status
-	fi
-	if [[ -d ~/Code/spikes/.git ]]; then
-		printf '\n\n---> Updating SPIKES...\n'
-		cd ~/Code/spikes
-		git pull
-		git status
-	fi
-	if [[ -d ~/Code/scrivomatic/.git ]]; then
-		printf '\n\n---> Updating SCRIVOMATIC...\n'
-		cd ~/Code/scrivomatic
-		git pull
-		git status
-	fi
-	if [[ -d ~/Code/bookends-tools/.git ]]; then
-		printf '\n\n---> Updating BOOKENDS-TOOLS...\n'
-		cd ~/Code/bookends-tools
-		git pull
-		git status
-	fi
-	if [[ -d ~/Code/pandocomatic/.git ]]; then
-		printf '\n\n---> Updating PANDOCOMATIC...\n'
-		cd ~/Code/pandocomatic
-		git checkout master
-		git pull
-		git status
-		if [[ -n $(git remote | grep upstream) ]]; then
-			printf '\t\t---> Fetching upstream...\n'
-			git fetch -v upstream
-			git merge --ff-only -v upstream/master
+	ul=('.dotfiles' '.zplug' 'Code/dotpandoc' 'Code/opticka'
+		'Code/AfterImage' 'Code/isoluminant' 'Code/Pinna' 'Code/spikes/'
+		'Code/scrivomatic' 'Code/bookends-tools' 'Code/pandocomatic' 'Code/paru'
+		'Documents/MATLAB/gramm' 'Code/CPServer'
+		'Code/Psychtoolbox-3' 'Code/fieldtrip')
+	for x in $ul; do
+		if [[ -d ~/${x}/.git ]]; then
+			printf "\n\n---> Updating ${x}...\n"
+			cd ~/${x}
+			git checkout master
+			git pull
+			git status
+			if [[ -n $(git remote 2>/dev/null | grep upstream) ]]; then
+				printf "\t\t---> Fetching ${x} upstream...\n"
+				git fetch -v upstream
+				git merge --ff-only -v upstream/master
+			fi
 		fi
-	fi
-		if [[ -d ~/Code/paru/.git ]]; then
-		printf '\n\n---> Updating PARU...\n'
-		cd ~/Code/paru
-		git checkout master
-		git pull
-		git status
-		if [[ -n $(git remote | grep upstream) ]]; then
-			printf '\t\t---> Fetching upstream...\n'
-			git fetch -v upstream
-			git merge --ff-only -v upstream/master
-		fi
-	fi
-	if [[ -d ~/Code/AfterImage/.git ]]; then
-		printf '\n\n---> Updating AFTERIMAGE...\n'
-		cd ~/Code/AfterImage
-		git pull
-		git status
-	fi
-	if [[ -d ~/Code/isoluminant/.git ]]; then
-		printf '\n\n---> Updating ISOLUMINANT...\n'
-		cd ~/Code/isoluminant
-		git pull
-		git status
-	fi
-	if [[ -d ~/Code/Pinna/.git ]]; then
-		printf '\n\n---> Updating PINNA...\n'
-		cd ~/Code/Pinna
-		git pull
-		git status
-	fi
-	if [[ -d ~/Code/Psychtoolbox-3/.git ]]; then
-		printf '\n\n---> Updating PTB...\n'
-		cd ~/Code/Psychtoolbox-3
-		git pull
-		if [[ -n $(git remote | grep upstream) ]]; then
-			printf '\t\t---> Fetching upstream PTB...\n'
-			git fetch -v upstream
-		fi
-	fi
-	if [[ -d ~/Code/fieldtrip ]]; then
-		printf '\n\n---> Updating FIELDTRIP...\n'
-		cd ~/Code/fieldtrip
-		git pull
-		if [[ -n $(git remote | grep upstream) ]]; then
-			printf '\t\t---> Fetching upstream FIELDTRIP...\n'
-			git fetch -v upstream
-		fi
-	fi
-	if [[ -d ~/Documents/MATLAB/gramm/.git ]]; then
-		printf '\n\n---> Updating GRAMM...\n'
-		cd ~/Documents/MATLAB/gramm/
-		git pull
-		git status
-	fi
-	if [[ -d ~/Code/CPServer/.git ]]; then
-		printf '\n\n---> Updating DCP...\n'
-		cd ~/Code/CPServer
-		git pull
-		git status
-	fi
+	done
 	cd $myolddir
 	unset myolddir
 
@@ -333,14 +239,10 @@ function update() {
 		brew cleanup -f && brew cask cleanup
 	fi
 
-	[[ -f $(which rbenv) ]] && rbenv rehash; printf '\n\n---> Rehash RBENV...\n'
+	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash RBENV...\n'; rbenv rehash)
 
-	[[ -e "$HOME/.antigen" ]] && printf '\n\n---> Updating Antigen...\n'
-	[[ -e "$HOME/.antigen" ]] && antigen selfupdate; antigen update; antigen cleanup
-
-	[[ -e "$HOME/.zplug" ]] && printf '\n\n---> Updating ZPLUG...\n'
-	[[ -e "$HOME/.zplug" ]] && zplug info; zplug list; zplug update
-
+	[[ -e "$HOME/.zplug" ]] && (printf '\n\n---> Updating ZPLUG...\n';zplug info; zplug list; zplug update)
+	[[ $SHELL = *zsh* ]] && (printf '\n\n---> Updating compinit...\n'; rm -f "$HOME/.zcompdump"; compinit)
 }
 
 function updatePTB() {

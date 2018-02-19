@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+#encoding: utf-8
+
 require 'tempfile'
 require 'fileutils'
 
@@ -85,8 +87,10 @@ when /json/
 	titleRegex = /^\s*"title": /
 	lineSeparator = "\n"
 end
-boundary1 = '[«\s\/\{\[\"\'\-\u2013\u2014]'
-boundary2 = '[»\s\.\,[}\]\/\"\'\-\u2013\u2014]'
+
+#cusom boundarys, more specific than the generic \b 
+boundary1 = "[\\'\\\"\\s\\/\\{\\[\\-\\u2013\\u2014]"
+boundary2 = "[\\'\\\"\\s\\.\\,\\[\\}\\]\\/\\-\\u2013\\u2014]"
 
 begin
 	File.open(infilename, 'r') do |file|

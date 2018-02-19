@@ -1,3 +1,4 @@
+#!/usr/bin/env zsh
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
 # Comment this out to disable weekly auto-update checks
@@ -14,12 +15,13 @@ export DF_BASE="$HOME/.dotfiles"
 export ZPLUG_HOME=~/.zplug
 source $ZPLUG_HOME/init.zsh
 zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-history-substring-search"
 zplug "zsh-users/zsh-autosuggestions"
+zplug "zdharma/history-search-multi-word"
+zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
+zplug "zdharma/fast-syntax-highlighting", defer:2
+zplug "zsh-users/zsh-history-substring-search", defer:3
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
-zplug "zdharma/history-search-multi-word"
-zplug "zdharma/fast-syntax-highlighting", defer:2
 # Load theme file
 #zplug 'dracula/zsh', as:theme
 #zplug "agkozak/agkozak-zsh-theme"
@@ -28,7 +30,7 @@ zplug "zdharma/fast-syntax-highlighting", defer:2
 #zplug "eendroroy/alien-minimal"
 export ALIEN_THEME="red"
 export USE_NERD_FONT=1
-zplug "eendroroy/alien"
+zplug "eendroroy/alien", as:theme
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
   zplug install
