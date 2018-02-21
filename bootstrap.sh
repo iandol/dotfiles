@@ -27,11 +27,11 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 	if [[ -e /usr/local/bin/brew ]]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install rbenv ruby-build git figlet archey jq fzy ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver 
-		brew cask install font-fira-code font-hack font-hasklig font-input font-source-code-pro font-source-sans-pro imageoptim tex-live-utility 
+		brew cask install font-fantasquesansmono-nerd-font font-fira-code font-hack font-hasklig font-source-code-pro font-source-sans-pro imageoptim tex-live-utility 
 	fi
 else
 	printf 'Assume we are setting up a Ubuntu machine\n'
-	sudo apt-get install zsh vim git figlet jq ansiweather freeglut 
+	sudo apt-get install zsh ruby vim git figlet jq ansiweather freeglut 
 	mkdir -p ~/bin
   cd ~/bin
   wget https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy

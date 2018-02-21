@@ -210,20 +210,20 @@ lips() {
 # Get Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
 	myolddir=$(pwd)
-	ul=('.dotfiles' '.zplug' 'Code/dotpandoc' 'Code/opticka'
-		'Code/AfterImage' 'Code/isoluminant' 'Code/Pinna' 'Code/spikes/'
-		'Code/scrivomatic' 'Code/bookends-tools' 'Code/pandocomatic' 'Code/paru'
-		'Documents/MATLAB/gramm' 'Code/CPServer'
-		'Code/Psychtoolbox-3' 'Code/fieldtrip')
+	ul=(.dotfiles .zplug Code/dotpandoc Code/opticka
+		Code/AfterImage Code/isoluminant Code/Pinna Code/spikes/
+		Code/scrivomatic Code/bookends-tools Code/pandocomatic Code/paru
+		Documents/MATLAB/gramm Code/CPServer
+		Code/Psychtoolbox-3 Code/fieldtrip)
 	for x in $ul; do
 		if [[ -d ~/${x}/.git ]]; then
-			printf "\n\n---> Updating ${x}...\n"
+			printf "\n\n---> Updating \e[92m${x}\e[m...\n"
 			cd ~/${x}
 			git checkout master
 			git pull
 			git status
 			if [[ -n $(git remote 2>/dev/null | grep upstream) ]]; then
-				printf "\t\t---> Fetching ${x} upstream...\n"
+				printf "\t\t---> Fetching \e[92m${x}\e[m upstream...\n"
 				git fetch -v upstream
 				git merge --ff-only -v upstream/master
 			fi
@@ -233,16 +233,16 @@ function update() {
 	unset myolddir
 
 	if [[ "$(uname -s)" = "Darwin" ]]; then 
-		printf '\n\n---> Updating homebrew...\n'
+		printf '\n\n---> Updating \e[92mHomeBrew\e[m...\n'
 		brew update
 		brew upgrade
 		brew cleanup -f && brew cask cleanup
 	fi
 
-	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash RBENV...\n'; rbenv rehash)
+	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
 
-	[[ -e "$HOME/.zplug" ]] && (printf '\n\n---> Updating ZPLUG...\n';zplug info; zplug list; zplug update)
-	[[ $SHELL = *zsh* ]] && (printf '\n\n---> Updating compinit...\n'; rm -f "$HOME/.zcompdump"; compinit)
+	[[ -e "$HOME/.zplug" ]] && (printf '\n\n---> Updating \e[92mZPLUG\e[m...\n';zplug info; zplug list; zplug update)
+	[[ $SHELL = *zsh* ]] && (printf '\n\n---> Updating \e[92mcompinit\e[m...\n'; rm -f "$HOME/.zcompdump"; compinit)
 }
 
 function updatePTB() {

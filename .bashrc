@@ -2,7 +2,7 @@ source ~/.dotfiles/env
 source ~/.dotfiles/aliases
 [[ $OSTYPE = 'darwin'* ]] && source ~/.dotfiles/config
 
-# Make vim the default editor
+# Make sublime the default editor
 if [[ -f $(which subl) ]]; then 
 	export EDITOR="subl -w"
 else
@@ -30,5 +30,3 @@ fi
 
 [[ -f $(which figlet) ]] && figlet "Tarako Hai!"
 [[ -f $(which rbenv) ]] && eval "$(rbenv init -)"
-
-# export PATH="$PATH:$HOME/.rvm/bin"
