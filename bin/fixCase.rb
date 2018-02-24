@@ -82,36 +82,38 @@ temp_file = Tempfile.new('fixcase')
 case format 
 when /bib/
 	titleRegex = /^\s*title = /
-	lineSeparator = "\n"
 when /json/
 	titleRegex = /^\s*"title": /
-	lineSeparator = "\n"
 end
 
 #cusom boundarys, more specific than the generic \b 
-boundary1 = "[\\'\\\"\\s\\/\\{\\[\\-\\u2013\\u2014]"
-boundary2 = "[\\'\\\"\\s\\.\\,\\[\\}\\]\\/\\-\\u2013\\u2014]"
+b1 = Regexp.escape("'\",.[(-–—")
+b2 = Regexp.escape("'\",.])-–—")
 
 begin
 	File.open(infilename, 'r') do |file|
-		file.each_line(lineSeparator) do |line|
+		file.each_line do |line|
 			if line.match(titleRegex)
 				keepCase.each do | k |
-					r = /(?<=#{boundary1})#{k}(?=#{boundary2})/
-					case format
-					when /bib/
-						line.gsub!(r, "{#{k}}") #case sensitive
-					when /json/
-						line.gsub!(r, "<span class=\\\"nocase\\\">#{k}</span>") #case sensitive
+					r = /(?<=[\s#{b1}])#{k}(?=[\s#{b2}])/
+					if line.match(r)
+						case format
+						when /bib/
+							line.gsub!(r, "{#{k}}") #case sensitive
+						when /json/
+							line.gsub!(r, "<span class=\\\"nocase\\\">#{k}</span>") #case sensitive
+						end
 					end
 				end
 				enforceCase.each do | e |
-					r = /(?<=#{boundary1})#{e}(?=#{boundary2})/i
-					case format
-					when /bib/
-						line.gsub!(r, "{#{e}}") #case insensitive
-					when /json/
-						line.gsub!(r, "<span class=\\\"nocase\\\">#{e}</span>") #case sensitive
+					r = /(?<=[\s#{b1}])#{e}(?=[\s#{b2}])/i
+					if line.match(r)
+						case format
+						when /bib/
+							line.gsub!(r, "{#{e}}") #case insensitive
+						when /json/
+							line.gsub!(r, "<span class=\\\"nocase\\\">#{e}</span>") #case sensitive
+						end
 					end
 				end
 			end
