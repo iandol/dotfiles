@@ -14,23 +14,25 @@ export DF_BASE="$HOME/.dotfiles"
 
 export ZPLUG_HOME=~/.zplug
 source $ZPLUG_HOME/init.zsh
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "zdharma/history-search-multi-word"
+zplug "zsh-users/zsh-completions", from:github
+zplug "zsh-users/zsh-autosuggestions", from:github
+zplug "zdharma/history-search-multi-word", from:github
 zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
-zplug "zdharma/fast-syntax-highlighting", defer:2
-zplug "zsh-users/zsh-history-substring-search", defer:3
+zplug "zdharma/fast-syntax-highlighting", from:github, defer:2
+zplug "zsh-users/zsh-history-substring-search", from:github, defer:3
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 # Load theme file
-#zplug 'dracula/zsh', as:theme
+#zplug "dracula/zsh", as:theme
 #zplug "agkozak/agkozak-zsh-theme"
-#export AM_VERSIONS_PROMPT=(RUBY)
-#export USE_NERD_FONT=1
-#zplug "eendroroy/alien-minimal"
-export ALIEN_THEME="red"
+#zplug "mashaal/wild-cherry/zsh", from:github, use:wild-cherry.zsh-theme, as:theme
+zplug mafredri/zsh-async, from:github
+zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
+export AM_VERSIONS_PROMPT=(RUBY)
 export USE_NERD_FONT=1
-zplug "eendroroy/alien", as:theme
+export ALIEN_THEME="red"
+#zplug "eendroroy/alien-minimal", from:github, as:theme
+#zplug "eendroroy/alien", from:github, as:theme
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
   zplug install
