@@ -39,7 +39,11 @@ if ! zplug check --verbose; then
 fi
 zplug load
 
-export EDITOR='subl -w'
+if [[ -f $(which subl) ]]; then 
+  export EDITOR='subl -w'
+else
+  export EDITOR='vim'
+fi
 export MANPAGER='less -X' # don't clear after quitting man
 DIRSTACKSIZE=12 # pushd stacksize
 setopt autopushd pushdminus pushdsilent
@@ -71,8 +75,6 @@ fi
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 export path
 
-#[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # RVM shell *as function*
-# export PATH="$PATH:$HOME/.rvm/bin"
 [[ -f $(which swiftenv) ]] && eval "$(swiftenv init -)"
 [[ -f $(which rbenv) ]] && eval "$(rbenv init -)"
 [[ -f $(which archey) ]] && archey -c -o
