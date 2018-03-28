@@ -47,6 +47,7 @@ enforceCase = [
 	"V6a",
 	"MT",
 	"MST",
+	"hMT+",
 	"DNA",
 	"RNA",
 	"TRN",
@@ -68,6 +69,7 @@ enforceCase = [
 	"fMRI",
 	"tDCS",
 	"EEG",
+	"VEP",
 	"AAV",
 	"TMS",
 	"MEG",
@@ -87,37 +89,47 @@ when /json/
 end
 
 #cusom boundarys, more specific than the generic \b 
-b1 = Regexp.escape("'\",.[(-–—")
-b2 = Regexp.escape("'\",.])-–—")
+b1 = Regexp.escape("'\"/,.[(-–—")
+b2 = Regexp.escape("'\"/,.]):-–—")
 
 begin
 	File.open(infilename, 'r') do |file|
 		file.each_line do |line|
+			line.gsub!(/\r+$/, "\n")
 			if line.match(titleRegex)
 				keepCase.each do | k |
-					r = /(?<=[\s#{b1}])#{k}(?=[\s#{b2}])/
-					if line.match(r)
-						case format
-						when /bib/
-							line.gsub!(r, "{#{k}}") #case sensitive
-						when /json/
+					r = /(?<=[\s#{b1}])#{k}(?=[\s#{b2}])/ #case sensitive
+					case format
+					when /bib/
+						line.gsub!(r, "{#{k}}") if line.match(r)
+						sr = /title = {#{k}(?=\b)/ #deal with start-of-title words
+						er = /(?<=\b)#{k}},\s+\n/ #deal with end-of-title words
+						line.gsub!(sr, "title = {{#{k}}") if line.match(sr)
+						line.gsub!(er, "{#{k}}}, \n") if line.match(er)
+					when /json/
+						if line.match(r)
 							line.gsub!(r, "<span class=\\\"nocase\\\">#{k}</span>") #case sensitive
 						end
 					end
+
+					rr = /#{k}},\s\n/
 				end
 				enforceCase.each do | e |
-					r = /(?<=[\s#{b1}])#{e}(?=[\s#{b2}])/i
-					if line.match(r)
-						case format
-						when /bib/
-							line.gsub!(r, "{#{e}}") #case insensitive
-						when /json/
+					r = /(?<=[\s#{b1}])#{e}(?=[\s#{b2}])/i #case insensitive
+					case format
+					when /bib/
+						line.gsub!(r, "{#{e}}") if line.match(r)
+						sr = /title = {#{e}(?=\b)/i #deal with start-of-title words
+						er = /(?<=\b)#{e}},\s+\n/i #deal with end-of-title words
+						line.gsub!(sr, "title = {{#{e}}") if line.match(sr)
+						line.gsub!(er, "{#{e}}}, \n") if line.match(er)
+					when /json/
+						if line.match(r)
 							line.gsub!(r, "<span class=\\\"nocase\\\">#{e}</span>") #case sensitive
 						end
 					end
 				end
 			end
-			line.gsub!(/\r+$/, "\n")
 			temp_file.puts line
 		end
 	end
