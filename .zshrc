@@ -20,8 +20,8 @@ zplug "zdharma/history-search-multi-word", from:github
 zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
 zplug "zdharma/fast-syntax-highlighting", from:github, defer:2
 zplug "zsh-users/zsh-history-substring-search", from:github, defer:3
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+bindkey '^[[A' history-substring-search-up # binds to up-arrow ↑
+bindkey '^[[B' history-substring-search-down # binds to down-arrow ↓
 # Load theme file
 #zplug "dracula/zsh", as:theme
 #zplug "agkozak/agkozak-zsh-theme"
@@ -57,12 +57,12 @@ setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 
-[[ -d "/Volumes/Mac/Users/ian/" ]] && MYHD='/Volumes/Mac/Users/ian/' # old external HD
+#[[ -d "/Volumes/Mac/Users/ian/" ]] && MYHD='/Volumes/Mac/Users/ian/' # old external HD
 #[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home" # use installed JAVA
 #[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 [[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
-[[ -d "/Applications/MATLAB_R2017b.app/bin/" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2017b.app/bin/matlab" && path=("/Applications/MATLAB_R2017b.app/bin" $path) # matlab
-[[ -f "/Applications/MATLAB_R2017b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2017b.app/bin/maci64/mlint" ~/bin/mlint # matlab
+[[ -d "/Applications/MATLAB_R2018a.app/bin/" ]] && (export MATLAB_EXECUTABLE="/Applications/MATLAB_R2018a.app/bin/matlab"; path=("/Applications/MATLAB_R2018a.app/bin" $path)) # matlab
+[[ -f "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ~/bin/mlint # matlab
 if [[ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
   source $HOME/miniconda3/etc/profile.d/conda.sh # anaconda scientific python
 elif [[ -d "$HOME/miniconda3/" ]]; then
@@ -81,4 +81,4 @@ export path
 #[[ -f $(which ansiweather) ]] && ansiweather
 [[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
 
-echo "💡:CTRL+w,k,u: 🔪 | CTRL+r|s: 🔍 | d, cd - & cd #: 🚀 | curl cheat.sh/?"
+echo "💡— CTRL+w,k,u: 🔪 | ↑↓ CTRL+r|s: 🔍 | d, cd - & cd #: 🚀 | curl cheat.sh/?"
