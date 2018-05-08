@@ -28,7 +28,7 @@ alias ping="ping -c 5" # ping 5 times ‘by default’
 # Enable aliases to be sudo’ed
 alias sudo='sudo '
 
-alias installTeX='sudo tlmgr install abstract latexmk csquotes pagecolor relsize ucharcat sectsty titling titlesec preprint layouts glossaries tabulary soul xargs todonotes mfirstuc xfor datatool substr'
+alias installTeX='sudo tlmgr install abstract latexmk csquotes pagecolor relsize ucharcat mdframed needspace sectsty titling titlesec preprint layouts glossaries tabulary soul xargs todonotes mfirstuc xfor datatool substr'
 
 #manage bash/zsh
 if [[ -f $(which subl) ]]; then 
