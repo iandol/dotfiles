@@ -211,6 +211,7 @@ lips() {
 
 # Get Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
+  printf "\n=====>>> Update @ \e[93m$(date)\e[m <<<=====\n"
 	myolddir=$(pwd)
 	ul=(.dotfiles .zplug Code/dotpandoc Code/opticka
 		Code/AfterImage Code/isoluminant Code/Pinna Code/spikes/
@@ -241,7 +242,7 @@ function update() {
 		brew update
 		brew upgrade
 		brew cask upgrade
-		brew cleanup -f && brew cask cleanup
+		brew cleanup && brew cask cleanup
 	fi
 
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
