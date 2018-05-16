@@ -30,6 +30,10 @@ alias sudo='sudo '
 
 alias installTeX='sudo tlmgr install abstract latexmk csquotes pagecolor relsize ucharcat mdframed needspace sectsty titling titlesec preprint layouts glossaries tabulary soul xargs todonotes mfirstuc xfor datatool substr'
 
+# conflicts with MATLAB PTB, so we must manually [dis|en]able
+alias loadKarabiner='sudo launchctl load /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl start /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
+alias unloadKarabiner='sudo launchctl stop /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl unload /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
+
 #manage bash/zsh
 if [[ -f $(which subl) ]]; then 
 	alias edit='subl -w'; #prefer sublime text
