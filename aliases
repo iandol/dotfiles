@@ -26,13 +26,17 @@ alias gzip="gzip -9n" # set strongest compression level as ‘default’ for gzi
 alias ping="ping -c 5" # ping 5 times ‘by default’
 
 # Enable aliases to be sudo’ed
-alias sudo='sudo '
+#alias sudo='sudo '
 
+# Sizes of Folder Contents
+alias sizes='du -sh * | sort -h'
+
+# Minimal TeX packages for Pandoc with BasicTeX
 alias installTeX='sudo tlmgr install abstract latexmk csquotes pagecolor relsize ucharcat mdframed needspace sectsty titling titlesec preprint layouts glossaries tabulary soul xargs todonotes mfirstuc xfor datatool substr'
 
 # conflicts with MATLAB PTB, so we must manually [dis|en]able
-alias loadKarabiner='sudo launchctl load /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl start /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
-alias unloadKarabiner='sudo launchctl stop /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl unload /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
+alias karabinerLoad='sudo launchctl load /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl start /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
+alias karabinerUnload='sudo launchctl stop /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl unload /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
 
 #manage bash/zsh
 if [[ -f $(which subl) ]]; then 
