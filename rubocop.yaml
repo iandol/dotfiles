@@ -1,0 +1,11 @@
+AllCops:
+  TargetRubyVersion: 2.3
+Layout/Tab:
+  Enabled: false
+Layout/IndentationWidth:
+  Enabled: false
+Naming/MethodName:
+  Enabled: false
+Naming/VariableName:
+  Enabled: false
+  
