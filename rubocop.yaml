@@ -1,11 +1,14 @@
 AllCops:
   TargetRubyVersion: 2.3
+Metrics/LineLength:
+  Enabled: false
 Layout/Tab:
   Enabled: false
 Layout/IndentationWidth:
+  Enabled: false
+Layout/IndentHash:
   Enabled: false
 Naming/MethodName:
   Enabled: false
 Naming/VariableName:
   Enabled: false
-  
