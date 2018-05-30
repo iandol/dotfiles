@@ -32,11 +32,18 @@ alias ping="ping -c 5" # ping 5 times ‘by default’
 alias sizes='du -sh * | sort -h'
 
 # Minimal TeX packages for Pandoc with BasicTeX
-alias installTeX='sudo tlmgr install lm-math abstract latexmk csquotes pagecolor relsize ucharcat mdframed needspace sectsty titling titlesec preprint layouts glossaries tabulary soul xargs todonotes mfirstuc xfor wallpaper datatool substr'
+alias installTeX='sudo tlmgr install lm-math lualatex-math luatexja abstract \
+latexmk csquotes pagecolor relsize ucharcat mdframed needspace sectsty \
+titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
+mfirstuc xfor wallpaper datatool substr ctablestack'
 
 # conflicts with MATLAB PTB, so we must manually [dis|en]able
 alias karabinerLoad='sudo launchctl load /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl start /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
 alias karabinerUnload='sudo launchctl stop /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl unload /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
+
+alias zerotierUnload='sudo launchctl unload /Library/LaunchDaemons/com.zerotier.one.plist'
+alias zerotierLoad='sudo launchctl load /Library/LaunchDaemons/com.zerotier.one.plist'
+alias zerotierUninstall='sudo /Library/Application\ Support/ZeroTier/One/uninstall.sh'
 
 #manage bash/zsh
 if [[ -f $(which subl) ]]; then 

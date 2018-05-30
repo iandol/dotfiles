@@ -3,6 +3,4 @@
 .bzrignore
 *~
 .ruby-version
-Core.bib
-Core.json
 .byebug_history
