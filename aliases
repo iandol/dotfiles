@@ -35,7 +35,7 @@ alias sizes='du -sh * | sort -h'
 alias installTeX='sudo tlmgr install lm-math lualatex-math luatexja abstract \
 latexmk csquotes pagecolor relsize ucharcat mdframed needspace sectsty \
 titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
-mfirstuc xfor wallpaper datatool substr ctablestack'
+mfirstuc xfor wallpaper datatool substr ctablestack ifetex'
 
 # conflicts with MATLAB PTB, so we must manually [dis|en]able
 alias karabinerLoad='sudo launchctl load /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl start /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
