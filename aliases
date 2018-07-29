@@ -37,14 +37,6 @@ latexmk csquotes pagecolor relsize ucharcat mdframed needspace sectsty \
 titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
 mfirstuc xfor wallpaper datatool substr ctablestack ifetex'
 
-# conflicts with MATLAB PTB, so we must manually [dis|en]able
-alias karabinerLoad='sudo launchctl load /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl start /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
-alias karabinerUnload='sudo launchctl stop /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl unload /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
-
-alias zerotierUnload='sudo launchctl unload /Library/LaunchDaemons/com.zerotier.one.plist'
-alias zerotierLoad='sudo launchctl load /Library/LaunchDaemons/com.zerotier.one.plist'
-alias zerotierUninstall='sudo /Library/Application\ Support/ZeroTier/One/uninstall.sh'
-
 #manage bash/zsh
 if [[ -f $(which subl) ]]; then 
 	alias edit='subl -w'; #prefer sublime text
@@ -64,6 +56,14 @@ alias tu='top -o cpu' # cpu
 alias tm='top -o vsize' # memory
 
 if [[ "$(uname -s)" = "Darwin" ]]; then 
+	# conflicts with MATLAB PTB, so we must manually [dis|en]able
+	alias karabinerLoad='sudo launchctl load /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl start /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
+	alias karabinerUnload='sudo launchctl stop /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; sudo launchctl unload /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist'
+
+	alias zerotierUnload='sudo launchctl unload /Library/LaunchDaemons/com.zerotier.one.plist'
+	alias zerotierLoad='sudo launchctl load /Library/LaunchDaemons/com.zerotier.one.plist'
+	alias zerotierUninstall='sudo /Library/Application\ Support/ZeroTier/One/uninstall.sh'
+
 	alias randomAddress="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//'"
 	alias randomiseMAC="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//' | xargs sudo ifconfig en0 ether"
 	alias noquarantine='xattr -d com.apple.quarantine '
@@ -294,7 +294,9 @@ function update() {
 function doBib() {
 	printf '\n---> Processing Bibliography file...\n'
 	cd ~/Desktop
+	printf '\n---> Citeproc generating JSON from BIB file...\n'
 	pandoc-citeproc -j ~/Desktop/Core.bib > ~/Desktop/Core.json
+	printf '\n---> Processing title case...\n'
 	fixCase.rb ~/Desktop/Core.bib
 	fixCase.rb ~/Desktop/Core.json
 	printf '\n---> Moving to Dropbox...\n'
