@@ -80,13 +80,13 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 	#alias kernel64='sudo systemsetup -setkernelbootarchitecture x86_64'
 	#alias kernel32='sudo systemsetup -setkernelbootarchitecture i386'
 	alias top='TERM=vt100 top'
-  alias reveal='open --reveal'
-  alias nitenite='exec pmset sleepnow'
+	alias reveal='open --reveal'
+	alias nitenite='exec pmset sleepnow'
 
 	# Quicklook and Spotlight
-  alias ql='qlmanage -p'
-  alias quicklook='qlmanage -p'
-  alias spotlighter='mdfind -onlyin `pwd`'
+	alias ql='qlmanage -p'
+	alias quicklook='qlmanage -p'
+	alias spotlighter='mdfind -onlyin `pwd`'
 
 	# `wifi on` to turn wifi on, and `wifi off` to turn it off
 	alias wifi="networksetup -setairportpower $(networksetup -listallhardwareports | grep -A 2 'Hardware Port: Wi-Fi' | grep 'Device:' | awk '{print $2}')"
@@ -124,7 +124,6 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 	alias show-desktop-icons="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 	alias hide-desktop-icons="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
 
-
 	function sharescreen() {
 		sudo defaults write /var/db/launchd.db/com.apple.launchd/overrides.plist com.apple.screensharing -dict Disabled -bool false
 		sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist
@@ -132,7 +131,16 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 	function sharescreenstop() {
 		sudo launchctl unload /System/Library/LaunchDaemons/com.apple.screensharing.plist
 	}
-
+	function convertMetadata() {
+		mdfind "kMDItemOMUserTags == *" -onlyin "." | while IFS= read -r file; do
+			echo "$file"
+			plistTags=$(mdls -plist - -name kMDItemOMUserTags "$file"|grep -v "kMDItemOMUserTags\|dict")
+			xattr -w com.apple.metadata:_kMDItemUserTags "$plistTags" "$file"
+		done
+	}
+	function pman() {
+		man -t "${1}" | open -f -a /Applications/Preview.app
+	}
 fi
 
 # Checksums
@@ -172,19 +180,19 @@ alias rot13='tr a-zA-Z n-za-mN-ZA-M'
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 
 function transfer() { 
-  if [ $# -eq 0 ]; then
-    echo -e "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md";
-    return 1;
-  fi
-  tmpfile=$( mktemp -t transferXXX );
-  if tty -s; then
-    basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g');
-    curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile;
-  else 
-    curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile ;
-  fi;
-  cat $tmpfile;
-  rm -f $tmpfile;
+	if [ $# -eq 0 ]; then
+		echo -e "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md";
+		return 1;
+	fi
+	tmpfile=$( mktemp -t transferXXX );
+	if tty -s; then
+		basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g');
+		curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile;
+	else 
+		curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile ;
+	fi;
+	cat $tmpfile;
+	rm -f $tmpfile;
 }
 
 function setproxy() {
@@ -242,7 +250,7 @@ lips() {
 
 # Get Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
-  printf "\n=====>>> Update @ \e[93m$(date)\e[m <<<=====\n"
+	printf "\n=====>>> Start Update @ \e[93m$(date)\e[m <<<=====\n"
 	myolddir=$(pwd)
 	ul=(.dotfiles .zplug Code/dotpandoc Code/opticka
 		Code/AfterImage Code/isoluminant Code/Pinna Code/spikes/
@@ -280,6 +288,7 @@ function update() {
 
 	[[ -e "$HOME/.zplug" ]] && (printf '\n\n---> Updating \e[92mZPLUG\e[m...\n';zplug info; zplug list; zplug update)
 	[[ $SHELL = *zsh* ]] && (printf '\n\n---> Updating \e[92mcompinit\e[m...\n'; rm -f "$HOME/.zcompdump"; compinit)
+	printf "\n=====>>> Finish Update @ \e[93m$(date)\e[m <<<=====\n"
 }
 
 function doBib() {
@@ -346,10 +355,6 @@ function listTCP() {
 function define() {
 	local y="$@";
 	curl -sA "Opera" "http://www.google.com/search?q=define:${y// /+}" | grep -Po '(?<=<li>)[^<]+'|nl|perl -MHTML::Entities -pe 'decode_entities($_)' 2>/dev/null;
-}
-
-function pman() {
-	man -t "${1}" | open -f -a /Applications/Preview.app
 }
 
 function tman() {
