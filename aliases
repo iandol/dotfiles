@@ -57,12 +57,12 @@ alias tm='top -o vsize' # memory
 
 if [[ "$(uname -s)" = "Darwin" ]]; then 
 	# conflicts with MATLAB PTB, so we must manually [dis|en]able
-	alias karabinerLoad='launchctl load /Library/LaunchAgents/org.pqrs.karabiner.karabiner_console_user_server.plist; \
-	sudo launchctl load /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; \
-	sudo launchctl load /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_observer.plist;'
-	alias karabinerUnload='launchctl unload /Library/LaunchAgents/org.pqrs.karabiner.karabiner_console_user_server.plist; \
-	sudo launchctl unload /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; \
-	sudo launchctl unload /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_observer.plist; \
+	alias karabinerLoad='sudo launchctl load -wF /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; \
+	sudo launchctl load -wF /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_observer.plist; \
+	launchctl load -wF /Library/LaunchAgents/org.pqrs.karabiner.karabiner_console_user_server.plist'
+	alias karabinerUnload='launchctl unload -wF /Library/LaunchAgents/org.pqrs.karabiner.karabiner_console_user_server.plist; \
+	sudo launchctl unload -wF /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; \
+	sudo launchctl unload -wF /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_observer.plist; \
 	sudo killall karabiner_grabber; \
 	sudo killall karabiner_console_user_server; \
 	sudo killall Karabiner-Menu; \
