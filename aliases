@@ -64,8 +64,8 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 	sudo launchctl unload /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; \
 	sudo launchctl unload /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_observer.plist; \
 	sudo killall karabiner_grabber; \
-	sudo killall Karabiner-Menu; \
 	sudo killall karabiner_console_user_server; \
+	sudo killall Karabiner-Menu; \
 	sudo killall Karabiner-Elements'
 
 	alias zerotierUnload='sudo launchctl unload /Library/LaunchDaemons/com.zerotier.one.plist'
