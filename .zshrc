@@ -60,6 +60,7 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 #[[ -d "/Volumes/Mac/Users/ian/" ]] && MYHD='/Volumes/Mac/Users/ian/' # old external HD
 #[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home" # use installed JAVA
 #[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
+[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path=("/Applications/Araxis Merge.app/Contents/Utilities" $path)
 [[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
 [[ -d "/Applications/MATLAB_R2018a.app/bin/" ]] && (export MATLAB_EXECUTABLE="/Applications/MATLAB_R2018a.app/bin/matlab"; path=("/Applications/MATLAB_R2018a.app/bin" $path)) # matlab
 [[ -f "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ~/bin/mlint # matlab
