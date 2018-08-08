@@ -65,6 +65,9 @@ ln -siv ~/.dotfiles/.vimrc ~
 chown $USER ~/.vimrc
 ln -siv ~/.dotfiles/.vim ~/.vim
 chown -R $USER ~/.vim
+ln -siv ~/.dotfiles/.rubocop.yml ~
+chown $USER ~/.rubocop.yml
+
 printf '\e[36m'
 
 printf 'Will check for a functional Antigen...\n'
@@ -102,7 +105,7 @@ if [[ "$(uname -s)" = "Darwin" ]; then
 	if [ $ans == 'y' ]; then
 		echo 'Enter password for setup command:'
 		sudo echo -n "..."
-		zsh ~/.dotfiles/osx.sh
+		zsh ~/.dotfiles/macos.sh
 	fi
 fi
 
@@ -114,6 +117,8 @@ if [ -f $(which git) ]; then
 	git config --global alias.br branch
 	git config --global alias.co checkout
 	git config --global alias.dt difftool
+	git config --global alias.dta difftool -d
+	git config --global alias.dtl difftool HEAD^
 	git config --global difftool.prompt false
 	git config --global color.ui always
 	git config --global color.branch true
