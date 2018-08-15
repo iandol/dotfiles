@@ -69,8 +69,8 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 	sudo killall Karabiner-Menu; \
 	sudo killall Karabiner-Elements;'
 
-	alias zerotierUnload='sudo launchctl unload /Library/LaunchDaemons/com.zerotier.one.plist'
-	alias zerotierLoad='sudo launchctl load /Library/LaunchDaemons/com.zerotier.one.plist'
+	alias zerotierUnload='sudo killall "ZeroTier One"; sudo launchctl unload /Library/LaunchDaemons/com.zerotier.one.plist'
+	alias zerotierLoad='sudo launchctl load /Library/LaunchDaemons/com.zerotier.one.plist; sleep 3; open "/Applications/ZeroTier One.app"'
 	alias zerotierUninstall='sudo /Library/Application\ Support/ZeroTier/One/uninstall.sh'
 
 	alias randomAddress="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//'"
