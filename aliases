@@ -15,6 +15,9 @@ else
 fi
 alias gst='git status'
 alias gca='git commit --all'
+alias gdt='git difftool'
+alias resetorigin='git fetch origin && git reset --hard origin/master && git clean -f -d'
+alias resetupstream='git fetch upstream && git reset --hard upstream/master && git clean -f -d'
 alias la="ls -alGhF"
 alias las="ls -alGhFeLH"
 alias ll="ls -alFGh"
@@ -290,7 +293,7 @@ function update() {
 		brew update
 		brew upgrade
 		brew cask upgrade
-		brew cleanup && brew cask cleanup
+		brew cleanup
 	fi
 
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
