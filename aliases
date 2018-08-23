@@ -153,6 +153,8 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 	function pman() {
 		man -t "${1}" | open -f -a /Applications/Preview.app
 	}
+else
+	alias flushdns='sudo systemd-resolve --flush-caches; sudo systemd-resolve --statistics'
 fi
 
 # Checksums
