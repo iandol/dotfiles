@@ -62,10 +62,11 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 #[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 [[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path=("/Applications/Araxis Merge.app/Contents/Utilities" $path)
 [[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
-[[ -d "/Applications/MATLAB_R2018a.app/bin/" ]] && (export MATLAB_EXECUTABLE="/Applications/MATLAB_R2018a.app/bin/matlab"; path=("/Applications/MATLAB_R2018a.app/bin" $path)) # matlab
+[[ -d "/Applications/MATLAB_R2018a.app/bin" ]] && path=("/Applications/MATLAB_R2018a.app/bin" $path) # matlab
+[[ -d "/Applications/MATLAB_R2018a.app/bin" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2018a.app/bin/matlab" # matlab
 [[ -f "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ~/bin/mlint # matlab
 if [[ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
-  source $HOME/miniconda3/etc/profile.d/conda.sh # anaconda scientific python
+  source $HOME/miniconda3/etc/profile.d/conda.sh # miniconda, preferred way to use conda without mod path
 elif [[ -d "$HOME/miniconda3/" ]]; then
   path=("$HOME/miniconda3/bin" $path) 
 elif [[ -d "$HOME/anaconda3/" ]]; then
@@ -74,7 +75,7 @@ fi
 [[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=("/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" $path)
 [[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
-export path
+export PATH
 
 [[ -f $(which swiftenv) ]] && eval "$(swiftenv init -)"
 [[ -f $(which rbenv) ]] && eval "$(rbenv init -)"
