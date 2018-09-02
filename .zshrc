@@ -10,14 +10,14 @@
 # Uncomment following line if you want red dots to be displayed while waiting for completion
 COMPLETION_WAITING_DOTS="true"
 
-export DF_BASE="$HOME/.dotfiles"
+export DF="$HOME/.dotfiles"
 
 export ZPLUG_HOME=~/.zplug
 source $ZPLUG_HOME/init.zsh
 zplug "zsh-users/zsh-completions", from:github
 zplug "zsh-users/zsh-autosuggestions", from:github
-zplug "zdharma/history-search-multi-word", from:github
-zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
+[[ ! -x $(which fzf) ]] && zplug "zdharma/history-search-multi-word", from:github 
+[[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
 zplug "zdharma/fast-syntax-highlighting", from:github, defer:2
 zplug "zsh-users/zsh-history-substring-search", from:github, defer:3
 bindkey '^[[A' history-substring-search-up # binds to up-arrow ↑
@@ -39,11 +39,12 @@ if ! zplug check --verbose; then
 fi
 zplug load
 
-if [[ -f $(which subl) ]]; then 
-  export EDITOR='subl -w'
+if [[ -f $(which code) ]]; then 
+  export EDITOR='code -nw'
 else
   export EDITOR='vim'
 fi
+
 export MANPAGER='less -X' # don't clear after quitting man
 DIRSTACKSIZE=12 # pushd stacksize
 setopt autopushd pushdminus pushdsilent
@@ -64,9 +65,10 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 [[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
 [[ -d "/Applications/MATLAB_R2018a.app/bin" ]] && path=("/Applications/MATLAB_R2018a.app/bin" $path) # matlab
 [[ -d "/Applications/MATLAB_R2018a.app/bin" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2018a.app/bin/matlab" # matlab
-[[ -f "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ~/bin/mlint # matlab
-if [[ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
+[[ -x "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ~/bin/mlint # matlab
+if [[ -e "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
   source $HOME/miniconda3/etc/profile.d/conda.sh # miniconda, preferred way to use conda without mod path
+  conda activate base
 elif [[ -d "$HOME/miniconda3/" ]]; then
   path=("$HOME/miniconda3/bin" $path) 
 elif [[ -d "$HOME/anaconda3/" ]]; then
@@ -77,10 +79,12 @@ fi
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 export PATH
 
-[[ -f $(which swiftenv) ]] && eval "$(swiftenv init -)"
-[[ -f $(which rbenv) ]] && eval "$(rbenv init -)"
-[[ -f $(which archey) ]] && archey -c -o
-#[[ -f $(which ansiweather) ]] && ansiweather
-[[ -e "$DF_BASE/aliases" ]] && source "$DF_BASE/aliases"
+[[ -x $(which swiftenv) ]] && eval "$(swiftenv init -)"
+[[ -x $(which rbenv) ]] && eval "$(rbenv init -)"
+[[ -x $(which archey) ]] && archey -c -o
+#[[ -x $(which ansiweather) ]] && ansiweather
+[[ -f "$DF/aliases" ]] && source "$DF/aliases"
+[[ -x $(which fzf) ]] && source $DF/.fzf.zsh
 
 echo "💡— CTRL+w,k,u: 🔪 | ↑↓ CTRL+r|s: 🔍 | d, cd - & cd #: 🚀 | curl cheat.sh/?"
+

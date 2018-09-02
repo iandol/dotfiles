@@ -27,9 +27,17 @@ alias l.='ls -d .[^.]*' #only show .dot files
 alias grep="grep --color=auto"
 alias gzip="gzip -9n" # set strongest compression level as ‘default’ for gzip
 alias ping="ping -c 5" # ping 5 times ‘by default’
-
+[[ -x $(which prettyping) ]] && alias ping="prettyping --nolegend"
+[[ -x $(which bat) ]] && alias cat='bat'
 # Enable aliases to be sudo’ed
 #alias sudo='sudo '
+
+# fuzzy finder
+if [[ -x $(which fzf) ]]; then
+	alias preview="fzf --preview 'bat --color \"always\" {}'"
+	# add support for ctrl+o to open selected file in VS Code
+	export FZF_DEFAULT_OPTS="--bind='ctrl-o:execute(code {})+abort'"
+fi
 
 # Sizes of Folder Contents
 alias sizes='du -sh * | sort -h'
@@ -41,14 +49,15 @@ titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
 mfirstuc xfor wallpaper datatool substr ctablestack ifetex'
 
 #manage bash/zsh
-if [[ -f $(which subl) ]]; then 
-	alias edit='subl -w'; #prefer sublime text
+if [[ -x $(which code) ]]; then 
+	alias edit='code -nw';
 	alias s='subl';
+	alias e='code';
 else
 	alias edit='vim';
 fi
-alias reloadbash='source ~/.bashrc'
-alias reloadzsh='source ~/.zshrc'
+alias reloadbash='clear;source ~/.bashrc'
+alias reloadzsh='clear;source ~/.zshrc'
 alias editbash='edit ~/.bashrc ~/.bash_profile ~/.dotfiles/env ~/.dotfiles/config ~/.dotfiles/aliases && reloadbash'
 alias editzsh='edit ~/.zshrc ~/.dotfiles/config ~/.dotfiles/aliases && reloadzsh'
 alias usezsh='chsh -s $(which zsh) && reloadzsh'
