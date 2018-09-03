@@ -11,11 +11,15 @@
 COMPLETION_WAITING_DOTS="true"
 
 export DF="$HOME/.dotfiles"
+export PLATFORM=$(uname -s)
 
 export ZPLUG_HOME=~/.zplug
 source $ZPLUG_HOME/init.zsh
 zplug "zsh-users/zsh-completions", from:github
 zplug "zsh-users/zsh-autosuggestions", from:github
+# Grab binaries from GitHub Releases
+# and rename with the "rename-to:" tag
+[[ $PLATFORM = "Linux" ]] && zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"*linux*amd64*"
 [[ ! -x $(which fzf) ]] && zplug "zdharma/history-search-multi-word", from:github 
 [[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
 zplug "zdharma/fast-syntax-highlighting", from:github, defer:2
@@ -35,14 +39,14 @@ export ALIEN_THEME="red"
 #zplug "eendroroy/alien", from:github, as:theme
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
-  zplug install
+	zplug install
 fi
 zplug load
 
 if [[ -f $(which code) ]]; then 
-  export EDITOR='code -nw'
+	export EDITOR='code -nw'
 else
-  export EDITOR='vim'
+	export EDITOR='vim'
 fi
 
 export MANPAGER='less -X' # don't clear after quitting man
@@ -67,15 +71,16 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 [[ -d "/Applications/MATLAB_R2018a.app/bin" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2018a.app/bin/matlab" # matlab
 [[ -x "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ~/bin/mlint # matlab
 if [[ -e "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
-  source $HOME/miniconda3/etc/profile.d/conda.sh # miniconda, preferred way to use conda without mod path
-  conda activate base
+	source $HOME/miniconda3/etc/profile.d/conda.sh # miniconda, preferred way to use conda without mod path
+	conda activate base
 elif [[ -d "$HOME/miniconda3/" ]]; then
-  path=("$HOME/miniconda3/bin" $path) 
+	path=("$HOME/miniconda3/bin" $path) 
 elif [[ -d "$HOME/anaconda3/" ]]; then
-  path=("$HOME/anaconda3/bin" $path) 
+	path=("$HOME/anaconda3/bin" $path) 
 fi
 [[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=("/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" $path)
 [[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
+[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrewbin" "/home/linuxbrew/.linuxbrewbin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 export PATH
 

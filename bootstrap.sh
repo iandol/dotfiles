@@ -3,8 +3,10 @@ cd ~
 printf "\n\n--->>> Bootstrap terminal setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
 
+PLATFORM=$(uname -s)
+
 #try to install homebrew on macOS
-if [[ "$(uname -s)" = "Darwin" ]]; then
+if [[ $PLATFORM = "Darwin" ]]; then
 	if [[ ! -e /usr/bin/clang ]]; then
 		printf 'We will need to install Command-line tools ... '
 		xcode-select --install
@@ -29,13 +31,24 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 		brew install bat rbenv ruby-build git figlet archey jq fzf prettyping ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver 
 		brew cask install font-fantasquesansmono-nerd-font font-fira-code font-hack font-hasklig font-source-code-pro font-source-sans-pro imageoptim tex-live-utility 
 	fi
-else
+elif [[ $PLATFORM = "Linux" ]]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
-	sudo apt-get install zsh ruby vim git figlet jq ansiweather freeglut 
+	if [[ ! -d /home/linuxbrew/.linuxbrew ]]; then
+		printf 'Installing Homebrew...\n'
+		sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+	else
+		printf 'Homebrew installed...\n'
+	fi
+	sudo apt-get install build-essential curl file zsh ruby vim git figlet jq ansiweather freeglut 
 	mkdir -p ~/bin
-  cd ~/bin
-  wget https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy
-  chmod 755 ~/bin/diff-so-fancy
+	cd ~/bin
+	wget https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy
+	chmod 755 ~/bin/diff-so-fancy
+	#make sure our minimum packages are installed
+	if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+		printf 'Adding Homebrew packages...\n'
+		brew install gcc bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver 
+	fi
 fi
 
 printf 'Let us bootstrap .dotfiles if not present ... '
@@ -87,7 +100,7 @@ else
 	chown $USER ~/.antigen
 fi
 
-if [[ "$(uname -s)" = "Darwin" ]; then
+if [[ $PLATFORM = "Darwin" ]; then
 	printf 'Linking some bin files in ~/bin/: \n'
 	printf '\e[32m'
 	if [ -d ~/bin/ ]; then
@@ -126,7 +139,7 @@ if [ -f $(which git) ]; then
 	git config --global color.grep true
 	git config --global color.interactive true
 	git config --global color.status true
-  if [ $OSTYPE == 'darwin'* ]; then
+  if [ $PLATFORM = 'Darwin' ]; then
   	git config --global credential.helper osxkeychain
   fi
 	git config --global pager.diff "diff-so-fancy | less --tabs=4 -RFX"
