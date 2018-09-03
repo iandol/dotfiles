@@ -17,9 +17,6 @@ export ZPLUG_HOME=~/.zplug
 source $ZPLUG_HOME/init.zsh
 zplug "zsh-users/zsh-completions", from:github
 zplug "zsh-users/zsh-autosuggestions", from:github
-# Grab binaries from GitHub Releases
-# and rename with the "rename-to:" tag
-[[ $PLATFORM = "Linux" ]] && zplug "junegunn/fzf-bin", from:gh-r, as:command, rename-to:fzf, use:"*linux*amd64*"
 [[ ! -x $(which fzf) ]] && zplug "zdharma/history-search-multi-word", from:github 
 [[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
 zplug "zdharma/fast-syntax-highlighting", from:github, defer:2
@@ -80,7 +77,7 @@ elif [[ -d "$HOME/anaconda3/" ]]; then
 fi
 [[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=("/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" $path)
 [[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
-[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrewbin" "/home/linuxbrew/.linuxbrewbin" $path)
+[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 export PATH
 

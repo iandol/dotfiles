@@ -19,7 +19,6 @@ if [[ $PLATFORM = "Darwin" ]]; then
 		printf 'Homebrew is present!\n'
 	else
 		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-		brew tap homebrew/science
 		printf 'Homebrew installed...\n'
 		brew tap caskroom/cask
 		brew tap caskroom/fonts
@@ -37,17 +36,13 @@ elif [[ $PLATFORM = "Linux" ]]; then
 		printf 'Installing Homebrew...\n'
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 	else
-		printf 'Homebrew installed...\n'
+		printf 'Homebrew already installed...\n'
 	fi
-	sudo apt-get install build-essential curl file zsh ruby vim git figlet jq ansiweather freeglut 
-	mkdir -p ~/bin
-	cd ~/bin
-	wget https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy
-	chmod 755 ~/bin/diff-so-fancy
 	#make sure our minimum packages are installed
+	sudo apt-get install build-essential curl file zsh vim git figlet jq ansiweather freeglut 
 	if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install gcc bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver 
+		brew install gcc diff-so-fancy figlet bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref 
 	fi
 fi
 
