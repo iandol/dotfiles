@@ -88,5 +88,4 @@ export PATH
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which fzf) ]] && source $DF/.fzf.zsh
 
-echo "💡— CTRL+w,k,u: 🔪 | ↑↓ CTRL+r|s: 🔍 | d, cd - & cd #: 🚀 | curl cheat.sh/?"
-
+echo "⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: ↑↓🔍 | d, cd - & cd #n: 🚀 | 💡 tldr ? / curl cheat.sh/?"
