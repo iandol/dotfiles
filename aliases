@@ -299,7 +299,7 @@ function update() {
 	cd $myolddir
 	unset myolddir
 
-	if [[ "$(uname -s)" = "Darwin" ]]; then 
+	if [[ -x $(which brew) ]]; then 
 		printf '\n\n---> Updating \e[92mHomeBrew\e[m...\n'
 		brew update
 		brew upgrade
@@ -310,7 +310,7 @@ function update() {
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
 
 	[[ -e "$HOME/.zplug" ]] && (printf '\n\n---> Updating \e[92mZPLUG\e[m...\n';zplug info; zplug list; zplug update)
-	[[ $SHELL = *zsh* ]] && (printf '\n\n---> Updating \e[92mcompinit\e[m...\n'; rm -f "$HOME/.zcompdump"; compinit)
+	#[[ $SHELL = *zsh* ]] && (printf '\n\n---> Updating \e[92mcompinit\e[m...\n'; rm -f "$HOME/.zcompdump"; compinit)
 	printf "\n=====>>> Finish Update @ \e[93m$(date)\e[m <<<=====\n"
 }
 
