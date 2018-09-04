@@ -27,7 +27,7 @@ alias l.='ls -d .[^.]*' #only show .dot files
 alias grep="grep --color=auto"
 alias gzip="gzip -9n" # set strongest compression level as ‘default’ for gzip
 alias ping="ping -c 5" # ping 5 times ‘by default’
-[[ -x $(which prettyping) ]] && alias ping="prettyping --nolegend"
+[[ -x $(which prettyping) ]] && alias ping="prettyping -c 5 --nolegend"
 [[ -x $(which bat) ]] && alias cat='bat'
 # Enable aliases to be sudo’ed
 #alias sudo='sudo '
