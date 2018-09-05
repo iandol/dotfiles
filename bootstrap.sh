@@ -39,7 +39,7 @@ elif [[ $PLATFORM = "Linux" ]]; then
 		printf 'Homebrew already installed...\n'
 	fi
 	#make sure our minimum packages are installed
-	sudo apt-get install build-essential curl file zsh vim git figlet jq ansiweather freeglut 
+	sudo apt-get install build-essential curl file zsh git figlet jq ansiweather freeglut3 
 	if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install gcc diff-so-fancy figlet bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref 
