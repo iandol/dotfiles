@@ -17,12 +17,9 @@ export ZPLUG_HOME=~/.zplug
 source $ZPLUG_HOME/init.zsh
 zplug "zsh-users/zsh-completions", from:github
 zplug "zsh-users/zsh-autosuggestions", from:github
+#if fzf is not installed
 [[ ! -x $(which fzf) ]] && zplug "zdharma/history-search-multi-word", from:github 
 [[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
-zplug "zdharma/fast-syntax-highlighting", from:github, defer:2
-zplug "zsh-users/zsh-history-substring-search", from:github, defer:3
-bindkey '^[[A' history-substring-search-up # binds to up-arrow ↑
-bindkey '^[[B' history-substring-search-down # binds to down-arrow ↓
 # Load theme file
 #zplug "dracula/zsh", as:theme
 #zplug "agkozak/agkozak-zsh-theme"
@@ -34,11 +31,16 @@ export USE_NERD_FONT=1
 export ALIEN_THEME="red"
 #zplug "eendroroy/alien-minimal", from:github, as:theme
 #zplug "eendroroy/alien", from:github, as:theme
+#supposed to come after compinit
+zplug "zdharma/fast-syntax-highlighting", from:github, defer:2
+zplug "zsh-users/zsh-history-substring-search", from:github, defer:3
+bindkey '^[[A' history-substring-search-up # binds to up-arrow ↑
+bindkey '^[[B' history-substring-search-down # binds to down-arrow ↓
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
 	zplug install
 fi
-zplug load
+zplug load --verbose
 
 if [[ -f $(which code) ]]; then 
 	export EDITOR='code -nw'
