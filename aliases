@@ -31,6 +31,8 @@ alias ping="ping -c 5" # ping 5 times ‘by default’
 [[ -x $(which bat) ]] && alias cat='bat'
 # Enable aliases to be sudo’ed
 #alias sudo='sudo '
+# howdoi is a python pip install
+alias h='function hdi(){ howdoi $* -c -n 5; }; hdi'
 
 # fuzzy finder
 if [[ -x $(which fzf) ]]; then
