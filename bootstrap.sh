@@ -19,7 +19,7 @@ if [[ $PLATFORM = "Darwin" ]]; then
 		printf 'Homebrew is present!\n'
 	else
 		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-		printf 'Homebrew installed...\n'
+		printf 'Homebrew now installed...\n'
 		brew tap caskroom/cask
 		brew tap caskroom/fonts
 		printf 'Added Caskroom to Homebrew...\n'
@@ -32,19 +32,22 @@ if [[ $PLATFORM = "Darwin" ]]; then
 	fi
 elif [[ $PLATFORM = "Linux" ]]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
+	#make sure our minimum packages are installed
+	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather freeglut3 
 	if [[ ! -d /home/linuxbrew/.linuxbrew ]]; then
 		printf 'Installing Homebrew...\n'
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 	else
 		printf 'Homebrew already installed...\n'
 	fi
-	#make sure our minimum packages are installed
-	sudo apt-get install build-essential curl file zsh git figlet jq ansiweather freeglut3 
 	if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install gcc diff-so-fancy figlet bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref 
+		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref 
 	fi
 fi
+
+#few python packages
+pip install howdoi black pylint
 
 printf 'Let us bootstrap .dotfiles if not present ... '
 if [[ -d ~/.dotfiles/.git ]]; then
@@ -78,7 +81,7 @@ chown $USER ~/.rubocop.yml
 
 printf '\e[36m'
 
-printf 'Will check for a functional Antigen...\n'
+printf 'Will check for a functional ZPLUG...\n'
 if [ -d ~/.oh-my-zsh/ ]; then
 	printf '\t...Going to replace oh-my-zsh with ZPlug... '
 	rm -rf ~/.oh-my-zsh/
@@ -90,9 +93,10 @@ fi
 if [ ! -d ~/.zplug/ ]; then
 	printf '\t...Going to ... '
 	curl -sL https://github.com/zplug/installer/raw/master/installer.zsh | zsh
+	chown $USER ~/.zplug
 else
-	printf '\tAntigen already installed...\n'
-	chown $USER ~/.antigen
+	printf '\tZPlug already installed...\n'
+	chown $USER ~/.zplug
 fi
 
 if [[ $PLATFORM = "Darwin" ]; then
@@ -134,9 +138,9 @@ if [ -f $(which git) ]; then
 	git config --global color.grep true
 	git config --global color.interactive true
 	git config --global color.status true
-  if [ $PLATFORM = 'Darwin' ]; then
-  	git config --global credential.helper osxkeychain
-  fi
+	if [ $PLATFORM = 'Darwin' ]; then
+		git config --global credential.helper osxkeychain
+	fi
 	git config --global pager.diff "diff-so-fancy | less --tabs=4 -RFX"
 	git config --global pager.show "diff-so-fancy | less --tabs=4 -RFX"
 else

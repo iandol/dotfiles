@@ -1,54 +1,47 @@
 #!/usr/bin/env zsh
-# Set to this to use case-sensitive completion
-# CASE_SENSITIVE="true"
-# Comment this out to disable weekly auto-update checks
-# DISABLE_AUTO_UPDATE="true"
-# Uncomment following line if you want to disable colors in ls
-# DISABLE_LS_COLORS="true"
-# Uncomment following line if you want to disable autosetting terminal title.
-# DISABLE_AUTO_TITLE="true"
-# Uncomment following line if you want red dots to be displayed while waiting for completion
-COMPLETION_WAITING_DOTS="true"
 
 export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 
+#--------------------------ZPLUG SETUP
 export ZPLUG_HOME=~/.zplug
 source $ZPLUG_HOME/init.zsh
 zplug "zsh-users/zsh-completions", from:github
 zplug "zsh-users/zsh-autosuggestions", from:github
-#if fzf is not installed
+#-----if fzf is not installed
 [[ ! -x $(which fzf) ]] && zplug "zdharma/history-search-multi-word", from:github 
 [[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
-# Load theme file
+#-----Load theme file
+zplug mafredri/zsh-async, from:github
 #zplug "dracula/zsh", as:theme
 #zplug "agkozak/agkozak-zsh-theme"
 #zplug "mashaal/wild-cherry/zsh", from:github, use:wild-cherry.zsh-theme, as:theme
-zplug mafredri/zsh-async, from:github
+#zplug "eendroroy/alien-minimal", from:github, as:theme
+#zplug "eendroroy/alien", from:github, as:theme
 zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
 export AM_VERSIONS_PROMPT=(RUBY)
 export USE_NERD_FONT=1
 export ALIEN_THEME="red"
-#zplug "eendroroy/alien-minimal", from:github, as:theme
-#zplug "eendroroy/alien", from:github, as:theme
-#supposed to come after compinit
+#-----supposed to come after compinit
 zplug "zdharma/fast-syntax-highlighting", from:github, defer:2
 zplug "zsh-users/zsh-history-substring-search", from:github, defer:3
 bindkey '^[[A' history-substring-search-up # binds to up-arrow ↑
 bindkey '^[[B' history-substring-search-down # binds to down-arrow ↓
-# Install plugins if there are plugins that have not been installed
+#-----Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
 	zplug install
 fi
-zplug load --verbose
+zplug load
 
+#-------------------------------PREFER CODE
 if [[ -f $(which code) ]]; then 
 	export EDITOR='code -nw'
 else
 	export EDITOR='vim'
 fi
 
-export MANPAGER='less -X' # don't clear after quitting man
+#-------------------------------OPTIONS
+COMPLETION_WAITING_DOTS="true"
 DIRSTACKSIZE=12 # pushd stacksize
 setopt autopushd pushdminus pushdsilent
 export HISTFILE="$HOME/.zsh_history"
@@ -60,7 +53,9 @@ setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a d
 setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
+export MANPAGER='less -X' # don't clear after quitting man
 
+#------------------------------------PATHS ETC.
 #[[ -d "/Volumes/Mac/Users/ian/" ]] && MYHD='/Volumes/Mac/Users/ian/' # old external HD
 #[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home" # use installed JAVA
 #[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
