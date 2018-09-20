@@ -27,7 +27,7 @@ if [[ $PLATFORM = "Darwin" ]]; then
 	#make sure our minimum packages are installed
 	if [[ -e /usr/local/bin/brew ]]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install bat rbenv ruby-build git figlet archey jq fzf prettyping ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver 
+		brew install bat rbenv ruby-build zsh git figlet archey jq fzf prettyping ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver 
 		brew cask install font-fantasquesansmono-nerd-font font-fira-code font-hack font-hasklig font-source-code-pro font-source-sans-pro imageoptim tex-live-utility 
 	fi
 elif [[ $PLATFORM = "Linux" ]]; then
@@ -149,6 +149,10 @@ fi
 
 
 printf 'Switching to use ZSH...\n'
-chsh -s $(which zsh) && source ~/.zshrc
+if [[ $PLATFORM = "Darwin" ]; then
+	chsh -s /usr/local/bin/zsh && source ~/.zshrc #installed via brew
+else
+	chsh -s $(which zsh) && source ~/.zshrc
+fi
 printf '\n\n--->>> All Done...\n'
 printf '\e[m'
