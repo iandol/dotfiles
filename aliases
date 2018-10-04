@@ -44,11 +44,11 @@ fi
 # Sizes of Folder Contents
 alias sizes='du -sh * | sort -h'
 
-# Minimal TeX packages for Pandoc with BasicTeX
+# Minimal additional TeX packages for Pandoc templates with BasicTeX
 alias installTeX='sudo tlmgr install lm-math lualatex-math luatexja abstract \
 latexmk csquotes pagecolor relsize ucharcat mdframed needspace sectsty \
 titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
-mfirstuc xfor wallpaper datatool substr ctablestack ifetex'
+mfirstuc xfor wallpaper datatool substr ctablestack ifetex adjustbox collectbox'
 
 #manage bash/zsh
 if [[ -x $(which code) ]]; then 
@@ -98,6 +98,7 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 	alias measurebig='for f in /Volumes /.Spotlight* /.Trashes /Library/Logs /private/ {var/{log,spool,db,vm,tmp},tmp} /Temp*; do sudo du -hsx "$f"; done'
 	alias lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
 	alias lsrebuild='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -v -kill -r -domain local -domain system -domain user'
+	alias servicesrebuild='/System/Library/CoreServices/pbs -flush'
 	alias profop='sudo fs_usage -w -f filesys -e Terminal Parallels mds nmbd Dock WindowServer ATSServer Quicksilver > ~/Desktop/operafs.txt' #profile opera file system usage
 	alias airscan="/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -s"
 	#alias kernel64='sudo systemsetup -setkernelbootarchitecture x86_64'
