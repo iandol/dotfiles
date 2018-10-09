@@ -61,12 +61,12 @@ export MANPAGER='less -X' # don't clear after quitting man
 #[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 [[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path=("/Applications/Araxis Merge.app/Contents/Utilities" $path)
 [[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
-[[ -d "/Applications/MATLAB_R2018a.app/bin" ]] && path=("/Applications/MATLAB_R2018a.app/bin" $path) # matlab
-[[ -d "/Applications/MATLAB_R2018a.app/bin" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2018a.app/bin/matlab" # matlab
-[[ -x "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2018a.app/bin/maci64/mlint" ~/bin/mlint # matlab
+[[ -d "/Applications/MATLAB_R2018b.app/bin" ]] && path=("/Applications/MATLAB_R2018b.app/bin" $path) # matlab
+[[ -d "/Applications/MATLAB_R2018b.app/bin" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2018b.app/bin/matlab" # matlab
+[[ -x "/Applications/MATLAB_R2018b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2018b.app/bin/maci64/mlint" ~/bin/mlint # matlab
 if [[ -e "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
 	source $HOME/miniconda3/etc/profile.d/conda.sh # miniconda, preferred way to use conda without mod path
-	conda activate base
+	#conda activate base
 elif [[ -d "$HOME/miniconda3/" ]]; then
 	path=("$HOME/miniconda3/bin" $path) 
 elif [[ -d "$HOME/anaconda3/" ]]; then
