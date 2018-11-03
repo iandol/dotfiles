@@ -71,7 +71,8 @@ alias tm='top -o vsize' # memory
 
 if [[ "$(uname -s)" = "Darwin" ]]; then 
 	# conflicts with MATLAB PTB, so we must manually [dis|en]able
-	alias karabinerLoad='sudo launchctl load -F /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; \
+	alias karabinerLoad='sudo kextload /Library/Application\ Support/org.pqrs/Karabiner-VirtualHIDDevice/Extensions/org.pqrs.driver.Karabiner.VirtualHIDDevice.v060800.kext; \
+	sudo launchctl load -F /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; \
 	sudo launchctl load -F /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_observer.plist; \
 	launchctl load -F /Library/LaunchAgents/org.pqrs.karabiner.karabiner_console_user_server.plist'
 	alias karabinerUnload='launchctl unload -F /Library/LaunchAgents/org.pqrs.karabiner.karabiner_console_user_server.plist; \
@@ -81,7 +82,8 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 	sudo killall karabiner_grabber; \
 	sudo killall karabiner_console_user_server; \
 	sudo killall Karabiner-Menu; \
-	sudo killall Karabiner-Elements;'
+	sudo killall Karabiner-Elements; \
+	sudo kextunload /Library/Application\ Support/org.pqrs/Karabiner-VirtualHIDDevice/Extensions/org.pqrs.driver.Karabiner.VirtualHIDDevice.v060800.kext;'
 
 	alias zerotierUnload='sudo killall "ZeroTier One"; sudo launchctl unload /Library/LaunchDaemons/com.zerotier.one.plist'
 	alias zerotierLoad='sudo launchctl load /Library/LaunchDaemons/com.zerotier.one.plist; sleep 3; open "/Applications/ZeroTier One.app"'

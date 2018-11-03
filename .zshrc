@@ -12,19 +12,15 @@ zplug "zsh-users/zsh-autosuggestions", from:github
 [[ ! -x $(which fzf) ]] && zplug "zdharma/history-search-multi-word", from:github 
 [[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
 #-----Load theme file
+#zplug "dracula/zsh", as:theme #zplug "agkozak/agkozak-zsh-theme" #zplug "mashaal/wild-cherry/zsh", from:github, use:wild-cherry.zsh-theme, as:theme #zplug "eendroroy/alien-minimal", from:github, as:theme #zplug "eendroroy/alien", from:github, as:theme
 zplug mafredri/zsh-async, from:github
-#zplug "dracula/zsh", as:theme
-#zplug "agkozak/agkozak-zsh-theme"
-#zplug "mashaal/wild-cherry/zsh", from:github, use:wild-cherry.zsh-theme, as:theme
-#zplug "eendroroy/alien-minimal", from:github, as:theme
-#zplug "eendroroy/alien", from:github, as:theme
 zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
-export AM_VERSIONS_PROMPT=(RUBY)
-export USE_NERD_FONT=1
-export ALIEN_THEME="red"
+#export AM_VERSIONS_PROMPT=(RUBY)
+#export USE_NERD_FONT=1
+#export ALIEN_THEME="red"
 #-----supposed to come after compinit
 zplug "zdharma/fast-syntax-highlighting", from:github, defer:2
-zplug "zsh-users/zsh-history-substring-search", from:github, defer:3
+zplug "zsh-users/zsh-history-substring-search", from:github, defer:2
 bindkey '^[[A' history-substring-search-up # binds to up-arrow ↑
 bindkey '^[[B' history-substring-search-down # binds to down-arrow ↓
 #-----Install plugins if there are plugins that have not been installed
