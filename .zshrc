@@ -70,6 +70,7 @@ elif [[ -d "$HOME/anaconda3/" ]]; then
 fi
 [[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=("/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" $path)
 [[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
+[[ -d "/opt/jdk-11/bin/" ]] && export PATH="/opt/jdk-11/bin/:$PATH" # Java
 [[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 export PATH

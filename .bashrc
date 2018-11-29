@@ -29,6 +29,9 @@ elif [[ -d "$HOME/anaconda3/" ]]; then
   export PATH="$HOME/anaconda3/bin:$PATH"
 fi
 
+[[ -d "/opt/jdk-11/bin/" ]] && export PATH="/opt/jdk-11/bin/:$PATH" # Java
+
+[[ -d "/home/linuxbrew/.linuxbrew/bin/" ]] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 if [[ -x $(which brew) ]]; then
 	if [[ -f `brew --prefix`/etc/bash_completion ]]; then
 		source `brew --prefix`/etc/bash_completion

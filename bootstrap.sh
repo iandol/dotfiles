@@ -6,8 +6,8 @@ printf '\e[36m'
 PLATFORM=$(uname -s)
 
 #try to install homebrew on macOS
-if [[ $PLATFORM = "Darwin" ]]; then
-	if [[ ! -e /usr/bin/clang ]]; then
+if [ $PLATFORM = "Darwin" ]; then
+	if [ ! -e /usr/bin/clang ]; then
 		printf 'We will need to install Command-line tools ... '
 		xcode-select --install
 		printf 'Wait for it to finish then rerun bootstrap.sh ... '
@@ -15,7 +15,7 @@ if [[ $PLATFORM = "Darwin" ]]; then
 	fi
 	chflags nohidden ~/Library
 	printf 'Let us bootstrap Homebrew if not present ... '
-	if [[ -e /usr/local/bin/brew ]]; then
+	if [ -e /usr/local/bin/brew ]; then
 		printf 'Homebrew is present!\n'
 	else
 		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -25,32 +25,34 @@ if [[ $PLATFORM = "Darwin" ]]; then
 		printf 'Added Caskroom to Homebrew...\n'
 	fi
 	#make sure our minimum packages are installed
-	if [[ -e /usr/local/bin/brew ]]; then
+	if [ -e /usr/local/bin/brew ]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install bat rbenv ruby-build zsh git figlet archey jq fzf prettyping ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver 
 		brew cask install font-fantasquesansmono-nerd-font font-fira-code font-hack font-hasklig font-source-code-pro font-source-sans-pro imageoptim tex-live-utility 
 	fi
-elif [[ $PLATFORM = "Linux" ]]; then
+elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
 	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather freeglut3 
-	if [[ ! -d /home/linuxbrew/.linuxbrew ]]; then
+	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+		eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 	else
 		printf 'Homebrew already installed...\n'
+		eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 	fi
-	if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+	if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref 
 	fi
 fi
 
 #few python packages
-pip install howdoi black pylint
+pip3 install howdoi black pylint
 
 printf 'Let us bootstrap .dotfiles if not present ... '
-if [[ -d ~/.dotfiles/.git ]]; then
+if [ -d ~/.dotfiles/.git ]; then
 	printf ' .dotfiles are present! \n'
 else
 	git clone https://github.com/iandol/dotfiles.git ~/.dotfiles
@@ -62,9 +64,9 @@ printf 'Setting up the symbolic links at: '
 date
 printf '...\n'
 printf '\e[32m'
-[[ -e ~/.bashrc ]] && cp ~/.bashrc ~/.bashrc.bak
-[[ -e ~/.bash_profile ]] && cp ~/.bash_profile ~/.bash_profile.bak
-[[ -e ~/.zshrc ]] && cp ~/.zshrc ~/.zshrc.bak
+[ -e ~/.bashrc ] && cp ~/.bashrc ~/.bashrc`date -Iseconds`.bak
+[ -e ~/.bash_profile ] && cp ~/.bash_profile ~/.bash_profile`date -Iseconds`.bak
+[ -e ~/.zshrc ] && cp ~/.zshrc ~/.zshrc`date -Iseconds`.bak
 
 ln -siv ~/.dotfiles/.zshrc ~
 chown $USER ~/.zshrc
@@ -99,7 +101,7 @@ else
 	chown $USER ~/.zplug
 fi
 
-if [[ $PLATFORM = "Darwin" ]; then
+if [ $PLATFORM = "Darwin" ]; then
 	printf 'Linking some bin files in ~/bin/: \n'
 	printf '\e[32m'
 	if [ -d ~/bin/ ]; then
@@ -147,12 +149,13 @@ else
 	printf 'GIT is not installed, use command line tools or install homebrew...\n'
 fi
 
-
-printf 'Switching to use ZSH...\n'
-if [[ $PLATFORM = "Darwin" ]; then
-	chsh -s /usr/local/bin/zsh && source ~/.zshrc #installed via brew
-else
-	chsh -s $(which zsh) && source ~/.zshrc
+if [ -x `which zsh` ]; then
+	printf 'Switching to use ZSH...\n'
+	if [ $PLATFORM = "Darwin" ]; then
+		chsh -s /usr/local/bin/zsh && source ~/.zshrc #installed via brew
+	else
+		chsh -s $(which zsh) && source ~/.zshrc
+	fi
 fi
 printf '\n\n--->>> All Done...\n'
 printf '\e[m'
