@@ -52,8 +52,6 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 export MANPAGER='less -X' # don't clear after quitting man
 
 #------------------------------------PATHS ETC.
-#[[ -d "/Volumes/Mac/Users/ian/" ]] && MYHD='/Volumes/Mac/Users/ian/' # old external HD
-#[[ -d "/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/" ]] && export MATLAB_JAVA="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home" # use installed JAVA
 #[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
 [[ -d "/opt/jdk-11/bin" ]] && path=("opt/jdk-11/bin" $path) # Linux JDK
 [[ -d "/opt/jdk-11/bin" ]] && export JAVA_HOME="/opt/jdk-11/bin" # Linux Java
