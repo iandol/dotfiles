@@ -1,5 +1,6 @@
 export DF="$HOME/.dotfiles"
-[[ $OSTYPE = 'darwin'* ]] && source $DF/config
+export PLATFORM=$(uname -s)
+[[ $PLATFORM = 'darwin'* ]] && source $DF/config
 
 # Make sublime the default editor
 if [[ -f $(which subl) ]]; then 
@@ -29,13 +30,12 @@ elif [[ -d "$HOME/anaconda3/" ]]; then
   export PATH="$HOME/anaconda3/bin:$PATH"
 fi
 
-[[ -d "/opt/jdk-11/bin/" ]] && export PATH="/opt/jdk-11/bin/:$PATH" # Java
+[[ -d "/opt/jdk-11/bin/" ]] && export PATH="/opt/jdk-11/bin:$PATH" # Linux Java
+[[ -d "/opt/jdk-11/bin/" ]] && export JAVA_HOME="/opt/jdk-11/bin" # Linux Java
 
 [[ -d "/home/linuxbrew/.linuxbrew/bin/" ]] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 if [[ -x $(which brew) ]]; then
-	if [[ -f `brew --prefix`/etc/bash_completion ]]; then
-		source `brew --prefix`/etc/bash_completion
-	fi
+	[[ -f `brew --prefix`/etc/bash_completion ]] &&	source `brew --prefix`/etc/bash_completion
 fi
 
 [[ -x $(which rbenv) ]] && eval "$(rbenv init -)"
