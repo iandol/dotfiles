@@ -282,7 +282,7 @@ function update() {
 	myolddir=$(pwd)
 	ul=(.dotfiles .zplug Code/dotpandoc Code/opticka
 		Code/AfterImage Code/isoluminant Code/Pinna Code/spikes/
-		Code/scrivomatic Code/bookends-tools Code/pandocomatic Code/paru
+		Code/Mymou Code/scrivomatic Code/bookends-tools Code/pandocomatic Code/paru
 		Documents/MATLAB/gramm Code/CPServer
 		Code/Psychtoolbox-3 Code/fieldtrip)
 	for x in $ul; do
