@@ -48,7 +48,8 @@ alias sizes='du -sh * | sort -h'
 alias installTeX='sudo tlmgr install lm-math lualatex-math luatexja abstract \
 latexmk csquotes pagecolor relsize ucharcat mdframed needspace sectsty \
 titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
-mfirstuc xfor wallpaper datatool substr ctablestack ifetex adjustbox collectbox'
+mfirstuc xfor wallpaper datatool substr ctablestack ifetex adjustbox collectbox \
+sttools wrapfig'
 
 #manage bash/zsh
 if [[ -x $(which code) ]]; then 
