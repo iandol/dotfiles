@@ -3,6 +3,10 @@
 export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+fi
+
 #--------------------------ZPLUG SETUP
 export ZPLUG_HOME=~/.zplug
 source $ZPLUG_HOME/init.zsh
