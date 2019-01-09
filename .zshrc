@@ -2,7 +2,7 @@
 
 export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
-
+export HOMEBREW_INSTALL_CLEANUP=true
 
 #======================ZPLUG SETUP==============
 export ZPLUG_HOME=~/.zplug
