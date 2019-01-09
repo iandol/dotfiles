@@ -3,35 +3,30 @@
 export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 
-if type brew &>/dev/null; then
-  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
-fi
 
-#--------------------------ZPLUG SETUP
+#======================ZPLUG SETUP==============
 export ZPLUG_HOME=~/.zplug
 source $ZPLUG_HOME/init.zsh
-zplug "zsh-users/zsh-completions", from:github
-zplug "zsh-users/zsh-autosuggestions", from:github
+zplug "zsh-users/zsh-completions"
+zplug "zsh-users/zsh-autosuggestions"
 #-----if fzf is not installed
-[[ ! -x $(which fzf) ]] && zplug "zdharma/history-search-multi-word", from:github 
+[[ ! -x $(which fzf) ]] && zplug "zdharma/history-search-multi-word" 
 [[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
 #-----Load theme file
 #zplug "dracula/zsh", as:theme #zplug "agkozak/agkozak-zsh-theme" #zplug "mashaal/wild-cherry/zsh", from:github, use:wild-cherry.zsh-theme, as:theme #zplug "eendroroy/alien-minimal", from:github, as:theme #zplug "eendroroy/alien", from:github, as:theme
-zplug mafredri/zsh-async, from:github
-zplug sindresorhus/pure, use:pure.zsh, from:github, as:theme
-#export AM_VERSIONS_PROMPT=(RUBY)
-#export USE_NERD_FONT=1
-#export ALIEN_THEME="red"
+zplug "mafredri/zsh-async"
+zplug "sindresorhus/pure", use:pure.zsh, as:theme
 #-----supposed to come after compinit
-zplug "zdharma/fast-syntax-highlighting", from:github, defer:2
-zplug "zsh-users/zsh-history-substring-search", from:github, defer:2
-bindkey '^[[A' history-substring-search-up # binds to up-arrow ↑
-bindkey '^[[B' history-substring-search-down # binds to down-arrow ↓
+zplug "zdharma/fast-syntax-highlighting", defer:2
+zplug "zsh-users/zsh-history-substring-search", defer:2
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 #-----Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
 	zplug install
 fi
 zplug load
+#===============================================
 
 #-------------------------------PREFER CODE
 if [[ -f $(which code) ]]; then 
@@ -55,22 +50,24 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 export MANPAGER='less -X' # don't clear after quitting man
 
-#------------------------------------PATHS ETC.
-#[[ -d "/usr/local/share/zsh-completions/" ]] && fpath=(/usr/local/share/zsh-completions $fpath)
+#------------------------------------PATHS/ENVS ETC.
+[[ -d "$(brew --prefix)/share/zsh/site-functions/" ]] && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
+
 if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
 	[[ -d "/Applications/MATLAB_R2018b.app/bin" ]] && path=("/Applications/MATLAB_R2018b.app/bin" $path) # matlab
 	[[ -d "/Applications/MATLAB_R2018b.app/bin" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2018b.app/bin/matlab" # matlab
 	[[ -x "/Applications/MATLAB_R2018b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2018b.app/bin/maci64/mlint" ~/bin/mlint # matlab
-	[[ -d "/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" ]] && path=("/Library/Developer/Toolchains/swift-latest.xctoolchain/usr/bin" $path)
+	[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path=("/Applications/Araxis Merge.app/Contents/Utilities" $path)
+	[[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
 else
 	[[ -d "/opt/jdk-11/bin" ]] && export JAVA_HOME="/opt/jdk-11/" # Linux Java
 	[[ -d "/opt/jdk-11/bin" ]] && path=(${JAVA_HOME}bin $path) # Linux JDK
 	[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
 fi
-[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path=("/Applications/Araxis Merge.app/Contents/Utilities" $path)
-[[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
+
+#-------------------------------------CONDA
 if [[ -e "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
 	source $HOME/miniconda3/etc/profile.d/conda.sh # miniconda, preferred way to use conda without mod path
 	#conda activate base
@@ -79,14 +76,15 @@ elif [[ -d "$HOME/miniconda3/" ]]; then
 elif [[ -d "$HOME/anaconda3/" ]]; then
 	path=("$HOME/anaconda3/bin" $path) 
 fi
+
+#------------------------------------FINALISE PATH
 [[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 export PATH
 
-[[ -x $(which swiftenv) ]] && eval "$(swiftenv init -)"
+#------------------------------------FINALISE OTHERS
 [[ -x $(which rbenv) ]] && eval "$(rbenv init -)"
 [[ -x $(which archey) ]] && archey -c -o
-#[[ -x $(which ansiweather) ]] && ansiweather
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which fzf) ]] && source $DF/.fzf.zsh
 
