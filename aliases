@@ -309,6 +309,13 @@ function update() {
 		printf '\n\n---> Updating \e[92mHomeBrew\e[m...\n'
 		brew update
 		brew upgrade
+		brew cask upgrade
+	fi
+
+	if [[ -x $(which apt) ]]; then 
+		printf '\n\n---> Updating \e[92mApt\e[m...\n'
+		sudo apt update
+		apt autoremove
 	fi
 
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
