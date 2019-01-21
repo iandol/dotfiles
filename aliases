@@ -315,7 +315,8 @@ function update() {
 	if [[ -x $(which apt) ]]; then 
 		printf '\n\n---> Updating \e[92mApt\e[m...\n'
 		sudo apt update
-		apt autoremove
+		sudo apt autoremove
+		apt list --upgradable 
 	fi
 
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
