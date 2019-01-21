@@ -312,7 +312,7 @@ function update() {
 		brew cask upgrade
 	fi
 
-	if [[ -x $(which apt) ]]; then 
+	if [[ $PLATFORM = "Linux" ]]; then 
 		printf '\n\n---> Updating \e[92mApt\e[m...\n'
 		sudo apt update
 		sudo apt autoremove
