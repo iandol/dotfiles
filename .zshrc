@@ -18,9 +18,14 @@ zplug "mafredri/zsh-async"
 zplug "sindresorhus/pure", use:pure.zsh, as:theme
 #-----supposed to come after compinit
 zplug "zdharma/fast-syntax-highlighting", defer:2
-zplug "zsh-users/zsh-history-substring-search", defer:2
-bindkey "$terminfo[kcuu1]" history-substring-search-up # see https://github.com/zsh-users/zsh-history-substring-search/issues/92
-bindkey "$terminfo[kcud1]" history-substring-search-down
+zplug "zsh-users/zsh-history-substring-search", defer:3
+if [[ $PLATFORM = 'Darwin' ]]; then
+	bindkey "^[[A" history-substring-search-up
+	bindkey "^[[B" history-substring-search-down
+else
+	bindkey "$terminfo[kcuu1]" history-substring-search-up # see https://github.com/zsh-users/zsh-history-substring-search/issues/92
+	bindkey "$terminfo[kcud1]" history-substring-search-down
+fi
 #-----Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
 	zplug install
