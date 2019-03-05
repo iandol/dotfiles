@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #encoding: utf-8
 
-# version = 1.0.0
+# version = 1.0.1
 
 require 'tempfile'
 require 'fileutils'
@@ -37,6 +37,10 @@ enforceCase = [
 	'Y-cell',
 	'X-cells',
 	'Y-cells',
+	'LGN',
+	'dLGN',
+	'TRN',
+	'RTN',
 	'V1',
 	'V2',
 	'V3',
@@ -49,10 +53,7 @@ enforceCase = [
 	'MT',
 	'MST',
 	'hMT+',
-	'DNA',
-	'RNA',
-	'TRN',
-	'RTN',
+	'8A',
 	'FEF',
 	'mPFC',
 	'VIP',
@@ -62,8 +63,8 @@ enforceCase = [
 	'AMPA',
 	'GABA',
 	'GABAergic',
-	'LGN',
-	'dLGN',
+	'DNA',
+	'RNA',
 	'LFP',
 	'DREADD',
 	'ROC',
@@ -86,8 +87,10 @@ temp_file = Tempfile.new('fixcase')
 case format
 when /bib/
 	titleRegex = /^\s*title = /
+	abstractRegex = /^\s*abstract = /
 when /json/
 	titleRegex = /^\s*"title": /
+	abstractRegex = /^\s*"abstract": /
 end
 
 # cusom boundaries, more specific than the generic \b
