@@ -20,16 +20,18 @@ if [ $PLATFORM = "Darwin" ]; then
 	else
 		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 		printf 'Homebrew now installed...\n'
-		brew tap caskroom/cask
-		brew tap caskroom/fonts
+		brew tap homebrew/cask-fonts 
 		printf 'Added Caskroom to Homebrew...\n'
 	fi
 	#make sure our minimum packages are installed
 	if [ -e /usr/local/bin/brew ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install bat rbenv ruby-build zsh git figlet archey jq fzf prettyping ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver 
-		brew cask install font-fantasquesansmono-nerd-font font-fira-code font-hack font-hasklig font-source-code-pro font-source-sans-pro imageoptim tex-live-utility 
+		brew install bat rbenv ruby-build zsh git figlet archey jq fzf prettyping ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver youtube-dl
+		brew cask install font-fantasquesansmono-nerd-font font-fira-code font-hack font-hasklig font-source-code-pro font-source-sans-pro 
+		brew cask install dropbox imageoptim tex-live-utility fsnotes kitty knockknock
+		#brew cask install adoptopenjdk android-studio calibre mono-mdk
 	fi
+	git clone https://github.com/rbenv/rbenv-default-gems.git $(rbenv root)/plugins/rbenv-default-gems
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
@@ -46,9 +48,11 @@ elif [ $PLATFORM = "Linux" ]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref 
 	fi
+	git clone https://github.com/rbenv/rbenv-default-gems.git $(rbenv root)/plugins/rbenv-default-gems
 fi
 
 #few python packages
+printf 'Install a few python packages ... '
 pip3 install howdoi black pylint
 
 printf 'Let us bootstrap .dotfiles if not present ... '
@@ -57,7 +61,7 @@ if [ -d ~/.dotfiles/.git ]; then
 else
 	git clone https://github.com/iandol/dotfiles.git ~/.dotfiles
 	chown -R $USER ~/.dotfiles
-	printf 'we cloned a new .dotfiles...\n'
+	printf 'We cloned a new .dotfiles...\n'
 fi
 
 printf 'Setting up the symbolic links at: '
@@ -80,6 +84,8 @@ ln -siv ~/.dotfiles/.vim ~/.vim
 chown -R $USER ~/.vim
 ln -siv ~/.dotfiles/.rubocop.yml ~
 chown $USER ~/.rubocop.yml
+ln -siv ~/.dotfiles/default-gems ~/.rbenv/
+chown $USER ~/.rbenv/default-gems
 
 printf '\e[36m'
 
