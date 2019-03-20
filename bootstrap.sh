@@ -26,9 +26,12 @@ if [ $PLATFORM = "Darwin" ]; then
 	#make sure our minimum packages are installed
 	if [ -e /usr/local/bin/brew ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install bat rbenv ruby-build zsh git figlet archey jq fzf prettyping ansiweather diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver youtube-dl
-		brew cask install font-fantasquesansmono-nerd-font font-fira-code font-hack font-hasklig font-source-code-pro font-source-sans-pro 
-		brew cask install dropbox imageoptim tex-live-utility fsnotes kitty knockknock
+		brew install bat rbenv ruby-build zsh git figlet archey jq fzf prettyping ansiweather \
+		diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver youtube-dl
+		brew cask install font-fantasquesansmono-nerd-font font-fira-code font-hack font-hasklig \
+		font-source-code-pro font-source-sans-pro 
+		brew cask install dropbox betterzip karabiner-elements bettertouchtool \
+		vivaldi imageoptim tex-live-utility fsnotes kitty knockknock
 		#brew cask install adoptopenjdk android-studio calibre mono-mdk
 	fi
 	git clone https://github.com/rbenv/rbenv-default-gems.git $(rbenv root)/plugins/rbenv-default-gems
