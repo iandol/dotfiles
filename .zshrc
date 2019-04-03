@@ -61,9 +61,9 @@ export MANPAGER='less -X' # don't clear after quitting man
 if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	[[ -d "/Applications/MATLAB_R2018b.app/bin" ]] && path=("/Applications/MATLAB_R2018b.app/bin" $path) # matlab
-	[[ -d "/Applications/MATLAB_R2018b.app/bin" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2018b.app/bin/matlab" # matlab
-	[[ -x "/Applications/MATLAB_R2018b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2018b.app/bin/maci64/mlint" ~/bin/mlint # matlab
+	[[ -d "/Applications/MATLAB_R2019a.app/bin" ]] && path=("/Applications/MATLAB_R2019a.app/bin" $path) # matlab
+	[[ -d "/Applications/MATLAB_R2019a.app/bin" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2019a.app/bin/matlab" # matlab
+	[[ -x "/Applications/MATLAB_R2019a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2019a.app/bin/maci64/mlint" ~/bin/mlint # matlab
 	[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path=("/Applications/Araxis Merge.app/Contents/Utilities" $path)
 	[[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
 else
