@@ -308,7 +308,8 @@ function update() {
 	if [[ -x $(which brew) ]]; then 
 		printf '\n\n---> Updating \e[92mHomeBrew\e[m...\n'
 		brew update
-		brew upgrade
+		brew outdated
+		brew upgrade --force-bottle 
 		brew cask upgrade
 	fi
 

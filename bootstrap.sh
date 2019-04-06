@@ -34,7 +34,6 @@ if [ $PLATFORM = "Darwin" ]; then
 		vivaldi imageoptim tex-live-utility fsnotes kitty knockknock
 		#brew cask install adoptopenjdk android-studio calibre mono-mdk
 	fi
-	git clone https://github.com/rbenv/rbenv-default-gems.git $(rbenv root)/plugins/rbenv-default-gems
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
@@ -51,7 +50,11 @@ elif [ $PLATFORM = "Linux" ]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref 
 	fi
+fi
+
+if [ -d "~/.rbenv/" ]; then
 	git clone https://github.com/rbenv/rbenv-default-gems.git $(rbenv root)/plugins/rbenv-default-gems
+	cp ~/.dotfiles/default-gems ~/.rbenv/
 fi
 
 #few python packages
