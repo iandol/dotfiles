@@ -79,6 +79,10 @@ if [[ "$(uname -s)" = "Darwin" ]]; then
 	alias karabinerUnload='launchctl unload -F /Library/LaunchAgents/org.pqrs.karabiner.karabiner_console_user_server.plist; \
 	sudo launchctl unload -F /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; \
 	sudo launchctl unload -F /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_observer.plist; \
+	sudo launchctl unload -F  /Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_kextd; \
+	sudo launchctl unload -F  /Library/Application\ Support/org.pqrs/Karabiner-Elements/bin/karabiner_session_monitor; \
+	sudo killall -v karabiner_kextd; \
+	sudo killall -v karabiner_session_monitor; \
 	sudo killall -v karabiner_observer; \
 	sudo killall -v karabiner_grabber; \
 	sudo killall -v karabiner_console_user_server; \
