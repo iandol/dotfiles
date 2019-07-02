@@ -14,8 +14,9 @@ zplug "zsh-users/zsh-autosuggestions"
 [[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
 #-----Load theme file
 #zplug "dracula/zsh", as:theme #zplug "agkozak/agkozak-zsh-theme" #zplug "mashaal/wild-cherry/zsh", from:github, use:wild-cherry.zsh-theme, as:theme #zplug "eendroroy/alien-minimal", from:github, as:theme #zplug "eendroroy/alien", from:github, as:theme
-zplug "mafredri/zsh-async"
-zplug "sindresorhus/pure", use:pure.zsh, as:theme
+zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
+#zplug "mafredri/zsh-async"
+#zplug "sindresorhus/pure", use:pure.zsh, as:theme
 #-----supposed to come after compinit
 zplug "zdharma/fast-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-history-substring-search", defer:3
