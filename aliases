@@ -333,15 +333,18 @@ function update() {
 }
 
 function doBib() {
-	printf '\n---> Processing Bibliography file...\n'
+	printf '\n---> Processing Bibliography file @ \e[93m$(date)\e[m...\n'
 	cd ~/Desktop
 	printf '\n---> Citeproc generating JSON from BIB file...\n'
-	pandoc-citeproc -j ~/Desktop/Core.bib > ~/Desktop/Core.json
+	pandoc-citeproc -j ~/Desktop/Core.bib > ~/Desktop/Temp.json
 	printf '\n---> Processing title case...\n'
 	fixCase.rb ~/Desktop/Core.bib
-	fixCase.rb ~/Desktop/Core.json
+	fixCase.rb ~/Desktop/Temp.json
+	printf '\n---> Minifying JSON...\n'
+	jq -c . < Temp.json > Core.json
 	printf '\n---> Moving to Dropbox...\n'
 	mv ~/Desktop/Core.* ~/Dropbox/Papers/References
+	rm ~/Desktop/Temp.json
 	printf '\n---> ...Finished!\n'
 }
 

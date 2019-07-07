@@ -139,6 +139,7 @@ if [ -f $(which git) ]; then
 	printf 'Setting some GIT defaults...\n'
 	git config --global alias.last 'log -1 HEAD'
 	git config --global alias.unstage 'reset HEAD --'
+	git config --global alias.history 'log -p --'
 	git config --global alias.st status
 	git config --global alias.br branch
 	git config --global alias.co checkout
