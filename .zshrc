@@ -68,6 +68,9 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path=("/Applications/Araxis Merge.app/Contents/Utilities" $path)
 	[[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
 else
+	[[ -d "/usr/local/MATLAB/R2019a/bin" ]] && path=("/usr/local/MATLAB/R2019a/bin" $path) # matlab
+	[[ -d "/usr/local/MATLAB/R2019a/bin" ]] && export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2019a/bin" # matlab
+	[[ -x "/usr/local/MATLAB/R2019a/bin/glnxa64/mlint" ]] && ln -sf "/usr/local/MATLAB/R2019a/bin/glnxa64/mlint" ~/bin/ # mlint
 	[[ -d "/opt/jdk-11/bin" ]] && export JAVA_HOME="/opt/jdk-11/" # Linux Java
 	[[ -d "/opt/jdk-11/bin" ]] && path=(${JAVA_HOME}bin $path) # Linux JDK
 	[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
