@@ -4,6 +4,8 @@ printf "\n\n--->>> Bootstrap terminal setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
 
 PLATFORM=$(uname -s)
+[[ $(uname -a | grep -i "microsoft") ]] && ISWIN="WSL"
+PLATFORM=$PLATFORM$ISWIN
 
 #try to install homebrew on macOS
 if [ $PLATFORM = "Darwin" ]; then
@@ -36,6 +38,22 @@ if [ $PLATFORM = "Darwin" ]; then
 	fi
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
+	#make sure our minimum packages are installed
+	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather freeglut3 
+	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
+		printf 'Installing Homebrew...\n'
+		sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+		eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+	else
+		printf 'Homebrew already installed...\n'
+		eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+	fi
+	if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
+		printf 'Adding Homebrew packages...\n'
+		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref 
+	fi
+elif [ $PLATFORM = "LinuxWSL" ]; then
+	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
 	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather freeglut3 
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
