@@ -1,11 +1,10 @@
 #!/bin/bash
 cd ~
-printf "\n\n--->>> Bootstrap terminal setup, current directory is $(pwd)\n\n"
+printf "\n\n--->>> Bootstrap terminal $SHELL setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
-
 PLATFORM=$(uname -s)
 [[ $(uname -a | grep -i "microsoft") ]] && ISWIN="WSL"
-PLATFORM=$PLATFORM$ISWIN
+export PLATFORM=$PLATFORM$ISWIN
 
 #try to install homebrew on macOS
 if [ $PLATFORM = "Darwin" ]; then
@@ -55,20 +54,14 @@ elif [ $PLATFORM = "Linux" ]; then
 elif [ $PLATFORM = "LinuxWSL" ]; then
 	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
-	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather freeglut3 
-	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
-		printf 'Installing Homebrew...\n'
-		sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-		eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-	else
-		printf 'Homebrew already installed...\n'
-		eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-	fi
-	if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
-		printf 'Adding Homebrew packages...\n'
-		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref 
-	fi
+	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather wget rbenv ruby
+    printf 'We will not install homebrew under WSL, try chocolately in PS...'
+    mkdir bin
+    curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
+    chmod +x bin/diff-so-fancy
 fi
+
+sleep 2
 
 if [ -d "~/.rbenv/" ]; then
 	git clone https://github.com/rbenv/rbenv-default-gems.git $(rbenv root)/plugins/rbenv-default-gems
@@ -79,7 +72,10 @@ fi
 printf 'Install a few python packages ... '
 pip3 install howdoi black pylint
 
+sleep 2
+
 printf 'Let us bootstrap .dotfiles if not present ... '
+read -p "Press any key to continue... " -n1 -s; printf '\n'
 if [ -d ~/.dotfiles/.git ]; then
 	printf ' .dotfiles are present! \n'
 else
@@ -87,6 +83,8 @@ else
 	chown -R $USER ~/.dotfiles
 	printf 'We cloned a new .dotfiles...\n'
 fi
+
+sleep 2
 
 printf 'Setting up the symbolic links at: '
 date
@@ -113,6 +111,8 @@ chown $USER ~/.rbenv/default-gems
 
 printf '\e[36m'
 
+sleep 2
+
 printf 'Will check for a functional ZPLUG...\n'
 if [ -d ~/.oh-my-zsh/ ]; then
 	printf '\t...Going to replace oh-my-zsh with ZPlug... '
@@ -123,12 +123,13 @@ if [ -d ~/.antigen/ ]; then
 	rm -rf ~/.antigen/
 fi
 if [ ! -d ~/.zplug/ ]; then
-	printf '\t...Going to ... '
+	printf '\t...Going to install ZPlug... '
 	curl -sL https://github.com/zplug/installer/raw/master/installer.zsh | zsh
-	chown $USER ~/.zplug
+	chown -R $USER ~/.zplug
+    printf ' DONE!'
 else
 	printf '\tZPlug already installed...\n'
-	chown $USER ~/.zplug
+	chown -R $USER ~/.zplug
 fi
 
 if [ $PLATFORM = "Darwin" ]; then
@@ -153,24 +154,27 @@ if [ $PLATFORM = "Darwin" ]; then
 	fi
 fi
 
+sleep 2
+
 if [ -f $(which git) ]; then
 	printf 'Setting some GIT defaults...\n'
-	git config --global alias.last 'log -1 HEAD'
-	git config --global alias.unstage 'reset HEAD --'
-	git config --global alias.history 'log -p --'
-	git config --global alias.st status
-	git config --global alias.br branch
-	git config --global alias.co checkout
-	git config --global alias.dt difftool
-	git config --global alias.dta difftool -d
-	git config --global alias.dtl difftool HEAD^
-	git config --global difftool.prompt false
-	git config --global color.ui always
-	git config --global color.branch true
-	git config --global color.diff true
-	git config --global color.grep true
-	git config --global color.interactive true
-	git config --global color.status true
+	git config --global --replace-all alias.last 'log -1 HEAD'
+	git config --global --replace-all alias.unstage 'reset HEAD --'
+	git config --global --replace-all alias.history 'log -p --'
+	git config --global --replace-all alias.st 'status'
+	git config --global --replace-all alias.br 'branch'
+    git config --global --replace-all alias.bl 'branch -v -a'
+	git config --global --replace-all alias.co 'checkout'
+	git config --global --replace-all alias.dt 'difftool'
+	git config --global --replace-all alias.dta 'difftool -d'
+	git config --global --replace-all alias.dtl 'difftool HEAD^'
+	git config --global --replace-all difftool.prompt false
+	git config --global --replace-all color.ui always
+	git config --global --replace-all color.branch true
+	git config --global --replace-all color.diff true
+	git config --global --replace-all color.grep true
+	git config --global --replace-all color.interactive true
+	git config --global --replace-all color.status true
 	if [ $PLATFORM = 'Darwin' ]; then
 		git config --global credential.helper osxkeychain
 	fi
@@ -179,6 +183,8 @@ if [ -f $(which git) ]; then
 else
 	printf 'GIT is not installed, use command line tools or install homebrew...\n'
 fi
+
+sleep 2
 
 if [ -x `which zsh` ]; then
 	printf 'Switching to use ZSH...\n'
