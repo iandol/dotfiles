@@ -29,17 +29,20 @@ if [ $PLATFORM = "Darwin" ]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install bat rbenv ruby-build zsh git figlet archey jq fzf prettyping ansiweather \
 		diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver youtube-dl
+		#cask fonts
 		brew cask install font-fantasque-sans-mono font-fira-code font-hack font-hasklig \
 		font-source-code-pro font-source-sans-pro font-source-serif-pro
+		#cask apps
 		brew cask install forklift fsnotes betterzip karabiner-elements bettertouchtool \
 		imageoptim tex-live-utility knockknock prince calibre iina mpv \
 		carbon-copy-cloner ff-works kitty vivaldi
+		#brew cask install dropbox #fails unless on VPN
 		#brew cask install adoptopenjdk android-studio mono-mdk
 	fi
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
-	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather freeglut3 
+	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather freeglut3 gawk
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
@@ -50,16 +53,16 @@ elif [ $PLATFORM = "Linux" ]; then
 	fi
 	if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping ansiweather pandoc pandoc-citeproc pandoc-crossref 
+		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping pandoc pandoc-citeproc pandoc-crossref 
 	fi
 elif [ $PLATFORM = "LinuxWSL" ]; then
 	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
-	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather wget rbenv ruby
-    printf 'We will not install homebrew under WSL, try chocolately in PS...'
-    mkdir bin
-    curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
-    chmod +x bin/diff-so-fancy
+	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather wget rbenv ruby gawk
+	printf 'We will not install homebrew under WSL, try chocolately in PS...'
+	mkdir bin
+	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
+	chmod +x bin/diff-so-fancy
 fi
 
 sleep 2
@@ -127,10 +130,12 @@ if [ ! -d ~/.zplug/ ]; then
 	printf '\t...Going to install ZPlug... '
 	curl -sL https://github.com/zplug/installer/raw/master/installer.zsh | zsh
 	chown -R $USER ~/.zplug
-    printf ' DONE!'
+	touch ~/.zplug/packages.zsh
+	printf ' DONE!'
 else
 	printf '\tZPlug already installed...\n'
 	chown -R $USER ~/.zplug
+	touch ~/.zplug/packages.zsh
 fi
 
 if [ $PLATFORM = "Darwin" ]; then
@@ -164,7 +169,7 @@ if [ -f $(which git) ]; then
 	git config --global --replace-all alias.history 'log -p --'
 	git config --global --replace-all alias.st 'status'
 	git config --global --replace-all alias.br 'branch'
-    git config --global --replace-all alias.bl 'branch -v -a'
+	git config --global --replace-all alias.bl 'branch -v -a'
 	git config --global --replace-all alias.co 'checkout'
 	git config --global --replace-all alias.dt 'difftool'
 	git config --global --replace-all alias.dta 'difftool -d'
