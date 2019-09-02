@@ -35,7 +35,7 @@ if [ $PLATFORM = "Darwin" ]; then
 		#cask apps
 		brew cask install forklift fsnotes betterzip karabiner-elements bettertouchtool \
 		imageoptim tex-live-utility knockknock prince calibre iina mpv \
-		carbon-copy-cloner ff-works kitty vivaldi
+		scrivener bookends carbon-copy-cloner ff-works kitty vivaldi
 		#brew cask install dropbox #fails unless on VPN
 		#brew cask install adoptopenjdk android-studio mono-mdk
 	fi
