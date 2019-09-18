@@ -69,7 +69,7 @@ sleep 2
 
 if [ -d "~/.rbenv/" ]; then
 	git clone https://github.com/rbenv/rbenv-default-gems.git $(rbenv root)/plugins/rbenv-default-gems
-	cp ~/.dotfiles/default-gems ~/.rbenv/
+	ln -s $HOME/.dotfiles/default-gems $HOME/.rbenv/
 fi
 
 #few python packages
