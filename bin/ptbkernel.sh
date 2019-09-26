@@ -1,21 +1,28 @@
-#!/bin/zsh
-cd /System/Library/Extensions
+#!/usr/bin/env zsh
+ptbroot=~/Code/Psychtoolbox/Psychtoolbox
+printf "\n=====>>> Update PTB KEXT @ \e[93m$(date)\e[m <<<=====\n"
+printf "You need to first disable SIP, or this script will fail...\n\n"
+printf "======================================\n Remounting Root to be writable..."
 sudo mount -u -w / #need to remount as R/W
-echo "\n\List /System/Library/Extensions directory for Psy*:"
+cd /System/Library/Extensions
+printf "\n======================================\nList /System/Library/Extensions directory for Psy*:\n"
 ls -d Psy*
-echo "\n\nIs PsychtoolboxKernelDriver Currently Installed:"
+printf "\n\n======================================\nCheck PsychtoolboxKernelDriver Currently Installed?:\n"
 kextstat -b PsychtoolboxKernelDriver
-read -p "prompt"
-echo "\n\nRemoving old driver, installing update..."
+read "?Press [enter] to Continue..."
+printf "\n\n======================================\nRemoving older KEXT, installing latest version:\n"
 sudo kextunload -b PsychtoolboxKernelDriver
 sleep 1
 sudo rm -rf PsychtoolboxKernelDriver.kext
-sudo unzip ~/Code/Psychtoolbox/Psychtoolbox/PsychHardware/PsychtoolboxKernelDriverUpTodDate_Unsigned.kext.zip
+read "ans?Install new unsigned [y] or old signed [n] kext?   "
+if [[ $ans = "y" ]]; then
+	sudo unzip $ptbroot/PsychHardware/PsychtoolboxKernelDriverUpTodDate_Unsigned.kext.zip
+else
+	sudo unzip $ptbroot/PsychHardware/PsychtoolboxKernelDriver64Bit.kext.zip
+fi
 sleep 1
-echo "\n\nTrying to load new driver (this may fail, if so disable SIP)"
+printf "\n\n======================================\nTrying to load new driver:\n"
 sleep 1
 sudo kextload -b PsychtoolboxKernelDriver
 kextstat -b PsychtoolboxKernelDriver
-read -p "prompt"
-#echo "\n\nSetting kext override loading for Yosemite+ (boot-args='kext-dev-mode=1'); reboot if this is the first time you do this"
-#ma
+printf "\n=====>>> Update PTB KEXT Finished @ \e[93m$(date)\e[m <<<=====\n"

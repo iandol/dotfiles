@@ -33,9 +33,12 @@ if [ $PLATFORM = "Darwin" ]; then
 		brew cask install font-fantasque-sans-mono font-fira-code font-hack font-hasklig \
 		font-source-code-pro font-source-sans-pro font-source-serif-pro
 		#cask apps
-		brew cask install forklift fsnotes betterzip karabiner-elements bettertouchtool \
-		imageoptim tex-live-utility knockknock prince calibre iina mpv \
-		scrivener bookends carbon-copy-cloner ff-works kitty vivaldi
+		brew cask install forklift fsnotes betterzip karabiner-elements \
+		bettertouchtool imageoptim tex-live-utility knockknock prince \
+		calibre iina mpv scrivener bookends carbon-copy-cloner ff-works \
+		kitty vivaldi deckset
+		# other software
+		#brew cask install libreoffice microsoft-word microsoft-powerpoint microsoft-excel
 		#brew cask install dropbox #fails unless on VPN
 		#brew cask install adoptopenjdk android-studio mono-mdk
 	fi
@@ -181,6 +184,8 @@ if [ -f $(which git) ]; then
 	git config --global --replace-all color.grep true
 	git config --global --replace-all color.interactive true
 	git config --global --replace-all color.status true
+	git config --global core.autocrlf input
+	git config --global core.eol lf
 	if [ $PLATFORM = 'Darwin' ]; then
 		git config --global credential.helper osxkeychain
 	fi
