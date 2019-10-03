@@ -30,13 +30,13 @@ if [ $PLATFORM = "Darwin" ]; then
 		brew install bat rbenv ruby-build zsh git figlet archey jq fzf prettyping ansiweather \
 		diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver youtube-dl
 		#cask fonts
-		brew cask install font-fantasque-sans-mono font-fira-code font-hack font-hasklig \
+		brew cask install font-symbola font-fantasque-sans-mono font-fira-code font-hack font-hasklig \
 		font-source-code-pro font-source-sans-pro font-source-serif-pro
 		#cask apps
 		brew cask install forklift fsnotes betterzip karabiner-elements \
 		bettertouchtool imageoptim tex-live-utility knockknock prince \
 		calibre iina mpv scrivener bookends carbon-copy-cloner ff-works \
-		kitty vivaldi deckset
+		kitty vivaldi deckset aerial textmate launchcontrol
 		# other software
 		#brew cask install libreoffice microsoft-word microsoft-powerpoint microsoft-excel
 		#brew cask install dropbox #fails unless on VPN

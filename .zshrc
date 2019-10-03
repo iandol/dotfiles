@@ -60,8 +60,8 @@ export MANPAGER='less -X' # don't clear after quitting man
 [[ -d "$(brew --prefix)/share/zsh/site-functions/" ]] && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
 
 if [[ $PLATFORM == 'Darwin' ]]; then
-	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
-	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
+#	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
+#	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
 	[[ -d "/Applications/MATLAB_R2019b.app/bin" ]] && path=("/Applications/MATLAB_R2019b.app/bin" $path) # matlab
 	[[ -d "/Applications/MATLAB_R2019b.app/bin" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2019b.app/bin/matlab" # matlab
 	[[ -x "/Applications/MATLAB_R2019b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2019b.app/bin/maci64/mlint" ~/bin/mlint # matlab
