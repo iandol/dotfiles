@@ -192,7 +192,7 @@ if [ -f $(which git) ]; then
 	git config --global pager.diff "diff-so-fancy | less --tabs=4 -RFX"
 	git config --global pager.show "diff-so-fancy | less --tabs=4 -RFX"
 else
-	printf 'GIT is not installed, use command line tools or install homebrew...\n'
+	printf 'GIT is not installed, use command line tools or install brew/apt...\n'
 fi
 
 sleep 2
