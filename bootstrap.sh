@@ -45,7 +45,7 @@ if [ $PLATFORM = "Darwin" ]; then
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
-	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather freeglut3 gawk
+	sudo apt-get install build-essential vim curl file zsh git mc p7zip-full p7zip-rar figlet jq ansiweather freeglut3 gawk libdc1394-22 libraw1394-11
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
@@ -61,7 +61,7 @@ elif [ $PLATFORM = "Linux" ]; then
 elif [ $PLATFORM = "LinuxWSL" ]; then
 	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
-	sudo apt-get install build-essential vim curl file zsh git figlet jq ansiweather wget rbenv ruby gawk
+	sudo apt-get install build-essential vim curl p7zip-full p7zip-rar file zsh git figlet jq ansiweather wget rbenv ruby gawk
 	printf 'We will not install homebrew under WSL, try chocolately in PS...'
 	mkdir bin
 	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
