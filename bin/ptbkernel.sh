@@ -1,9 +1,9 @@
 #!/usr/bin/env zsh
-ptbroot=~/Code/Psychtoolbox/Psychtoolbox
+ptbroot=~/Code/Psychtoolbox-3/Psychtoolbox
 printf "\n=====>>> Update PTB KEXT @ \e[93m$(date)\e[m <<<=====\n"
 printf "You need to first disable SIP, or this script will fail...\n\n"
 printf "======================================\n Remounting Root to be writable..."
-sudo mount -u -w / #need to remount as R/W
+sudo mount -u -w /
 cd /System/Library/Extensions
 printf "\n======================================\nList /System/Library/Extensions directory for Psy*:\n"
 ls -d Psy*
