@@ -45,7 +45,9 @@ if [ $PLATFORM = "Darwin" ]; then
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
-	sudo apt-get install build-essential vim curl file zsh git mc p7zip-full p7zip-rar figlet jq ansiweather freeglut3 gawk libdc1394-22 libraw1394-11
+	sudo apt-get install build-essential gparted vim curl file zsh git mc \
+	p7zip-full p7zip-rar figlet jq ansiweather freeglut3 gawk \
+	exfat-fuse exfat-utils htop libunrar libdc1394-22 libraw1394-11
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
