@@ -1,13 +1,16 @@
 #!/usr/bin/env ruby
 #encoding: utf-8
 
-# version = 1.0.1
+# version = 1.0.2
+
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
 
 require 'tempfile'
 require 'fileutils'
 
 tstart = Time.now
-infilename = ARGV[0]
+infilename = File.expand_path(ARGV[0])
 raise 'Please specify an existing file!' unless infilename && File.exist?(infilename)
 
 format = ARGV[1]
@@ -60,6 +63,7 @@ enforceCase = [
 	'mGlu1',
 	'GluR',
 	'NMDA',
+	'NMDAR1',
 	'AMPA',
 	'GABA',
 	'GABAergic',
@@ -73,6 +77,8 @@ enforceCase = [
 	'EEG',
 	'VEP',
 	'AAV',
+	'rAAV',
+	'OTX2',
 	'TMS',
 	'MEG',
 	'2D',
