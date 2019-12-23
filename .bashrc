@@ -22,15 +22,6 @@ export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
 
 export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$HOME:$PATH
 
-if [[ -e "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
-  source $HOME/miniconda3/etc/profile.d/conda.sh # miniconda, preferred way to use conda without mod path
-  conda activate base
-elif [[ -d "$HOME/miniconda3/" ]]; then
-  export PATH="$HOME/miniconda3/bin:$PATH"
-elif [[ -d "$HOME/anaconda3/" ]]; then
-  export PATH="$HOME/anaconda3/bin:$PATH"
-fi
-
 if type brew 2&>/dev/null; then
   source "$(brew --prefix)/etc/bash_completion.d/*"
 else

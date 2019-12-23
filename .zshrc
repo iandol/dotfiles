@@ -75,14 +75,20 @@ else
 fi
 
 #-------------------------------------CONDA
-if [[ -e "$HOME/miniconda3/etc/profile.d/conda.sh" ]]; then
-	source $HOME/miniconda3/etc/profile.d/conda.sh # miniconda, preferred way to use conda without mod path
-	#conda activate base
-elif [[ -d "$HOME/miniconda3/" ]]; then
-	path=("$HOME/miniconda3/bin" $path) 
-elif [[ -d "$HOME/anaconda3/" ]]; then
-	path=("$HOME/anaconda3/bin" $path) 
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$("$HOME/miniconda3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "$HOME/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="$HOME/ian/miniconda3/bin:$PATH"
+    fi
 fi
+unset __conda_setup
+# <<< conda initialize <<<
 
 #------------------------------------FINALISE PATH
 [[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
