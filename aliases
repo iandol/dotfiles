@@ -49,7 +49,8 @@ alias installTeX='sudo tlmgr install lm-math lualatex-math luatexja abstract \
 latexmk csquotes pagecolor relsize ucharcat mdframed needspace sectsty \
 titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
 mfirstuc xfor wallpaper datatool substr ctablestack ifetex adjustbox collectbox \
-sttools wrapfig footnotebackref fvextra'
+sttools wrapfig footnotebackref fvextra zref \
+libertinus libertinus-fonts libertinus-otf threeparttable'
 
 #manage bash/zsh
 if [[ -x $(which code) ]]; then 
