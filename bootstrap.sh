@@ -16,27 +16,31 @@ if [ $PLATFORM = "Darwin" ]; then
 	fi
 	chflags nohidden ~/Library
 	printf 'Let us bootstrap Homebrew if not present ... '
-	if [ -e /usr/local/bin/brew ]; then
+	if [ -e $(which brew) ]; then
 		printf 'Homebrew is present!\n'
 	else
 		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 		printf 'Homebrew now installed...\n'
 		brew tap homebrew/cask-fonts 
-		printf 'Added Caskroom to Homebrew...\n'
+		printf 'Added Caskroom fonts to Homebrew...\n'
 	fi
 	#make sure our minimum packages are installed
-	if [ -e /usr/local/bin/brew ]; then
+	if [ -e $(which brew) ]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install bat rbenv ruby-build zsh git figlet archey jq fzf prettyping ansiweather \
 		diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver youtube-dl
 		#cask fonts
 		brew cask install font-symbola font-fantasque-sans-mono font-fira-code font-hack font-hasklig \
 		font-source-code-pro font-source-sans-pro font-source-serif-pro
-		#cask apps
-		brew cask install forklift fsnotes betterzip karabiner-elements \
-		bettertouchtool imageoptim tex-live-utility knockknock prince \
-		calibre iina mpv scrivener bookends carbon-copy-cloner ff-works \
-		kitty vivaldi deckset aerial textmate launchcontrol
+		printf 'Do you want to install Apps? (y / n):  '
+		read ans
+		if [ $ans == 'y' ]; then
+			#cask apps
+			brew cask install forklift fsnotes betterzip karabiner-elements \
+			bettertouchtool imageoptim tex-live-utility knockknock prince \
+			calibre iina mpv scrivener bookends carbon-copy-cloner ff-works \
+			kitty vivaldi deckset aerial textmate launchcontrol
+		fi
 		# other software
 		#brew cask install libreoffice microsoft-word microsoft-powerpoint microsoft-excel
 		#brew cask install dropbox #fails unless on VPN
@@ -70,7 +74,7 @@ elif [ $PLATFORM = "LinuxWSL" ]; then
 	chmod +x bin/diff-so-fancy
 fi
 
-sleep 2
+sleep 1
 
 if [ -d "~/.rbenv/" ]; then
 	git clone https://github.com/rbenv/rbenv-default-gems.git $(rbenv root)/plugins/rbenv-default-gems

@@ -65,6 +65,12 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -x "/Applications/MATLAB_R2019b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2019b.app/bin/maci64/mlint" ~/bin/mlint # matlab
 	[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path=("/Applications/Araxis Merge.app/Contents/Utilities" $path)
 	[[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
+	[[ -d "/Library/Frameworks/GStreamer.framework/Commands" ]] && path=("/Library/Frameworks/GStreamer.framework/Commands" $path) # GStreamer
+	if [[ -d ~/Code/ZeroBraneStudio ]]; then
+		export ZBS=$HOME/Code/ZeroBraneStudio
+		export LUA_PATH="./?.lua;$ZBS/lualibs/?/?.lua;$ZBS/lualibs/?.lua"
+		export LUA_CPATH="$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
+	fi
 else
 	[[ -d "/usr/local/MATLAB/R2019b/bin" ]] && path=("/usr/local/MATLAB/R2019b/bin" $path) # matlab
 	[[ -d "/usr/local/MATLAB/R2019b/bin" ]] && export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2019b/bin" # matlab

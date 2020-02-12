@@ -1,5 +1,5 @@
 #!/usr/bin/env zsh
-if [[ "$(uname -s)" = "Darwin" ]]; then 
+if [[ $PLATFORM = 'Darwin' ]]; then 
 	alias la="ls -alGhF"
 	alias las="ls -alGhFeLH"
 	alias ll="ls -alFGh"
@@ -71,7 +71,7 @@ alias usebash='chsh -s $(which bash) && reloadbash'
 alias tu='top -o cpu' # cpu
 alias tm='top -o vsize' # memory
 
-if [[ "$(uname -s)" = "Darwin" ]]; then 
+if [[ $PLATFORM = 'Darwin' ]]; then 
 	# conflicts with MATLAB PTB, so we must manually [dis|en]able
 	alias karabinerLoad='sudo kextload /Library/Application\ Support/org.pqrs/Karabiner-VirtualHIDDevice/Extensions/org.pqrs.driver.Karabiner.VirtualHIDDevice.v061000.kext; \
 	sudo launchctl load -F /Library/LaunchDaemons/org.pqrs.karabiner.karabiner_grabber.plist; \
