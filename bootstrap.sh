@@ -175,6 +175,9 @@ if [ -f $(which git) ]; then
 	printf 'Setting some GIT defaults...\n'
 	#git config --global --replace-all user.email 'iandol@machine'
 	#git config --global --replace-all user.name 'iandol'
+	git config --global core.editor "vim"
+	git config --global core.autocrlf input
+	git config --global core.eol lf
 	git config --global --replace-all alias.last 'log -1 HEAD'
 	git config --global --replace-all alias.unstage 'reset HEAD --'
 	git config --global --replace-all alias.history 'log -p --'
@@ -193,8 +196,6 @@ if [ -f $(which git) ]; then
 	git config --global --replace-all color.interactive true
 	git config --global --replace-all color.status true
 	git config --global --replace-all credential.helper=cache --timeout=3600
-	git config --global core.autocrlf input
-	git config --global core.eol lf
 	if [ $PLATFORM = 'Darwin' ]; then
 		git config --global credential.helper osxkeychain
 	fi

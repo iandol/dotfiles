@@ -286,10 +286,11 @@ lips() {
 function update() {
 	printf "\n=====>>> Start Update @ \e[93m$(date)\e[m <<<=====\n"
 	myolddir=$(pwd)
-	ul=(.dotfiles .zplug Code/dotpandoc Code/opticka Code/Titta
-		Code/AfterImage Code/isoluminant Code/Pinna Code/spikes/
-		Code/Mymou Code/scrivomatic Code/bookends-tools Code/pandocomatic Code/paru
-		Documents/MATLAB/gramm Code/CPServer
+	ul=(.dotfiles .zplug Code/opticka Code/Titta
+		Code/AfterImage Code/isoluminant Code/Pinna Code/spikes
+		Code/Training Code/Mymou 
+		Code/scrivomatic Code/dotpandoc Code/bookends-tools Code/pandocomatic Code/paru
+		Documents/MATLAB/gramm
 		Code/Psychtoolbox-3 Code/fieldtrip)
 	for x in $ul; do
 		if [[ -d ~/${x}/.git ]]; then
