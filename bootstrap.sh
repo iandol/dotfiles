@@ -195,7 +195,7 @@ if [ -f $(which git) ]; then
 	git config --global --replace-all color.grep true
 	git config --global --replace-all color.interactive true
 	git config --global --replace-all color.status true
-	git config --global --replace-all credential.helper=cache --timeout=3600
+	git config --global --replace-all credential.helper 'cache --timeout=3600'
 	if [ $PLATFORM = 'Darwin' ]; then
 		git config --global credential.helper osxkeychain
 	fi
