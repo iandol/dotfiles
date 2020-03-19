@@ -336,7 +336,7 @@ function update() {
 }
 
 function doBib() {
-	printf '\n---> Processing Bibliography file @ \e[93m$(date)\e[m...\n'
+	printf "\n---> Processing Bibliography file @ \e[93m$(date)\e[m...\n"
 	cd ~/Desktop
 	printf '\n---> Citeproc generating JSON from BIB file...\n'
 	pandoc-citeproc -j ~/Desktop/Core.bib > ~/Desktop/Temp.json
