@@ -318,14 +318,15 @@ function update() {
 		brew update
 		brew outdated
 		brew upgrade --force-bottle 
-		brew cask upgrade
+		[[ $PLATFORM = 'Darwin' ]] && brew cask upgrade
 	fi
 
 	if [[ $PLATFORM = "Linux" ]]; then 
 		printf '\n\n---> Updating \e[92mApt\e[m...\n'
 		sudo apt update
 		sudo apt autoremove
-		apt list --upgradable 
+		apt list --upgradable
+		snap refresh
 	fi
 
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
