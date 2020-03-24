@@ -195,9 +195,10 @@ if [ -f $(which git) ]; then
 	git config --global --replace-all color.grep true
 	git config --global --replace-all color.interactive true
 	git config --global --replace-all color.status true
-	git config --global --replace-all credential.helper 'cache --timeout=3600'
 	if [ $PLATFORM = 'Darwin' ]; then
-		git config --global credential.helper osxkeychain
+		git config --global --replace-all credential.helper osxkeychain
+	else
+		git config --global --replace-all credential.helper 'cache --timeout=86400'
 	fi
 	git config --global pager.diff "diff-so-fancy | less --tabs=4 -RFX"
 	git config --global pager.show "diff-so-fancy | less --tabs=4 -RFX"
