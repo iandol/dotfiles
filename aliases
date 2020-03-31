@@ -232,37 +232,43 @@ function transfer() {
 
 function setproxy() {
 	if [[ $# -eq 0 ]]; then
-
 		echo "Will unset the proxy..."
 		unset http_proxy
-		unset https_proxy
+		unset HTTPS_PROXY
+		unset ALL_PROXY # for curl
 		git config --global --unset http.proxy
 		git config --global --unset https.proxy
-		
 	elif [[ $# -eq 1 ]]; then
 		if [[ $1 == "-l" ]]; then
-
-			echo "Proxy settings: " 
-
+			echo "Proxy settings:\n==============="
 		else
-
 			echo "Proxy set: " 
 			export http_proxy="$1"
-			export https_proxy=$http_proxy
-			git config --global http.proxy "http://$http_proxy"
-			git config --global https.proxy "http://$https_proxy"
-
+			export HTTPS_PROXY=$http_proxy
+			export ALL_PROXY=$http_proxy # for curl
+			if [[ $1 =~ ^socks5 ]]; then
+				git config --global http.proxy "$1"
+				git config --global https.proxy "$1"
+			else
+				git config --global http.proxy "http://$http_proxy"
+				git config --global https.proxy "https://$HTTPS_PROXY"
+			fi
 		fi
 	elif [[ $# -eq 2 ]]; then
-
 		echo "Proxy set: " 
 		export http_proxy="$1"
-		export https_proxy="$2"
-		git config --global http.proxy "http://$http_proxy"
-		git config --global https.proxy "http://$https_proxy"
-
+		export HTTPS_PROXY="$2"
+		export ALL_PROXY=$http_proxy # for curl
+		if [[ $1 =~ ^socks5 ]]; then
+			git config --global http.proxy "$1"
+			git config --global https.proxy "$2"
+		else
+			git config --global http.proxy "http://$http_proxy"
+			git config --global https.proxy "https://$HTTPS_PROXY"
+		fi
 	fi
-	echo "PROXY: HTTP = $http_proxy | HTTPS = $https_proxy"
+	echo "PROXY: HTTP = $http_proxy | HTTPS = $HTTPS_PROXY | ALL = $ALL_PROXY"
+	echo "GIT:\n$(git config --global --get-regexp http)"
 }
 
 # l(ist)ips Get local and WAN IP adddresses
@@ -339,6 +345,7 @@ function update() {
 function doBib() {
 	printf "\n---> Processing Bibliography file @ \e[93m$(date)\e[m...\n"
 	cd ~/Desktop
+	[[ -f "🌊Core.bib" ]] && mv 🌊Core.bib Core.bib
 	printf '\n---> Citeproc generating JSON from BIB file...\n'
 	pandoc-citeproc -j ~/Desktop/Core.bib > ~/Desktop/Temp.json
 	printf '\n---> Processing title case...\n'
