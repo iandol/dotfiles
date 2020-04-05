@@ -30,16 +30,15 @@ if [ $PLATFORM = "Darwin" ]; then
 		brew install bat rbenv ruby-build zsh git figlet archey jq fzf prettyping ansiweather \
 		diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver youtube-dl
 		#cask fonts
-		brew cask install font-symbola font-fantasque-sans-mono font-fira-code font-hack font-hasklig \
+		brew cask install font-symbola font-fantasque-sans-mono font-fira-code font-jetbrains-mono font-libertinus \
 		font-source-code-pro font-source-sans-pro font-source-serif-pro
-		printf 'Do you want to install Apps? (y / n):  '
+		printf 'Do you want to install Apps? (y / n): '
 		read ans
 		if [ $ans == 'y' ]; then
 			#cask apps
-			brew cask install forklift fsnotes betterzip karabiner-elements \
-			bettertouchtool imageoptim tex-live-utility knockknock prince \
-			calibre iina mpv scrivener bookends carbon-copy-cloner ff-works \
-			kitty vivaldi deckset aerial textmate launchcontrol
+			brew cask install aerial alfred bettertouchtool betterzip bitwarden bookends calibre carbon-copy-cloner deckset ff-works forklift fsnotes \
+			imageoptim iina kitty knockknock karabiner-elements prince \
+			mpv scrivener tex-live-utility vivaldi textmate launchcontrol proxyman
 		fi
 		# other software
 		#brew cask install libreoffice microsoft-word microsoft-powerpoint microsoft-excel
