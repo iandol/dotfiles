@@ -332,7 +332,7 @@ function update() {
 		sudo apt update
 		sudo apt autoremove
 		apt list --upgradable
-		snap refresh
+		sudo snap refresh
 	fi
 
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
