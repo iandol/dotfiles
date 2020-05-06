@@ -5,9 +5,11 @@ require 'open3' # ruby standard library class to handle stderr and stdout
 STDOUT.puts "\n\n=====================setpath.rb @ " + `date`
 STDOUT.puts "---SHELL PATH: " + `echo $PATH 2>&1`
 
+STDOUT.puts "\n---ENV PATH: " + ENV['PATH']
+
 ENV['PATH'] = "/usr/local/bin:" + ENV['HOME'] + "/.rbenv/shims:" + ENV['PATH']
 
-STDOUT.puts "\n---ENV PATH: " + ENV['PATH']
+STDOUT.puts "\n---MODIFIED PATH: " + ENV['PATH']
 
 STDOUT.puts "\n---USER: " + `echo $USER`
 STDOUT.puts "---PWD: " + `echo $PWD`
@@ -16,7 +18,9 @@ STDOUT.puts "---SHELL: " + `echo $SHELL`
 STDOUT.puts "---PATH: " + `echo $PATH`
 
 STDOUT.puts `echo "---ruby: $(which ruby)" `
+STDOUT.puts `ruby -v`
 STDOUT.puts `echo "---rbenv: $(which rbenv)"` 
+STDOUT.puts `rbenv versions`
 STDOUT.puts `echo "---pandoc: $(which pandoc)" `
 STDOUT.puts `echo "---panzer: $(which panzer)" `
 STDOUT.puts `echo "---pandocomatic: $(which pandocomatic)" `
