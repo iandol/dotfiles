@@ -1,0 +1,4 @@
+#!/usr/bin/osascript
+Tell Application "Amphetamine"
+	 start new session {duration:0, interval:0, displaySleepAllowed:true}
+end tell
