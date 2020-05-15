@@ -72,9 +72,9 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 		export LUA_CPATH="$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
 	fi
 else
-	[[ -d "/usr/local/MATLAB/R2019b/bin" ]] && path=("/usr/local/MATLAB/R2019b/bin" $path) # matlab
-	[[ -d "/usr/local/MATLAB/R2019b/bin" ]] && export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2019b/bin" # matlab
-	[[ -x "/usr/local/MATLAB/R2019b/bin/glnxa64/mlint" ]] && ln -sf "/usr/local/MATLAB/R2019b/bin/glnxa64/mlint" ~/bin/ # mlint
+	[[ -d "/usr/local/MATLAB/R2020a/bin" ]] && path=("/usr/local/MATLAB/R2020a/bin" $path) # matlab
+	[[ -d "/usr/local/MATLAB/R2020a/bin" ]] && export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020a/bin" # matlab
+	[[ -x "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ]] && ln -sf "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ~/bin/ # mlint
 	[[ -d "/opt/jdk-11/bin" ]] && export JAVA_HOME="/opt/jdk-11/" # Linux Java
 	[[ -d "/opt/jdk-11/bin" ]] && path=(${JAVA_HOME}bin $path) # Linux JDK
 	[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
