@@ -333,6 +333,7 @@ function update() {
 		sudo apt autoremove
 		apt list --upgradable
 		sudo snap refresh
+		fwupdmgr get-upgrades
 	fi
 
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
