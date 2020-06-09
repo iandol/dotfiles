@@ -303,7 +303,14 @@ function update() {
 		if [[ -d ~/${x}/.git ]]; then
 			printf "\n\n---> Updating \e[92m${x}\e[m...\n"
 			cd ~/${x}
-			git checkout master
+			oldbranch=$(git branch --show-current)
+			if [[ ! ${oldbranch} =~ 'master' ]]; then
+				if [[ ${x} =~ 'fieldtrip' ]]; then
+					git checkout umaster
+				else
+					git checkout master
+				fi
+			fi
 			git pull
 			git status
 			if [[ -n $(git remote 2>/dev/null | grep upstream) ]]; then
@@ -312,6 +319,9 @@ function update() {
 				if [[ ! ${x} =~ 'Psychtoolbox' ]]; then
 					git merge --ff-only -v upstream/master
 				fi
+			fi
+			if [[ ! ${oldbranch} =~ 'master' ]]; then
+				git checkout ${oldbranch}
 			fi
 		fi
 	done
