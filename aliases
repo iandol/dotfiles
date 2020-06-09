@@ -328,16 +328,21 @@ function update() {
 	cd $myolddir
 	unset myolddir
 
-	if [[ -x $(which brew) ]]; then 
+	if [[ -x $(which brew) ]]; then
 		printf '\n\n---> Updating \e[92mHomeBrew\e[m...\n'
 		export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK='true'
+		if [[ $PLATFORM = "Linux" ]]; then
+			if [[ -n $(brew tap 2>/dev/null | grep cask) ]]; then
+				brew untap homebrew/cask
+			fi
+		fi
 		brew update
 		brew outdated
 		brew upgrade --force-bottle 
 		[[ $PLATFORM = 'Darwin' ]] && brew cask upgrade
 	fi
 
-	if [[ $PLATFORM = "Linux" ]]; then 
+	if [[ $PLATFORM = "Linux" ]]; then
 		printf '\n\n---> Updating \e[92mApt\e[m...\n'
 		sudo apt update
 		sudo apt autoremove
