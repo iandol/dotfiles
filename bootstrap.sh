@@ -175,6 +175,7 @@ if [ -f $(which git) ]; then
 	#git config --global --replace-all user.email 'iandol@machine'
 	#git config --global --replace-all user.name 'iandol'
 	git config --global core.editor "vim"
+	git config --global init.defaultBranch main
 	git config --global core.autocrlf input
 	git config --global core.eol lf
 	git config --global --replace-all alias.last 'log -1 HEAD'
