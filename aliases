@@ -339,7 +339,7 @@ function update() {
 		brew update
 		brew outdated
 		brew upgrade --force-bottle 
-		[[ $PLATFORM = 'Darwin' ]] && brew cask upgrade
+		[[ $PLATFORM = 'Darwin' ]] && brew upgrade --cask
 	fi
 
 	if [[ $PLATFORM = "Linux" ]]; then
