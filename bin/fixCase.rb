@@ -95,7 +95,10 @@ enforceCase = [
 	'HMAX',
 	'R-CNN',
 	'DCNN',
-	'NCC'
+	'NCC',
+	'Part I',
+	'Part II',
+	'Part III'
 ]
 
 temp_file = Tempfile.new('fixcase')

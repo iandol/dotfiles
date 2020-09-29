@@ -68,8 +68,8 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -d "/Library/Frameworks/GStreamer.framework/Commands" ]] && path=("/Library/Frameworks/GStreamer.framework/Commands" $path) # GStreamer
 	if [[ -d ~/Code/ZeroBraneStudio ]]; then
 		export ZBS=$HOME/Code/ZeroBraneStudio
-		export LUA_PATH="./?.lua;$ZBS/lualibs/?/?.lua;$ZBS/lualibs/?.lua"
-		export LUA_CPATH="$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
+		export LUA_PATH="/usr/local/share/lua/5.3/?.lua;/usr/local/share/lua/5.3/?/init.lua;/usr/local/lib/lua/5.3/?.lua;/usr/local/lib/lua/5.3/?/init.lua;./?.lua;./?/init.lua;./?.lua;$ZBS/lualibs/?/?.lua;$ZBS/lualibs/?.lua"
+		export LUA_CPATH="/usr/local/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so;$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
 	fi
 else
 	[[ -d "/usr/local/MATLAB/R2020a/bin" ]] && path=("/usr/local/MATLAB/R2020a/bin" $path) # matlab
