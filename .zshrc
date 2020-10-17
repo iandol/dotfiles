@@ -14,6 +14,7 @@ zplug "zsh-users/zsh-autosuggestions"
 [[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
 #-----Load theme file
 zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
+export SPACESHIP_CONDA_SHOW='false'
 #"dracula/zsh" | "mashaal/wild-cherry/zsh", from:github, use:wild-cherry.zsh-theme, as:theme 
 #-----supposed to come after compinit
 zplug "zdharma/fast-syntax-highlighting", defer:2
@@ -52,7 +53,8 @@ setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a d
 setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
 setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
 setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
-export MANPAGER='less -X' # don't clear after quitting man
+export MANPAGER='less -X'        # don't clear after quitting man
+typeset -U path                  # don't allow duplicates in path
 
 #------------------------------------PATHS/ENVS ETC.
 [[ -d "$(brew --prefix)/share/zsh/site-functions/" ]] && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
@@ -60,23 +62,23 @@ export MANPAGER='less -X' # don't clear after quitting man
 if [[ $PLATFORM == 'Darwin' ]]; then
 #	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 #	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	[[ -d "/Applications/MATLAB_R2020a.app/bin" ]] && path=("/Applications/MATLAB_R2020a.app/bin" $path) # matlab
+	[[ -d "/Applications/MATLAB_R2020a.app/bin" ]] && path+="/Applications/MATLAB_R2020a.app/bin" # matlab
 	[[ -d "/Applications/MATLAB_R2020a.app/bin" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2020a.app/bin/matlab" # matlab
 	[[ -x "/Applications/MATLAB_R2020a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2020a.app/bin/maci64/mlint" ~/bin/mlint # matlab
-	[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path=("/Applications/Araxis Merge.app/Contents/Utilities" $path)
-	[[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path) # MacTeX
-	[[ -d "/Library/Frameworks/GStreamer.framework/Commands" ]] && path=("/Library/Frameworks/GStreamer.framework/Commands" $path) # GStreamer
-	if [[ -d ~/Code/ZeroBraneStudio ]]; then
-		export ZBS=$HOME/Code/ZeroBraneStudio
-		export LUA_PATH="/usr/local/share/lua/5.3/?.lua;/usr/local/share/lua/5.3/?/init.lua;/usr/local/lib/lua/5.3/?.lua;/usr/local/lib/lua/5.3/?/init.lua;./?.lua;./?/init.lua;./?.lua;$ZBS/lualibs/?/?.lua;$ZBS/lualibs/?.lua"
-		export LUA_CPATH="/usr/local/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so;$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
+	[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path+="/Applications/Araxis Merge.app/Contents/Utilities"
+	[[ -d "/Library/TeX/texbin" ]] && path+="/Library/TeX/texbin" # MacTeX
+	[[ -d "/Library/Frameworks/GStreamer.framework/Commands" ]] && path+="/Library/Frameworks/GStreamer.framework/Commands" # GStreamer
+	if [[ -d /Applications/ZeroBraneStudio.app ]]; then
+		export ZBS=/Applications/ZeroBraneStudio.app/Content/ZeroBraneStudio
+		#export LUA_PATH="/usr/local/share/lua/5.3/?.lua;/usr/local/share/lua/5.3/?/init.lua;/usr/local/lib/lua/5.3/?.lua;/usr/local/lib/lua/5.3/?/init.lua;./?.lua;./?/init.lua;./?.lua;$ZBS/lualibs/?/?.lua;$ZBS/lualibs/?.lua"
+		#export LUA_CPATH="/usr/local/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so;$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
 	fi
 else
-	[[ -d "/usr/local/MATLAB/R2020a/bin" ]] && path=("/usr/local/MATLAB/R2020a/bin" $path) # matlab
+	[[ -d "/usr/local/MATLAB/R2020a/bin" ]] && path+="/usr/local/MATLAB/R2020a/bin" # matlab
 	[[ -d "/usr/local/MATLAB/R2020a/bin" ]] && export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020a/bin" # matlab
 	[[ -x "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ]] && ln -sf "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ~/bin/ # mlint
 	[[ -d "/opt/jdk-11/bin" ]] && export JAVA_HOME="/opt/jdk-11/" # Linux Java
-	[[ -d "/opt/jdk-11/bin" ]] && path=(${JAVA_HOME}bin $path) # Linux JDK
+	[[ -d "/opt/jdk-11/bin" ]] && path+=${JAVA_HOME}bin # Linux JDK
 	[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
 fi
 
@@ -90,14 +92,15 @@ else
     if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
         . "$HOME/miniconda3/etc/profile.d/conda.sh"
     else
-        export PATH="$HOME/ian/miniconda3/bin:$PATH"
+        path+="$HOME/ian/miniconda3/bin"
     fi
 fi
 unset __conda_setup
 # <<< conda initialize <<<
 
 #------------------------------------FINALISE PATH
-[[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
+[[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
+[[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 export PATH
 
