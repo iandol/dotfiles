@@ -80,7 +80,8 @@ REMOTE_VERSIONS=()
 arch=$(dpkg --print-architecture)
 
 # (internal) The text to search for to check if the build was successfully
-build_succeeded_text="Build for ${arch} succeeded"
+# NOTE: New succeed text since v5.6.18
+build_succeeded_text="(Build for ${arch} succeeded|Test ${arch}/build succeeded)"
 
 # (internal) The pid of the child process which checks download progress
 monitor_pid=0
@@ -426,9 +427,9 @@ Arguments:
   -i [VERSION]     Install kernel VERSION, see -l for list. You don't have to prefix
                    with v. E.g. -i 4.9 is the same as -i v4.9. If version is
                    omitted the latest available version will be installed
-  -l [SEarch]      List locally installed kernel versions. If an argument to this
+  -l [SEARCH]      List locally installed kernel versions. If an argument to this
                    option is supplied it will search for that
-  -r [SEarch]      List available kernel versions. If an argument to this option
+  -r [SEARCH]      List available kernel versions. If an argument to this option
                    is supplied it will search for that
   -u [VERSION]     Uninstall the specified kernel version. If version is omitted,
                    a list of max 10 installed kernel versions is displayed
@@ -590,12 +591,6 @@ Optional:
             warn "Disable signature check, gpg not available"
         }
 
-        if [ $check_signature -eq 0 ]; then
-            FILES=()
-        else
-            FILES=("CHECKSUMS" "CHECKSUMS.gpg")
-        fi
-
         IFS=$'\n'
 
         ppa_uri=$ppa_index${version%\.0}"/"
@@ -608,8 +603,23 @@ Optional:
           exit 1
         fi
 
-        index=${index##*<table}
+        index=${index%%*<table}
+
+        FILES=()
+
+        found_arch=0
+        uses_subfolders=0
+        section_end="^[[:space:]]*<br>[[:space:]]*$"
         for line in $index; do
+            if [[ $line =~ $build_succeeded_text ]]; then
+              found_arch=1
+              continue
+            elif [ $found_arch -eq 0 ]; then
+              continue
+            elif [[ $line =~ $section_end ]]; then
+              break
+            fi
+
             [[ "$line" =~ linux-(image(-(un)?signed)?|headers|modules)-[0-9]+\.[0-9]+\.[0-9]+-[0-9]{6}.*?_(${arch}|all).deb ]] || continue
 
             [ $use_lowlatency -eq 0 ] && [[ "$line" =~ "-lowlatency" ]] && continue
@@ -622,9 +632,21 @@ Optional:
             line=${line##*href=\"}
             line=${line%%\">*}
 
+            if [ $uses_subfolders -eq 0 ] && [[ $line =~ ${arch}/linux ]]; then
+              uses_subfolders=1
+            fi
+
             FILES+=("$line")
         done
         unset IFS
+
+        if [ $check_signature -eq 1 ]; then
+            if [ $uses_subfolders -eq 0 ]; then
+              FILES+=("CHECKSUMS" "CHECKSUMS.gpg")
+            else
+              FILES+=("${arch}/CHECKSUMS" "${arch}/CHECKSUMS.gpg")
+            fi
+        fi
 
         if [ ${#FILES[@]} -ne $expected_files_count ]; then
             if [ $assume_yes -eq 0 ]; then
@@ -641,14 +663,15 @@ Optional:
         debs=()
         log "Will download ${#FILES[@]} files from $ppa_host:"
         for file in "${FILES[@]}"; do
-            monitor_progress "Downloading $file" "$workdir$file"
-            download $ppa_host "$ppa_uri$file" > "$workdir$file"
+            workfile=${file##*/}
+            monitor_progress "Downloading $file" "$workdir$workfile"
+            download $ppa_host "$ppa_uri$file" > "$workdir$workfile"
 
-            remove_http_headers "$workdir$file"
+            remove_http_headers "$workdir$workfile"
             end_monitor_progress
 
-            if [[ "$file" =~ \.deb ]]; then
-                debs+=("$file")
+            if [[ "$workfile" =~ \.deb ]]; then
+                debs+=("$workfile")
             fi
         done
 
@@ -780,7 +803,7 @@ Optional:
                 fi
 
                 if [ "$continue" == "y" ] || [ "$continue" == "Y" ]; then
-                    if $sudo DEBIAN_FRONTEND=noninteractive dpkg --purge "${pckgs[@]}" 2>$debug_target >&2; then
+                    if $sudo env DEBIAN_FRONTEND=noninteractive dpkg --purge "${pckgs[@]}" 2>$debug_target >&2; then
                         log "Kernel $uninstall_version successfully purged"
                         exit 0
                     fi
