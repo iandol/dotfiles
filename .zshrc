@@ -57,7 +57,7 @@ export MANPAGER='less -X'        # don't clear after quitting man
 typeset -U path                  # don't allow duplicates in path
 
 #------------------------------------PATHS/ENVS ETC.
-[[ -d "$(brew --prefix)/share/zsh/site-functions/" ]] && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
+([[ -f $(which brew) ]] && [[ -d "$(brew --prefix)/share/zsh/site-functions/" ]]) && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
 
 if [[ $PLATFORM == 'Darwin' ]]; then
 #	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
