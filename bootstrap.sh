@@ -19,7 +19,7 @@ if [ $PLATFORM = "Darwin" ]; then
 	if [ -e $(which brew) ]; then
 		printf 'Homebrew is present!\n'
 	else
-		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 		printf 'Homebrew now installed...\n'
 		brew tap homebrew/cask-fonts 
 		printf 'Added Caskroom fonts to Homebrew...\n'
@@ -48,12 +48,13 @@ if [ $PLATFORM = "Darwin" ]; then
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
-	sudo apt-get install build-essential gparted vim curl file zsh git mc \
-	p7zip-full p7zip-rar figlet jq ansiweather freeglut3 gawk \
-	exfat-fuse exfat-utils htop libunrar libdc1394-22 libraw1394-11
+	sudo apt-get -m install build-essential gparted vim curl file zsh git mc
+	sudo apt-get -m install freeglut3 gawk
+	sudo apt-get -m install p7zip-full p7zip-rar figlet jq ansiweather exfat-fuse exfat-utils htop 
+	sudo apt-get -m install libunrar5 libdc1394-25 libraw1394-11
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
-		sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 		eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 	else
 		printf 'Homebrew already installed...\n'
@@ -61,13 +62,13 @@ elif [ $PLATFORM = "Linux" ]; then
 	fi
 	if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping pandoc pandoc-citeproc pandoc-crossref 
+		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping 
 	fi
 elif [ $PLATFORM = "LinuxWSL" ]; then
 	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
 	sudo apt-get install build-essential vim curl p7zip-full p7zip-rar file zsh git figlet jq ansiweather wget rbenv ruby gawk
-	printf 'We will not install homebrew under WSL, try chocolately in PS...'
+	printf 'We will not install homebrew under WSL, try scoop in PS...'
 	mkdir bin
 	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
 	chmod +x bin/diff-so-fancy
