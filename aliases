@@ -373,7 +373,7 @@ function doBib() {
 	cd ~/Desktop
 	[[ -f "🌊Core.bib" ]] && mv 🌊Core.bib Core.bib
 	printf '\n---> Citeproc generating JSON from BIB file...\n'
-	pandoc-citeproc -j ~/Desktop/Core.bib > ~/Desktop/Temp.json
+	pandoc -f biblatex -t csljson ~/Desktop/Core.bib > ~/Desktop/Temp.json
 	printf '\n---> Processing title case...\n'
 	fixCase.rb ~/Desktop/Core.bib
 	fixCase.rb ~/Desktop/Temp.json
