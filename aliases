@@ -216,12 +216,19 @@ alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.ar
 
 function ffmpeg-update() {
 	cd ~
-	ffmpeg -version
-	curl -JL --output ff.7z https://evermeet.cx/ffmpeg/get
-	7z -y -o$HOME/bin/ e ff.7z
-	cp ~/bin/ffmpeg "$HOME/Library/Application Support/FFmpegTools/"
-	rm ff.7z
-	ffmpeg -version
+	lver=$(ffmpeg -version | grep -owE 'N-\d+-[^-]+')
+	rver=$(curl -s https://evermeet.cx/ffmpeg/info/ffmpeg/snapshot | jq -r '.version')
+	echo "Local: $lver & Remote: $rver"
+	if [[ ! $(echo N-$lver) =~ $rver ]]; then
+		echo '\tDownloading new ffmpeg:'
+		curl -JL --output ff.7z https://evermeet.cx/ffmpeg/get
+		7z -y -o$HOME/bin/ e ff.7z
+		cp ~/bin/ffmpeg "$HOME/Library/Application Support/FFmpegTools/"
+		rm ff.7z
+		ffmpeg -version
+	else
+		echo '\tNo need to update...'
+	fi
 }
 
 function transfer() { 
