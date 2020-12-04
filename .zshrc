@@ -64,9 +64,15 @@ typeset -U path                  # don't allow duplicates in path
 if [[ $PLATFORM == 'Darwin' ]]; then
 #	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 #	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	[[ -d "/Applications/MATLAB_R2020a.app/bin" ]] && path+="/Applications/MATLAB_R2020a.app/bin" # matlab
-	[[ -d "/Applications/MATLAB_R2020a.app/bin" ]] && export MATLAB_EXECUTABLE="/Applications/MATLAB_R2020a.app/bin/matlab" # matlab
-	[[ -x "/Applications/MATLAB_R2020a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2020a.app/bin/maci64/mlint" ~/bin/mlint # matlab
+	if [[ -d "/Applications/MATLAB_R2020b.app/bin" ]]; then
+		path+="/Applications/MATLAB_R2020b.app/bin" # matlab
+		export MATLAB_EXECUTABLE="/Applications/MATLAB_R2020b.app/bin/matlab" # matlab
+		ln -sf "/Applications/MATLAB_R2020b.app/bin/maci64/mlint" ~/bin/mlint # matlab
+	elif [[ -d "/Applications/MATLAB_R2020a.app/bin" ]]; then
+		path+="/Applications/MATLAB_R2020a.app/bin" # matlab
+		export MATLAB_EXECUTABLE="/Applications/MATLAB_R2020a.app/bin/matlab" # matlab
+		ln -sf "/Applications/MATLAB_R2020a.app/bin/maci64/mlint" ~/bin/mlint # matlab
+	fi
 	[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path+="/Applications/Araxis Merge.app/Contents/Utilities"
 	[[ -d "/Library/TeX/texbin" ]] && path+="/Library/TeX/texbin" # MacTeX
 	[[ -d "/Library/Frameworks/GStreamer.framework/Commands" ]] && path+="/Library/Frameworks/GStreamer.framework/Commands" # GStreamer
@@ -76,9 +82,15 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 		#export LUA_CPATH="/usr/local/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so;$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
 	fi
 else
-	[[ -d "/usr/local/MATLAB/R2020a/bin" ]] && path+="/usr/local/MATLAB/R2020a/bin" # matlab
-	[[ -d "/usr/local/MATLAB/R2020a/bin" ]] && export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020a/bin" # matlab
-	[[ -x "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ]] && ln -sf "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ~/bin/ # mlint
+	if [[ -d "/usr/local/MATLAB/R2020b/bin" ]]; then
+		path+="/usr/local/MATLAB/R2020b/bin" # matlab
+		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020b/bin" # matlab
+		ln -sf "/usr/local/MATLAB/R2020b/bin/glnxa64/mlint" ~/bin/ # mlint
+	elif [[ -d "/usr/local/MATLAB/R2020b/bin" ]]; then
+		path+="/usr/local/MATLAB/R2020a/bin" # matlab
+		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020a/bin" # matlab
+		ln -sf "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ~/bin/ # mlint
+	fi
 	[[ -d "/opt/jdk-11/bin" ]] && export JAVA_HOME="/opt/jdk-11/" # Linux Java
 	[[ -d "/opt/jdk-11/bin" ]] && path+=${JAVA_HOME}bin # Linux JDK
 	[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
