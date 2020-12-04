@@ -36,8 +36,10 @@ zplug load
 #-------------------------------PREFER VSCODE
 if [[ -f $(which code) ]]; then 
 	export EDITOR='code -nw'
+elif [[ -f $(which micro) ]]; then
+	export EDITOR='micro'
 else
-	export EDITOR='vim'
+	export EDITOR='nano'
 fi
 
 #-------------------------------OPTIONS

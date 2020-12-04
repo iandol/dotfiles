@@ -137,7 +137,7 @@ if [ -d ~/.antigen/ ]; then
 fi
 if [ ! -d ~/.zplug/ ]; then
 	printf '\t...Going to install ZPlug... '
-	curl -sL https://github.com/zplug/installer/raw/master/installer.zsh | zsh
+	curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 	chown -R $USER ~/.zplug
 	touch ~/.zplug/packages.zsh
 	printf ' DONE!'
