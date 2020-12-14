@@ -10,7 +10,7 @@
 # Edit the word lists for your needs, and run it like so: > ./fixCase.rb MyBib.bib
 # It will overwrite the original file.
 
-# version = 1.0.3
+# version = 1.0.4
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8
@@ -116,9 +116,9 @@ b1 = Regexp.escape("'\"/,.[(-–—")
 b2 = Regexp.escape("'\"/,.]):-–—")
 
 begin
-	File.open(infilename, 'r') do |file|
+	File.open(infilename, 'r', universal_newline: true) do |file|
 		file.each_line do |line|
-			line.gsub!(/\r+$/, "\n")
+			# line.gsub!(/\r+$/, "\n")
 			if line.match(titleRegex)
 
 				keepCase.each do |k|
@@ -127,9 +127,9 @@ begin
 					when /bib/
 						line.gsub!(r, "{#{k}}") if line.match(r)
 						sr = /title = {#{k}(?=\b)/ # deal with start-of-title words
-						er = /(?<=\b)#{k}},\s+\n/ # deal with end-of-title words
+						er = /(?<=\b)#{k}},\s*$/ # deal with end-of-title words
 						line.gsub!(sr, "title = {{#{k}}") if line.match(sr)
-						line.gsub!(er, "{#{k}}}, \n") if line.match(er)
+						line.gsub!(er, "{#{k}}},\n") if line.match(er)
 					when /json/
 						if line.match(r)
 							line.gsub!(r, "<span class=\\\"nocase\\\">#{k}</span>") # case sensitive
@@ -144,9 +144,9 @@ begin
 					when /bib/
 						line.gsub!(r, "{#{e}}") if line.match(r)
 						sr = /title = {#{e}(?=\b)/i # deal with start-of-title words
-						er = /(?<=\b)#{e}},\s+\n/i # deal with end-of-title words
+						er = /(?<=\b)#{e}},\s*$/i # deal with end-of-title words
 						line.gsub!(sr, "title = {{#{e}}") if line.match(sr)
-						line.gsub!(er, "{#{e}}}, \n") if line.match(er)
+						line.gsub!(er, "{#{e}}},\n") if line.match(er)
 					when /json/
 						if line.match(r)
 							line.gsub!(r, "<span class=\\\"nocase\\\">#{e}</span>") # case sensitive
