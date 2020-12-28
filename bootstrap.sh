@@ -21,29 +21,30 @@ if [ $PLATFORM = "Darwin" ]; then
 	else
 		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 		printf 'Homebrew now installed...\n'
-		brew tap homebrew/cask-fonts 
-		printf 'Added Caskroom fonts to Homebrew...\n'
 	fi
+	printf 'Added Caskroom fonts to Homebrew...\n'
+	brew tap homebrew/cask-fonts
 	#make sure our minimum packages are installed
 	if [ -e $(which brew) ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install bat rbenv ruby-build zsh git figlet archey jq fzf prettyping ansiweather \
-		diff-so-fancy pandoc pandoc-citeproc pandoc-crossref multimarkdown libusb exodriver youtube-dl
+		brew install bat rbenv p7zip ruby-build zsh git figlet archey jq fzf prettyping ansiweather \
+		diff-so-fancy pandoc pandoc-crossref multimarkdown libusb exodriver youtube-dl
 		#cask fonts
-		brew cask install font-symbola font-fantasque-sans-mono font-fira-code font-jetbrains-mono font-libertinus \
+		brew install font-symbola font-fantasque-sans-mono font-fira-code font-jetbrains-mono font-libertinus \
 		font-source-code-pro font-source-sans-pro font-source-serif-pro
 		printf 'Do you want to install Apps? (y / n): '
 		read ans
 		if [ $ans == 'y' ]; then
 			#cask apps
-			brew cask install aerial alfred bettertouchtool betterzip bitwarden bookends calibre carbon-copy-cloner deckset ff-works forklift fsnotes \
+			brew install aerial alfred bettertouchtool betterzip bitwarden bookends calibre \
+			carbon-copy-cloner deckset ff-works forklift fsnotes \
 			imageoptim iina kitty knockknock karabiner-elements prince \
 			mpv scrivener tex-live-utility vivaldi textmate launchcontrol proxyman
+			# other software
+			#brew install libreoffice microsoft-word microsoft-powerpoint microsoft-excel
+			#brew install dropbox #fails unless on VPN
+			#brew install adoptopenjdk android-studio mono-mdk
 		fi
-		# other software
-		#brew cask install libreoffice microsoft-word microsoft-powerpoint microsoft-excel
-		#brew cask install dropbox #fails unless on VPN
-		#brew cask install adoptopenjdk android-studio mono-mdk
 	fi
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'

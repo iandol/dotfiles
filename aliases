@@ -98,7 +98,7 @@ if [[ $PLATFORM = 'Darwin' ]]; then
 
 	alias randomAddress="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//'"
 	alias randomiseMAC="openssl rand -hex 6 | sed 's/\(..\)/\1:/g; s/.$//' | xargs sudo ifconfig en0 ether"
-	alias noquarantine='xattr -d com.apple.quarantine '
+	alias dequarantine='xattr -d com.apple.quarantine '
 	alias lock="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend"
 	alias stfu="osascript -e 'set volume output muted true'"
 	alias pumpitup="sudo osascript -e 'set volume 10'"
@@ -125,7 +125,7 @@ if [[ $PLATFORM = 'Darwin' ]]; then
 	alias wifi="networksetup -setairportpower $(networksetup -listallhardwareports | grep -A 2 'Hardware Port: Wi-Fi' | grep 'Device:' | awk '{print $2}')"
 
 	#Some hardcore maintainance
-	alias rebuildkexts="sudo touch /System/Library/Extensions"
+	#alias rebuildkexts="sudo touch /System/Library/Extensions"
 	alias rebuilddyld="sudo update_dyld_shared_cache -force"
 
 	# Flush DNS cache
