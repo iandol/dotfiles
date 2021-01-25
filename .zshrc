@@ -86,7 +86,7 @@ else
 		path+="/usr/local/MATLAB/R2020b/bin" # matlab
 		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020b/bin" # matlab
 		ln -sf "/usr/local/MATLAB/R2020b/bin/glnxa64/mlint" ~/bin/ # mlint
-	elif [[ -d "/usr/local/MATLAB/R2020b/bin" ]]; then
+	elif [[ -d "/usr/local/MATLAB/R2020a/bin" ]]; then
 		path+="/usr/local/MATLAB/R2020a/bin" # matlab
 		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020a/bin" # matlab
 		ln -sf "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ~/bin/ # mlint

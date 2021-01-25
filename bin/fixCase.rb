@@ -98,7 +98,10 @@ enforceCase = [
 	'NCC',
 	'Part I',
 	'Part II',
-	'Part III'
+	'Part III',
+	'Purkinje',
+	'Westheimer',
+	'Golgi'
 ]
 
 temp_file = Tempfile.new('fixcase')
