@@ -311,7 +311,7 @@ function update() {
 	printf "\n=====>>> Start Update @ \e[93m$(date)\e[m <<<=====\n"
 	myolddir=$(pwd)
 	ul=(.dotfiles .zplug Code/opticka Code/Titta
-		Code/Training Code/AfterImage Code/isoluminant Code/Pinna Code/spikes
+		Code/Training Code/Palamedes Code/AfterImage Code/isoluminant Code/Pinna Code/spikes
 		Code/Psychtoolbox-3 Code/fieldtrip
 		Code/Mymou 
 		Documents/MATLAB/gramm
@@ -401,7 +401,7 @@ function updatePTB() {
 	git merge --ff-only -v upstream/master
 	printf '\n\n---> Merging Fieldtrip MASTER...\n'
 	cd ~/Code/fieldtrip
-	git checkout master
+	git checkout umaster
 	git pull
 	git fetch upstream
 	git checkout master
