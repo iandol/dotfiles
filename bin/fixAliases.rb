@@ -2,7 +2,8 @@
 #encoding: utf-8
 
 # This traverses a Scrivener project and finds alias files (binary start=book....mark) and 
-# adds com.Finder.FinderInfo metadata to make sure macOs recognises them...
+# adds com.Finder.FinderInfo metadata "alisMACS" to make sure macOS recognises them...
+# See https://eclecticlight.co/2017/12/19/xattr-com-apple-finderinfo-information-for-the-finder/
 # version = 1.0.0
 
 Encoding.default_external = Encoding::UTF_8
@@ -35,9 +36,9 @@ def process(path)
 	return if File.ftype(path) == "directory"
 	cmd = "xxd -ps -l12 '#{path}'"
 	firstBytes = `#{cmd}`.chomp
-	if firstBytes =~ /626f6f6b000000006d61726b/ # first 12 bytes read book....mark which is an alias file
+	if firstBytes =~ /626f6f6b000000006d61726b/ # first 12 bytes read 'book....mark' which denotes an alias file
 		puts "Processing #{path} as an alias..."
-		ret = `xattr -wx com.apple.FinderInfo 616C69734D414353800000000000000000000000000000000000000000000000 "#{path}"`
+		`xattr -wx com.apple.FinderInfo 616C69734D414353800000000000000000000000000000000000000000000000 "#{path}"`
 	end
 end
 
