@@ -253,9 +253,11 @@ function setproxy() {
 		unset http_proxy
 		unset HTTPS_PROXY
 		unset ALL_PROXY # for curl
+		unset no_proxy
 		git config --global --unset http.proxy
 		git config --global --unset https.proxy
 	elif [[ $# -eq 1 ]]; then
+		export no_proxy="localhost, 127.0.0.1"
 		if [[ $1 == "-l" ]]; then
 			echo "Proxy settings:\n==============="
 		else
@@ -272,6 +274,7 @@ function setproxy() {
 			fi
 		fi
 	elif [[ $# -eq 2 ]]; then
+		export no_proxy="localhost, 127.0.0.1"
 		echo "Proxy set: " 
 		export http_proxy="$1"
 		export HTTPS_PROXY="$2"
@@ -285,6 +288,7 @@ function setproxy() {
 		fi
 	fi
 	echo "PROXY: HTTP = $http_proxy | HTTPS = $HTTPS_PROXY | ALL = $ALL_PROXY"
+	echo "BYPASS: $no_proxy"
 	echo "GIT:\n$(git config --global --get-regexp http)"
 }
 

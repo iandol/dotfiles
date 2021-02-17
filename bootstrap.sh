@@ -2,9 +2,11 @@
 cd ~
 printf "\n\n--->>> Bootstrap terminal $SHELL setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
-PLATFORM=$(uname -s)
-[[ $(uname -a | grep -i "microsoft") ]] && ISWIN="WSL"
-export PLATFORM=$PLATFORM$ISWIN
+export PLATFORM=$(uname -s)
+[[ $(uname -a | grep -i "microsoft") ]] && MOD="WSL"
+[[ $(uname -a | grep -i "raspberrypi") ]] && MOD="RPi"
+export PLATFORM=$PLATFORM$MOD
+printf "Using $PLATFORM...\n"
 
 #try to install homebrew on macOS
 if [ $PLATFORM = "Darwin" ]; then
@@ -65,6 +67,13 @@ elif [ $PLATFORM = "Linux" ]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping 
 	fi
+elif [ $PLATFORM = "LinuxRPi" ]; then
+	printf 'Assume we are setting up a Raspberry Pi machine\n'
+	#make sure our minimum packages are installed
+	sudo apt-get -m install build-essential gparted vim curl file zsh git mc
+	sudo apt-get -m install freeglut3 gawk
+	sudo apt-get -m install p7zip-full figlet jq ansiweather exfat-fuse exfat-utils htop 
+	sudo apt-get -m install libdc1394-25 libraw1394-11
 elif [ $PLATFORM = "LinuxWSL" ]; then
 	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
@@ -83,8 +92,12 @@ if [ -d "~/.rbenv/" ]; then
 fi
 
 #few python packages
-printf 'Install a few python packages ... '
-pip3 install howdoi black pylint
+printf "Do you want to add Python packages? [y / n]:  "
+read ans
+if [ $ans == 'y' ]; then
+	printf 'Install a few python packages ... '
+	pip3 install howdoi black pylint
+fi
 
 sleep 2
 
@@ -161,7 +174,7 @@ if [ $PLATFORM = "Darwin" ]; then
 	fi
 	printf '\e[36m\n\n'
 
-	printf 'Do you want to set up OS X defaults? (y / n):  '
+	printf "Do you want to set up OS X defaults? [y / n]:  "
 	read ans
 	if [ $ans == 'y' ]; then
 		echo 'Enter password for setup command:'
