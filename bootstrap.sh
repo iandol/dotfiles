@@ -2,10 +2,9 @@
 cd ~
 printf "\n\n--->>> Bootstrap terminal $SHELL setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
-export PLATFORM=$(uname -s)
 [[ $(uname -a | grep -i "microsoft") ]] && MOD="WSL"
-[[ $(uname -a | grep -i "raspberrypi") ]] && MOD="RPi"
-export PLATFORM=$PLATFORM$MOD
+[[ $(uname -a | grep -i "armv7") ]] && MOD="RPi"
+export PLATFORM=$(uname -s)$MOD
 printf "Using $PLATFORM...\n"
 
 #try to install homebrew on macOS
@@ -161,19 +160,20 @@ else
 	touch ~/.zplug/packages.zsh
 fi
 
-if [ $PLATFORM = "Darwin" ]; then
-	printf 'Linking some bin files in ~/bin/: \n'
+printf 'Linking some bin files in ~/bin/: \n'
 	printf '\e[32m'
-	if [ -d ~/bin/ ]; then
-		ln -sv ~/.dotfiles/bin/* ~/bin
-		chown -R $USER ~/bin/*
+	mkdir -pv ~/bin/
+	if [ $PLATFORM = "Darwin" ]; then
+		ln -sv ~/.dotfiles/bin/* $HOME/bin
 	else
-		mkdir ~/bin/
-		ln -sv ~/.dotfiles/bin/* ~/bin
-		chown -R $USER ~/bin/*
+		ln -sv ~/.dotfiles/bin/*.sh $HOME/bin
+		ln -sv ~/.dotfiles/bin/*.rb $HOME/bin
 	fi
+	chown -R $USER ~/bin/*
 	printf '\e[36m\n\n'
+fi 
 
+if [ $PLATFORM = "Darwin" ]; then
 	printf "Do you want to set up OS X defaults? [y / n]:  "
 	read ans
 	if [ $ans == 'y' ]; then
