@@ -102,7 +102,7 @@ action_data=()
 } || {
     OS=$(lsb_release -si 2>&-)
     [[ "$OS" == "Ubuntu" ]] || [[ "$OS" == "LinuxMint" ]]  || [[ "$OS" == "neon" ]] || {
-        echo "Abort, this script is only intended for Ubuntu-like distro's"
+        echo "Abort, this script is only intended for Ubuntu-like distros"
         exit 2
     }
 }
@@ -342,7 +342,7 @@ load_local_versions() {
     local version
     if [ ${#LOCAL_VERSIONS[@]} -eq 0 ]; then
         IFS=$'\n'
-        for pckg in $(dpkg -l linux-image-* | cut -d " " -f 3 | sort); do
+        for pckg in $(dpkg -l linux-image-* | cut -d " " -f 3 | sort -V); do
             # only match kernels from ppa
             if [[ "$pckg" =~ linux-image-[0-9]+\.[0-9]+\.[0-9]+-[0-9]{6} ]]; then
                 version="v"$(echo "$pckg" | cut -d"-" -f 3,4)
@@ -369,6 +369,23 @@ latest_local_version() {
 }
 
 remote_html_cache=""
+parse_remote_versions() {
+    local line
+    while read -r line; do
+        if [[ $line =~ DIR.*href=\"(v[[:digit:]]+\.[[:digit:]]+(\.[[:digit:]]+)?)(-(rc[[:digit:]]+))?/\" ]]; then
+            line="${BASH_REMATCH[1]}"
+            if [[ -z "${BASH_REMATCH[2]}" ]]; then
+                line="$line.0"
+            fi
+            # temporarily substitute rc suffix join character for correct version sort
+            if [[ -n "${BASH_REMATCH[3]}" ]]; then
+                line="$line~${BASH_REMATCH[4]}"
+            fi
+            echo "$line"
+        fi
+    done <<<"$remote_html_cache"
+}
+
 load_remote_versions () {
     local line
 
@@ -384,28 +401,22 @@ load_remote_versions () {
         fi
 
         IFS=$'\n'
-        for line in $remote_html_cache; do
-            [[ "$line" =~ "folder" ]] || continue
-            [[ $use_rc -eq 0 ]] && [[ "$line" =~ -rc ]] && continue
-            [[ "$line" =~ v[0-9]+\.[0-9]+(\.[0-9]+)?(-rc[0-9]+)?/ ]] || continue
+        while read -r line; do
+            # reinstate original rc suffix join character
+            if [[ $line =~ ^([^~]+)~([^~]+)$ ]]; then
+                [[ $use_rc -eq 0 ]] && continue
+                line="${BASH_REMATCH[1]}-${BASH_REMATCH[2]}"
+            fi
             [[ -n "$2" ]] && [[ ! "$line" =~ $2 ]] && continue
-
-            line=${line##*href=\"}
-            line=${line%%\/\">*}
-            [[ ! "$line" =~ (v[0-9]+\.[0-9]+)\.[0-9]+ ]] && [[ "$line" =~ (v[0-9]+\.[0-9]+)(-rc[0-9]+)? ]] && line=${BASH_REMATCH[1]}".0"${BASH_REMATCH[2]}
-
             REMOTE_VERSIONS+=("$line")
-        done
+        done < <(parse_remote_versions | sort -V)
         unset IFS
     fi
 }
 
 latest_remote_version () {
     load_remote_versions 1 "$1"
-    local sorted
-
-    mapfile -t sorted < <(echo "${REMOTE_VERSIONS[*]}" | tr ' ' '\n' | sort -V)
-    echo "${sorted[${#sorted[@]}-1]}"
+    echo "${REMOTE_VERSIONS[${#REMOTE_VERSIONS[@]}-1]}"
 }
 
 check_environment () {
@@ -413,6 +424,13 @@ check_environment () {
         err "Abort, wget not found. Please apt install wget"
         exit 3
     fi
+}
+
+guard_run_as_root () {
+  if [ "$(id -u)" -ne 0 ]; then
+    echo "The '$run_action' command requires root privileges"
+    exit 2
+  fi  
 }
 
 # execute requested action
@@ -529,6 +547,9 @@ Optional:
         done) | $column
         ;;
     install)
+        # only ensure running if the kernel files should be installed
+        [ $do_install -eq 1 ] && guard_run_as_root
+
         check_environment
         load_local_versions
 
@@ -738,6 +759,7 @@ Optional:
         fi
         ;;
     uninstall)
+        guard_run_as_root
         load_local_versions
 
         if [ ${#LOCAL_VERSIONS[@]} -eq 0 ]; then

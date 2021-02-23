@@ -3,7 +3,7 @@ cd ~
 printf "\n\n--->>> Bootstrap terminal $SHELL setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
 [[ $(uname -a | grep -i "microsoft") ]] && MOD="WSL"
-[[ $(uname -a | grep -i "armv7") ]] && MOD="RPi"
+[[ $(uname -a | grep -Ei "aarch64|armv7") ]] && MOD="RPi"
 export PLATFORM=$(uname -s)$MOD
 printf "Using $PLATFORM...\n"
 
@@ -31,7 +31,7 @@ if [ $PLATFORM = "Darwin" ]; then
 		brew install bat rbenv p7zip ruby-build zsh git figlet archey jq fzf prettyping ansiweather \
 		diff-so-fancy pandoc pandoc-crossref multimarkdown libusb exodriver youtube-dl
 		#cask fonts
-		brew install font-symbola font-fantasque-sans-mono font-fira-code font-jetbrains-mono font-libertinus \
+		brew install font-symbola font-fantasque-sans-mono font-fira-code font-jetbrains-mono font-cascadia-code font-libertinus \
 		font-source-code-pro font-source-sans-pro font-source-serif-pro
 		printf 'Do you want to install Apps? (y / n): '
 		read ans
@@ -64,7 +64,12 @@ elif [ $PLATFORM = "Linux" ]; then
 	fi
 	if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping 
+		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping
+		brew tap linuxbrew/fonts
+		brew install font-fantasque-sans-mono font-fira-code font-jetbrains-mono font-cascadia-code font-libertinus \
+		font-source-code-pro font-source-sans-pro
+		sudo ln -s /home/linuxbrew/.linuxbrew/share/fonts /usr/local/share/fonts/
+		sudo fc-cache -fv
 	fi
 elif [ $PLATFORM = "LinuxRPi" ]; then
 	printf 'Assume we are setting up a Raspberry Pi machine\n'
@@ -73,12 +78,15 @@ elif [ $PLATFORM = "LinuxRPi" ]; then
 	sudo apt-get -m install freeglut3 gawk
 	sudo apt-get -m install p7zip-full figlet jq ansiweather exfat-fuse exfat-utils htop 
 	sudo apt-get -m install libdc1394-25 libraw1394-11
+	mkdir -p bin
+	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
+	chmod +x bin/diff-so-fancy
 elif [ $PLATFORM = "LinuxWSL" ]; then
 	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
 	sudo apt-get install build-essential vim curl p7zip-full p7zip-rar file zsh git figlet jq ansiweather wget rbenv ruby gawk
 	printf 'We will not install homebrew under WSL, try scoop in PS...'
-	mkdir bin
+	mkdir -p bin
 	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
 	chmod +x bin/diff-so-fancy
 fi
