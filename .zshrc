@@ -91,8 +91,8 @@ else
 		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020a/bin" # matlab
 		ln -sf "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ~/bin/ # mlint
 	fi
-	[[ -d "/opt/jdk-11/bin" ]] && export JAVA_HOME="/opt/jdk-11/" # Linux Java
-	[[ -d "/opt/jdk-11/bin" ]] && path+=${JAVA_HOME}bin # Linux JDK
+	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-15-openjdk-amd64/" # Linux Java
+	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
 	[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
 fi
 
@@ -106,7 +106,7 @@ else
     if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
         . "$HOME/miniconda3/etc/profile.d/conda.sh"
     else
-        path+="$HOME/ian/miniconda3/bin"
+        path=("$HOME/ian/miniconda3/bin" $path)
     fi
 fi
 unset __conda_setup
