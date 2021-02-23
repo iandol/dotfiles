@@ -271,7 +271,7 @@ function setproxy() {
 	elif [[ $# -eq 2 ]]; then
 		export no_proxy="localhost, 127.0.0.1, ::1"
 		if [[ $1 == "-a" ]]; then # TODO add apt proxy setup
-
+			echo -e "TODO:\n==============="
 		else
 			echo "Proxy set: " 
 			export {http,ftp,all}_proxy="$1"
