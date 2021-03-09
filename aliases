@@ -378,20 +378,30 @@ function update() {
 }
 
 function doBib() {
-	printf "\n---> Processing Bibliography file @ \e[93m$(date)\e[m...\n"
-	cd ~/Desktop
-	[[ -f "🌊Core.bib" ]] && mv 🌊Core.bib Core.bib
+	myolddir=$(pwd); cd ~/Desktop
+	if [[ $# -eq 0 ]]; then
+		[[ -f "🌊Core.bib" ]] && mv 🌊Core.bib Core.bib
+		filename="Core.bib"
+	else
+		filename=$1
+	fi
+	printf "\n---> Processing Bibliography file $filename @ \e[93m$(date)\e[m...\n"
+	if [[ ! -f $filename ]]; then
+		printf "\nCannot find $filename\n"
+		return -1
+	fi
 	printf '\n---> Citeproc generating JSON from BIB file...\n'
-	pandoc -f biblatex -t csljson ~/Desktop/Core.bib > ~/Desktop/Temp.json
+	pandoc -f biblatex -t csljson $filename > Temp.json
 	printf '\n---> Processing title case...\n'
-	fixCase.rb ~/Desktop/Core.bib
-	fixCase.rb ~/Desktop/Temp.json
+	fixCase.rb $filename
+	fixCase.rb Temp.json
 	printf '\n---> Minifying JSON...\n'
 	jq -c . < Temp.json > Core.json
 	printf '\n---> Moving to Dropbox...\n'
-	mv ~/Desktop/Core.* ~/Dropbox/Papers/References
-	rm ~/Desktop/Temp.json
+	mv -v Core.* ~/Dropbox/Papers/References
+	rm -v Temp.json
 	printf '\n---> ...Finished!\n'
+	cd $myolddir; unset filename myolddir
 }
 
 function updatePTB() {
