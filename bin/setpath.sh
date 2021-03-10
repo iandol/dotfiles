@@ -19,8 +19,8 @@ export path
 echo "\n---PATH: " $PATH 
 echo "\n---DROOPY: " $DROOPY 
 
-[[ -f $(which rbenv) ]] && rbenv local 2.4.1
-[[ -f $(which rbenv) ]] && rbenv global 2.4.1
+#[[ -f $(which rbenv) ]] && rbenv local system
+#[[ -f $(which rbenv) ]] && rbenv global system
 
 echo "---ruby: $(which ruby)" 
 echo "---rbenv: $(which rbenv)" 

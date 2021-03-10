@@ -4,42 +4,42 @@ export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
 
-#======================ZPLUG SETUP==============
-export ZPLUG_HOME=~/.zplug
-source $ZPLUG_HOME/init.zsh
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-autosuggestions"
-#-----if fzf is not installed
-[[ ! -x $(which fzf) ]] && zplug "zdharma/history-search-multi-word" 
-[[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
-#-----Load theme file
-zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
-export SPACESHIP_CONDA_SHOW='false'
-#"dracula/zsh" | "mashaal/wild-cherry/zsh", from:github, use:wild-cherry.zsh-theme, as:theme 
-#-----supposed to come after compinit
-zplug "zdharma/fast-syntax-highlighting", defer:2
-zplug "zsh-users/zsh-history-substring-search", defer:3
-if [[ $PLATFORM = 'Darwin' ]]; then
-	bindkey "^[[A" history-substring-search-up
-	bindkey "^[[B" history-substring-search-down
-else
-	bindkey "$terminfo[kcuu1]" history-substring-search-up # see https://github.com/zsh-users/zsh-history-substring-search/issues/92
-	bindkey "$terminfo[kcud1]" history-substring-search-down
-fi
-#-----Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-	zplug install
-fi
-zplug load
-#===============================================
+# #======================ZPLUG SETUP==============
+# export ZPLUG_HOME=~/.zplug
+# source $ZPLUG_HOME/init.zsh
+# zplug "zsh-users/zsh-completions"
+# zplug "zsh-users/zsh-autosuggestions"
+# #-----if fzf is not installed
+# [[ ! -x $(which fzf) ]] && zplug "zdharma/history-search-multi-word" 
+# [[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
+# #-----Load theme file
+# zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
+# export SPACESHIP_CONDA_SHOW='false'
+# #"dracula/zsh" | "mashaal/wild-cherry/zsh", from:github, use:wild-cherry.zsh-theme, as:theme 
+# #-----supposed to come after compinit
+# zplug "zdharma/fast-syntax-highlighting", defer:2
+# zplug "zsh-users/zsh-history-substring-search", defer:3
+# if [[ $PLATFORM = 'Darwin' ]]; then
+# 	bindkey "^[[A" history-substring-search-up
+# 	bindkey "^[[B" history-substring-search-down
+# else
+# 	bindkey "$terminfo[kcuu1]" history-substring-search-up # see https://github.com/zsh-users/zsh-history-substring-search/issues/92
+# 	bindkey "$terminfo[kcud1]" history-substring-search-down
+# fi
+# #-----Install plugins if there are plugins that have not been installed
+# if ! zplug check --verbose; then
+# 	zplug install
+# fi
+# zplug load
+# #===============================================
 
 #-------------------------------PREFER VSCODE
 if [[ -f $(which code) ]]; then 
-	export EDITOR='code -nw'
+    export EDITOR='code -nw'
 elif [[ -f $(which micro) ]]; then
-	export EDITOR='micro'
+    export EDITOR='micro'
 else
-	export EDITOR='nano'
+    export EDITOR='nano'
 fi
 
 #-------------------------------OPTIONS
@@ -64,36 +64,36 @@ typeset -U path                  # don't allow duplicates in path
 if [[ $PLATFORM == 'Darwin' ]]; then
 #	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 #	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	if [[ -d "/Applications/MATLAB_R2020b.app/bin" ]]; then
-		path+="/Applications/MATLAB_R2020b.app/bin" # matlab
-		export MATLAB_EXECUTABLE="/Applications/MATLAB_R2020b.app/bin/matlab" # matlab
-		ln -sf "/Applications/MATLAB_R2020b.app/bin/maci64/mlint" ~/bin/mlint # matlab
-	elif [[ -d "/Applications/MATLAB_R2020a.app/bin" ]]; then
-		path+="/Applications/MATLAB_R2020a.app/bin" # matlab
-		export MATLAB_EXECUTABLE="/Applications/MATLAB_R2020a.app/bin/matlab" # matlab
-		ln -sf "/Applications/MATLAB_R2020a.app/bin/maci64/mlint" ~/bin/mlint # matlab
-	fi
-	[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path+="/Applications/Araxis Merge.app/Contents/Utilities"
-	[[ -d "/Library/TeX/texbin" ]] && path+="/Library/TeX/texbin" # MacTeX
-	[[ -d "/Library/Frameworks/GStreamer.framework/Commands" ]] && path+="/Library/Frameworks/GStreamer.framework/Commands" # GStreamer
-	if [[ -d /Applications/ZeroBraneStudio.app ]]; then
-		export ZBS=/Applications/ZeroBraneStudio.app/Content/ZeroBraneStudio
-		#export LUA_PATH="/usr/local/share/lua/5.3/?.lua;/usr/local/share/lua/5.3/?/init.lua;/usr/local/lib/lua/5.3/?.lua;/usr/local/lib/lua/5.3/?/init.lua;./?.lua;./?/init.lua;./?.lua;$ZBS/lualibs/?/?.lua;$ZBS/lualibs/?.lua"
-		#export LUA_CPATH="/usr/local/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so;$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
-	fi
+    if [[ -d "/Applications/MATLAB_R2020b.app/bin" ]]; then
+        path+="/Applications/MATLAB_R2020b.app/bin" # matlab
+        export MATLAB_EXECUTABLE="/Applications/MATLAB_R2020b.app/bin/matlab" # matlab
+        ln -sf "/Applications/MATLAB_R2020b.app/bin/maci64/mlint" ~/bin/mlint # matlab
+    elif [[ -d "/Applications/MATLAB_R2020a.app/bin" ]]; then
+        path+="/Applications/MATLAB_R2020a.app/bin" # matlab
+        export MATLAB_EXECUTABLE="/Applications/MATLAB_R2020a.app/bin/matlab" # matlab
+        ln -sf "/Applications/MATLAB_R2020a.app/bin/maci64/mlint" ~/bin/mlint # matlab
+    fi
+    [[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path+="/Applications/Araxis Merge.app/Contents/Utilities"
+    [[ -d "/Library/TeX/texbin" ]] && path+="/Library/TeX/texbin" # MacTeX
+    [[ -d "/Library/Frameworks/GStreamer.framework/Commands" ]] && path+="/Library/Frameworks/GStreamer.framework/Commands" # GStreamer
+    if [[ -d /Applications/ZeroBraneStudio.app ]]; then
+        export ZBS=/Applications/ZeroBraneStudio.app/Content/ZeroBraneStudio
+        #export LUA_PATH="/usr/local/share/lua/5.3/?.lua;/usr/local/share/lua/5.3/?/init.lua;/usr/local/lib/lua/5.3/?.lua;/usr/local/lib/lua/5.3/?/init.lua;./?.lua;./?/init.lua;./?.lua;$ZBS/lualibs/?/?.lua;$ZBS/lualibs/?.lua"
+        #export LUA_CPATH="/usr/local/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so;$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
+    fi
 else
-	if [[ -d "/usr/local/MATLAB/R2020b/bin" ]]; then
-		path+="/usr/local/MATLAB/R2020b/bin" # matlab
-		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020b/bin" # matlab
-		ln -sf "/usr/local/MATLAB/R2020b/bin/glnxa64/mlint" ~/bin/ # mlint
-	elif [[ -d "/usr/local/MATLAB/R2020a/bin" ]]; then
-		path+="/usr/local/MATLAB/R2020a/bin" # matlab
-		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020a/bin" # matlab
-		ln -sf "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ~/bin/ # mlint
-	fi
-	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-15-openjdk-amd64/" # Linux Java
-	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
-	[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
+    if [[ -d "/usr/local/MATLAB/R2020b/bin" ]]; then
+        path+="/usr/local/MATLAB/R2020b/bin" # matlab
+        export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020b/bin" # matlab
+        ln -sf "/usr/local/MATLAB/R2020b/bin/glnxa64/mlint" ~/bin/ # mlint
+    elif [[ -d "/usr/local/MATLAB/R2020a/bin" ]]; then
+        path+="/usr/local/MATLAB/R2020a/bin" # matlab
+        export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020a/bin" # matlab
+        ln -sf "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ~/bin/ # mlint
+    fi
+    [[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-15-openjdk-amd64/" # Linux Java
+    [[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
+    [[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
 fi
 
 #-------------------------------------CONDA
@@ -125,3 +125,33 @@ export PATH
 [[ -x $(which fzf) ]] && source $DF/.fzf.zsh
 
 echo "⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: ↑↓🔍 | d, cd - & cd #n: 🚀 | 💡 tldr ? / curl cheat.sh/?"
+
+### Added by Zinit's installer
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zinit-zsh/z-a-rust \
+    zinit-zsh/z-a-as-monitor \
+    zinit-zsh/z-a-patch-dl \
+    zinit-zsh/z-a-bin-gem-node
+
+zinit for \
+    load  zsh-users/zsh-completions \
+    load  zsh-users/zsh-autosuggestions \
+    load  zdharma/history-search-multi-word \
+    load  zsh-users/zsh-history-substring-search \
+    load pick"async.zsh" src"pure.zsh" \
+                sindresorhus/pure \
+    load  zdharma/fast-syntax-highlighting
+if [[ $PLATFORM = 'Darwin' ]]; then
+	bindkey "^[[A" history-substring-search-up
+	bindkey "^[[B" history-substring-search-down
+else
+	bindkey "$terminfo[kcuu1]" history-substring-search-up # see https://github.com/zsh-users/zsh-history-substring-search/issues/92
+	bindkey "$terminfo[kcud1]" history-substring-search-down
+fi
+### End of Zinit's installer chunk
