@@ -1,37 +1,6 @@
-#!/usr/bin/env zsh
-
 export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
-
-# #======================ZPLUG SETUP==============
-# export ZPLUG_HOME=~/.zplug
-# source $ZPLUG_HOME/init.zsh
-# zplug "zsh-users/zsh-completions"
-# zplug "zsh-users/zsh-autosuggestions"
-# #-----if fzf is not installed
-# [[ ! -x $(which fzf) ]] && zplug "zdharma/history-search-multi-word" 
-# [[ ! -x $(which fzf) ]] && zstyle ":plugin:history-search-multi-word" clear-on-cancel "yes"
-# #-----Load theme file
-# zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
-# export SPACESHIP_CONDA_SHOW='false'
-# #"dracula/zsh" | "mashaal/wild-cherry/zsh", from:github, use:wild-cherry.zsh-theme, as:theme 
-# #-----supposed to come after compinit
-# zplug "zdharma/fast-syntax-highlighting", defer:2
-# zplug "zsh-users/zsh-history-substring-search", defer:3
-# if [[ $PLATFORM = 'Darwin' ]]; then
-# 	bindkey "^[[A" history-substring-search-up
-# 	bindkey "^[[B" history-substring-search-down
-# else
-# 	bindkey "$terminfo[kcuu1]" history-substring-search-up # see https://github.com/zsh-users/zsh-history-substring-search/issues/92
-# 	bindkey "$terminfo[kcud1]" history-substring-search-down
-# fi
-# #-----Install plugins if there are plugins that have not been installed
-# if ! zplug check --verbose; then
-# 	zplug install
-# fi
-# zplug load
-# #===============================================
 
 #-------------------------------PREFER VSCODE
 if [[ -f $(which code) ]]; then 
@@ -120,11 +89,11 @@ export PATH
 
 #------------------------------------FINALISE OTHERS
 [[ -x $(which rbenv) ]] && eval "$(rbenv init -)"
-[[ -x $(which archey) ]] && archey -c -o
+#[[ -x $(which archey) ]] && archey -c -o
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which fzf) ]] && source $DF/.fzf.zsh
 
-echo "⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: ↑↓🔍 | d, cd - & cd #n: 🚀 | 💡 tldr ? / curl cheat.sh/?"
+echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
 
 ### Added by Zinit's installer
 source "$HOME/.zinit/bin/zinit.zsh"
@@ -137,16 +106,19 @@ zinit light-mode for \
     zinit-zsh/z-a-rust \
     zinit-zsh/z-a-as-monitor \
     zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node
+    zinit-zsh/z-a-bin-gem-node \
+    romkatv/powerlevel10k 
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 zinit for \
     load  zsh-users/zsh-completions \
     load  zsh-users/zsh-autosuggestions \
     load  zdharma/history-search-multi-word \
     load  zsh-users/zsh-history-substring-search \
-    load pick"async.zsh" src"pure.zsh" \
-                sindresorhus/pure \
     load  zdharma/fast-syntax-highlighting
+    #load pick"async.zsh" src"pure.zsh" \
+    #            sindresorhus/pure \
+
 if [[ $PLATFORM = 'Darwin' ]]; then
 	bindkey "^[[A" history-substring-search-up
 	bindkey "^[[B" history-substring-search-down
