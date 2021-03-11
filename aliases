@@ -312,9 +312,10 @@ lips() {
 function update() {
 	printf "\n=====>>> Start Update @ \e[93m$(date)\e[m <<<=====\n"
 	myolddir=$(pwd)
-	ul=(.dotfiles .zplug Code/opticka Code/Titta
-		Code/Training Code/Palamedes Code/AfterImage Code/isoluminant Code/Pinna Code/spikes
+	ul=(.dotfiles Code/opticka Code/Titta
+		Code/AfterImage Code/isoluminant Code/Pinna Code/spikes
 		Code/Psychtoolbox-3 Code/fieldtrip
+		Code/Training Code/Palamedes 
 		Code/Mymou 
 		Documents/MATLAB/gramm
 		Code/scrivomatic Code/dotpandoc Code/bookends-tools Code/pandocomatic Code/paru)
@@ -372,7 +373,7 @@ function update() {
 
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
 
-	[[ -e "$HOME/.zinit" ]] && (printf '\n\n---> Updating \e[92mZINIT\e[m...\n';zinit list; zinit self-update; zinit update --all)
+	[[ -e "$HOME/.zinit" ]] && (printf '\n\n---> Updating \e[92mZINIT\e[m...\n';zinit self-update; zinit update -p --all)
 	#[[ $SHELL = *zsh* ]] && (printf '\n\n---> Updating \e[92mcompinit\e[m...\n'; rm -f "$HOME/.zcompdump"; compinit)
 	printf "\n=====>>> Finish Update @ \e[93m$(date)\e[m <<<=====\n"
 }
@@ -393,10 +394,19 @@ function doBib() {
 	printf '\n---> Citeproc generating JSON from BIB file...\n'
 	pandoc -f biblatex -t csljson $filename > Temp.json
 	printf '\n---> Processing title case...\n'
-	fixCase.rb $filename
-	fixCase.rb Temp.json
+	names=($filename Temp.json)
+	i=1
+	for x in $names; do
+		fixCase.rb ${x} &
+		let ps[$i] = $!
+		fprint "Spawn process: %i\n" ps[$i]
+		echo "Doing: $i"
+		let i = i + 1
+	done
+	echo $ps
+	wait
 	printf '\n---> Minifying JSON...\n'
-	jq -c . < Temp.json > Core.json
+	[[ -f Temp.json ]] && jq -c . < Temp.json > Core.json
 	printf '\n---> Moving to Dropbox...\n'
 	mv -v Core.* ~/Dropbox/Papers/References
 	rm -v Temp.json

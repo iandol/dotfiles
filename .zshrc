@@ -93,8 +93,6 @@ export PATH
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which fzf) ]] && source $DF/.fzf.zsh
 
-echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
-
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
@@ -114,17 +112,14 @@ zinit light-mode for \
     zinit-zsh/z-a-as-monitor \
     zinit-zsh/z-a-patch-dl \
     zinit-zsh/z-a-bin-gem-node \
-    romkatv/powerlevel10k 
+    romkatv/powerlevel10k \
+    zsh-users/zsh-completions \
+    zsh-users/zsh-autosuggestions \
+    zdharma/history-search-multi-word \
+    zsh-users/zsh-history-substring-search \
+    zdharma/fast-syntax-highlighting
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-zinit for \
-    load  zsh-users/zsh-completions \
-    load  zsh-users/zsh-autosuggestions \
-    load  zdharma/history-search-multi-word \
-    load  zsh-users/zsh-history-substring-search \
-    load  zdharma/fast-syntax-highlighting
-    #load pick"async.zsh" src"pure.zsh" \
-    #            sindresorhus/pure \
+[[ -f $(which fzf) ]] && zinit wait lucid for wfxr/forgit
 
 if [[ $PLATFORM = 'Darwin' ]]; then
 	bindkey "^[[A" history-substring-search-up
@@ -134,3 +129,5 @@ else
 	bindkey "$terminfo[kcud1]" history-substring-search-down
 fi
 ### End of Zinit's installer chunk
+
+echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
