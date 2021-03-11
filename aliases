@@ -394,17 +394,18 @@ function doBib() {
 	printf '\n---> Citeproc generating JSON from BIB file...\n'
 	pandoc -f biblatex -t csljson $filename > Temp.json
 	printf '\n---> Processing title case...\n'
+	unset PIDS names i
 	names=($filename Temp.json)
 	i=1
 	for x in $names; do
 		fixCase.rb ${x} &
-		let ps[$i] = $!
-		fprint "Spawn process: %i\n" ps[$i]
-		echo "Doing: $i"
-		let i = i + 1
+		p=$!; PIDS[$i]=$p
+		printf "fixCase for %s - Loop: %i PID = %i\n" $x $i ${PIDS[$i]:-"Unknown"}
+		((i++)) #https://linuxize.com/post/bash-increment-decrement-variable/
 	done
-	echo $ps
-	wait
+	echo "Waiting for PIDS: ${PIDS}"
+	wait ${PIDS}
+	echo "Finshed processing title case"
 	printf '\n---> Minifying JSON...\n'
 	[[ -f Temp.json ]] && jq -c . < Temp.json > Core.json
 	printf '\n---> Moving to Dropbox...\n'
