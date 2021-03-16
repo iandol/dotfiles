@@ -33,7 +33,11 @@ typeset -U path                  # don't allow duplicates in path
 if [[ $PLATFORM == 'Darwin' ]]; then
 #	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 #	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-    if [[ -d "/Applications/MATLAB_R2020b.app/bin" ]]; then
+    if [[ -d "/Applications/MATLAB_R2021a.app/bin" ]]; then
+        path+="/Applications/MATLAB_R2021a.app/bin" # matlab
+        export MATLAB_EXECUTABLE="/Applications/MATLAB_R2021a.app/bin/matlab" # matlab
+        ln -sf "/Applications/MATLAB_R2021a.app/bin/maci64/mlint" ~/bin/mlint # matlab
+    elif [[ -d "/Applications/MATLAB_R2020b.app/bin" ]]; then
         path+="/Applications/MATLAB_R2020b.app/bin" # matlab
         export MATLAB_EXECUTABLE="/Applications/MATLAB_R2020b.app/bin/matlab" # matlab
         ln -sf "/Applications/MATLAB_R2020b.app/bin/maci64/mlint" ~/bin/mlint # matlab
@@ -51,8 +55,12 @@ if [[ $PLATFORM == 'Darwin' ]]; then
         #export LUA_CPATH="/usr/local/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so;$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
     fi
 else
-    if [[ -d "/usr/local/MATLAB/R2020b/bin" ]]; then
-        path+="/usr/local/MATLAB/R2020b/bin" # matlab
+    if [[ -d "/usr/local/MATLAB/R2021a/bin" ]]; then
+        path=("/usr/local/MATLAB/R2021a/bin" $path) # matlab
+        export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2021a/bin" # matlab
+        ln -sf "/usr/local/MATLAB/R2021a/bin/glnxa64/mlint" ~/bin/ # mlint
+    elif [[ -d "/usr/local/MATLAB/R2020b/bin" ]]; then
+        path=("/usr/local/MATLAB/R2020b/bin" $path)# matlab
         export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020b/bin" # matlab
         ln -sf "/usr/local/MATLAB/R2020b/bin/glnxa64/mlint" ~/bin/ # mlint
     elif [[ -d "/usr/local/MATLAB/R2020a/bin" ]]; then
