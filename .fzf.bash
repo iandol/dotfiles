@@ -1,4 +1,5 @@
 if [[ $PLATFORM = "Darwin" ]]; then
+	[[ ! -d '/usr/local/opt/fzf' ]] && return
 	# Setup fzf
 	if [[ ! "$PATH" == */usr/local/opt/fzf/bin* ]]; then
 		export PATH="$PATH:/usr/local/opt/fzf/bin"
@@ -8,6 +9,7 @@ if [[ $PLATFORM = "Darwin" ]]; then
 	# Key bindings
 	source "/usr/local/opt/fzf/shell/key-bindings.bash"
 else
+	[[ ! -d '/home/linuxbrew/.linuxbrew/opt/fzf' ]] && return
 	# Setup fzf
 	if [[ ! "$PATH" == */home/linuxbrew/.linuxbrew/opt/fzf/bin* ]]; then
 		export PATH="$PATH:/home/linuxbrew/.linuxbrew/opt/fzf/bin"
