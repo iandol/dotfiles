@@ -27,7 +27,7 @@ setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording en
 export MANPAGER='less -X'        # don't clear after quitting man
 typeset -U PATH path             # don't allow duplicates in path
 
-unalias run-help
+unalias run-help >& /dev/null
 autoload run-help # use ESC + H to bring up help, see https://man.archlinux.org/man/extra/zsh/zshcontrib.1.en
 alias help=run-help
 
@@ -37,19 +37,16 @@ alias help=run-help
 if [[ $PLATFORM == 'Darwin' ]]; then
 #	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 #	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	if [[ -d "/Applications/MATLAB_R2021a.app/bin" ]]; then
-		path+="/Applications/MATLAB_R2021a.app/bin" # matlab
-		export MATLAB_EXECUTABLE="/Applications/MATLAB_R2021a.app/bin/matlab" # matlab
-		ln -sf "/Applications/MATLAB_R2021a.app/bin/maci64/mlint" ~/bin/mlint # matlab
-	elif [[ -d "/Applications/MATLAB_R2020b.app/bin" ]]; then
-		path+="/Applications/MATLAB_R2020b.app/bin" # matlab
-		export MATLAB_EXECUTABLE="/Applications/MATLAB_R2020b.app/bin/matlab" # matlab
-		ln -sf "/Applications/MATLAB_R2020b.app/bin/maci64/mlint" ~/bin/mlint # matlab
-	elif [[ -d "/Applications/MATLAB_R2020a.app/bin" ]]; then
-		path+="/Applications/MATLAB_R2020a.app/bin" # matlab
-		export MATLAB_EXECUTABLE="/Applications/MATLAB_R2020a.app/bin/matlab" # matlab
-		ln -sf "/Applications/MATLAB_R2020a.app/bin/maci64/mlint" ~/bin/mlint # matlab
-	fi
+	ul=("R2021a","R2020b","R2020a")
+	match=0
+	for x in $ul; do
+		if ( [[ $match == 0 ]] && [[ -d "/Applications/MATLAB_${x}.app/bin" ]]); then
+			match=1
+			path+="/Applications/MATLAB_${x}.app/bin" # matlab
+			export MATLAB_EXECUTABLE="/Applications/MATLAB_${x}.app/bin/matlab" # matlab
+			ln -sf "/Applications/MATLAB_${x}.app/bin/maci64/mlint" ~/bin/mlint # matlab
+		fi
+	done
 	[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path+="/Applications/Araxis Merge.app/Contents/Utilities"
 	[[ -d "/Library/TeX/texbin" ]] && path+="/Library/TeX/texbin" # MacTeX
 	[[ -d "/Library/Frameworks/GStreamer.framework/Commands" ]] && path+="/Library/Frameworks/GStreamer.framework/Commands" # GStreamer
@@ -59,19 +56,16 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 		#export LUA_CPATH="/usr/local/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so;$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
 	fi
 else
-	if [[ -d "/usr/local/MATLAB/R2021a/bin" ]]; then
-		path=("/usr/local/MATLAB/R2021a/bin" $path) # matlab
-		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2021a/bin" # matlab
-		ln -sf "/usr/local/MATLAB/R2021a/bin/glnxa64/mlint" ~/bin/ # mlint
-	elif [[ -d "/usr/local/MATLAB/R2020b/bin" ]]; then
-		path=("/usr/local/MATLAB/R2020b/bin" $path)# matlab
-		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020b/bin" # matlab
-		ln -sf "/usr/local/MATLAB/R2020b/bin/glnxa64/mlint" ~/bin/ # mlint
-	elif [[ -d "/usr/local/MATLAB/R2020a/bin" ]]; then
-		path+="/usr/local/MATLAB/R2020a/bin" # matlab
-		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2020a/bin" # matlab
-		ln -sf "/usr/local/MATLAB/R2020a/bin/glnxa64/mlint" ~/bin/ # mlint
-	fi
+	ul=("R2021a","R2020b","R2020a")
+	match=0
+	for x in $ul; do
+		if ( [[ $match == 0 ]] && [[ -d "/usr/local/MATLAB/${x}/bin" ]]); then
+			match=1
+			path+="/usr/local/MATLAB/${x}/bin" # matlab
+			export MATLAB_EXECUTABLE="/usr/local/MATLAB/${x}/bin/matlab" # matlab
+			ln -sf "/usr/local/MATLAB/${x}/bin/glnxa64/mlint" ~/bin/mlint &> /dev/null # matlab
+		fi
+	done
 	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-15-openjdk-amd64/" # Linux Java
 	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
 	[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
