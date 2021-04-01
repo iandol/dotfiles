@@ -1,7 +1,9 @@
 export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
-
+echo "======Initial path:"
+echo $path
+echo "======"
 #-------------------------------PREFER VSCODE
 if [[ -f $(which code) ]]; then 
 	export EDITOR='code -nw'
@@ -37,12 +39,12 @@ alias help=run-help
 if [[ $PLATFORM == 'Darwin' ]]; then
 #	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 #	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	ul=("R2021a","R2020b","R2020a")
+	ul=("R2021a" "R2020b" "R2020a")
 	match=0
 	for x in $ul; do
-		if ( [[ $match == 0 ]] && [[ -d "/Applications/MATLAB_${x}.app/bin" ]]); then
+		if ( [[ $match == 0 ]] && [[ -d "/Applications/MATLAB_${x}.app/bin" ]] ); then
 			match=1
-			path+="/Applications/MATLAB_${x}.app/bin" # matlab
+			path=("/Applications/MATLAB_${x}.app/bin" $path) # matlab
 			export MATLAB_EXECUTABLE="/Applications/MATLAB_${x}.app/bin/matlab" # matlab
 			ln -sf "/Applications/MATLAB_${x}.app/bin/maci64/mlint" ~/bin/mlint # matlab
 		fi
@@ -56,18 +58,18 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 		#export LUA_CPATH="/usr/local/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so;$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
 	fi
 else
-	ul=("R2021a","R2020b","R2020a")
+	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-15-openjdk-amd64/" # Linux Java
+	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
+	ul=("R2021a" "R2020b" "R2020a")
 	match=0
 	for x in $ul; do
 		if ( [[ $match == 0 ]] && [[ -d "/usr/local/MATLAB/${x}/bin" ]]); then
 			match=1
-			path+="/usr/local/MATLAB/${x}/bin" # matlab
+			path=("/usr/local/MATLAB/${x}/bin" $path) # matlab
 			export MATLAB_EXECUTABLE="/usr/local/MATLAB/${x}/bin/matlab" # matlab
 			ln -sf "/usr/local/MATLAB/${x}/bin/glnxa64/mlint" ~/bin/mlint &> /dev/null # matlab
 		fi
 	done
-	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-15-openjdk-amd64/" # Linux Java
-	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
 	[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
 fi
 
