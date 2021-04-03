@@ -1,9 +1,7 @@
 export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
-echo "======Initial path:"
-echo $path
-echo "======"
+
 #-------------------------------PREFER VSCODE
 if [[ -f $(which code) ]]; then 
 	export EDITOR='code -nw'

@@ -51,7 +51,7 @@ titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
 mfirstuc xfor wallpaper datatool substr adjustbox collectbox \
 sttools wrapfig footnotebackref fvextra zref \
 libertinus libertinus-fonts libertinus-otf threeparttable \
-elsarticle algorithms algorithmicx siunitx bbding biblatex biber'
+elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex'
 
 #manage bash/zsh
 if [[ -x $(which code) ]]; then 
