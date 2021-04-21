@@ -323,10 +323,12 @@ function update() {
 		if [[ -d ~/${x}/.git ]]; then
 			printf "\n\n---> Updating \e[92m${x}\e[m...\n"
 			cd ~/${x}
-			oldbranch=$(git branch --show-current)
-			if [[ ! ${oldbranch} =~ 'master' ]]; then
+			oldbranch=$(git branch | grep -e '*' | cut -b 3-)
+			if [[ ! ${oldbranch} =~ 'master|main' ]]; then
 				if [[ ${x} =~ 'fieldtrip' ]]; then
 					git checkout umaster
+				elif [[ ${x} =~ 'Palamedes' ]]; then
+					git checkout main
 				else
 					git checkout master
 				fi
@@ -367,8 +369,8 @@ function update() {
 		sudo apt update
 		sudo apt autoremove
 		apt list --upgradable
-		sudo snap refresh
-		fwupdmgr get-upgrades
+		[[ -x $(which snap) ]] && sudo snap refresh
+		[[ -x $(which fwupdmgr) ]] && fwupdmgr get-upgrades
 	fi
 
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
