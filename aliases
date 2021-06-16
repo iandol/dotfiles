@@ -231,6 +231,24 @@ function ffmpeg-update() {
 	fi
 }
 
+function avahi-reset() {
+	if [[ $PLATFORM = "Linux" ]]; then
+		sudo systemctl stop avahi-daemon.socket
+		sudo systemctl stop avahi-daemon.service
+		sudo systemctl start avahi-daemon.socket
+		sudo systemctl start avahi-daemon.service
+		sudo systemctl status avahi-daemon.service
+	fi
+}
+
+function avahi-stop() {
+	if [[ $PLATFORM = "Linux" ]]; then
+		sudo systemctl stop avahi-daemon.socket
+		sudo systemctl stop avahi-daemon.service
+		sudo systemctl status avahi-daemon.service
+	fi
+}
+
 function transfer() { 
 	if [ $# -eq 0 ]; then
 		echo -e "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md";
