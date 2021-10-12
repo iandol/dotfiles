@@ -37,7 +37,7 @@ alias help=run-help
 if [[ $PLATFORM == 'Darwin' ]]; then
 #	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 #	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	ul=("R2021a" "R2020b" "R2020a")
+	ul=("R2021b" "R2021a" "R2020b" "R2020a")
 	match=0
 	for x in $ul; do
 		if ( [[ $match == 0 ]] && [[ -d "/Applications/MATLAB_${x}.app/bin" ]] ); then
@@ -58,7 +58,7 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 else
 	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-15-openjdk-amd64/" # Linux Java
 	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
-	ul=("R2021a" "R2020b" "R2020a")
+	ul=("R2021b" "R2021a" "R2020b" "R2020a")
 	match=0
 	for x in $ul; do
 		if ( [[ $match == 0 ]] && [[ -d "/usr/local/MATLAB/${x}/bin" ]]); then
