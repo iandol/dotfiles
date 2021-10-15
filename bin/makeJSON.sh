@@ -24,13 +24,13 @@ if [[ ! -s Temp.json ]]; then
 	return -1
 fi
 printf '\n---> Processing title case...\n' >> sync.log
-/Users/ian/bin/fixCase.rb $filename
+/Users/ian/bin/fixCase.rb Temp.json
 printf "---> Finshed processing title case...\n" >> sync.log
 if [[ -s Temp.json ]]; then
 	printf '\n---> Minifying JSON...\n' >> sync.log
 	/usr/local/bin/jq -Sc '. | del(.[]."abstract",.[]."keyword",.[]."publisher-place")' < Temp.json > Core.json
 else
-	printf '---> ERROR: Temp.json does not exist or is empty\n'
+	printf '---> ERROR: Temp.json does not exist or is empty\n' >> sync.log
 fi
 [[ -s Temp.json ]] && rm Temp.json
 printf '\n---> ...Finished!\n' >> sync.log
