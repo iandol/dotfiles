@@ -1,0 +1,5 @@
+# XONSH WEBCONFIG START
+$PROMPT = '{BOLD_INTENSE_RED}➜ {CYAN}{cwd_base} {gitstatus}{RESET} '
+$XONSH_COLOR_STYLE = 'fruity'
+xontrib load abbrevs
+# XONSH WEBCONFIG END

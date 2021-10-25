@@ -20,7 +20,7 @@ if [ $PLATFORM = "Darwin" ]; then
 	if [ -e $(which brew) ]; then
 		printf 'Homebrew is present!\n'
 	else
-		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 		printf 'Homebrew now installed...\n'
 	fi
 	printf 'Added Caskroom fonts to Homebrew...\n'
@@ -56,7 +56,7 @@ elif [ $PLATFORM = "Linux" ]; then
 	sudo apt-get -m install libunrar5 libdc1394-25 libraw1394-11
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
-		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 		eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 	else
 		printf 'Homebrew already installed...\n'
