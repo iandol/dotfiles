@@ -71,21 +71,23 @@ else
 	[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
 fi
 
-#-------------------------------------CONDA
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$("$HOME/miniconda3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-	eval "$__conda_setup"
-else
-	if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
-		. "$HOME/miniconda3/etc/profile.d/conda.sh"
+if [[ -d "$HOME/miniconda3/" ]]; then
+	#-------------------------------------CONDA
+	# >>> conda initialize >>>
+	# !! Contents within this block are managed by 'conda init' !!
+	__conda_setup="$("$HOME/miniconda3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
+	if [ $? -eq 0 ]; then
+		eval "$__conda_setup"
 	else
-		path=("$HOME/ian/miniconda3/bin" $path)
+		if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+			. "$HOME/miniconda3/etc/profile.d/conda.sh"
+		else
+			path=("$HOME/miniconda3/bin" $path)
+		fi
 	fi
+	unset __conda_setup
+	# <<< conda initialize <<<
 fi
-unset __conda_setup
-# <<< conda initialize <<<
 
 #------------------------------------FINALISE PATH
 [[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"

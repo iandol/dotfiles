@@ -220,6 +220,13 @@ alias rot13='tr a-zA-Z n-za-mN-ZA-M'
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 
+function manpdf() {
+	if [ $# -eq 0 ]; then
+		echo -e "No arguments specified. Usage:\n  manpdf command";
+		return 1;
+	fi
+	man -t $1 | open -f -a /System/Applications/Preview.app
+}
 function ffmpeg-update() {
 	cd ~
 	lver=$(ffmpeg -version | grep -owE 'N-\d+-[^-]+')
