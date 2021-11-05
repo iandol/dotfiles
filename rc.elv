@@ -9,6 +9,19 @@ use math
 use epm
 use platform
 
+epm:install &silent-if-installed ^
+  github.com/muesli/elvish-libs ^
+  github.com/zzamboni/elvish-modules ^
+  github.com/zzamboni/elvish-themes ^
+  github.com/zzamboni/elvish-completions
+
+#use github.com/muesli/elvish-libs/theme/powerline
+use github.com/zzamboni/elvish-modules/proxy
+use github.com/zzamboni/elvish-modules/alias
+use github.com/zzamboni/elvish-completions/git
+use github.com/zzamboni/elvish-completions/cd
+use github.com/zzamboni/elvish-completions/ssh
+
 # general ENV
 if ( has-env PLATFORM ) {
   echo (styled "Elvish V"$version" running on "$E:PLATFORM bold bg-red)
@@ -18,21 +31,20 @@ if ( has-env PLATFORM ) {
 }
 
 # aliases
-var ll~ ls~ manpdf~ gst~ gca~ dl~
+set alias:dir = ~/.config/elvish/aliases
 if ( eq $platform:os "darwin" ) {
-  set ll~ = [@a]{ e:ls -alFGh@ $@a }
-  set ls~ = [@a]{ e:ls -GF $@a }
-  set manpdf~ = [@cmds]{
-    each [c]{
-      man -t $c | open -f -a /System/Applications/Preview.app
-    } $cmds
+  alias:new lm e:ls -alFGh@
+  alias:new ll e:ls -alFGh
+  alias:new ls e:ls -GF
+  edit:add-var manpdf~ [@cmds]{
+    each [c]{ man -t $c | open -f -a /System/Applications/Preview.app } $cmds
   }
 } elif ( eq $platform:os "linux" ) {
-  set ls~ = [@a]{ e:ls --color -GhFLH $@a }
-  set ll~ =  [@a]{ e:ls --color -alFGh $@a }
+  alias:new ls e:ls --color -GhFLH
+  alias:new ll e:ls --color -alFGh
 }
-set gst~ = [@a]{ e:git status $@a }
-set gca~ = [@a]{ e:git commit --all $@a }
+alias:new gst e:git status
+alias:new gca e:git commit --all
 set dl~ = [@a]{ e:curl -C - -O $@a }
 
 # setup brew
@@ -65,22 +77,6 @@ each [p]{
     echo (styled "Warning: directory "$p" in $paths no longer exists." bg-red)
 	}
 } $paths
-
-
-epm:install &silent-if-installed ^
-  github.com/muesli/elvish-libs ^
-  github.com/zzamboni/elvish-modules ^
-  github.com/zzamboni/elvish-themes ^
-  github.com/zzamboni/elvish-completions
-
-#use github.com/muesli/elvish-libs/theme/powerline
-use github.com/zzamboni/elvish-modules/proxy
-use github.com/zzamboni/elvish-modules/alias
-use github.com/zzamboni/elvish-completions/git
-use github.com/zzamboni/elvish-completions/cd
-use github.com/zzamboni/elvish-completions/ssh
-
-alias:new lm e:ls -alFGh@ 
 
 # chain theme
 use github.com/zzamboni/elvish-themes/chain
