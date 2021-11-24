@@ -39,7 +39,6 @@ alias h='function hdi(){ howdoi $* -c -n 5; }; hdi'
 hash -d C=$HOME/Code
 hashcwd() { hash -d "$1"="$PWD" }
 
-
 # fuzzy finder
 if [[ -x $(which fzf) ]]; then
 	alias preview="fzf --preview 'bat --color \"always\" {}'"
@@ -177,8 +176,12 @@ if [[ $PLATFORM = 'Darwin' ]]; then
 			xattr -w com.apple.metadata:_kMDItemUserTags "$plistTags" "$file"
 		done
 	}
-	function pman() {
-		man -t "${1}" | open -f -a /Applications/Preview.app
+	function manpdf() {
+		if [ $# -eq 0 ]; then
+			echo -e "No arguments specified. Usage:\n  manpdf command";
+			return 1;
+		fi
+		man -t $1 | open -f -a /System/Applications/Preview.app
 	}
 else
 	alias flushdns='sudo systemd-resolve --flush-caches; sudo systemd-resolve --statistics'
@@ -220,13 +223,7 @@ alias rot13='tr a-zA-Z n-za-mN-ZA-M'
 # URL-encode strings
 alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
 
-function manpdf() {
-	if [ $# -eq 0 ]; then
-		echo -e "No arguments specified. Usage:\n  manpdf command";
-		return 1;
-	fi
-	man -t $1 | open -f -a /System/Applications/Preview.app
-}
+
 function ffmpeg-update() {
 	cd ~
 	lver=$(ffmpeg -version | grep -owE 'N-\d+-[^-]+')
@@ -409,6 +406,18 @@ function update() {
 	[[ -e "$HOME/.zinit" ]] && (printf '\n\n---> Updating \e[92mZINIT\e[m...\n';zinit self-update; zinit update -p --all)
 	#[[ $SHELL = *zsh* ]] && (printf '\n\n---> Updating \e[92mcompinit\e[m...\n'; rm -f "$HOME/.zcompdump"; compinit)
 	printf "\n=====>>> Finish Update @ \e[93m$(date)\e[m <<<=====\n"
+}
+
+function updateElvish () {
+	cd ~/Downloads/
+	if [[ $PLATFORM = "Linux" ]]; then
+		curl -C - -O https://dl.elv.sh/linux-amd64/elvish-HEAD.tar.gz
+	else
+		curl -C - -O https://dl.elv.sh/darwin-amd64/elvish-HEAD.tar.gz
+	fi
+	tar xvf elvish-HEAD.tar.gz 
+	chmod +x elvish-HEAD
+	sudo cp elvish-HEAD /usr/local/bin/elvish
 }
 
 function doBib() {

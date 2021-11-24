@@ -13,10 +13,6 @@ if [[ ! -s $filename ]]; then # make sure file exists
 	printf "\nCannot find $filename\n" >> sync.log
 	return -1
 fi
-if [[ ! -s $filename ]]; then # make sure file is not empty
-	printf "\n$filename is empty!\n" >> sync.log
-	return -1
-fi
 printf '\n---> Citeproc generating JSON from BIB file...\n' >> sync.log
 /usr/local/bin/pandoc --verbose -f bibtex -t csljson $filename > Temp.json 2>> sync.log
 if [[ ! -s Temp.json ]]; then

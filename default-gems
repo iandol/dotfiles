@@ -4,8 +4,6 @@ debase
 bond
 paru
 pandocomatic
-pry
-pry-byebug
 rubocop
 ruby-debug-ide
 rib
