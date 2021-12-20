@@ -15,16 +15,10 @@ if (not (path:is-regular &follow-symlink=$true ~/.config/elvish/lib/cmds.elv)) {
 }
 use cmds
 
-################################################ Utils
-fn only-when-external { |prog lambda|
-	if (has-external $prog) { $lambda }
-}
-fn append-to-path { |path|
-	set paths = [ $@paths $path ]
-}
-fn prepend-to-path { |path|
-	set paths = [ $path $@paths ]
-}
+################################################ Export Utils
+var only-when-external~ = $cmds:only-when-external~
+var append-to-path~ = $cmds:append-to-path~
+var prepend-to-path~ = $cmds:prepend-to-path~
 
 ################################################ Key bindings
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
@@ -76,7 +70,6 @@ epm:install &silent-if-installed ^
 	#github.com/muesli/elvish-libs ^
 
 #use github.com/muesli/elvish-libs/theme/powerline
-#use github.com/zzamboni/elvish-modules/alias
 use github.com/zzamboni/elvish-modules/proxy
 use github.com/zzamboni/elvish-modules/bang-bang
 use github.com/zzamboni/elvish-modules/spinners
@@ -95,10 +88,10 @@ set chain:prompt-segment-delimiters = [ "⎛" "⎞" ]
 
 ################################################ general ENV
 if ( has-env PLATFORM ) {
-	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic bg-blue)
+	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
 } else {
 	set-env PLATFORM (str:to-lower (uname -s))
-	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic bg-blue)
+	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
 }
 if ( path:is-dir /Applications/ZeroBraneStudio.app ) { 
 	var ZBS = '/Applications/ZeroBraneStudio.app/Contents/ZeroBraneStudio'
@@ -118,8 +111,8 @@ use aliases
 if ( and (eq $platform:os 'linux') (path:is-dir &follow-symlink /home/linuxbrew/.linuxbrew/bin/) ) {
 	echo (styled "…configuring "$platform:os" brew…\n" bold italic bg-blue)
 	set paths = [/home/linuxbrew/.linuxbrew/bin/ /home/linuxbrew/.linuxbrew/sbin/ $@paths]
-} elif ( and (eq $platform:os 'darwin') (path:is-dir &follow-symlink /home/) ) {
-	echo (styled "…configuring "$platform:os" brew…\n" bold italic bg-blue)
+} elif ( and (eq $platform:os 'darwin') (path:is-dir &follow-symlink /usr/local/Homebrew/bin) ) {
+	echo (styled "…configuring "$platform:os" brew…\n" bold italic white bg-blue)
 	set-env HOMEBREW_PREFIX '/usr/local'
 	set-env HOMEBREW_CELLAR '/usr/local/Cellar'
 }

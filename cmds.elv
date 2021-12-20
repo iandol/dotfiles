@@ -1,6 +1,16 @@
 use re
 use str
 
+################################################ Utils
+fn only-when-external { |prog lambda|
+	if (has-external $prog) { $lambda }
+}
+fn append-to-path { |path|
+	set paths = [ $@paths $path ]
+}
+fn prepend-to-path { |path|
+	set paths = [ $path $@paths ]
+}
 var sep = "----------------------------"
 fn newelves { curl "https://api.github.com/repos/elves/elvish/commits?per_page=8" |
 	from-json |

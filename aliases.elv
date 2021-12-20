@@ -4,40 +4,39 @@ use path
 use math
 use epm
 use platform
-use github.com/zzamboni/elvish-modules/alias
+use cmds
+# use github.com/zzamboni/elvish-modules/alias
+# set alias:dir = ~/.config/elvish/aliases
 
-set alias:dir = ~/.config/elvish/aliases
+################################################ Export Utils
+var only-when-external~ = $cmds:only-when-external~
 
-echo (styled "…loading aliases…" bold italic bg-blue)
-
-fn only-when-external { |prog lambda|
-	if (has-external $prog) { $lambda }
-}
+echo (styled "…loading command aliases…" bold italic white bg-blue)
 
 if ( eq $platform:os "darwin" ) {
 	edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
-	alias:new ll e:ls -alFGh   # set edit:small-word-abbr['ll'] = 'ls -alFGh@'
-	alias:new ls e:ls -GF      # set edit:small-word-abbr['ls'] = 'ls -GF'
+	edit:add-var ll~ {|@in| e:ls -alFGh $@in }   # set edit:small-word-abbr['ll'] = 'ls -alFGh@'
+	edit:add-var ls~ {|@in| e:ls -GF $@in } # set edit:small-word-abbr['ls'] = 'ls -GF'
 	edit:add-var manpdf~ {|@cmds|
 		each {|c| man -t $c | open -f -a /System/Applications/Preview.app } $cmds
 	}
-	alias:new ql e:qlmanage -p
-	alias:new quicklook e:qlmanage -p
-	alias:new spotlighter e:mdfind -onlyin (pwd)
+	edit:add-var ql~ {|@in| e:qlmanage -p $@in }
+	edit:add-var quicklook~ {|@in| e:qlmanage -p $@in }
+	edit:add-var spotlighter~ {|@in| e:mdfind -onlyin (pwd) $@in }
 } elif ( eq $platform:os "linux" ) {
-	alias:new ls e:ls --color -GhFLH
-	alias:new ll e:ls --color -alFGh
+	edit:add-var ls~ {|@in| e:ls --color -GhFLH $@in }
+	edit:add-var ll~ {|@in| e:ls --color -alFGh $@in }
 }
 
-alias:new gst e:git status
-alias:new gca e:git commit --all
+edit:add-var gst~ {|@in| e:git status $@in }
+edit:add-var gca~ {|@in| e:git commit --all $@in }
 edit:add-var resetorigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
 edit:add-var resetupstream~ { e:git fetch upstream; e:git reset --hard upstream/master; e:git clean -f -d }
-alias:new untar e:tar -zxvf 
-alias:new wget e:wget -c 
-alias:new makepwd e:openssl rand -base64 15
-alias:new dl e:curl -C - -O '{}'
-alias:new ping e:ping -c 5
+edit:add-var untar~  {|@in| e:tar -zxvf $@in }
+edit:add-var wget~  {|@in| e:wget -c $@in }
+edit:add-var makepwd~ { e:openssl rand -base64 15 }
+edit:add-var dl~  {|@in| e:curl -C - -O '{}' $@in }
+edit:add-var ping~ {|@in| e:ping -c 5 $@in }
 
 edit:add-var update~ {
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
