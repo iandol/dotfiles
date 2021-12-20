@@ -1,0 +1,4 @@
+#!/bin/zsh
+
+exec /usr/local/bin/elvish -deprecation-level 16 "$@"
+

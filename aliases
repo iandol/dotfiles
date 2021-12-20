@@ -56,7 +56,8 @@ titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
 mfirstuc xfor wallpaper datatool substr adjustbox collectbox \
 sttools wrapfig footnotebackref fvextra zref \
 libertinus libertinus-fonts libertinus-otf threeparttable \
-elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex'
+elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex \
+stackengine xltabular booktabs orcidlink'
 
 #manage bash/zsh
 if [[ -x $(which code) ]]; then 
@@ -409,7 +410,10 @@ function update() {
 }
 
 function updateElvish () {
-	cd ~/Downloads/
+	tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
+	old_dir=$(pwd)
+	cd $tmp_dir
+	rm -rf elvish-HEAD*
 	if [[ $PLATFORM = "Linux" ]]; then
 		curl -C - -O https://dl.elv.sh/linux-amd64/elvish-HEAD.tar.gz
 	else
@@ -418,6 +422,9 @@ function updateElvish () {
 	tar xvf elvish-HEAD.tar.gz 
 	chmod +x elvish-HEAD
 	sudo cp elvish-HEAD /usr/local/bin/elvish
+	sudo chown ian:admin /usr/local/bin/elvish
+	cd $old_dir
+	rm -rf $tmp_dir
 }
 
 function doBib() {

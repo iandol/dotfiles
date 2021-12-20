@@ -2,13 +2,41 @@ use re
 use str
 
 var sep = "----------------------------"
-fn newelves { curl "https://api.github.com/repos/elves/elvish/commits?per_page=5" |
-  from-json |
-  all (one) |
-  each {|issue| echo $sep; echo (styled $issue[sha][0..12] bold): (styled (re:replace "\n" "  " $issue[commit][message]) yellow) } }
+fn newelves { curl "https://api.github.com/repos/elves/elvish/commits?per_page=8" |
+	from-json |
+	all (one) |
+	each {|issue| echo $sep; echo (styled $issue[sha][0..12] bold): (styled (re:replace "\n" "  " $issue[commit][message]) yellow) }
+}
+fn repeat-each {|n f|
+	range $n | each {|_| $f }
+}
+fn hexstring {|@n|
+	if (is-empty $n) {
+		put (repeat-each 32 { printf '%X' (randint 0 16) })
+	} else {
+		put (repeat-each $@n { printf '%X' (randint 0 16) })
+	}
+}
+################################################ filtering functions
+# var colors = [red orange yellow green blue purple]
+# var cond = {|s| str:has-suffix $s 'e' }
+# all $colors | filter-pipe { |in| re:match "e$" $in }
 fn match {|in re| re:match $re $in }
-fn match {|in re| re:match $re $in }
-fn filter {|cond re @in| 
+fn filter {|re @in| 
+	if (eq $in []) {
+		each {|item| if ($match~ $item $re) { put $item } } 
+	} else {
+		each {|item| if ($match~ $item $re) { put $item } } $@in
+	}
+}
+fn filterp {|re @in| 
+	if (eq $in []) {
+		peach {|item| if ($match~ $item $re) { put $item } } 
+	} else {
+		peach {|item| if ($match~ $item $re) { put $item } } $@in
+	}
+}
+fn filterc {|cond re @in| 
 	if (eq $in []) {
 		each {|item| if ($cond $item $re) { put $item } } 
 	} else {
@@ -18,6 +46,7 @@ fn filter {|cond re @in|
 
 # see https://github.com/crinklywrappr/rivendell 
 fn is-zero {|n| == 0 $n }
+fn is-empty {|li| is-zero (count $li) }
 fn is-one {|n| == 1 $n }
 fn is-even {|n| == (% $n 2) 0 }
 fn is-odd {|n| == (% $n 2) 1 }
@@ -47,45 +76,47 @@ fn end {|li| put $li[-1] }
 fn butlast {|li| put $li[:(dec (count $li))] }
 
 fn min2 {|a b|
-  if (< $a $b) {
-    put $a
-  } else {
-    put $b
-  }
+	if (< $a $b) {
+		put $a
+	} else {
+		put $b
+	}
 }
 
 fn max2 {|a b|
-  if (> $a $b) {
-    put $a
-  } else {
-    put $b
-  }
+	if (> $a $b) {
+		put $a
+	} else {
+		put $b
+	}
 }
 
 fn nth {|li n &not-found=$false|
-  if (and $not-found (> $n (count $li))) {
-    put $not-found
-  } else {
-    drop $n $li | take 1
-  }
+	if (and $not-found (> $n (count $li))) {
+		put $not-found
+	} else {
+		drop $n $li | take 1
+	}
 }
 
-fn is-empty {|li| is-zero (count $li) }
-fn check-pipe {|li|
-  # use when taking @args
-  if (is-empty $li) {
-    all
-  } else {
-    explode $li
-  }
+fn check-pipe {|@li| # use when taking @args
+	if (is-empty $li) { all } else { all $li }
 }
 
-fn flatten {|li|
-  if (eq (kind-of $li) list) {
-    for e $li {
-      flatten $e
-    }
-  } else {
-    put $li
-  }
+fn test {|@in| # test to take either stdin or pipein
+	var list = $nil
+	if (is-empty $in) { set list = (all) } else { set list = $in[0] }
+	put $list
+}
+
+fn flatten {|@in| # use when taking @args
+	var list = $nil
+	if (is-empty $in) { set list = (all) } else { set list = $in[0] }
+	if (eq (kind-of $list) list) {
+		for e $list {
+			flatten $e
+		}
+	} else {
+		put $list
+	}
 }
