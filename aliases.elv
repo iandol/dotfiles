@@ -9,7 +9,7 @@ use cmds
 # set alias:dir = ~/.config/elvish/aliases
 
 ################################################ Export Utils
-var only-when-external~ = $cmds:only-when-external~
+var if-external~ = $cmds:if-external~
 
 echo (styled "…loading command aliases…" bold italic white bg-blue)
 
@@ -23,11 +23,25 @@ if ( eq $platform:os "darwin" ) {
 	edit:add-var ql~ {|@in| e:qlmanage -p $@in }
 	edit:add-var quicklook~ {|@in| e:qlmanage -p $@in }
 	edit:add-var spotlighter~ {|@in| e:mdfind -onlyin (pwd) $@in }
+	edit:add-var dequarantine~ {|@in| e:xattr -d com.apple.quarantine $@in }
 } elif ( eq $platform:os "linux" ) {
 	edit:add-var ls~ {|@in| e:ls --color -GhFLH $@in }
 	edit:add-var ll~ {|@in| e:ls --color -alFGh $@in }
 }
 
+if-external bat { edit:add-var cat~ {|@in| e:bat $@in }}
+if-external python { edit:add-var urlencode~ {|@in| e:python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);" $@in } }
+
+edit:add-var listUDP~ {|@in| 
+	echo "Searching for: "$@in
+	sudo lsof -i UDP -P | grep -E $@in
+}
+edit:add-var listTCP~ {|@in| 
+	echo "Searching for: "$@in
+	sudo lsof -i TCP -P | grep -E $@in
+}
+
+edit:add-var sizes~ { e:du -sh * | e:sort -rh | e:bat --color never }
 edit:add-var gst~ {|@in| e:git status $@in }
 edit:add-var gca~ {|@in| e:git commit --all $@in }
 edit:add-var resetorigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
@@ -64,7 +78,7 @@ edit:add-var update~ {
 		}
 	}
 	cd $olddir
-	only-when-external brew {
+	if-external brew {
 		echo (styled "\n\n---> Updating Homebrew...\n" bold bg-green)
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		brew update; brew outdated; brew upgrade
@@ -74,10 +88,10 @@ edit:add-var update~ {
 		sudo apt update
 		sudo apt autoremove
 		apt list --upgradable
-		only-when-external snap { sudo snap refresh }
-		only-when-external fwupdmgr { fwupdmgr get-upgrades }
+		if-external snap { sudo snap refresh }
+		if-external fwupdmgr { fwupdmgr get-upgrades }
 	}
-	only-when-external rbenv { echo "\n---> Rehash RBENV...\n"; rbenv rehash }
+	if-external rbenv { echo "\n---> Rehash RBENV...\n"; rbenv rehash }
 	echo (styled "\n\n---> Updating Elvish Packages...\n" bold bg-green)
 	epm:upgrade
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
