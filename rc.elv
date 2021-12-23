@@ -15,6 +15,7 @@ if (not (path:is-regular &follow-symlink ~/.config/elvish/lib/cmds.elv)) {
 	ln -s ~/.dotfiles/cmds.elv ~/.config/elvish/lib/
 }
 use cmds
+if $platform:is-unix { use unix; edit:add-var unix: $unix: }
 
 ############################################################ External modules
 epm:install &silent-if-installed ^

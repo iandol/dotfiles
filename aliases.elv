@@ -11,12 +11,19 @@ use cmds
 ################################################ Export Utils
 var if-external~ = $cmds:if-external~
 
+################################################ Abbreviations
+set edit:abbr['||'] = '| less'
+set edit:abbr['>dn'] = '2>/dev/null'
+# set edit:small-word-abbr['ll'] = 'ls -alFGh@'
+# set edit:small-word-abbr['ls'] = 'ls -GF'
+
+################################################ Aliases
 echo (styled "…loading command aliases…" bold italic white bg-blue)
 
 if ( eq $platform:os "darwin" ) {
 	edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
-	edit:add-var ll~ {|@in| e:ls -alFGh $@in }   # set edit:small-word-abbr['ll'] = 'ls -alFGh@'
-	edit:add-var ls~ {|@in| e:ls -GF $@in } # set edit:small-word-abbr['ls'] = 'ls -GF'
+	edit:add-var ll~ {|@in| e:ls -alFGh $@in }
+	edit:add-var ls~ {|@in| e:ls -GF $@in }
 	edit:add-var manpdf~ {|@cmds|
 		each {|c| man -t $c | open -f -a /System/Applications/Preview.app } $cmds
 	}
