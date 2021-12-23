@@ -419,7 +419,7 @@ function updateElvish () {
 	tar xvf elvish-HEAD.tar.gz 
 	chmod +x elvish-HEAD
 	sudo cp elvish-HEAD /usr/local/bin/elvish
-	sudo chown ian:admin /usr/local/bin/elvish
+	sudo chown $USER /usr/local/bin/elvish
 	cd $old_dir
 	rm -rf $tmp_dir
 }
