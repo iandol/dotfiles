@@ -52,6 +52,7 @@ var is-file~ = $cmds:is-file~
 ############################################################ Key bindings
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
 set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
+set edit:insert:binding[Ctrl-s] = { edit:move-dot-eol; edit:kill-line-left }
 
 ############################################################ Paths
 set paths = [
