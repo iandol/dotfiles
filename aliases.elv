@@ -10,6 +10,8 @@ use cmds
 
 ################################################ Export Utils
 var if-external~ = $cmds:if-external~
+var is-path~ = $cmds:is-path~
+var is-file~ = $cmds:is-file~
 
 ################################################ Abbreviations
 set edit:abbr['||'] = '| less'
@@ -48,6 +50,7 @@ edit:add-var listTCP~ {|@in|
 	sudo lsof -i TCP -P | grep -E $@in
 }
 
+edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var sizes~ { e:du -sh * | e:sort -rh | e:bat --color never }
 edit:add-var gst~ {|@in| e:git status $@in }
 edit:add-var gca~ {|@in| e:git commit --all $@in }
@@ -68,19 +71,18 @@ edit:add-var update~ {
 	Documents/MATLAB/gramm Code/scrivomatic Code/dotpandoc Code/bookends-tools ^
 	Code/pandocomatic Code/paru]
 	for x $ul {
-		if (path:is-dir ~/$x/.git) {
+		if (is-path ~/$x/.git) {
 			cd ~/$x
 			set oldbranch = (git branch --show-current)
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
-			echo (styled "\n--->>> Updating "(styled $x bold)":"$oldbranch"...\n" bg-blue)
+			echo (styled "\n--->>> Updating "(styled $x bold)":"$oldbranch"…\n" bg-blue)
 			for x $branches {
 				if (re:match '^(main|master|umaster)' $x) { git checkout $x }
 			}
-			try { git fetch --all 2>/dev/null; git pull 2>/dev/null } except e { echo "\t\t ...couldn't pull" }
-			git status
+			try { git fetch --all 2>/dev/null; git pull 2>/dev/null; git status } except e { echo "\t\t…couldn't pull!" }
 			if (re:match 'upstream' (git remote | slurp)) {
-				echo "\t\t---> Fetching upstream"
-				git fetch -v upstream
+				print "\t\t---> Fetching upstream…"
+				try { git fetch -v upstream } except e { echo "\t…couldn't fetch upstream!" }
 			}
 		}
 	}
@@ -88,18 +90,22 @@ edit:add-var update~ {
 	if-external brew {
 		echo (styled "\n\n---> Updating Homebrew...\n" bold bg-green)
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
-		brew update; brew outdated; brew upgrade
+		try { brew update; brew outdated; brew upgrade } except e { echo "\t\t …can't upgrade!"}
 	}
 	if ( eq $platform:os "linux" ) {
-		echo (styled "\n\n---> Updating APT...\n" bold bg-green)
+		echo (styled "\n\n---> Updating APT…\n" bold bg-green)
+		try {
 		sudo apt update
 		sudo apt autoremove
 		apt list --upgradable
 		if-external snap { sudo snap refresh }
 		if-external fwupdmgr { fwupdmgr get-upgrades }
+		} except e {
+			echo "\t…couldn't update APT!"
+		}
 	}
-	if-external rbenv { echo "\n---> Rehash RBENV...\n"; rbenv rehash }
-	echo (styled "\n\n---> Updating Elvish Packages...\n" bold bg-green)
+	if-external rbenv { echo "\n---> Rehash RBENV…\n"; rbenv rehash }
+	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-green)
 	epm:upgrade
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }

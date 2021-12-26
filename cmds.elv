@@ -19,7 +19,7 @@ fn is-nil {|x| eq $x $nil }
 
 ################################################ Utils
 fn if-external { |prog lambda|
-	if (has-external $prog) { $lambda }
+	if (has-external $prog) { try { $lambda } except e { print "\n---> Could't run: "; pprint $lambda; pprint $e[reason][content] } }
 }
 fn is-path { |p|
 	path:is-dir &follow-symlink $p
