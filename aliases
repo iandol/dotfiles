@@ -407,6 +407,7 @@ function update() {
 }
 
 function updateElvish () {
+	[[ -f $(which elvish) ]] && elvish -version
 	tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
 	old_dir=$(pwd)
 	cd $tmp_dir
@@ -422,6 +423,7 @@ function updateElvish () {
 	sudo chown $USER /usr/local/bin/elvish
 	cd $old_dir
 	rm -rf $tmp_dir
+	[[ -f $(which elvish) ]] && elvish -version
 }
 
 function doBib() {

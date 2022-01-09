@@ -19,7 +19,7 @@ fn is-nil {|x| eq $x $nil }
 
 ################################################ Utils
 fn if-external { |prog lambda|
-	if (has-external $prog) { try { $lambda } except e { print "\n---> Could't run: "; pprint $lambda; pprint $e[reason][content] } }
+	if (has-external $prog) { try { $lambda } except e { print "\n---> Could't run: "; pprint $lambda[def]; pprint $e[reason][content] } }
 }
 fn is-path { |p|
 	path:is-dir &follow-symlink $p
@@ -81,19 +81,28 @@ fn check-pipe { |@li| # use when taking @args
 	if (is-empty $li) { all } else { all $li }
 }
 fn listify { |@in| # test to take either stdin or pipein
-	var @list = []
-	if (is-empty $in) { set @list = (all) } else { set @list = $in[0] }
+	var list
+	if (is-empty $in) { set list = [ (all) ] } else { set list = $in[0] }
+	while (and (is-one (count $list)) (is-list $list) (is-list $list[0])) { set list = $list[0] }
 	put $list
 }
 fn flatten { |@in| # use when taking @args
-	var @list = []
-	if (is-empty $in) { set list = (all) } else { set list = $in[0] }
+	var list
+	if (is-empty $in) { set list = [ (all) ] } else { set list = $in[0] }
 	if (eq (kind-of $list) list) {
 		for e $list { flatten $e }
 	} else {
 		put $list
 	}
 }
+fn cond {|cond v1 v2|
+	if $cond {
+		put $v1
+	} else {
+		put $v2
+	}
+}
+
 
 fn dec {|n| - $n 1 }
 fn inc {|n| + $n 1 }

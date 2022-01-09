@@ -111,6 +111,7 @@ edit:add-var update~ {
 }
 
 edit:add-var updateElvish~ {
+	if-external elvish { elvish -version }
 	var old_dir = $pwd
 	var tmp_dir = (path:temp-dir)
 	cd $tmp_dir
@@ -124,6 +125,7 @@ edit:add-var updateElvish~ {
 	sudo cp elvish-HEAD /usr/local/bin/elvish
 	cd $old_dir
 	rm -rf $tmp_dir
+	if-external elvish { elvish -version }
 }
 
 edit:add-var updateFFmpeg~ {
