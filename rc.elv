@@ -97,7 +97,7 @@ if ( has-env PLATFORM ) {
 	set-env PLATFORM (str:to-lower (uname -s))
 	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
 }
-if (is-path /usr/local/Cellar/openjdk/17*) { set-env JAVA_HOME (/usr/libexec/java_home -v 17) }
+if (and (eq $platform:os 'darwin') (is-path /usr/local/Cellar/openjdk/17*)) { set-env JAVA_HOME (/usr/libexec/java_home -v 17) }
 if ( is-path /Applications/ZeroBraneStudio.app ) { 
 	var ZBS = '/Applications/ZeroBraneStudio.app/Contents/ZeroBraneStudio'
 	set-env ZBS $ZBS
