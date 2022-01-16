@@ -48,6 +48,7 @@ var append-to-path~ = $cmds:append-to-path~
 var prepend-to-path~ = $cmds:prepend-to-path~
 var is-path~ = $cmds:is-path~
 var is-file~ = $cmds:is-file~
+var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~
 
 ############################################################ Key bindings
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
@@ -76,7 +77,7 @@ each {|p|
 } $paths
 var releases = ["R2022a" "R2021b" "R2021a" "R2020b" "R2020a"]
 var match = $false; var prefix; var suffix
-if (eq $platform:os 'darwin') {
+if (is-macos) {
 	set prefix = "/Applications/MATLAB_"; set suffix = ".app/bin"
 } else {
 	set prefix = "/usr/local/MATLAB/"; set suffix = "/bin"
@@ -97,7 +98,7 @@ if ( has-env PLATFORM ) {
 	set-env PLATFORM (str:to-lower (uname -s))
 	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
 }
-if (and (eq $platform:os 'darwin') (is-path /usr/local/Cellar/openjdk/17*)) { set-env JAVA_HOME (/usr/libexec/java_home -v 17) }
+if (and (is-macos) (is-path /usr/local/Cellar/openjdk/17*)) { set-env JAVA_HOME (/usr/libexec/java_home -v 17) }
 if ( is-path /Applications/ZeroBraneStudio.app ) { 
 	var ZBS = '/Applications/ZeroBraneStudio.app/Contents/ZeroBraneStudio'
 	set-env ZBS $ZBS
@@ -113,11 +114,11 @@ if (not (is-file ~/.config/elvish/lib/aliases.elv)) {
 use aliases
 
 ############################################################ setup brew
-if ( and (eq $platform:os 'linux') (is-path /home/linuxbrew/.linuxbrew/bin/) ) {
+if ( and (is-linux) (is-path /home/linuxbrew/.linuxbrew/bin/) ) {
 	echo (styled "…configuring "$platform:os" brew…\n" bold italic bg-blue)
 	prepend-to-path /home/linuxbrew/.linuxbrew/bin/ 
 	prepend-to-path /home/linuxbrew/.linuxbrew/sbin/ 
-} elif ( and (eq $platform:os 'darwin') (is-path /usr/local/Homebrew/bin) ) {
+} elif ( and (is-macos) (is-path /usr/local/Homebrew/bin) ) {
 	echo (styled "…configuring "$platform:os" brew…\n" bold italic white bg-blue)
 	set-env HOMEBREW_PREFIX '/usr/local'
 	set-env HOMEBREW_CELLAR '/usr/local/Cellar'

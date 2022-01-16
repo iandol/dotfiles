@@ -12,6 +12,7 @@ use cmds
 var if-external~ = $cmds:if-external~
 var is-path~ = $cmds:is-path~
 var is-file~ = $cmds:is-file~
+var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~
 
 ################################################ Abbreviations
 set edit:abbr['||'] = '| less'
@@ -22,7 +23,7 @@ set edit:abbr['>dn'] = '2>/dev/null'
 ################################################ Aliases
 echo (styled "…loading command aliases…" bold italic white bg-blue)
 
-if ( eq $platform:os "darwin" ) {
+if ( is-macos ) {
 	edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
 	edit:add-var ll~ {|@in| e:ls -alFGh $@in }
 	edit:add-var ls~ {|@in| e:ls -GF $@in }
@@ -33,7 +34,7 @@ if ( eq $platform:os "darwin" ) {
 	edit:add-var quicklook~ {|@in| e:qlmanage -p $@in }
 	edit:add-var spotlighter~ {|@in| e:mdfind -onlyin (pwd) $@in }
 	edit:add-var dequarantine~ {|@in| e:xattr -d com.apple.quarantine $@in }
-} elif ( eq $platform:os "linux" ) {
+} elif ( is-linux ) {
 	edit:add-var ls~ {|@in| e:ls --color -GhFLH $@in }
 	edit:add-var ll~ {|@in| e:ls --color -alFGh $@in }
 }
@@ -84,6 +85,7 @@ edit:add-var update~ {
 				print "\t\t---> Fetching upstream…"
 				try { git fetch -v upstream } except e { echo "\t…couldn't fetch upstream!" }
 			}
+			git checkout $oldbranch
 		}
 	}
 	cd $olddir
@@ -92,7 +94,7 @@ edit:add-var update~ {
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		try { brew update; brew outdated; brew upgrade } except e { echo "\t\t …can't upgrade!"}
 	}
-	if ( eq $platform:os "linux" ) {
+	if (is-linux) {
 		echo (styled "\n\n---> Updating APT…\n" bold bg-green)
 		try {
 		sudo apt update
@@ -115,9 +117,9 @@ edit:add-var updateElvish~ {
 	var old_dir = $pwd
 	var tmp_dir = (path:temp-dir)
 	cd $tmp_dir
-	if ( eq $platform:os "darwin" ) {
+	if (is-macos) {
 		curl -C - -O https://dl.elv.sh/darwin-amd64/elvish-HEAD.tar.gz
-	} elif ( eq $platform:os "linux" ) {
+	} elif (is-linux) {
 		curl -C - -O https://dl.elv.sh/linux-amd64/elvish-HEAD.tar.gz
 	}
 	tar xvf elvish-HEAD.tar.gz 
@@ -131,15 +133,18 @@ edit:add-var updateElvish~ {
 edit:add-var updateFFmpeg~ {
 	var old_dir = $pwd
 	var tmp_dir = (path:temp-dir)
+	var lver rver = '' ''
 	cd $tmp_dir
-	var lver = (ffmpeg -version | grep -owE 'N-\d+-[^-]+')
+	if-external ffmpeg { set lver = (ffmpeg -version | grep -owE 'N-\d+-[^-]+') }
 	var rver = "N-"(curl -s https://evermeet.cx/ffmpeg/info/ffmpeg/snapshot | jq -r '.version')
 	echo "\n===FFMPEG UPDATE===\nLocal: "$lver" & Remote: "$rver
 	if (not (eq $lver $rver)) {
 		echo '\tDownloading new ffmpeg:'
 		curl -JL --output ff.7z https://evermeet.cx/ffmpeg/get
-		7z -y -o ~/bin/ e ff.7z
-		cp ~/bin/ffmpeg "~/Library/Application Support/FFmpegTools/"
+		7z -y -o$E:HOME/bin/ e ff.7z
+		if (is-path ~/Library/Application\ Support/FFmpegTools) {
+			cp -f -v ~/bin/ffmpeg $E:HOME"/Library/Application Support/FFmpegTools/"
+		}
 		rm ff.7z
 		ffmpeg -version
 	} else {

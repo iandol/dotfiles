@@ -1,6 +1,7 @@
 use re
 use str
 use path
+use platform
 
 ################################################ IS
 # see https://github.com/crinklywrappr/rivendell 
@@ -16,6 +17,10 @@ fn is-string {|x| eq (kind-of $x) string }
 fn is-bool {|x| eq (kind-of $x) bool }
 fn is-number {|x| eq (kind-of $x) !!float64 }
 fn is-nil {|x| eq $x $nil }
+
+fn is-macos { eq $platform:os 'darwin' }
+fn is-linux { eq $platform:os 'linux' }
+fn is-win { eq $platform:os 'windows' }
 
 ################################################ Utils
 fn if-external { |prog lambda|
