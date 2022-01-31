@@ -2,19 +2,19 @@
 # elvish shell config: https://elv.sh/learn/tour.html
 # see a sample here: https://gitlab.com/zzamboni/dot-elvish/-/blob/master/rc.org
 
-############################################################ https://elv.sh/ref/
+############################################################ Internal modules
 use re
 use str
 use path
 use math
 use epm
 use platform
-#use readline-binding
 if (not (path:is-regular &follow-symlink ~/.config/elvish/lib/cmds.elv)) {
 	mkdir -p ~/.config/elvish/lib/
 	ln -s ~/.dotfiles/cmds.elv ~/.config/elvish/lib/
 }
 use cmds
+#use readline-binding
 if $platform:is-unix { use unix; edit:add-var unix: $unix: }
 
 ############################################################ External modules
@@ -25,7 +25,6 @@ epm:install &silent-if-installed ^
 	github.com/zzamboni/elvish-completions ^
 	#github.com/muesli/elvish-libs ^
 
-#use github.com/muesli/elvish-libs/theme/powerline
 use github.com/zzamboni/elvish-modules/proxy
 use github.com/zzamboni/elvish-modules/bang-bang
 use github.com/zzamboni/elvish-modules/spinners
@@ -34,26 +33,14 @@ use github.com/zzamboni/elvish-completions/cd
 use github.com/zzamboni/elvish-completions/ssh
 use github.com/href/elvish-gitstatus/gitstatus
 
-# chain theme
-use github.com/zzamboni/elvish-themes/chain
-chain:init
-set chain:bold-prompt = $true
-set chain:show-last-chain = $false
-set chain:glyph[arrow] = "⇝"
-set chain:prompt-segment-delimiters = [ "⎛" "⎞" ]
-
 ############################################################ Import util names
 var if-external~ = $cmds:if-external~
 var append-to-path~ = $cmds:append-to-path~
 var prepend-to-path~ = $cmds:prepend-to-path~
 var is-path~ = $cmds:is-path~
 var is-file~ = $cmds:is-file~
-var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~
-
-############################################################ Key bindings
-set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
-set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
-set edit:insert:binding[Ctrl-s] = { edit:move-dot-eol; edit:kill-line-left }
+var is-macos~ = $cmds:is-macos~
+var is-linux~ = $cmds:is-linux~
 
 ############################################################ Paths
 set paths = [
@@ -91,6 +78,27 @@ each {|p|
 	}
 } $releases
 
+############################################################ Theme
+var theme = chain
+if-external starship { set theme = starship }
+if (eq $theme starship) {
+	eval (/usr/local/bin/starship init elvish)
+} elif (eq $theme powerline) {
+	use github.com/muesli/elvish-libs/theme/powerline
+} else {
+	use github.com/zzamboni/elvish-themes/chain
+	chain:init
+	set chain:bold-prompt = $true
+	set chain:show-last-chain = $false
+	set chain:glyph[arrow] = "⇝"
+	set chain:prompt-segment-delimiters = [ "⎛" "⎞" ]
+}
+
+############################################################ Key bindings
+set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
+set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
+set edit:insert:binding[Ctrl-s] = { edit:move-dot-eol; edit:kill-line-left }
+
 ############################################################ general ENV
 if ( has-env PLATFORM ) {
 	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
@@ -98,15 +106,16 @@ if ( has-env PLATFORM ) {
 	set-env PLATFORM (str:to-lower (uname -s))
 	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
 }
+if (is-path /Applications/MATLAB/MATLAB_Runtime/v911/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v911/ }
 if (and (is-macos) (is-path /usr/local/Cellar/openjdk/17*)) { set-env JAVA_HOME (/usr/libexec/java_home -v 17) }
-if ( is-path /Applications/ZeroBraneStudio.app ) { 
+if (is-path /Applications/ZeroBraneStudio.app) { 
 	var ZBS = '/Applications/ZeroBraneStudio.app/Contents/ZeroBraneStudio'
 	set-env ZBS $ZBS
 	set-env LUA_PATH "./?.lua;"$ZBS"/lualibs/?/?.lua;"$ZBS"/lualibs/?.lua"  
 	set-env LUA_CPATH $ZBS"/bin/?.dylib;"$ZBS"/bin/clibs53/?.dylib;"$ZBS"/bin/clibs53/?/?.dylib"	
 }
 
-############################################################ aliases
+############################################################ Aliases
 if (not (is-file ~/.config/elvish/lib/aliases.elv)) {
 	mkdir -p ~/.config/elvish/lib/
 	ln -s ~/.dotfiles/aliases.elv ~/.config/elvish/lib/
@@ -124,4 +133,5 @@ if ( and (is-linux) (is-path /home/linuxbrew/.linuxbrew/bin/) ) {
 	set-env HOMEBREW_CELLAR '/usr/local/Cellar'
 }
 
+############################################################ end
 echo (styled "\n!: last cmd | ⌃a,e: ⇄ | ^N: 🚀navigate | ⌃R: 🔍history | ^L: 🔍dirs | 💡 curl cheat.sh/?\n" bold italic)

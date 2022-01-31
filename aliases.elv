@@ -114,9 +114,9 @@ edit:add-var update~ {
 
 edit:add-var updateElvish~ {
 	if-external elvish { elvish -version }
-	var old_dir = $pwd
-	var tmp_dir = (path:temp-dir)
-	cd $tmp_dir
+	var olddir = $pwd
+	var tmpdir = (path:temp-dir)
+	cd $tmpdir
 	if (is-macos) {
 		curl -C - -O https://dl.elv.sh/darwin-amd64/elvish-HEAD.tar.gz
 	} elif (is-linux) {
@@ -125,16 +125,16 @@ edit:add-var updateElvish~ {
 	tar xvf elvish-HEAD.tar.gz 
 	chmod +x elvish-HEAD
 	sudo cp elvish-HEAD /usr/local/bin/elvish
-	cd $old_dir
-	rm -rf $tmp_dir
+	cd $olddir
+	rm -rf $tmpdir
 	if-external elvish { elvish -version }
 }
 
 edit:add-var updateFFmpeg~ {
-	var old_dir = $pwd
-	var tmp_dir = (path:temp-dir)
+	var olddir = $pwd
+	var tmpdir = (path:temp-dir)
 	var lver rver = '' ''
-	cd $tmp_dir
+	cd $tmpdir
 	if-external ffmpeg { set lver = (ffmpeg -version | grep -owE 'N-\d+-[^-]+') }
 	var rver = "N-"(curl -s https://evermeet.cx/ffmpeg/info/ffmpeg/snapshot | jq -r '.version')
 	echo "\n===FFMPEG UPDATE===\nLocal: "$lver" & Remote: "$rver
@@ -150,6 +150,25 @@ edit:add-var updateFFmpeg~ {
 	} else {
 		echo "\tNo need to update…"
 	}
-	cd $old_dir
-	rm -rf $tmp_dir
+	cd $olddir
+	rm -rf $tmpdir
+}
+
+edit:add-var updateOptickaPages~ {
+	var opath = $E:HOME'/Code/opticka'
+	if (is-path $opath) {
+		echo "Trying to sync gh-pages from: "$opath
+		var olddir = $pwd
+		var tmpdir = (path:temp-dir)
+		cd $opath
+		var oldbranch = (git branch --show-current)
+		git checkout master
+		cp README.md $tmpdir
+		git checkout gh-pages
+		cp -f $tmpdir/README.md ./
+		#git checkout $oldbranch
+		#cd $olddir
+		echo "Updated gh-pages from README.md"
+		echo "Check and push manually..."
+	}
 }
