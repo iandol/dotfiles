@@ -53,16 +53,18 @@ set paths = [
 	/usr/bin
 	/bin
 ]
-if (is-path /Library/TeX/texbin ) { prepend-to-path /Library/TeX/texbin }
-if (is-path /opt/local/bin ) { prepend-to-path /opt/local/bin }
-if (is-path /Library/Frameworks/GStreamer.framework/Commands ) { append-to-path /Library/Frameworks/GStreamer.framework/Commands }
-if-external rbenv { prepend-to-path ~/.rbenv/shims/ }
+var ppaths = [/Library/TeX/texbin /opt/local/bin /usr/local/opt/python@3.10/libexec/bin ~/.rbenv/shims/]
+each {|p| if (is-path $p) { prepend-to-path $p }} $ppaths
+var apaths = [/Library/Frameworks/GStreamer.framework/Commands]
+each {|p| if (is-path $p) { append-to-path $p }} $apaths
+
 each {|p|
 	if (not (is-path $p)) {
 		echo (styled "🥺—"$p" in $paths no longer exists…" bg-red)
 	}
 } $paths
-var releases = ["R2022a" "R2021b" "R2021a" "R2020b" "R2020a"]
+
+var releases = [R2022b R2022a R2021b R2021a R2020b R2020a]
 var match = $false; var prefix; var suffix
 if (is-macos) {
 	set prefix = "/Applications/MATLAB_"; set suffix = ".app/bin"
@@ -72,7 +74,7 @@ if (is-macos) {
 each {|p|
 	if (and (eq $match $false) (is-path $prefix$p$suffix)) {
 		set match = $true
-		set paths = [$prefix$p$suffix $@paths] # matlab
+		append-to-path $prefix$p$suffix
 		set-env MATLAB_EXECUTABLE $prefix$p$suffix"/matlab" # matlab
 		ln -sf $prefix$p$suffix"/maci64/mlint" ~/bin/mlint # matlab
 	}
@@ -114,6 +116,8 @@ if (is-path /Applications/ZeroBraneStudio.app) {
 	set-env LUA_PATH "./?.lua;"$ZBS"/lualibs/?/?.lua;"$ZBS"/lualibs/?.lua"  
 	set-env LUA_CPATH $ZBS"/bin/?.dylib;"$ZBS"/bin/clibs53/?.dylib;"$ZBS"/bin/clibs53/?/?.dylib"	
 }
+# brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
+if-external carapace { eval (carapace _carapace|slurp) }
 
 ############################################################ Aliases
 if (not (is-file ~/.config/elvish/lib/aliases.elv)) {

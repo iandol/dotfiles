@@ -142,7 +142,7 @@ edit:add-var updateFFmpeg~ {
 		echo '\tDownloading new ffmpeg:'
 		curl -JL --output ff.7z https://evermeet.cx/ffmpeg/get
 		7z -y -o$E:HOME/bin/ e ff.7z
-		if (is-path ~/Library/Application\ Support/FFmpegTools) {
+		if (is-path $E:HOME"/Library/Application Support/FFmpegTools") {
 			cp -f -v ~/bin/ffmpeg $E:HOME"/Library/Application Support/FFmpegTools/"
 		}
 		rm ff.7z
