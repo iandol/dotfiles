@@ -23,15 +23,17 @@ epm:install &silent-if-installed ^
 	github.com/zzamboni/elvish-modules ^
 	github.com/zzamboni/elvish-themes ^
 	github.com/zzamboni/elvish-completions ^
+	github.com/iwoloschin/elvish-packages
 	#github.com/muesli/elvish-libs ^
 
 use github.com/zzamboni/elvish-modules/proxy
 use github.com/zzamboni/elvish-modules/bang-bang
 use github.com/zzamboni/elvish-modules/spinners
-use github.com/zzamboni/elvish-completions/git
-use github.com/zzamboni/elvish-completions/cd
-use github.com/zzamboni/elvish-completions/ssh
+#use github.com/zzamboni/elvish-completions/git
+#use github.com/zzamboni/elvish-completions/cd
+#use github.com/zzamboni/elvish-completions/ssh
 use github.com/href/elvish-gitstatus/gitstatus
+use github.com/iwoloschin/elvish-packages/python
 
 ############################################################ Import util names
 var if-external~ = $cmds:if-external~
@@ -84,7 +86,7 @@ each {|p|
 var theme = chain
 if-external starship { set theme = starship }
 if (eq $theme starship) {
-	eval (/usr/local/bin/starship init elvish)
+	eval ((which starship) init elvish)
 } elif (eq $theme powerline) {
 	use github.com/muesli/elvish-libs/theme/powerline
 } else {

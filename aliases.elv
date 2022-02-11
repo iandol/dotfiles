@@ -117,11 +117,9 @@ edit:add-var updateElvish~ {
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
-	if (is-macos) {
-		curl -C - -O https://dl.elv.sh/darwin-amd64/elvish-HEAD.tar.gz
-	} elif (is-linux) {
-		curl -C - -O https://dl.elv.sh/linux-amd64/elvish-HEAD.tar.gz
-	}
+	var os = 'linux'; if (is-macos) { set os = 'darwin' }
+	var pr = 'amd64'; if (str:contains (uname -m) 'aarch6') { set pr = 'arm64'}
+	curl -C - -O 'https://dl.elv.sh/'$os'-'$pr'/elvish-HEAD.tar.gz'
 	tar xvf elvish-HEAD.tar.gz 
 	chmod +x elvish-HEAD
 	sudo cp elvish-HEAD /usr/local/bin/elvish
