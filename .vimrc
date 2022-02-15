@@ -1,7 +1,6 @@
-call pathogen#infect()
-call pathogen#helptags()
+syntax enable
+colorscheme onedark
 set background=dark           " Assume a dark background
-let g:solarized_termtrans = 1 "colorscheme solarized
 set mouse=a                   " automatically enable mouse usage
 set encoding=utf-8            " The encoding displayed.
 set fileencoding=utf-8        " The encoding written to file.
@@ -13,13 +12,12 @@ set wildmode=list:longest,full  " command <Tab> completion, list matches, then l
 set whichwrap=b,s,h,l,<,>,[,]   " backspace and cursor keys wrap to
 set nowrap                      " wrap long lines
 set autoindent                  " indent at the same level of the previous line
-set shiftwidth=2                " use indents of 2 spaces
+set shiftwidth=4                " use indents of 2 spaces
 "set expandtab                   " tabs are spaces, not tabs
-set tabstop=2                   " an indentation every 2 columns
-set softtabstop=2               " let backspace delete indent
+set tabstop=4                   " an indentation every 2 columns
+set softtabstop=4               " let backspace delete indent
 set pastetoggle=<F12>           " pastetoggle (sane indentation on pastes)
 set nocompatible
-syntax enable
-set incsearch
-set hlsearch
+set incsearch                   " incremental search
+set hlsearch                    " highlight search result
 filetype plugin indent on

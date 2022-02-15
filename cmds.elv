@@ -1,6 +1,7 @@
 use re
 use str
 use path
+use file
 use platform
 
 ################################################ IS
@@ -55,6 +56,18 @@ fn hexstring { |@n|
 		put (repeat-each $@n { printf '%X' (randint 0 16) })
 	}
 }
+fn external_edit_command {
+	var temp-file = (path:temp-file)
+	print $edit:current-command > $temp-file
+	try {
+		e:vim $temp-file[name] </dev/tty >/dev/tty 2>&1
+		set edit:current-command = (slurp < $temp-file[name])[..-1]
+	} else {
+		file:close $temp-file
+		rm $temp-file[name]
+	}
+}
+
 ################################################ filtering functions
 # var colors = [red orange yellow green blue purple]
 # var cond = {|s| str:has-suffix $s 'e' }
