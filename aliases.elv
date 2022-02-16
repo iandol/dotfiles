@@ -70,7 +70,7 @@ edit:add-var update~ {
 	var ul = [.dotfiles Code/opticka Code/Titta Code/AfterImage Code/isoluminant Code/Pinna Code/spikes ^
 	Code/Psychtoolbox-3 Code/fieldtrip Code/Training Code/Palamedes Code/Mymou ^
 	Documents/MATLAB/gramm Code/scrivomatic Code/dotpandoc Code/bookends-tools ^
-	Code/pandocomatic Code/paru]
+	Code/gears Code/pandocomatic Code/paru]
 	for x $ul {
 		if (is-path ~/$x/.git) {
 			cd ~/$x
@@ -103,7 +103,7 @@ edit:add-var update~ {
 		if-external snap { sudo snap refresh }
 		if-external fwupdmgr { fwupdmgr get-upgrades }
 		} except e {
-			echo "\t…couldn't update APT!"
+			echo "\t…couldn't update APT or Snap or FWUPDATE!"
 		}
 	}
 	if-external rbenv { echo "\n---> Rehash RBENV…\n"; rbenv rehash }

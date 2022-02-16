@@ -81,7 +81,7 @@ each {|p|
 		ln -sf $prefix$p$suffix"/maci64/mlint" ~/bin/mlint # matlab
 	}
 } $releases
-if (is-path ~/.venv/) { set python:virtualenv-directory = $E:HOME'/.venv/' }
+if (is-path ~/.venv/) { set python:virtualenv-directory = $E:HOME'/.venv' }
 
 ############################################################ Theme
 var theme = chain
