@@ -408,15 +408,15 @@ function update() {
 
 function updateElvish () {
 	[[ -f $(which elvish) ]] && elvish -version
-	tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
 	old_dir=$(pwd)
+	tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
 	cd $tmp_dir
 	rm -rf elvish-HEAD*
-	if [[ $PLATFORM = "Linux" ]]; then
-		curl -C - -O https://dl.elv.sh/linux-amd64/elvish-HEAD.tar.gz
-	else
-		curl -C - -O https://dl.elv.sh/darwin-amd64/elvish-HEAD.tar.gz
-	fi
+	os='linux'
+	pr='amd64'
+	[[ $PLATFORM = "darwin" ]] && os = 'darwin'
+	[[ $(uname -m) = 'aarch64' ]] && pr = 'aarch64'
+	curl -C - -O "https://dl.elv.sh/$os-$pr/elvish-HEAD.tar.gz"
 	tar xvf elvish-HEAD.tar.gz 
 	chmod +x elvish-HEAD
 	sudo cp elvish-HEAD /usr/local/bin/elvish

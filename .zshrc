@@ -102,33 +102,28 @@ export PATH
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which fzf) ]] && source $DF/.fzf.zsh
 
-### Added by Zinit's installer
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-	print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-	command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-	command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+### Added by Zi's installer
+if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
+	print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
+	command mkdir -p "$HOME/.zi" && command chmod g-rwX "$HOME/.zi"
+	command git clone -q --depth=1 --branch "main" https://github.com/z-shell/zi "$HOME/.zi/bin" && \
 		print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
 		print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
-source "$HOME/.zinit/bin/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
+source "$HOME/.zi/bin/zi.zsh"
+autoload -Uz _zi
+(( ${+_comps} )) && _comps[zi]=_zi
 
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-	zinit-zsh/z-a-rust \
-	zinit-zsh/z-a-as-monitor \
-	zinit-zsh/z-a-patch-dl \
-	zinit-zsh/z-a-bin-gem-node \
-	romkatv/powerlevel10k \
-	zsh-users/zsh-completions \
-	zsh-users/zsh-autosuggestions \
-	zdharma/history-search-multi-word \
-	zsh-users/zsh-history-substring-search \
-	zdharma/fast-syntax-highlighting
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-[[ -f $(which fzf) ]] && zinit wait lucid for wfxr/forgit
+zi ice blockf atpull'zi creinstall -q .'
+zi light zsh-users/zsh-completions
+
+# examples here -> https://z-shell.pages.dev/docs/gallery/collection
+zicompinit # <- https://z-shell.pages.dev/docs/gallery/collection#minimal
+
+zi light zsh-users/zsh-history-substring-search
+zi light zdharma-continuum/history-search-multi-word
+zi light zdharma-continuum/fast-syntax-highlighting
+zi light zsh-users/zsh-autosuggestions
 
 if [[ $PLATFORM = 'Darwin' ]]; then
 	bindkey "^[[A" history-substring-search-up
@@ -137,6 +132,8 @@ else
 	bindkey "$terminfo[kcuu1]" history-substring-search-up # see https://github.com/zsh-users/zsh-history-substring-search/issues/92
 	bindkey "$terminfo[kcud1]" history-substring-search-down
 fi
-### End of Zinit's installer chunk
+### End of Zi's installer chunk
+
+[[ -f $(which starship) ]] && eval "$(starship init zsh)"
 
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"

@@ -1,6 +1,7 @@
 ############################################################ Elvish Config
 # elvish shell config: https://elv.sh/learn/tour.html
 # see a sample here: https://gitlab.com/zzamboni/dot-elvish/-/blob/master/rc.org
+############################################################
 
 ############################################################ Internal modules
 use re
@@ -29,11 +30,11 @@ epm:install &silent-if-installed ^
 use github.com/zzamboni/elvish-modules/proxy
 use github.com/zzamboni/elvish-modules/bang-bang
 use github.com/zzamboni/elvish-modules/spinners
+use github.com/href/elvish-gitstatus/gitstatus
+use github.com/iwoloschin/elvish-packages/python
 #use github.com/zzamboni/elvish-completions/git
 #use github.com/zzamboni/elvish-completions/cd
 #use github.com/zzamboni/elvish-completions/ssh
-use github.com/href/elvish-gitstatus/gitstatus
-use github.com/iwoloschin/elvish-packages/python
 
 ############################################################ Import util names
 var if-external~ = $cmds:if-external~
