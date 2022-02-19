@@ -414,8 +414,8 @@ function updateElvish () {
 	rm -rf elvish-HEAD*
 	os='linux'
 	pr='amd64'
-	[[ $PLATFORM = "darwin" ]] && os = 'darwin'
-	[[ $(uname -m) = 'aarch64' ]] && pr = 'aarch64'
+	[[ $PLATFORM = "darwin" ]] && os='darwin'
+	[[ $(uname -m) = 'aarch64' ]] && pr='aarch64'
 	curl -C - -O "https://dl.elv.sh/$os-$pr/elvish-HEAD.tar.gz"
 	tar xvf elvish-HEAD.tar.gz 
 	chmod +x elvish-HEAD
