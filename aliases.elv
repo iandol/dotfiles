@@ -62,6 +62,7 @@ edit:add-var wget~  {|@in| e:wget -c $@in }
 edit:add-var makepwd~ { e:openssl rand -base64 15 }
 edit:add-var dl~  {|@in| e:curl -C - -O '{}' $@in }
 edit:add-var ping~ {|@in| e:ping -c 5 $@in }
+edit:add-var sizes~ { du -sh * | sort -hr }
 
 edit:add-var update~ {
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)

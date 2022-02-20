@@ -123,6 +123,7 @@ if (is-path /Applications/ZeroBraneStudio.app) {
 }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 if-external carapace { eval (carapace _carapace|slurp) }
+python:deactivate
 
 ############################################################ Aliases
 if (not (is-file ~/.config/elvish/lib/aliases.elv)) {
