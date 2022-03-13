@@ -34,6 +34,7 @@ if ( is-macos ) {
 	edit:add-var quicklook~ {|@in| e:qlmanage -p $@in }
 	edit:add-var spotlighter~ {|@in| e:mdfind -onlyin (pwd) $@in }
 	edit:add-var dequarantine~ {|@in| e:xattr -d com.apple.quarantine $@in }
+	edit:add-var nitenite~ { e:exec pmset sleepnow }
 } elif ( is-linux ) {
 	edit:add-var ls~ {|@in| e:ls --color -GhFLH $@in }
 	edit:add-var ll~ {|@in| e:ls --color -alFGh $@in }
@@ -53,6 +54,7 @@ edit:add-var listTCP~ {|@in|
 
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var sizes~ { e:du -sh * | e:sort -rh | e:bat --color never }
+edit:add-var fs {|@in| e:du -sh $@in }
 edit:add-var gst~ {|@in| e:git status $@in }
 edit:add-var gca~ {|@in| e:git commit --all $@in }
 edit:add-var resetorigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
@@ -62,7 +64,8 @@ edit:add-var wget~  {|@in| e:wget -c $@in }
 edit:add-var makepwd~ { e:openssl rand -base64 15 }
 edit:add-var dl~  {|@in| e:curl -C - -O '{}' $@in }
 edit:add-var ping~ {|@in| e:ping -c 5 $@in }
-edit:add-var sizes~ { du -sh * | sort -hr }
+edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" $c | cmds:first [(all)
+] | echo (one) }) }
 
 edit:add-var update~ {
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)

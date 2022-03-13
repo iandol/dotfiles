@@ -37,13 +37,17 @@ use github.com/iwoloschin/elvish-packages/python
 #use github.com/zzamboni/elvish-completions/ssh
 
 ############################################################ Import util names
-var if-external~ = $cmds:if-external~
-var append-to-path~ = $cmds:append-to-path~
-var prepend-to-path~ = $cmds:prepend-to-path~
-var is-path~ = $cmds:is-path~
-var is-file~ = $cmds:is-file~
-var is-macos~ = $cmds:is-macos~
-var is-linux~ = $cmds:is-linux~
+var if-external~		= $cmds:if-external~
+var append-to-path~		= $cmds:append-to-path~
+var prepend-to-path~	= $cmds:prepend-to-path~
+var is-path~			= $cmds:is-path~
+var is-file~			= $cmds:is-file~
+var is-macos~			= $cmds:is-macos~
+var is-linux~			= $cmds:is-linux~
+var pya~				= $python:activate~
+var pyd~				= $python:deactivate~
+var pyl~				= $python:list-virtualenvs~
+set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
 
 ############################################################ Paths
 set paths = [
@@ -56,7 +60,8 @@ set paths = [
 	/usr/bin
 	/bin
 ]
-var ppaths = [/Library/TeX/texbin /opt/local/bin /usr/local/opt/python@3.10/libexec/bin ~/.rbenv/shims/]
+var ppaths = [/Library/TeX/texbin /opt/local/bin 
+	/usr/local/opt/python@3.10/libexec/bin ~/.rbenv/shims/]
 each {|p| if (is-path $p) { prepend-to-path $p }} $ppaths
 var apaths = [/Library/Frameworks/GStreamer.framework/Commands]
 each {|p| if (is-path $p) { append-to-path $p }} $apaths
@@ -115,7 +120,7 @@ if ( has-env PLATFORM ) {
 }
 if (is-path /Applications/MATLAB/MATLAB_Runtime/v911/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v911/ }
 if (and (is-macos) (is-path /usr/local/Cellar/openjdk/17*)) { set-env JAVA_HOME (/usr/libexec/java_home -v 17) }
-if (is-path /Applications/ZeroBraneStudio.app) { 
+if (is-path /Applications/ZeroBraneStudio.app) {
 	var ZBS = '/Applications/ZeroBraneStudio.app/Contents/ZeroBraneStudio'
 	set-env ZBS $ZBS
 	set-env LUA_PATH "./?.lua;"$ZBS"/lualibs/?/?.lua;"$ZBS"/lualibs/?.lua"  

@@ -46,7 +46,7 @@ fn newelves {
 	all (one) |
 	each {|issue| echo $sep; echo (styled $issue[sha][0..12] bold): (styled (re:replace "\n" "  " $issue[commit][message]) yellow) }
 }
-fn repeat-each { |n f|
+fn repeat-each { |n f| # takses a number and a lambda
 	range $n | each {|_| $f }
 }
 fn hexstring { |@n|
@@ -62,7 +62,7 @@ fn external_edit_command {
 	try {
 		e:vim $temp-file[name] </dev/tty >/dev/tty 2>&1
 		set edit:current-command = (slurp < $temp-file[name])[..-1]
-	} else {
+	} catch {
 		file:close $temp-file
 		rm $temp-file[name]
 	}
@@ -120,7 +120,6 @@ fn cond {|cond v1 v2|
 		put $v2
 	}
 }
-
 
 fn dec {|n| - $n 1 }
 fn inc {|n| + $n 1 }
