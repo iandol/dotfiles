@@ -55,13 +55,9 @@ set paths = [
 	/usr/local/bin
 	/usr/local/sbin
 	$@paths
-	/usr/sbin
-	/sbin
-	/usr/bin
-	/bin
 ]
 var ppaths = [/Library/TeX/texbin /opt/local/bin 
-	/usr/local/opt/python@3.10/libexec/bin ~/.rbenv/shims/]
+	/usr/local/opt/python@3.10/libexec/bin ~/.rbenv/shims ~/.pyenv/shims]
 each {|p| if (is-path $p) { prepend-to-path $p }} $ppaths
 var apaths = [/Library/Frameworks/GStreamer.framework/Commands]
 each {|p| if (is-path $p) { append-to-path $p }} $apaths
@@ -140,12 +136,17 @@ use aliases
 ############################################################ setup brew
 if ( and (is-linux) (is-path /home/linuxbrew/.linuxbrew/bin/) ) {
 	echo (styled "…configuring "$platform:os" brew…\n" bold italic bg-blue)
-	prepend-to-path /home/linuxbrew/.linuxbrew/bin/ 
-	prepend-to-path /home/linuxbrew/.linuxbrew/sbin/ 
+	prepend-to-path /home/linuxbrew/.linuxbrew/bin/
+	prepend-to-path /home/linuxbrew/.linuxbrew/sbin/
+	set-env MANPATH '/usr/local/share/man'$E:MANPATH
+	set-env INFOPATH '/usr/local/share/info'$E:INFOPATH
 } elif ( and (is-macos) (is-path /usr/local/Homebrew/bin) ) {
 	echo (styled "…configuring "$platform:os" brew…\n" bold italic white bg-blue)
 	set-env HOMEBREW_PREFIX '/usr/local'
 	set-env HOMEBREW_CELLAR '/usr/local/Cellar'
+	set-env HOMEBREW_REPOSITORY '/usr/local/Homebrew'
+	set-env MANPATH '/usr/local/share/man'$E:MANPATH
+	set-env INFOPATH '/usr/local/share/info'$E:INFOPATH
 }
 
 ############################################################ end

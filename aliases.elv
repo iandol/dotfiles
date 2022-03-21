@@ -84,10 +84,10 @@ edit:add-var update~ {
 			for x $branches {
 				if (re:match '^(main|master|umaster)' $x) { git checkout $x }
 			}
-			try { git fetch --all 2>/dev/null; git pull 2>/dev/null; git status } except e { echo "\t\t…couldn't pull!" }
+			try { git fetch --all 2>/dev/null; git pull 2>/dev/null; git status } catch e { echo "\t\t…couldn't pull!" }
 			if (re:match 'upstream' (git remote | slurp)) {
 				print "\t\t---> Fetching upstream…"
-				try { git fetch -v upstream } except e { echo "\t…couldn't fetch upstream!" }
+				try { git fetch -v upstream } catch e { echo "\t…couldn't fetch upstream!" }
 			}
 			git checkout $oldbranch
 		}
@@ -96,7 +96,7 @@ edit:add-var update~ {
 	if-external brew {
 		echo (styled "\n\n---> Updating Homebrew...\n" bold bg-green)
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
-		try { brew update; brew outdated; brew upgrade } except e { echo "\t\t …can't upgrade!"}
+		try { brew update; brew outdated; brew upgrade } catch e { echo "\t\t …can't upgrade!"}
 	}
 	if (is-linux) {
 		echo (styled "\n\n---> Updating APT…\n" bold bg-green)
@@ -106,7 +106,7 @@ edit:add-var update~ {
 		apt list --upgradable
 		if-external snap { sudo snap refresh }
 		if-external fwupdmgr { fwupdmgr get-upgrades }
-		} except e {
+		} catch e {
 			echo "\t…couldn't update APT or Snap or FWUPDATE!"
 		}
 	}
