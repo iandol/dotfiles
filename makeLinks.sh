@@ -30,7 +30,7 @@ chown $USER ~/.bash_profile
 # Basic Vim setup
 ln -siv $DF/.vimrc ~
 chown $USER ~/.vimrc
-ln -siv $DF/.vim ~/.vim
+ln -siv $DF/.vim ~
 chown -R $USER ~/.vim
 
 # Ruby setup
