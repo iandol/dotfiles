@@ -47,3 +47,6 @@ chown $USER $XDG_CONFIG_HOME/starship.toml
 ln -siv $CONFIGS/alacritty.yml ~/.config/
 chown $USER $XDG_CONFIG_HOME/alacritty.yml
 
+# tmux setup
+ln -siv $CONFIGS/.tmux.conf ~
+chown $USER ~/.tmux.conf
