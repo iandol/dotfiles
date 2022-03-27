@@ -108,19 +108,22 @@ set edit:insert:binding[Ctrl-l] = { $edit:move-dot-eol~; $edit:kill-line-left~ }
 set edit:insert:binding[Ctrl-b] = $cmds:external_edit_command~
 
 ############################################################ general ENV
+set-env XDG_CONFIG_HOME $E:HOME"/.config/"
 if ( has-env PLATFORM ) {
 	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
 } else {
 	set-env PLATFORM (str:to-lower (uname -s))
 	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
 }
-if (is-path /Applications/MATLAB/MATLAB_Runtime/v911/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v911/ }
-if (and (is-macos) (is-path /usr/local/Cellar/openjdk/17*)) { set-env JAVA_HOME (/usr/libexec/java_home -v 17) }
-if (is-path /Applications/ZeroBraneStudio.app) {
-	var ZBS = '/Applications/ZeroBraneStudio.app/Contents/ZeroBraneStudio'
-	set-env ZBS $ZBS
-	set-env LUA_PATH "./?.lua;"$ZBS"/lualibs/?/?.lua;"$ZBS"/lualibs/?.lua"  
-	set-env LUA_CPATH $ZBS"/bin/?.dylib;"$ZBS"/bin/clibs53/?.dylib;"$ZBS"/bin/clibs53/?/?.dylib"	
+if (is-macos) {
+	if (is-path /Applications/MATLAB/MATLAB_Runtime/v912/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v912/ }
+	if (is-path /usr/local/Cellar/openjdk/17*) { set-env JAVA_HOME (/usr/libexec/java_home -v 17) }
+	if (is-path /Applications/ZeroBraneStudio.app) {
+		var ZBS = '/Applications/ZeroBraneStudio.app/Contents/ZeroBraneStudio'
+		set-env ZBS $ZBS
+		set-env LUA_PATH "./?.lua;"$ZBS"/lualibs/?/?.lua;"$ZBS"/lualibs/?.lua"  
+		set-env LUA_CPATH $ZBS"/bin/?.dylib;"$ZBS"/bin/clibs53/?.dylib;"$ZBS"/bin/clibs53/?/?.dylib"	
+	}
 }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 if-external carapace { eval (carapace _carapace|slurp) }
@@ -138,15 +141,15 @@ if ( and (is-linux) (is-path /home/linuxbrew/.linuxbrew/bin/) ) {
 	echo (styled "…configuring "$platform:os" brew…\n" bold italic bg-blue)
 	prepend-to-path /home/linuxbrew/.linuxbrew/bin/
 	prepend-to-path /home/linuxbrew/.linuxbrew/sbin/
-	set-env MANPATH '/usr/local/share/man'$E:MANPATH
-	set-env INFOPATH '/usr/local/share/info'$E:INFOPATH
+	set-env MANPATH '/usr/local/share/man:'$E:MANPATH
+	set-env INFOPATH '/usr/local/share/info:'$E:INFOPATH
 } elif ( and (is-macos) (is-path /usr/local/Homebrew/bin) ) {
 	echo (styled "…configuring "$platform:os" brew…\n" bold italic white bg-blue)
 	set-env HOMEBREW_PREFIX '/usr/local'
 	set-env HOMEBREW_CELLAR '/usr/local/Cellar'
 	set-env HOMEBREW_REPOSITORY '/usr/local/Homebrew'
-	set-env MANPATH '/usr/local/share/man'$E:MANPATH
-	set-env INFOPATH '/usr/local/share/info'$E:INFOPATH
+	set-env MANPATH '/usr/local/share/man:'$E:MANPATH
+	set-env INFOPATH '/usr/local/share/info:'$E:INFOPATH
 }
 
 ############################################################ end

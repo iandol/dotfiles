@@ -1,0 +1,41 @@
+# Inserts a blank line between shell prompts
+add_newline = true
+
+[character] 
+success_symbol = "[▶︎](bold green)"
+error_symbol = "[▷](bold red)"
+
+#[env_var]
+#variable = "PLATFORM"
+#default = ""
+
+[shlvl]
+symbol = "↯"
+style = "dimmed yellow"
+disabled = false
+
+[shell]
+bash_indicator = "ⓑ"
+zsh_indicator = "ⓩ"
+elvish_indicator = "ⓔ"
+style = "dimmed gray"
+disabled = false
+
+[hostname]
+format = "[$hostname]($style) » "
+ssh_only = false
+
+[memory_usage]
+disabled = false
+
+[directory]
+truncation_symbol = "…/"
+
+[battery]
+[[battery.display]]
+threshold = 10
+style = "bold red"
+[[battery.display]]
+threshold = 30
+style = "bold yellow"
+discharging_symbol = "💦"

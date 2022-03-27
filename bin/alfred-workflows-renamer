@@ -55,7 +55,7 @@ for dir in "${workflows_dir}"/*; do
   bundle_id="$(/usr/libexec/PlistBuddy -c 'print bundleid' "${info_plist}")"
 
   [[ -n "${bundle_id}" ]] && id=".${bundle_id}" || id=''
-  new_dir="${workflows_dir}/${name}${id}"
+  new_dir="${workflows_dir}/$(tr -d '/:' <<< "${name}${id}")"
 
   if [[ -d "${new_dir}" ]]; then
     skip "Directory $(basename "${new_dir}") already exists at ${workflows_dir}."
