@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 cd ~
 printf "\n\n--->>> Make links in $SHELL, current directory is $(pwd)\n\n"
 

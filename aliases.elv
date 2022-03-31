@@ -5,8 +5,6 @@ use math
 use epm
 use platform
 use cmds
-# use github.com/zzamboni/elvish-modules/alias
-# set alias:dir = ~/.config/elvish/aliases
 
 ################################################ Export Utils
 var if-external~ = $cmds:if-external~
@@ -17,7 +15,8 @@ var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~
 ################################################ Abbreviations
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
-# set edit:small-word-abbr['ll'] = 'ls -alFGh@'
+set edit:abbr['sudo '] = 'sudo -- '
+# set edit:small-word-abbr['ll'] = 'ls -alFGh@'			
 # set edit:small-word-abbr['ls'] = 'ls -GF'
 
 ################################################ Aliases
@@ -41,7 +40,7 @@ if ( is-macos ) {
 }
 
 if-external bat { edit:add-var cat~ {|@in| e:bat $@in }}
-if-external python { edit:add-var urlencode~ {|@in| e:python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);" $@in } }
+if-external python3 { edit:add-var urlencode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } }
 
 edit:add-var listUDP~ {|@in| 
 	echo "Searching for: "$@in
@@ -54,7 +53,7 @@ edit:add-var listTCP~ {|@in|
 
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var sizes~ { e:du -sh * | e:sort -rh | e:bat --color never }
-edit:add-var fs {|@in| e:du -sh $@in }
+edit:add-var fs~ {|@in| e:du -sh $@in }
 edit:add-var gst~ {|@in| e:git status $@in }
 edit:add-var gca~ {|@in| e:git commit --all $@in }
 edit:add-var resetorigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
@@ -66,6 +65,17 @@ edit:add-var dl~  {|@in| e:curl -C - -O '{}' $@in }
 edit:add-var ping~ {|@in| e:ping -c 5 $@in }
 edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" $c | cmds:first [(all)
 ] | echo (one) }) }
+
+edit:add-var installTeX~ {
+	sudo tlmgr install lualatex-math luatexja abstract ^
+	latexmk csquotes pagecolor relsize mdframed needspace sectsty ^
+	titling titlesec preprint layouts glossaries tabulary soul xargs todonotes ^
+	mfirstuc xfor wallpaper datatool substr adjustbox collectbox ^
+	sttools wrapfig footnotebackref fvextra zref ^
+	libertinus libertsinus-fonts libertinus-otf threeparttable ^
+	elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex ^
+	stackengine xltabular booktabs orcidlink
+}
 
 edit:add-var update~ {
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)

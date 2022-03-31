@@ -20,10 +20,10 @@ if $platform:is-unix { use unix; edit:add-var unix: $unix: }
 
 ############################################################ External modules
 epm:install &silent-if-installed ^
-	github.com/xiaq/edit.elv ^
 	github.com/zzamboni/elvish-modules ^
 	github.com/zzamboni/elvish-themes ^
 	github.com/zzamboni/elvish-completions ^
+	github.com/xiaq/edit.elv ^
 	github.com/iwoloschin/elvish-packages
 	#github.com/muesli/elvish-libs ^
 
@@ -109,15 +109,11 @@ set edit:insert:binding[Ctrl-b] = $cmds:external_edit_command~
 
 ############################################################ general ENV
 set-env XDG_CONFIG_HOME $E:HOME"/.config/"
-if ( has-env PLATFORM ) {
-	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
-} else {
-	set-env PLATFORM (str:to-lower (uname -s))
-	echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
-}
+if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
+echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
 if (is-macos) {
 	if (is-path /Applications/MATLAB/MATLAB_Runtime/v912/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v912/ }
-	if (is-path /usr/local/Cellar/openjdk/17*) { set-env JAVA_HOME (/usr/libexec/java_home -v 17) }
+	if (is-path /usr/local/Cellar/openjdk/18) { set-env JAVA_HOME (/usr/libexec/java_home -v 18) }
 	if (is-path /Applications/ZeroBraneStudio.app) {
 		var ZBS = '/Applications/ZeroBraneStudio.app/Contents/ZeroBraneStudio'
 		set-env ZBS $ZBS
@@ -153,4 +149,4 @@ if ( and (is-linux) (is-path /home/linuxbrew/.linuxbrew/bin/) ) {
 }
 
 ############################################################ end
-echo (styled "\n ! – last cmd | ⌃a,e – ⇄ | ⌃N – 🚀navigate | ⌃R – 🔍history | ⌃L – 🔍dirs\n ⌃B – Edit command-line | ⌃L – Clear line | 💡 curl cheat.sh/?\n" bold italic)
+echo (styled "\n ! – last cmd | ⌃a,e – ⇄ | ⌃N – 🚀navigate | ⌃R – 🔍history | ⌃L – 🔍dirs\n ⌃B – Edit command-line | ⌃L – Clear line | 💡 curl cheat.sh/?\n tmux: ^a | - focus=o\n" bold italic)
