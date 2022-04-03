@@ -12,7 +12,7 @@ error_symbol = "[▷](bold red)"
 [shlvl]
 symbol = "↯"
 style = "dimmed yellow"
-disabled = false
+disabled = true
 
 [shell]
 bash_indicator = "ⓑ"
