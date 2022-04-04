@@ -15,7 +15,7 @@ CONFIGS="$DF/configs"
 ln -siv $DF/rc.elv $XDG_CONFIG_HOME/elvish
 ln -siv $DF/cmds.elv $XDG_CONFIG_HOME/elvish/lib
 ln -siv $DF/aliases.elv $XDG_CONFIG_HOME/elvish/lib
-chown $USER -R $XDG_CONFIG_HOME/elvish
+chown -R $USER $XDG_CONFIG_HOME/elvish
 
 # Default on macOS
 ln -siv $DF/.zshrc ~
@@ -40,11 +40,16 @@ ln -siv $CONFIGS/default-gems ~/.rbenv/
 chown $USER ~/.rbenv/default-gems
 
 # Great command prompt
-ln -siv $CONFIGS/starship.toml ~/.config/
+ln -siv $CONFIGS/starship.toml $XDG_CONFIG_HOME
 chown $USER $XDG_CONFIG_HOME/starship.toml
 
+# Used on macOS and Linux
+mkdir -p ~/.config.kitty
+ln -siv $CONFIGS/kitty.conf $XDG_CONFIG_HOME/kitty/
+chown -R $USER $XDG_CONFIG_HOME/kitty/
+
 # Used on RPi
-ln -siv $CONFIGS/alacritty.yml ~/.config/
+ln -siv $CONFIGS/alacritty.yml $XDG_CONFIG_HOME
 chown $USER $XDG_CONFIG_HOME/alacritty.yml
 
 # tmux setup
