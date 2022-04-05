@@ -23,6 +23,7 @@ set edit:abbr['sudo '] = 'sudo -- '
 echo (styled "…loading command aliases…" bold italic white bg-blue)
 
 if ( is-macos ) {
+	edit:add-var lls~ {|@in| e:ls -alFGhtr@ $@in }
 	edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
 	edit:add-var ll~ {|@in| e:ls -alFGh $@in }
 	edit:add-var ls~ {|@in| e:ls -GF $@in }
