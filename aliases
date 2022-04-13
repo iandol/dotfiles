@@ -3,6 +3,7 @@ if [[ $PLATFORM = 'Darwin' ]]; then
 	alias la="ls -alGhF"
 	alias las="ls -alGhFeLH"
 	alias ll="ls -alFGh"
+	alias lls="-alFGhtr@"
 	alias llm="ls -alFGh@"
 	alias dir='ls -alfG'
 else

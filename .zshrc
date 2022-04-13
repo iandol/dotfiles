@@ -2,14 +2,8 @@ export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
 
-#-------------------------------PREFER VSCODE
-if [[ -f $(which code) ]]; then 
-	export EDITOR='code -nw'
-elif [[ -f $(which micro) ]]; then
-	export EDITOR='micro'
-else
-	export EDITOR='nano'
-fi
+#-------------------------------PREFER nvim
+export EDITOR='nvim'
 
 #-------------------------------OPTIONS
 COMPLETION_WAITING_DOTS="true"
@@ -38,7 +32,7 @@ alias help=run-help
 if [[ $PLATFORM == 'Darwin' ]]; then
 #	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 #	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	ul=("R2021b" "R2021a" "R2020b" "R2020a")
+	ul=("R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
 	match=0
 	for x in $ul; do
 		if ( [[ $match == 0 ]] && [[ -d "/Applications/MATLAB_${x}.app/bin" ]] ); then
@@ -59,7 +53,7 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 else
 	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-15-openjdk-amd64/" # Linux Java
 	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
-	ul=("R2021b" "R2021a" "R2020b" "R2020a")
+	ul=("R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
 	match=0
 	for x in $ul; do
 		if ( [[ $match == 0 ]] && [[ -d "/usr/local/MATLAB/${x}/bin" ]]); then
@@ -100,7 +94,7 @@ export PATH
 [[ -x $(which rbenv) ]] && eval "$(rbenv init -)"
 #[[ -x $(which archey) ]] && archey -c -o
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
-[[ -x $(which fzf) ]] && source $DF/.fzf.zsh
+[[ -x $(which fzf) ]] && source $DF/configs/.fzf.zsh
 
 ### Added by Zi's installer
 if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then

@@ -149,4 +149,5 @@ if ( and (is-linux) (is-path /home/linuxbrew/.linuxbrew/bin/) ) {
 }
 
 ############################################################ end
-echo (styled "\n ! – last cmd | ⌃N – 🚀navigate | ⌃R – 🔍history | ⌃L – 🔍dirs\n ⌃B – Edit command-line | ⌃L – Clear line | ⌃a,e – ⇄ | 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux panesplit=§| §a- paneclose=§x panefocus=§o\n tmux itwindowcreate=§c windowswitch=§n windowclose=§&\n" bold italic)
+fn helpme { echo (styled "\n ! – last cmd | ⌃N – 🚀navigate | ⌃R – 🔍history | ⌃L – 🔍dirs\n ⌃B – Edit command-line | ⌃L – Clear line | ⌃a,e – ⇄ | 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane split=§| §a- close=§x focus=§o\n tmux window create=§c switch=§n close=§&\n" bold italic) }
+helpme
