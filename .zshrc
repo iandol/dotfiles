@@ -3,7 +3,11 @@ export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
 
 #-------------------------------PREFER nvim
-export EDITOR='nvim'
+if [[ -f $(which nvim) ]]; then
+	export EDITOR='nvim'
+else
+	export EDITOR='vim'
+fi
 
 #-------------------------------OPTIONS
 COMPLETION_WAITING_DOTS="true"

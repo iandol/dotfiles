@@ -28,15 +28,18 @@ ln -siv $DF/.bash_profile ~
 chown $USER ~/.bash_profile
 
 # Basic Vim setup
-ln -siv $DF/.vimrc ~
+mkdir -p $XDG_CONFIG_HOME/nvim
+ln -siv $CONFIGS/.vimrc ~
+ln -siv $CONFIGS/init.vim $XDG_CONFIG_HOME/nvim/init.vim
 chown $USER ~/.vimrc
 ln -siv $DF/.vim ~
 chown -R $USER ~/.vim
+chown -R $USER $XDG_CONFIG_HOME/nvim
 
 # Ruby setup
 ln -siv $CONFIGS/.rubocop.yml ~
 chown $USER ~/.rubocop.yml
-ln -siv $CONFIGS/default-gems ~/.rbenv/
+ln -siv $CONFIGS/default-gems ~/.rbenv
 chown $USER ~/.rbenv/default-gems
 
 # Great command prompt
@@ -44,9 +47,9 @@ ln -siv $CONFIGS/starship.toml $XDG_CONFIG_HOME
 chown $USER $XDG_CONFIG_HOME/starship.toml
 
 # Used on macOS and Linux
-mkdir -p ~/.config.kitty
-ln -siv $CONFIGS/kitty.conf $XDG_CONFIG_HOME/kitty/
-chown -R $USER $XDG_CONFIG_HOME/kitty/
+mkdir -p $XDG_CONFIG_HOME/kitty
+ln -siv $CONFIGS/kitty.conf $XDG_CONFIG_HOME/kitty
+chown -R $USER $XDG_CONFIG_HOME/kitty
 
 # Used on RPi
 ln -siv $CONFIGS/alacritty.yml $XDG_CONFIG_HOME

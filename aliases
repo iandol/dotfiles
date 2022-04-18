@@ -33,11 +33,6 @@ alias ping="ping -c 5" # ping 5 times ‘by default’
 # howdoi is a python pip install
 alias h='function hdi(){ howdoi $* -c -n 5; }; hdi'
 
-# from https://www.arp242.net/zshrc.html
-# Define directory shortcuts with hash -d so you can use cd ~C
-hash -d C=$HOME/Code
-hashcwd() { hash -d "$1"="$PWD" }
-
 # fuzzy finder
 if [[ -x $(which fzf) ]]; then
 	alias preview="fzf --preview 'bat --color \"always\" {}'"

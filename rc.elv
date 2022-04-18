@@ -121,6 +121,7 @@ if (is-macos) {
 		set-env LUA_CPATH $ZBS"/bin/?.dylib;"$ZBS"/bin/clibs53/?.dylib;"$ZBS"/bin/clibs53/?/?.dylib"	
 	}
 }
+if-external nvim { set-env EDITOR 'nvim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 if-external carapace { eval (carapace _carapace|slurp) }
 python:deactivate

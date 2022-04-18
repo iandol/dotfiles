@@ -1,14 +1,10 @@
 export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 
-[[ $PLATFORM = 'darwin'* ]] && source $DF/config
+[[ $PLATFORM = 'darwin'* ]] && source $DF/myinfo
 
 # Make sublime the default editor
-if [[ -f $(which code) ]]; then 
-	export EDITOR="code -w"
-else
-	export EDITOR="vim"
-fi
+export EDITOR="nvim"
 
 # Don’t clear the screen after quitting a manual page
 export MANPAGER="less -X"
@@ -49,7 +45,7 @@ if [[ -x $(which brew) ]]; then
 fi
 
 [[ -x $(which rbenv) ]] && eval "$(rbenv init -)"
-[ -x $(which fzf) ] && source $DF/.fzf.bash
+[ -x $(which fzf) ] && source $DF/configs/.fzf.bash
 [[ -f "$DF/env" ]] && source "$DF/env"
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which figlet) ]] && figlet "Totoro Hai!"

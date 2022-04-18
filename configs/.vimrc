@@ -1,12 +1,15 @@
+filetype plugin indent on
 syntax enable
 colorscheme onedark
-set background=dark           " Assume a dark background
-set mouse=a                   " automatically enable mouse usage
-set encoding=utf-8            " The encoding displayed.
-set fileencoding=utf-8        " The encoding written to file.
-set history=1000
-set ignorecase                  " case insensitive search
-set smartcase                   " case sensitive when uc present
+set clipboard=unnamedplus		" treat the defaut buffer as + register (system clipboard)
+set number
+set background=dark				" Assume a dark background
+set mouse=a						" automatically enable mouse usage
+set encoding=utf-8				" The encoding displayed.
+set fileencoding=utf-8			" The encoding written to file.
+set history=2000
+set ignorecase					" case insensitive search
+set smartcase					" case sensitive when uc present
 set wildmenu                    " show list instead of just completing
 set wildmode=list:longest,full  " command <Tab> completion, list matches, then longest common part, then all.
 set whichwrap=b,s,h,l,<,>,[,]   " backspace and cursor keys wrap to
@@ -22,4 +25,6 @@ set nocompatible                " not vi compatible, more features
 set ruler                       " show ruler
 set incsearch                   " incremental search
 set hlsearch                    " highlight search result
-filetype plugin indent on
+" Italics
+let &t_ZH="\e[3m"
+let &t_ZR="\e[23m"
