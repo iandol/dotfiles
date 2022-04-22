@@ -28,3 +28,7 @@ set hlsearch                    " highlight search result
 " Italics
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
+
+call plug#begin()
+	Plug 'dmix/elvish.vim', { 'on_ft': ['elvish']}
+call plug#end()

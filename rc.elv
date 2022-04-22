@@ -104,7 +104,7 @@ if (eq $theme starship) {
 ############################################################ Key bindings
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
 set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
-set edit:insert:binding[Ctrl-l] = { $edit:move-dot-eol~; $edit:kill-line-left~ }
+#set edit:insert:binding[Ctrl-l] = { $edit:move-dot-eol~; $edit:kill-line-left~ }
 set edit:insert:binding[Ctrl-b] = $cmds:external_edit_command~
 
 ############################################################ general ENV
