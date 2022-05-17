@@ -1,0 +1,28 @@
+name: scrivomatic
+description: wrapper for pandocomatic + pandoc
+flags:
+    -i, --input=: Input file
+    -o, --output=: Output file. Optional for pandocomatic.
+    -y, --yaml=: Specify which YAML file for pandocomatic.
+    -t, --to=: Pandoc Format. Optional for pandocomatic.
+    -c, --command=: Tool to use = pandocomatic | panzer
+    -p, --path=: Additional Path to Search for Commands.
+    -z, --data-dir=: Pandoc data dir.
+    -b, --build: For LaTeX output, run latexmk
+    -B, --buildclean: For LaTeX output, run latexmk and cleanup
+    -d, --dry-run: Dry run.
+    -v, --no-verbose, --verbose: Verbose output.
+    -l, --no-log, --log: View log in Console.app.
+    -h, --help: display this help and exit
+completion:
+    flag:
+        input: ["$files"]
+        output: ["$files"]
+        yaml: ["$files"]
+        to: ["$(pandoc --list-output-formats)"]
+        command:
+            - "pandocomatic\trun pandocomatic\tcyan"
+            - "panzer\trun panzer (deprecated and untested)\tcyan"
+        path: ["$directories"]
+        data-dir: ["$directories"]
+    positionalany: ["$files"]

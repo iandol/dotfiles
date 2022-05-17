@@ -15,6 +15,7 @@ var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~
 ################################################ Abbreviations
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
+set edit:abbr['>so'] = '2>&1'
 set edit:abbr['sudo '] = 'sudo -- '
 # set edit:small-word-abbr['ll'] = 'ls -alFGh@'			
 # set edit:small-word-abbr['ls'] = 'ls -GF'
@@ -77,7 +78,8 @@ edit:add-var installTeX~ {
 	sttools wrapfig footnotebackref fvextra zref ^
 	libertinus libertsinus-fonts libertinus-otf threeparttable ^
 	elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex ^
-	stackengine xltabular booktabs orcidlink
+	stackengine xltabular booktabs orcidlink ^
+	ltablex cleveref
 }
 
 edit:add-var update~ {
@@ -124,6 +126,8 @@ edit:add-var update~ {
 		}
 	}
 	if-external rbenv { echo "\n---> Rehash RBENV…\n"; rbenv rehash }
+	if-external pyenv { echo "\n---> Rehash PYENV…\n"; pyenv rehash }
+	if-external tlmgr { echo "\n---> Check TeX-Live…\n"; tlmgr update --list }
 	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-green)
 	epm:upgrade
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)

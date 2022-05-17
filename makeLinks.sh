@@ -17,7 +17,7 @@ ln -siv $DF/cmds.elv $XDG_CONFIG_HOME/elvish/lib
 ln -siv $DF/aliases.elv $XDG_CONFIG_HOME/elvish/lib
 chown -R $USER $XDG_CONFIG_HOME/elvish
 
-# Default on macOS
+# Default shell on macOS
 ln -siv $DF/.zshrc ~
 chown $USER ~/.zshrc
 
@@ -27,7 +27,7 @@ chown $USER ~/.bashrc
 ln -siv $DF/.bash_profile ~
 chown $USER ~/.bash_profile
 
-# Basic Vim setup
+# Basic Vim setup, use nvim
 mkdir -p $XDG_CONFIG_HOME/nvim
 ln -siv $CONFIGS/.vimrc ~
 ln -siv $CONFIGS/init.vim $XDG_CONFIG_HOME/nvim/init.vim
@@ -58,3 +58,12 @@ chown $USER $XDG_CONFIG_HOME/alacritty.yml
 # tmux setup
 ln -siv $CONFIGS/.tmux.conf ~
 chown $USER ~/.tmux.conf
+
+# carapace setup
+if [[ $PLATFORM == 'Darwin' ]]; then
+	mkdir -p $HOME/Library/Application\ Support/carapace/specs
+	ln -siv $DF/completions/* $HOME/Library/Application\ Support/carapace/specs/
+else
+	mkdir -p $XDG_CONFIG_HOME/carapace/specs
+	ln -siv $DF/completions/* $XDG_CONFIG_HOME/carapace/specs
+fi

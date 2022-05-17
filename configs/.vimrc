@@ -31,4 +31,6 @@ let &t_ZR="\e[23m"
 
 call plug#begin()
 	Plug 'dmix/elvish.vim', { 'on_ft': ['elvish']}
+	Plug 'scrooloose/nerdtree'
+	Plug 'itchyny/lightline.vim'
 call plug#end()

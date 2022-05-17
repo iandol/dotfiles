@@ -108,7 +108,8 @@ set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
 set edit:insert:binding[Ctrl-b] = $cmds:external_edit_command~
 
 ############################################################ general ENV
-set-env XDG_CONFIG_HOME $E:HOME"/.config/"
+set-env XDG_CONFIG_HOME $E:HOME"/.config"
+set-env DF $E:HOME"/.dotfiles"
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
 echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
 if (is-macos) {
@@ -121,9 +122,9 @@ if (is-macos) {
 		set-env LUA_CPATH $ZBS"/bin/?.dylib;"$ZBS"/bin/clibs53/?.dylib;"$ZBS"/bin/clibs53/?/?.dylib"	
 	}
 }
-if-external nvim { set-env EDITOR 'nvim' }
+if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
-if-external carapace { eval (carapace _carapace|slurp) }
+if-external carapace { eval (carapace _carapace elvish | slurp) }
 python:deactivate
 
 ############################################################ Aliases

@@ -28,19 +28,23 @@ if [ $PLATFORM = "Darwin" ]; then
 	#make sure our minimum packages are installed
 	if [ -e $(which brew) ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install bat rbenv p7zip ruby-build zsh git figlet archey jq fzf prettyping ansiweather \
-		diff-so-fancy pandoc pandoc-crossref multimarkdown libusb exodriver youtube-dl
+		brew install bat p7zip ruby-build rbenv pyenv zsh neovim git figlet archey jq \
+		fzf prettyping ansiweather media-info starship tmux \
+		diff-so-fancy mosh pandoc pandoc-crossref multimarkdown libusb exodriver youtube-dl
 		#cask fonts
-		brew install font-symbola font-fantasque-sans-mono font-fira-code font-jetbrains-mono font-cascadia-code font-libertinus \
-		font-source-code-pro font-source-sans-pro font-source-serif-pro
+		brew install font-fantasque-sans-mono font-fira-code font-jetbrains-mono font-cascadia-code font-libertinus \
+		font-source-code-pro font-source-sans-pro font-source-serif-pro \
+		font-cascadia-code font-libertinus
 		printf 'Do you want to install Apps? (y / n): '
 		read ans
 		if [ $ans == 'y' ]; then
 			#cask apps
-			brew install aerial alfred bettertouchtool betterzip bitwarden bookends calibre \
-			carbon-copy-cloner deckset ff-works forklift fsnotes \
-			imageoptim iina kitty knockknock karabiner-elements prince \
-			mpv scrivener tex-live-utility vivaldi textmate launchcontrol proxyman
+			brew install aerial alfred basictex bettertouchtool betterzip bitwarden \
+			bookends calibre \
+			carbon-copy-cloner deckset ff-works forklift fsnotes gswitch hex-fiend \
+			iina imageoptim kitty knockknock launchcontrol karabiner-elements mpv \
+			prince proxyman scrivener suspicious-package tex-live-utility vivaldi textmate \
+			zerotier-one
 			# other software
 			#brew install libreoffice microsoft-word microsoft-powerpoint microsoft-excel
 			#brew install dropbox #fails unless on VPN

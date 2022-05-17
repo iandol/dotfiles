@@ -5,3 +5,4 @@
 .ruby-version
 .byebug_history
 *.bak
+.vim/plugged
