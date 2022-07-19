@@ -57,16 +57,19 @@ fn hexstring { |@n|
 	}
 }
 fn external_edit_command {
-	var temp-file = (path:temp-file)
+	var temp-file = (path:temp-file '*.elv')
 	print $edit:current-command > $temp-file
 	try {
-		e:vim $temp-file[name] </dev/tty >/dev/tty 2>&1
+		e:nvim $temp-file[name] </dev/tty >/dev/tty 2>&1
 		set edit:current-command = (slurp < $temp-file[name])[..-1]
 	} catch {
 		file:close $temp-file
 		rm $temp-file[name]
 	}
 }
+
+################################################ make a map of ENV
+fn env-map { env -0 | from-terminated "\x00" | each {|item| put [(str:split '=' $item &max=2)]} | make-map}
 
 ################################################ filtering functions
 # var colors = [red orange yellow green blue purple]

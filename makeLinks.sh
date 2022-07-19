@@ -12,6 +12,8 @@ DF="$HOME/.dotfiles"
 CONFIGS="$DF/configs"
 
 # My current preferred shell is elvish - https://elv.sh
+mkdir -pv $XDG_CONFIG_HOME/elvish
+mkdir -pv $XDG_CONFIG_HOME/elvish/lib
 ln -siv $DF/rc.elv $XDG_CONFIG_HOME/elvish
 ln -siv $DF/cmds.elv $XDG_CONFIG_HOME/elvish/lib
 ln -siv $DF/aliases.elv $XDG_CONFIG_HOME/elvish/lib

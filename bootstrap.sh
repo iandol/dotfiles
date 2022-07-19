@@ -54,10 +54,11 @@ if [ $PLATFORM = "Darwin" ]; then
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
-	sudo apt-get -m install build-essential gparted vim curl file zsh git mc
+	sudo apt-get -m install build-essential zsh git gparted neovim curl file mc
 	sudo apt-get -m install freeglut3 gawk
 	sudo apt-get -m install p7zip-full p7zip-rar figlet jq ansiweather exfat-fuse exfat-utils htop 
 	sudo apt-get -m install libunrar5 libdc1394-25 libraw1394-11
+	snap install starship
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
 		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -70,8 +71,9 @@ elif [ $PLATFORM = "Linux" ]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping
 		brew tap linuxbrew/fonts
-		brew install font-fantasque-sans-mono font-fira-code font-jetbrains-mono font-cascadia-code font-libertinus \
-		font-source-code-pro font-source-sans-pro
+		brew install font-fantasque-sans-mono font-fira-code \
+		font-jetbrains-mono font-cascadia-code font-libertinus 
+		brew install --HEAD font-source-sans-3
 		sudo ln -s /home/linuxbrew/.linuxbrew/share/fonts /usr/local/share/fonts/
 		sudo fc-cache -fv
 	fi
@@ -173,17 +175,16 @@ else
 fi
 
 printf 'Linking some bin files in ~/bin/: \n'
-	printf '\e[32m'
-	mkdir -pv ~/bin/
-	if [ $PLATFORM = "Darwin" ]; then
-		ln -sv ~/.dotfiles/bin/* $HOME/bin
-	else
-		ln -sv ~/.dotfiles/bin/*.sh $HOME/bin
-		ln -sv ~/.dotfiles/bin/*.rb $HOME/bin
-	fi
-	chown -R $USER ~/bin/*
-	printf '\e[36m\n\n'
-fi 
+printf '\e[32m'
+mkdir -pv ~/bin/
+if [ $PLATFORM = "Darwin" ]; then
+	ln -sv ~/.dotfiles/bin/* $HOME/bin
+else
+	ln -sv ~/.dotfiles/bin/*.sh $HOME/bin
+	ln -sv ~/.dotfiles/bin/*.rb $HOME/bin
+fi
+chown -R $USER ~/bin/*
+printf '\e[36m\n\n'
 
 if [ $PLATFORM = "Darwin" ]; then
 	printf "Do you want to set up OS X defaults? [y / n]:  "
@@ -201,7 +202,7 @@ if [ -f $(which git) ]; then
 	printf 'Setting some GIT defaults...\n'
 	#git config --global --replace-all user.email 'iandol@machine'
 	#git config --global --replace-all user.name 'iandol'
-	git config --global core.editor "vim"
+	git config --global core.editor "nvim"
 	git config --global init.defaultBranch main
 	git config --global core.autocrlf input
 	git config --global core.eol lf

@@ -118,8 +118,8 @@ if (is-macos) {
 	if (is-path /Applications/ZeroBraneStudio.app) {
 		var ZBS = '/Applications/ZeroBraneStudio.app/Contents/ZeroBraneStudio'
 		set-env ZBS $ZBS
-		set-env LUA_PATH "./?.lua;"$ZBS"/lualibs/?/?.lua;"$ZBS"/lualibs/?.lua"  
-		set-env LUA_CPATH $ZBS"/bin/?.dylib;"$ZBS"/bin/clibs53/?.dylib;"$ZBS"/bin/clibs53/?/?.dylib"	
+		#set-env LUA_PATH "./?.lua;"$ZBS"/lualibs/?/?.lua;"$ZBS"/lualibs/?.lua"  
+		#set-env LUA_CPATH $ZBS"/bin/?.dylib;"$ZBS"/bin/clibs53/?.dylib;"$ZBS"/bin/clibs53/?/?.dylib"	
 	}
 }
 if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' }

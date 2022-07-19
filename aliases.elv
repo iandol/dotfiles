@@ -43,6 +43,7 @@ if ( is-macos ) {
 
 if-external bat { edit:add-var cat~ {|@in| e:bat $@in }}
 if-external python3 { edit:add-var urlencode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } }
+if-external kitty { edit:add-var kssh~ {|@in| kitty +kitten ssh $@in } }
 
 edit:add-var listUDP~ {|@in| 
 	echo "Searching for: "$@in
