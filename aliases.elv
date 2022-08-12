@@ -16,7 +16,7 @@ var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>so'] = '2>&1'
-set edit:abbr['sudo '] = 'sudo -- '
+# set edit:abbr['sudo '] = 'sudo -- '
 # set edit:small-word-abbr['ll'] = 'ls -alFGh@'			
 # set edit:small-word-abbr['ls'] = 'ls -GF'
 
@@ -34,7 +34,7 @@ if ( is-macos ) {
 	edit:add-var ql~ {|@in| e:qlmanage -p $@in }
 	edit:add-var quicklook~ {|@in| e:qlmanage -p $@in }
 	edit:add-var spotlighter~ {|@in| e:mdfind -onlyin (pwd) $@in }
-	edit:add-var dequarantine~ {|@in| e:xattr -d com.apple.quarantine $@in }
+	edit:add-var dequarantine~ {|@in| e:xattr -v -d com.apple.quarantine $@in }
 	edit:add-var nitenite~ { e:exec pmset sleepnow }
 } elif ( is-linux ) {
 	edit:add-var ls~ {|@in| e:ls --color -GhFLH $@in }
@@ -44,6 +44,7 @@ if ( is-macos ) {
 if-external bat { edit:add-var cat~ {|@in| e:bat $@in }}
 if-external python3 { edit:add-var urlencode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } }
 if-external kitty { edit:add-var kssh~ {|@in| kitty +kitten ssh $@in } }
+if-external nvim { edit:add-var vi~ {|@in| nvim $@in }}
 
 edit:add-var listUDP~ {|@in| 
 	echo "Searching for: "$@in
@@ -129,6 +130,8 @@ edit:add-var update~ {
 	if-external rbenv { echo "\n---> Rehash RBENV…\n"; rbenv rehash }
 	if-external pyenv { echo "\n---> Rehash PYENV…\n"; pyenv rehash }
 	if-external tlmgr { echo "\n---> Check TeX-Live…\n"; tlmgr update --list }
+	if-external vim { echo "\n---> Update VIM Plug.vim…\n"; curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim }
+	if-external nvim { echo "\n---> Update NVIM Plug.vim…\n"; cp -v $E:HOME/.vim/autoload/plug.vim $E:XDG_DATA_HOME/nvim/site/autoload/ }
 	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-green)
 	epm:upgrade
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
@@ -153,13 +156,15 @@ edit:add-var updateElvish~ {
 edit:add-var updateFFmpeg~ {
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
-	var lver rver = '' ''
+	var lver rver lverp rverp = '' '' '' ''
 	cd $tmpdir
 	if-external ffmpeg { set lver = (ffmpeg -version | grep -owE 'N-\d+-[^-]+') }
+	if-external ffplay { set lverp = (ffplay -version | grep -owE 'N-\d+-[^-]+') }
 	var rver = "N-"(curl -s https://evermeet.cx/ffmpeg/info/ffmpeg/snapshot | jq -r '.version')
+	var rverp = "N-"(curl -s https://evermeet.cx/ffplay/info/ffplay/snapshot | jq -r '.version')
 	echo "\n===FFMPEG UPDATE===\nLocal: "$lver" & Remote: "$rver
 	if (not (eq $lver $rver)) {
-		echo '\tDownloading new ffmpeg:'
+		echo "\tDownloading new ffmpeg:"
 		curl -JL --output ff.7z https://evermeet.cx/ffmpeg/get
 		7z -y -o$E:HOME/bin/ e ff.7z
 		if (is-path $E:HOME"/Library/Application Support/FFmpegTools") {
@@ -168,7 +173,17 @@ edit:add-var updateFFmpeg~ {
 		rm ff.7z
 		ffmpeg -version
 	} else {
-		echo "\tNo need to update…"
+		echo "\tNo need to update ffmpeg…"
+	}
+	echo "\n===FFPLAY UPDATE===\nLocal: "$lverp" & Remote: "$rverp
+	if (not (eq $lverp $rverp)) {
+		echo "\tDownloading new ffplay:"
+		curl -JL --output ff.7z https://evermeet.cx/ffmpreg/get/ffplay
+		7z -y -o$E:HOME/bin/ e ff.7z
+		rm ff.7z
+		ffplay -version
+	} else {
+		echo "\tNo need to update ffplay"
 	}
 	cd $olddir
 	rm -rf $tmpdir

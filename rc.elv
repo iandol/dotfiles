@@ -109,6 +109,7 @@ set edit:insert:binding[Ctrl-b] = $cmds:external_edit_command~
 
 ############################################################ general ENV
 set-env XDG_CONFIG_HOME $E:HOME"/.config"
+set-env XDG_DATA_HOME $E:HOME"/.local/share"
 set-env DF $E:HOME"/.dotfiles"
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
 echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
