@@ -81,7 +81,8 @@ edit:add-var installTeX~ {
 	libertinus libertsinus-fonts libertinus-otf threeparttable ^
 	elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex ^
 	stackengine xltabular booktabs orcidlink ^
-	ltablex cleveref
+	ltablex cleveref makecell threeparttablex tabu multirow ^
+	changepage marginnote sidenotes environ fontawesome5
 }
 
 edit:add-var update~ {
@@ -178,9 +179,9 @@ edit:add-var updateFFmpeg~ {
 	echo "\n===FFPLAY UPDATE===\nLocal: "$lverp" & Remote: "$rverp
 	if (not (eq $lverp $rverp)) {
 		echo "\tDownloading new ffplay:"
-		curl -JL --output ff.7z https://evermeet.cx/ffmpreg/get/ffplay
-		7z -y -o$E:HOME/bin/ e ff.7z
-		rm ff.7z
+		curl -JL --output fp.7z https://evermeet.cx/ffmpeg/get/ffplay
+		7z -y -o$E:HOME/bin/ e fp.7z
+		rm fp.7z
 		ffplay -version
 	} else {
 		echo "\tNo need to update ffplay"

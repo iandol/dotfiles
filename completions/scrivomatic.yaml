@@ -11,10 +11,11 @@ flags:
     -b, --build: For LaTeX output, run latexmk
     -B, --buildclean: For LaTeX output, run latexmk and cleanup
     -d, --dry-run: Dry run.
-    -v, --no-verbose, --verbose: Verbose output.
-    -l, --no-log, --log: View log in Console.app.
+    -v, --verbose, --no-verbose: Verbose output.
+    -l, --log, --no-log: View log in Console.app.
     -h, --help: display this help and exit
 completion:
+    positionalany: ["$files"]
     flag:
         input: ["$files"]
         output: ["$files"]
@@ -25,4 +26,3 @@ completion:
             - "panzer\trun panzer (deprecated and untested)\tcyan"
         path: ["$directories"]
         data-dir: ["$directories"]
-    positionalany: ["$files"]
