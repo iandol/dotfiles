@@ -11,6 +11,7 @@ var if-external~ = $cmds:if-external~
 var is-path~ = $cmds:is-path~
 var is-file~ = $cmds:is-file~
 var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~
+var flatten~ = $cmds:flatten~
 
 ################################################ Abbreviations
 set edit:abbr['||'] = '| less'
@@ -72,6 +73,38 @@ edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" 
 edit:add-var kittylight~ { sed -i '' 's/background_tint 0.755/background_tint 0.955/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 edit:add-var kittydark~ { sed -i '' 's/background_tint 0.955/background_tint 0.755/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 
+edit:add-var startarp~ { sudo launchctl start com.sangfor.EasyMonitor; launchctl start com.sangfor.ECAgentProxy; open "https://portal.arp.cn" }
+edit:add-var stoparp~ { sudo launchctl stop com.sangfor.EasyMonitor; launchctl stop com.sangfor.ECAgentProxy; }
+
+edit:add-var setproxy~ { |@argin|
+	var @plist = {http,https,ftp,all}_proxy
+	if (eq (count $argin) (num 1)) {
+		if (eq $argin[0] "-l") {
+			echo "Proxy Settings:"
+		} else {
+			echo "Proxy set: " 
+			set-env no_proxy "localhost, 127.0.0.1, ::1"
+			put $plist | cmds:flatten | each {|t| set-env $t $argin[0]}
+			if (str:contains $argin[0] "socks5") {
+				git config --global http.proxy $E:http_proxy
+				git config --global https.proxy $E:https_proxy
+			} else {
+				git config --global http.proxy "http://"$E:http_proxy
+				git config --global https.proxy "https://"$E:https_proxy
+			}
+		}
+	} else {
+		echo "Will unset the proxy..."
+		unset-env no_proxy
+		put $plist | cmds:flatten | each {|t| unset-env $t}
+		try { git config --global --unset http.proxy } catch { }
+		try { git config --global --unset https.proxy } catch { }
+	}
+	echo "PROXY: HTTP = "$E:http_proxy" | HTTPS = "$E:https_proxy" | ALL = "$E:all_proxy
+	echo "BYPASS: "$E:no_proxy
+	try { echo "GIT:"(git config --global --get-regexp http)"\n" } catch { }
+}
+
 edit:add-var installTeX~ {
 	sudo tlmgr install lualatex-math luatexja abstract ^
 	latexmk csquotes pagecolor relsize mdframed needspace sectsty ^
@@ -102,22 +135,22 @@ edit:add-var update~ {
 			for x $branches {
 				if (re:match '^(main|master|umaster)' $x) { git checkout $x }
 			}
-			try { git fetch --all 2>/dev/null; git pull 2>/dev/null; git status } catch e { echo "\t\t…couldn't pull!" }
+			try { git fetch --all 2>/dev/null; git pull 2>/dev/null; git status } catch { echo "\t\t…couldn't pull!" }
 			if (re:match 'upstream' (git remote | slurp)) {
 				print "\t\t---> Fetching upstream…"
-				try { git fetch -v upstream } catch e { echo "\t…couldn't fetch upstream!" }
+				try { git fetch -v upstream } catch { echo "\t…couldn't fetch upstream!" }
 			}
 			git checkout $oldbranch
 		}
 	}
 	cd $olddir
 	if-external brew {
-		echo (styled "\n\n---> Updating Homebrew...\n" bold bg-green)
+		echo (styled "\n\n---> Updating Homebrew...\n" bold bg-red)
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
-		try { brew update; brew outdated; brew upgrade } catch e { echo "\t\t …can't upgrade!"}
+		try { brew update; brew outdated; brew upgrade; brew cleanup } catch { echo "\t\t …can't upgrade!"}
 	}
 	if (is-linux) {
-		echo (styled "\n\n---> Updating APT…\n" bold bg-green)
+		echo (styled "\n\n---> Updating APT…\n" bold bg-red)
 		try {
 		sudo apt update
 		sudo apt autoremove
@@ -130,11 +163,14 @@ edit:add-var update~ {
 	}
 	if-external rbenv { echo "\n---> Rehash RBENV…\n"; rbenv rehash }
 	if-external pyenv { echo "\n---> Rehash PYENV…\n"; pyenv rehash }
-	if-external tlmgr { echo "\n---> Check TeX-Live…\n"; tlmgr update --list }
-	if-external vim { echo "\n---> Update VIM Plug.vim…\n"; curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim }
+	try { if-external tlmgr { echo "\n---> Check TeX-Live…\n"; tlmgr update --list } } catch { }
+	if-external vim { 
+		echo "\n---> Update VIM Plug.vim…\n"; 
+		try { curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim} catch { echo "Failed to download..." }
+	}
 	if-external nvim { echo "\n---> Update NVIM Plug.vim…\n"; cp -v $E:HOME/.vim/autoload/plug.vim $E:XDG_DATA_HOME/nvim/site/autoload/ }
-	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-green)
-	epm:upgrade
+	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-red)
+	try { epm:upgrade } catch { }
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
 
