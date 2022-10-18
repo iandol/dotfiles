@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+export PLATFORM=$(uname -s)
 if [[ $PLATFORM = 'Darwin' ]]; then 
 	alias la="ls -alGhF"
 	alias las="ls -alGhFeLH"
@@ -408,13 +409,15 @@ function updateElvish () {
 	tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
 	cd $tmp_dir
 	rm -rf elvish-HEAD*
-	os='linux'; [[ $PLATFORM = "darwin" ]] && os='darwin'
-	pr='amd64';	[[ $(uname -m) = 'aarch64' ]] && pr='arm64'
-	curl -C - -O "https://dl.elv.sh/$os-$pr/elvish-HEAD.tar.gz"
+	tos='linux'; [[ $PLATFORM = "Darwin" ]] && tos='darwin'
+	tpr='amd64'; [[ $(uname -m) = 'aarch64' ]] && tpr='arm64'
+	printf "\nElvish download: OS = ${tos} | Processor = ${tpr}\n"
+	curl -C - -O "https://mirrors.tuna.tsinghua.edu.cn/elvish/$tos-$tpr/elvish-HEAD.tar.gz"
 	tar xvf elvish-HEAD.tar.gz 
 	chmod +x elvish-HEAD
 	sudo cp elvish-HEAD /usr/local/bin/elvish
 	sudo chown $USER /usr/local/bin/elvish
+	sudo chmod +x /usr/local/bin/elvish
 	cd $old_dir
 	rm -rf $tmp_dir
 	[[ -f $(which elvish) ]] && elvish -version

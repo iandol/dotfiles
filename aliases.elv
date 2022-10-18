@@ -181,7 +181,7 @@ edit:add-var updateElvish~ {
 	cd $tmpdir
 	var os = 'linux'; if (is-macos) { set os = 'darwin' }
 	var pr = 'amd64'; if (eq (uname -m) 'aarch64') { set pr = 'aarch64'}
-	curl -C - -O 'https://dl.elv.sh/'$os'-'$pr'/elvish-HEAD.tar.gz'
+	curl -C - -O 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$os'-'$pr'/elvish-HEAD.tar.gz'
 	tar xvf elvish-HEAD.tar.gz
 	chmod +x elvish-HEAD
 	sudo cp elvish-HEAD /usr/local/bin/elvish
