@@ -5,11 +5,11 @@ export HOMEBREW_INSTALL_CLEANUP=true
 #-------------------------------PREFER nvim
 if [[ -f $(which nvim) ]]; then
 	export EDITOR='nvim'
-else
+elif [[ -f $(which vim) ]]; then
 	export EDITOR='vim'
 fi
 
-#-------------------------------OPTIONS
+#-------------------------------ZSH OPTIONS
 COMPLETION_WAITING_DOTS="true"
 DIRSTACKSIZE=20 # pushd stacksize
 setopt AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_MINUS PUSHD_SILENT 
@@ -49,11 +49,6 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path+="/Applications/Araxis Merge.app/Contents/Utilities"
 	[[ -d "/Library/TeX/texbin" ]] && path+="/Library/TeX/texbin" # MacTeX
 	[[ -d "/Library/Frameworks/GStreamer.framework/Commands" ]] && path+="/Library/Frameworks/GStreamer.framework/Commands" # GStreamer
-	if [[ -d /Applications/ZeroBraneStudio.app ]]; then
-		export ZBS=/Applications/ZeroBraneStudio.app/Content/ZeroBraneStudio
-		#export LUA_PATH="/usr/local/share/lua/5.3/?.lua;/usr/local/share/lua/5.3/?/init.lua;/usr/local/lib/lua/5.3/?.lua;/usr/local/lib/lua/5.3/?/init.lua;./?.lua;./?/init.lua;./?.lua;$ZBS/lualibs/?/?.lua;$ZBS/lualibs/?.lua"
-		#export LUA_CPATH="/usr/local/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so;$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
-	fi
 else
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/" # Linux Java
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
@@ -101,23 +96,27 @@ export PATH
 [[ -x $(which fzf) ]] && source $DF/configs/.fzf.zsh
 
 ### Added by Zi's installer
-if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
-	print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
-	command mkdir -p "$HOME/.zi" && command chmod g-rwX "$HOME/.zi"
-	command git clone -q --depth=1 --branch "main" https://github.com/z-shell/zi "$HOME/.zi/bin" && \
-		print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-		print -P "%F{160}▓▒░ The clone has failed.%f%b"
-fi
-source "$HOME/.zi/bin/zi.zsh"
-autoload -Uz _zi
-(( ${+_comps} )) && _comps[zi]=_zi
+#if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
+#	print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
+#	command mkdir -p "$HOME/.zi" && command chmod g-rwX "$HOME/.zi"
+#	command git clone -q --depth=1 --branch "main" https://github.com/z-shell/zi "$HOME/.zi/bin" && \
+#		print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+#		print -P "%F{160}▓▒░ The clone has failed.%f%b"
+#fi
+#source "$HOME/.zi/bin/zi.zsh"
+#autoload -Uz _zi
+#(( ${+_comps} )) && _comps[zi]=_zi
 
-zi ice blockf atpull'zi creinstall -q .'
-zi light zsh-users/zsh-completions
+#zi ice blockf atpull'zi creinstall -q .'
+
+sh -c "$(curl -fsSL git.io/get-zi)" -- -a loader
+
+
 
 # examples here -> https://z-shell.pages.dev/docs/gallery/collection
 zicompinit # <- https://z-shell.pages.dev/docs/gallery/collection#minimal
 
+zi light zsh-users/zsh-completions
 zi light zsh-users/zsh-history-substring-search
 zi light zdharma-continuum/history-search-multi-word
 zi light zdharma-continuum/fast-syntax-highlighting

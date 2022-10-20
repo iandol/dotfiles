@@ -3,7 +3,7 @@ cd ~
 printf "\n\n--->>> Bootstrap terminal $SHELL setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
 [[ $(uname -a | grep -i "microsoft") ]] && MOD="WSL"
-[[ $(uname -a | grep -Ei "aarch64|armv7") ]] && MOD="RPi"
+[[ $(uname -a | grep -Ei "aaarch64|armv7") ]] && MOD="RPi"
 export PLATFORM=$(uname -s)$MOD
 printf "Using $PLATFORM...\n"
 
@@ -54,11 +54,11 @@ if [ $PLATFORM = "Darwin" ]; then
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
-	sudo apt-get -m install build-essential zsh git gparted neovim curl file mc
-	sudo apt-get -m install freeglut3 gawk
-	sudo apt-get -m install p7zip-full p7zip-rar figlet jq ansiweather exfat-fuse exfat-utils htop 
-	sudo apt-get -m install libunrar5 libdc1394-25 libraw1394-11
-	snap install starship
+	sudo apt -my install build-essential zsh git gparted neovim curl file mc
+	sudo apt -my install freeglut3 gawk
+	sudo apt -my install p7zip-full p7zip-rar figlet jq ansiweather exfat-fuse exfat-utils htop 
+	sudo apt -my install libunrar5 libdc1394-25 libraw1394-11
+	
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
 		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -80,10 +80,14 @@ elif [ $PLATFORM = "Linux" ]; then
 elif [ $PLATFORM = "LinuxRPi" ]; then
 	printf 'Assume we are setting up a Raspberry Pi machine\n'
 	#make sure our minimum packages are installed
-	sudo apt-get -m install build-essential gparted vim curl file zsh git mc
-	sudo apt-get -m install freeglut3 gawk
-	sudo apt-get -m install p7zip-full figlet jq ansiweather exfat-fuse exfat-utils htop 
-	sudo apt-get -m install libdc1394-25 libraw1394-11
+	sudo apt update
+	sudo apt -my install build-essential gparted vim curl file zsh git mc
+	sudo apt -my install freeglut3 gawk
+	sudo apt -my install p7zip-full figlet jq ansiweather exfat-fuse exfat-utils htop 
+	sudo apt -my install libdc1394-25 libraw1394-11
+	sudo apt -my install code snapd synaptic
+	sudo snap install core
+	sudo snap install starship --edge
 	mkdir -p bin
 	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
 	chmod +x bin/diff-so-fancy
@@ -134,44 +138,33 @@ printf '\e[32m'
 [ -e ~/.bash_profile ] && cp ~/.bash_profile ~/.bash_profile`date -Iseconds`.bak
 [ -e ~/.zshrc ] && cp ~/.zshrc ~/.zshrc`date -Iseconds`.bak
 
-ln -siv ~/.dotfiles/.zshrc ~
-chown $USER ~/.zshrc
-ln -siv ~/.dotfiles/.bashrc ~
-chown $USER ~/.bashrc
-ln -siv ~/.dotfiles/.bash_profile ~
-chown $USER ~/.bash_profile
-ln -siv ~/.dotfiles/.vimrc ~
-chown $USER ~/.vimrc
-ln -siv ~/.dotfiles/.vim ~/.vim
-chown -R $USER ~/.vim
-ln -siv ~/.dotfiles/.rubocop.yml ~
-chown $USER ~/.rubocop.yml
-ln -siv ~/.dotfiles/default-gems ~/.rbenv/
-chown $USER ~/.rbenv/default-gems
+.dotfiles/makeLinks.sh
 
 printf '\e[36m'
 
 sleep 2
 
-printf 'Will check for a functional ZPLUG...\n'
+printf 'Will check for a functional ZInit...\n'
 if [ -d ~/.oh-my-zsh/ ]; then
-	printf '\t...Going to replace oh-my-zsh with ZPlug... '
+	printf '\t...Going to replace oh-my-zsh with ZInit... '
 	rm -rf ~/.oh-my-zsh/
 fi
 if [ -d ~/.antigen/ ]; then
-	printf '\t...Going to replace antigen with ZPlug... '
+	printf '\t...Going to replace antigen with ZInit... '
 	rm -rf ~/.antigen/
 fi
-if [ ! -d ~/.zplug/ ]; then
+if [ -d ~/.zplug/ ]; then
+	printf '\t...Going to replace antigen with ZInit... '
+	rm -rf ~/.antigen/
+fi
+if [ ! -d ~/.zi/ ]; then
 	printf '\t...Going to install ZPlug... '
 	curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-	chown -R $USER ~/.zplug
-	touch ~/.zplug/packages.zsh
+	chown -R $USER ~/.zi
 	printf ' DONE!'
 else
-	printf '\tZPlug already installed...\n'
-	chown -R $USER ~/.zplug
-	touch ~/.zplug/packages.zsh
+	printf '\tZInit already installed...\n'
+	chown -R $USER ~/.zi
 fi
 
 printf 'Linking some bin files in ~/bin/: \n'

@@ -45,7 +45,11 @@ ln -siv $CONFIGS/default-gems ~/.rbenv
 chown $USER ~/.rbenv/default-gems
 
 # Great command prompt
-ln -siv $CONFIGS/starship.toml $XDG_CONFIG_HOME
+if [[ $PLATFORM == 'LinuxRPi' ]]; then
+	ln -siv $CONFIGS/starshiprpi.toml $XDG_CONFIG_HOME/starship.toml
+else
+	ln -siv $CONFIGS/starship.toml $XDG_CONFIG_HOME
+fi
 chown $USER $XDG_CONFIG_HOME/starship.toml
 
 # Used on macOS and Linux
