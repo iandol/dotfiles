@@ -164,13 +164,13 @@ edit:add-var update~ {
 	if-external rbenv { echo "\n---> Rehash RBENV…\n"; rbenv rehash }
 	if-external pyenv { echo "\n---> Rehash PYENV…\n"; pyenv rehash }
 	try { if-external tlmgr { echo "\n---> Check TeX-Live…\n"; tlmgr update --list } } catch { }
-	if-external vim { 
+	if-external vim {
 		echo "\n---> Update VIM Plug.vim…\n"; 
 		try { curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim} catch { echo "Failed to download..." }
 	}
-	if-external nvim { echo "\n---> Update NVIM Plug.vim…\n"; cp -v $E:HOME/.vim/autoload/plug.vim $E:XDG_DATA_HOME/nvim/site/autoload/ }
+	if-external nvim { echo "\n---> Update NVIM Plug.vim…\n"; mkdir -p $E:XDG_DATA_HOME/nvim/site/autoload; cp -v $E:HOME/.vim/autoload/plug.vim $E:XDG_DATA_HOME/nvim/site/autoload/ }
 	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-red)
-	try { epm:upgrade } catch { }
+	try { epm:upgrade } catch { echo "Couldn't update EPM packages..."}
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
 

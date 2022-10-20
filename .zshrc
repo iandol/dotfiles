@@ -55,8 +55,8 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 		#export LUA_CPATH="/usr/local/lib/lua/5.3/?.so;/usr/local/lib/lua/5.3/?/?.so;/usr/local/lib/lua/5.3/loadall.so;./?.so;$ZBS/bin/?.dylib;$ZBS/bin/clibs53/?.dylib;$ZBS/bin/clibs53/?/?.dylib"
 	fi
 else
-	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-15-openjdk-amd64/" # Linux Java
-	[[ -d "/usr/lib/jvm/java-15-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
+	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/" # Linux Java
+	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
 	ul=("R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
 	match=0
 	for x in $ul; do

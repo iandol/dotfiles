@@ -61,14 +61,9 @@ var ppaths = [/Library/TeX/texbin /opt/local/bin
 each {|p| if (is-path $p) { prepend-to-path $p }} $ppaths
 var apaths = [/Library/Frameworks/GStreamer.framework/Commands]
 each {|p| if (is-path $p) { append-to-path $p }} $apaths
+each {|p| if (not (is-path $p)) { echo (styled "🥺—"$p" in $paths no longer exists…" bg-red) } } $paths
 
-each {|p|
-	if (not (is-path $p)) {
-		echo (styled "🥺—"$p" in $paths no longer exists…" bg-red)
-	}
-} $paths
-
-var releases = [R2022b R2022a R2021b R2021a R2020b R2020a]
+var releases = [R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a]
 var match = $false; var prefix; var suffix
 if (is-macos) {
 	set prefix = "/Applications/MATLAB_"; set suffix = ".app/bin"
@@ -80,7 +75,7 @@ each {|p|
 		set match = $true
 		append-to-path $prefix$p$suffix
 		set-env MATLAB_EXECUTABLE $prefix$p$suffix"/matlab" # matlab
-		ln -sf $prefix$p$suffix"/maci64/mlint" ~/bin/mlint # matlab
+		if (is-macos) { ln -sf $prefix$p$suffix"/maci64/mlint" ~/bin/mlint }
 	}
 } $releases
 if (is-path ~/.venv/) { set python:virtualenv-directory = $E:HOME'/.venv' }
@@ -108,6 +103,7 @@ set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
 set edit:insert:binding[Ctrl-b] = $cmds:external_edit_command~
 
 ############################################################ general ENV
+set-env PAPERSIZE A4
 set-env XDG_CONFIG_HOME $E:HOME"/.config"
 set-env XDG_DATA_HOME $E:HOME"/.local/share"
 set-env DF $E:HOME"/.dotfiles"
@@ -115,13 +111,7 @@ if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
 echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
 if (is-macos) {
 	if (is-path /Applications/MATLAB/MATLAB_Runtime/v912/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v912/ }
-	if (is-path /usr/local/Cellar/openjdk/18) { set-env JAVA_HOME (/usr/libexec/java_home -v 18) }
-	if (is-path /Applications/ZeroBraneStudio.app) {
-		var ZBS = '/Applications/ZeroBraneStudio.app/Contents/ZeroBraneStudio'
-		set-env ZBS $ZBS
-		#set-env LUA_PATH "./?.lua;"$ZBS"/lualibs/?/?.lua;"$ZBS"/lualibs/?.lua"  
-		#set-env LUA_CPATH $ZBS"/bin/?.dylib;"$ZBS"/bin/clibs53/?.dylib;"$ZBS"/bin/clibs53/?/?.dylib"	
-	}
+	if (is-path /usr/local/Cellar/openjdk/19) { set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
 }
 if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
