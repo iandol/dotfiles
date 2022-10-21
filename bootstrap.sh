@@ -193,9 +193,9 @@ sleep 2
 
 if [ -f $(which git) ]; then
 	printf 'Setting some GIT defaults...\n'
-	#git config --global --replace-all user.email 'iandol@machine'
-	#git config --global --replace-all user.name 'iandol'
-	git config --global core.editor "nvim"
+	git config --global --replace-all user.email 'iandol@machine'
+	git config --global --replace-all user.name 'iandol'
+	[[ -f $(which nvim) ]] && git config --global core.editor "nvim"
 	git config --global init.defaultBranch main
 	git config --global core.autocrlf input
 	git config --global core.eol lf
@@ -210,19 +210,25 @@ if [ -f $(which git) ]; then
 	git config --global --replace-all alias.dta 'difftool -d'
 	git config --global --replace-all alias.dtl 'difftool HEAD^'
 	git config --global --replace-all difftool.prompt false
-	git config --global --replace-all color.ui always
-	git config --global --replace-all color.branch true
-	git config --global --replace-all color.diff true
-	git config --global --replace-all color.grep true
-	git config --global --replace-all color.interactive true
-	git config --global --replace-all color.status true
 	if [ $PLATFORM = 'Darwin' ]; then
 		git config --global --replace-all credential.helper osxkeychain
 	else
 		git config --global --replace-all credential.helper 'cache --timeout=86400'
 	fi
-	git config --global pager.diff "diff-so-fancy | less --tabs=4 -RFX"
-	git config --global pager.show "diff-so-fancy | less --tabs=4 -RFX"
+	git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+	git config --global interactive.diffFilter "diff-so-fancy --patch"
+	git config --global color.ui true
+	git config --global color.diff-highlight.oldNormal    "red bold"
+	git config --global color.diff-highlight.oldHighlight "red bold 52"
+	git config --global color.diff-highlight.newNormal    "green bold"
+	git config --global color.diff-highlight.newHighlight "green bold 22"
+	git config --global color.diff.meta       "11"
+	git config --global color.diff.frag       "magenta bold"
+	git config --global color.diff.func       "146 bold"
+	git config --global color.diff.commit     "yellow bold"
+	git config --global color.diff.old        "red bold"
+	git config --global color.diff.new        "green bold"
+	git config --global color.diff.whitespace "red reverse"
 else
 	printf 'GIT is not installed, use command line tools or install brew/apt...\n'
 fi

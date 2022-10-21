@@ -95,31 +95,23 @@ export PATH
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which fzf) ]] && source $DF/configs/.fzf.zsh
 
-### Added by Zi's installer
-#if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
-#	print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
-#	command mkdir -p "$HOME/.zi" && command chmod g-rwX "$HOME/.zi"
-#	command git clone -q --depth=1 --branch "main" https://github.com/z-shell/zi "$HOME/.zi/bin" && \
-#		print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-#		print -P "%F{160}▓▒░ The clone has failed.%f%b"
-#fi
-#source "$HOME/.zi/bin/zi.zsh"
-#autoload -Uz _zi
-#(( ${+_comps} )) && _comps[zi]=_zi
-
-#zi ice blockf atpull'zi creinstall -q .'
-
-sh -c "$(curl -fsSL git.io/get-zi)" -- -a loader
-
-
-
-# examples here -> https://z-shell.pages.dev/docs/gallery/collection
-zicompinit # <- https://z-shell.pages.dev/docs/gallery/collection#minimal
-
+#-------------------------------------ZINIT SETUP
+if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
+  print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
+  command mkdir -p "$HOME/.zi" && command chmod go-rwX "$HOME/.zi"
+  command git clone -q --depth=1 --branch "main" https://github.com/z-shell/zi "$HOME/.zi/bin" && \
+    print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+    print -P "%F{160}▓▒░ The clone has failed.%f%b"
+fi
+source "$HOME/.zi/bin/zi.zsh"
+autoload -Uz _zi
+(( ${+_comps} )) && _comps[zi]=_zi
+# examples here -> https://wiki.zshell.dev/ecosystem/category/-annexes
+zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
 zi light zsh-users/zsh-completions
 zi light zsh-users/zsh-history-substring-search
-zi light zdharma-continuum/history-search-multi-word
-zi light zdharma-continuum/fast-syntax-highlighting
+zi light z-shell/H-S-MW 
+zi light z-shell/F-Sy-H 
 zi light zsh-users/zsh-autosuggestions
 
 if [[ $PLATFORM = 'Darwin' ]]; then
@@ -131,6 +123,8 @@ else
 fi
 ### End of Zi's installer chunk
 
+#---------------------------------------STARSHIP
 [[ -f $(which starship) ]] && eval "$(starship init zsh)"
 
+#---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
