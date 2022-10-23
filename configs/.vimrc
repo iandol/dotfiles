@@ -37,6 +37,11 @@ call plug#begin()
 	Plug 'vim-pandoc/vim-pandoc'
 	Plug 'vim-pandoc/vim-pandoc-syntax'
 	Plug 'quarto-dev/quarto-vim'
+	if has('nvim')
+		Plug 'ggandor/leap.nvim'
+	endif
 call plug#end()
 
-
+if has('nvim')
+	lua require('leap').add_default_mappings()
+endif
