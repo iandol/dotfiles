@@ -3,7 +3,7 @@ cd ~
 printf "\n\n--->>> Bootstrap terminal $SHELL setup, current directory is $(pwd)\n\n"
 printf '\e[36m'
 [[ $(uname -a | grep -i "microsoft") ]] && MOD="WSL"
-[[ $(uname -a | grep -Ei "aaarch64|armv7") ]] && MOD="RPi"
+[[ $(uname -a | grep -Ei "aarch64|armv7") ]] && MOD="RPi"
 export PLATFORM=$(uname -s)$MOD
 printf "Using $PLATFORM...\n"
 
@@ -86,6 +86,7 @@ elif [ $PLATFORM = "LinuxRPi" ]; then
 	sudo apt -my install p7zip-full figlet jq ansiweather exfat-fuse exfat-utils htop 
 	sudo apt -my install libdc1394-25 libraw1394-11
 	sudo apt -my install code snapd synaptic
+	sudo apt -my install python3-pip
 	sudo snap install core
 	sudo snap install starship --edge
 	mkdir -p bin
@@ -122,6 +123,7 @@ printf 'Let us bootstrap .dotfiles if not present ... '
 read -p "Press any key to continue... " -n1 -s; printf '\n'
 if [ -d ~/.dotfiles/.git ]; then
 	printf ' .dotfiles are present! \n'
+	cd ~/.dotfiles; git pull; cd ~
 else
 	git clone https://github.com/iandol/dotfiles.git ~/.dotfiles
 	chown -R $USER ~/.dotfiles
@@ -134,37 +136,34 @@ printf 'Setting up the symbolic links at: '
 date
 printf '...\n'
 printf '\e[32m'
-[ -e ~/.bashrc ] && cp ~/.bashrc ~/.bashrc`date -Iseconds`.bak
-[ -e ~/.bash_profile ] && cp ~/.bash_profile ~/.bash_profile`date -Iseconds`.bak
-[ -e ~/.zshrc ] && cp ~/.zshrc ~/.zshrc`date -Iseconds`.bak
-
 .dotfiles/makeLinks.sh
-
 printf '\e[36m'
 
-sleep 2
+sleep 1
 
-printf 'Will check for a functional ZInit...\n'
+printf 'Will check for a functional ZI...\n'
 if [ -d ~/.oh-my-zsh/ ]; then
-	printf '\t...Going to replace oh-my-zsh with ZInit... '
+	printf '\t...Going to replace oh-my-zsh with ZI... '
 	rm -rf ~/.oh-my-zsh/
 fi
 if [ -d ~/.antigen/ ]; then
-	printf '\t...Going to replace antigen with ZInit... '
+	printf '\t...Going to replace antigen with ZI... '
 	rm -rf ~/.antigen/
 fi
 if [ -d ~/.zplug/ ]; then
-	printf '\t...Going to replace antigen with ZInit... '
-	rm -rf ~/.antigen/
+	printf '\t...Going to replace zplug with ZI... '
+	rm -rf ~/.zplug/
 fi
-if [ ! -d ~/.zi/ ]; then
-	printf '\t...Going to install ZPlug... '
-	curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-	chown -R $USER ~/.zi
-	printf ' DONE!'
-else
-	printf '\tZInit already installed...\n'
-	chown -R $USER ~/.zi
+if [ -d ~/.zinit/ ]; then
+	printf '\t...Going to replace zinit with ZI... '
+	rm -rf ~/.zinit/
+fi
+if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
+  print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
+  command mkdir -p "$HOME/.zi" && command chmod go-rwX "$HOME/.zi"
+  command git clone -q --depth=1 --branch "main" https://github.com/z-shell/zi "$HOME/.zi/bin" && \
+    print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+    print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
 
 printf 'Linking some bin files in ~/bin/: \n'
@@ -189,7 +188,7 @@ if [ $PLATFORM = "Darwin" ]; then
 	fi
 fi
 
-sleep 2
+sleep 1
 
 if [ -f $(which git) ]; then
 	printf 'Setting some GIT defaults...\n'
@@ -236,7 +235,7 @@ fi
 sleep 2
 
 if [ -x `which zsh` ]; then
-	printf 'Switching to use ZSH...\n'
+	printf 'Switching to use ZSH, you will need to reboot...\n'
 	if [ $PLATFORM = "Darwin" ]; then
 		chsh -s /usr/local/bin/zsh && source ~/.zshrc #installed via brew
 	else

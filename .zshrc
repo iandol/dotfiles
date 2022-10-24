@@ -13,9 +13,9 @@ fi
 COMPLETION_WAITING_DOTS="true"
 DIRSTACKSIZE=20 # pushd stacksize
 setopt AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_MINUS PUSHD_SILENT 
-export HISTFILE="$HOME/.zsh_history"
-export HISTSIZE=20000
-export SAVEHIST=$HISTSIZE
+HISTSIZE=20000
+SAVEHIST=20000
+HISTFILE=~/.zsh_history
 setopt EXTENDED_GLOB
 setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
 setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
@@ -106,9 +106,8 @@ fi
 source "$HOME/.zi/bin/zi.zsh"
 autoload -Uz _zi
 (( ${+_comps} )) && _comps[zi]=_zi
-# examples here -> https://wiki.zshell.dev/ecosystem/category/-annexes
-zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
 zi light zsh-users/zsh-completions
+zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
 zi light zsh-users/zsh-history-substring-search
 zi light z-shell/H-S-MW 
 zi light z-shell/F-Sy-H 
@@ -124,7 +123,11 @@ fi
 ### End of Zi's installer chunk
 
 #---------------------------------------STARSHIP
-[[ -f $(which starship) ]] && eval "$(starship init zsh)"
+if [[ -f $(which starship) ]]; then
+	eval "$(starship init zsh)"
+else
+	autoload -Uz promptinit; promptinit; prompt adam1
+fi
 
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
