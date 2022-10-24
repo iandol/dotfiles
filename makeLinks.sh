@@ -14,12 +14,12 @@ CONFIGS="$DF/configs"
 #few python packages
 printf "Do you want to back up existing files? [y / n]:  "
 read ans
-if [ $ans == 'y' ]; then
-	[ -e ~/.bashrc ] && cp ~/.bashrc ~/.bashrc`date -Iseconds`.bak
-	[ -e ~/.bash_profile ] && cp ~/.bash_profile ~/.bash_profile`date -Iseconds`.bak
-	[ -e ~/.zshrc ] && cp ~/.zshrc ~/.zshrc`date -Iseconds`.bak
-	[ -e ~/.vimrc ] && cp ~/.vimrc ~/.vimrc`date -Iseconds`.bak
-	[ -e ~/.tmux.conf ] && cp ~/.tmux.conf ~/.tmux.conf`date -Iseconds`.bak
+if [[ $ans == 'y' ]]; then
+	[[ -e ~/.bashrc ]] && cp ~/.bashrc ~/.bashrc`date -Iseconds`.bak
+	[[ -e ~/.bash_profile ]] && cp ~/.bash_profile ~/.bash_profile`date -Iseconds`.bak
+	[[ -e ~/.zshrc ]] && cp ~/.zshrc ~/.zshrc`date -Iseconds`.bak
+	[[ -e ~/.vimrc ]] && cp ~/.vimrc ~/.vimrc`date -Iseconds`.bak
+	[[ -e ~/.tmux.conf ]] && cp ~/.tmux.conf ~/.tmux.conf`date -Iseconds`.bak
 fi
 
 # My current preferred shell is elvish - https://elv.sh
