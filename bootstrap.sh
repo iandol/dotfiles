@@ -199,7 +199,7 @@ if [ -f $(which git) ]; then
 	git config --global init.defaultBranch main
 	git config --global core.autocrlf input
 	git config --global core.eol lf
-	git config --global config.pull ff.onl
+	git config --global config.pull ff.only
 	git config --global --replace-all alias.last 'log -1 HEAD'
 	git config --global --replace-all alias.unstage 'reset HEAD --'
 	git config --global --replace-all alias.history 'log -p --'
