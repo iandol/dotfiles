@@ -28,23 +28,24 @@ if [ $PLATFORM = "Darwin" ]; then
 	#make sure our minimum packages are installed
 	if [ -e $(which brew) ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install bat p7zip ruby-build rbenv pyenv zsh neovim git figlet archey jq \
-		fzf prettyping ansiweather media-info starship tmux \
-		diff-so-fancy mosh pandoc pandoc-crossref multimarkdown libusb exodriver youtube-dl
+		brew install bat p7zip ruby-build rbenv pyenv zsh neovim git figlet jq
+		brew install fzf prettyping ansiweather media-info starship tmux 
+		brew install diff-so-fancy mosh pandoc pandoc-crossref multimarkdown libusb exodriver youtube-dl
 		#cask fonts
-		brew install font-fantasque-sans-mono font-fira-code font-jetbrains-mono font-cascadia-code font-libertinus \
-		font-source-code-pro font-source-sans-pro font-source-serif-pro \
-		font-cascadia-code font-libertinus
+		brew install font-fantasque-sans-mono font-fira-code font-jetbrains-mono \
+		font-cascadia-code font-libertinus font-alegreya font-alegreya-sans
+		brew install iandol/adobe-fonts/font-source-sans
+		brew install iandol/adobe-fonts/font-source-serif
 		printf 'Do you want to install Apps? (y / n): '
 		read ans
 		if [ $ans == 'y' ]; then
 			#cask apps
-			brew install aerial alfred basictex bettertouchtool betterzip bitwarden \
-			bookends calibre \
-			carbon-copy-cloner deckset ff-works forklift fsnotes gswitch hex-fiend \
-			iina imageoptim kitty knockknock launchcontrol karabiner-elements mpv \
-			prince proxyman scrivener suspicious-package tex-live-utility vivaldi textmate \
-			zerotier-one
+			brew install alfred basictex bettertouchtool betterzip bitwarden
+			brew install bookends calibre visual-studio-code
+			brew install deckset ff-works forklift fsnotes hex-fiend
+			brew install iina imageoptim kitty knockknock launchcontrol mpv
+			brew install prince proxyman scrivener suspicious-package tex-live-utility textmate
+			brew install zerotier-one
 			# other software
 			#brew install libreoffice microsoft-word microsoft-powerpoint microsoft-excel
 			#brew install dropbox #fails unless on VPN
