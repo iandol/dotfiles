@@ -80,22 +80,6 @@ each {|p|
 } $releases
 if (is-path ~/.venv/) { set python:virtualenv-directory = $E:HOME'/.venv' }
 
-############################################################ Theme
-var theme = chain
-if-external starship { set theme = starship }
-if (eq $theme starship) {
-	eval ((which starship) init elvish)
-} elif (eq $theme powerline) {
-	use github.com/muesli/elvish-libs/theme/powerline
-} else {
-	use github.com/zzamboni/elvish-themes/chain
-	chain:init
-	set chain:bold-prompt = $true
-	set chain:show-last-chain = $false
-	set chain:glyph[arrow] = "⇝"
-	set chain:prompt-segment-delimiters = [ "⎛" "⎞" ]
-}
-
 ############################################################ Key bindings
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
 set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
@@ -139,6 +123,31 @@ if ( and (is-linux) (is-path /home/linuxbrew/.linuxbrew/bin/) ) {
 	set-env HOMEBREW_REPOSITORY '/usr/local/Homebrew'
 	set-env MANPATH '/usr/local/share/man:'$E:MANPATH
 	set-env INFOPATH '/usr/local/share/info:'$E:INFOPATH
+} elif ( and (is-macos) (is-path /opt/homebrew/bin ) ) {
+	echo (styled "…configuring "$platform:os" on Apple Silicon brew…\n" bold italic white bg-blue)
+	set-env HOMEBREW_PREFIX '/opt/homebrew'
+	set-env HOMEBREW_CELLAR '/opt/homebrew/Cellar'
+	set-env HOMEBREW_REPOSITORY '/opt/homebrew'
+	set-env MANPATH $E:HOMEBREW_PREFIX'/share/man:'$E:MANPATH
+	set-env INFOPATH $E:HOMEBREW_PREFIX'/share/info:'$E:INFOPATH
+	prepend-to-path $E:HOMEBREW_PREFIX'/bin'
+	prepend-to-path $E:HOMEBREW_PREFIX'/sbin'
+}
+
+############################################################ Theme
+var theme = chain
+if-external starship { set theme = starship }
+if (eq $theme starship) {
+	eval ((which starship) init elvish)
+} elif (eq $theme powerline) {
+	use github.com/muesli/elvish-libs/theme/powerline
+} else {
+	use github.com/zzamboni/elvish-themes/chain
+	chain:init
+	set chain:bold-prompt = $true
+	set chain:show-last-chain = $false
+	set chain:glyph[arrow] = "⇝"
+	set chain:prompt-segment-delimiters = [ "⎛" "⎞" ]
 }
 
 ############################################################ end

@@ -52,6 +52,7 @@ chown -R $USER $XDG_CONFIG_HOME/nvim
 # Ruby setup
 ln -siv $CONFIGS/.rubocop.yml ~
 chown $USER ~/.rubocop.yml
+mkdir -p .rbenv
 ln -siv $CONFIGS/default-gems ~/.rbenv
 chown $USER ~/.rbenv/default-gems
 
