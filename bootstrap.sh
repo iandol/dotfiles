@@ -56,7 +56,7 @@ elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
 	sudo apt -my install build-essential zsh git gparted neovim curl file mc
-	sudo apt -my install freeglut3 gawk
+	sudo apt -my install freeglut3 gawk mesa-utils
 	sudo apt -my install p7zip-full p7zip-rar figlet jq ansiweather exfat-fuse exfat-utils htop 
 	sudo apt -my install libunrar5 libdc1394-25 libraw1394-11
 	
@@ -83,7 +83,7 @@ elif [ $PLATFORM = "LinuxRPi" ]; then
 	#make sure our minimum packages are installed
 	sudo apt update
 	sudo apt -my install build-essential gparted vim curl file zsh git mc
-	sudo apt -my install freeglut3 gawk
+	sudo apt -my install freeglut3 gawk mesa-utils
 	sudo apt -my install p7zip-full figlet jq ansiweather exfat-fuse exfat-utils htop 
 	sudo apt -my install libdc1394-25 libraw1394-11
 	sudo apt -my install code snapd synaptic
@@ -200,7 +200,7 @@ if [ -f $(which git) ]; then
 	git config --global init.defaultBranch main
 	git config --global core.autocrlf input
 	git config --global core.eol lf
-	git config --global config.pull ff.only
+	git config --global pull.ff only
 	git config --global --replace-all alias.last 'log -1 HEAD'
 	git config --global --replace-all alias.unstage 'reset HEAD --'
 	git config --global --replace-all alias.history 'log -p --'
