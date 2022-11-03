@@ -412,9 +412,7 @@ function updateElvish () {
 	rm -rf elvish-HEAD*
 	tos='linux'; [[ $PLATFORM = "Darwin" ]] && tos='darwin'
 	tpr='amd64'; 
-	if [[ $(uname -m) = 'arm64' ]]; then
-		tpr='arm64'
-	elif [[ $(uname -m) = 'aarch64' ]]; then
+	if [[ $(uname -m) = 'arm64' || $(uname -m) = 'aarch64' ]]; then
 		tpr='arm64'
 	fi
 	printf "\nElvish download: OS = ${tos} | Processor = ${tpr}\n"

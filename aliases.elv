@@ -180,7 +180,8 @@ edit:add-var updateElvish~ {
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
 	var os = 'linux'; if (is-macos) { set os = 'darwin' }
-	var pr = 'amd64'; if (eq (uname -m) 'aarch64') { set pr = 'aarch64'}
+	var pr = 'amd64'; 
+	if (or (eq (uname -m) 'arm64') (eq (uname -m) 'aarch64')) { set pr = 'arm64'}
 	curl -C - -O 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$os'-'$pr'/elvish-HEAD.tar.gz'
 	tar xvf elvish-HEAD.tar.gz
 	chmod +x elvish-HEAD
