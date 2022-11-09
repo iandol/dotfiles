@@ -22,7 +22,7 @@ set edit:abbr['>so'] = '2>&1'
 # set edit:small-word-abbr['ls'] = 'ls -GF'
 
 ################################################ Aliases
-echo (styled "…loading command aliases…" bold italic white bg-blue)
+echo (styled "…loading command aliases…" bold italic white)
 
 if ( is-macos ) {
 	edit:add-var lls~ {|@in| e:ls -alFGhtr@ $@in }

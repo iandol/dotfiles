@@ -92,14 +92,14 @@ set-env XDG_CONFIG_HOME $E:HOME"/.config"
 set-env XDG_DATA_HOME $E:HOME"/.local/share"
 set-env DF $E:HOME"/.dotfiles"
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
-echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white bg-blue)
+echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white)
 if (is-macos) {
 	if (is-path /Applications/MATLAB/MATLAB_Runtime/v912/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v912/ }
 	if (is-path /usr/local/Cellar/openjdk/19) { set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
 }
 if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
-if-external carapace { eval (carapace _carapace elvish | slurp) }
+if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…  " bold italic white) }
 python:deactivate
 
 ############################################################ Aliases
@@ -111,20 +111,20 @@ use aliases
 
 ############################################################ setup brew
 if ( and (is-linux) (is-path /home/linuxbrew/.linuxbrew/bin/) ) {
-	echo (styled "…configuring "$platform:os" brew…\n" bold italic bg-blue)
+	echo (styled "…configuring "$platform:os" brew… " bold italic white)
 	prepend-to-path /home/linuxbrew/.linuxbrew/bin/
 	prepend-to-path /home/linuxbrew/.linuxbrew/sbin/
 	set-env MANPATH '/usr/local/share/man:'$E:MANPATH
 	set-env INFOPATH '/usr/local/share/info:'$E:INFOPATH
 } elif ( and (is-macos) (is-path /usr/local/Homebrew/bin) ) {
-	echo (styled "…configuring "$platform:os" brew…\n" bold italic white bg-blue)
+	echo (styled "…configuring "$platform:os" brew… " bold italic white)
 	set-env HOMEBREW_PREFIX '/usr/local'
 	set-env HOMEBREW_CELLAR '/usr/local/Cellar'
 	set-env HOMEBREW_REPOSITORY '/usr/local/Homebrew'
 	set-env MANPATH '/usr/local/share/man:'$E:MANPATH
 	set-env INFOPATH '/usr/local/share/info:'$E:INFOPATH
 } elif ( and (is-macos) (is-path /opt/homebrew/bin ) ) {
-	echo (styled "…configuring "$platform:os" on Apple Silicon brew…\n" bold italic white bg-blue)
+	echo (styled "…configuring "$platform:os" on Apple Silicon brew… " bold italic white)
 	set-env HOMEBREW_PREFIX '/opt/homebrew'
 	set-env HOMEBREW_CELLAR '/opt/homebrew/Cellar'
 	set-env HOMEBREW_REPOSITORY '/opt/homebrew'
