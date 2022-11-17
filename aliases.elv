@@ -196,32 +196,44 @@ edit:add-var updateFFmpeg~ {
 	var tmpdir = (path:temp-dir)
 	var lver rver lverp rverp = '' '' '' ''
 	cd $tmpdir
-	if-external ffmpeg { set lver = (ffmpeg -version | grep -owE 'N-\d+-[^-]+') }
-	if-external ffplay { set lverp = (ffplay -version | grep -owE 'N-\d+-[^-]+') }
-	var rver = "N-"(curl -s https://evermeet.cx/ffmpeg/info/ffmpeg/snapshot | jq -r '.version')
-	var rverp = "N-"(curl -s https://evermeet.cx/ffplay/info/ffplay/snapshot | jq -r '.version')
-	echo "\n===FFMPEG UPDATE===\nLocal: "$lver" & Remote: "$rver
-	if (not (eq $lver $rver)) {
+	if-external ffmpeg { set lver = (ffmpeg -version | grep -owE 'N-\d+-[^- ]+') }
+	if-external ffplay { set lverp = (ffplay -version | grep -owE 'N-\d+-[^- ]+') }
+	if (eq (uname -m) 'arm64') {
 		echo "\tDownloading new ffmpeg:"
-		curl -JL --output ff.7z https://evermeet.cx/ffmpeg/get
-		7z -y -o$E:HOME/bin/ e ff.7z
-		if (is-path $E:HOME"/Library/Application Support/FFmpegTools") {
-			cp -f -v ~/bin/ffmpeg $E:HOME"/Library/Application Support/FFmpegTools/"
+		curl -JL --output ff.zip https://ffmpeg.martin-riedl.de/redirect/latest/macos/arm64/snapshot/ffmpeg.zip
+		unzip -o ff.zip -d $E:HOME/bin/
+		curl -JL --output fp.zip https://ffmpeg.martin-riedl.de/redirect/latest/macos/arm64/snapshot/ffplay.zip
+		unzip -o fp.zip -d $E:HOME/bin/
+		if-external ffmpeg { set rver = (ffmpeg -version | grep -owE 'N-\d+-[^- ]+') }
+		if-external ffplay { set rverp = (ffplay -version | grep -owE 'N-\d+-[^- ]+') }
+		echo "\n===FFMPEG UPDATE===\nOld: "$lver" & New: "$rver
+		echo "\n===FFPLAY UPDATE===\nOld: "$lverp" & New: "$rverp
+	} else {
+		var rver = "N-"(curl -s https://evermeet.cx/ffmpeg/info/ffmpeg/snapshot | jq -r '.version')
+		var rverp = "N-"(curl -s https://evermeet.cx/ffplay/info/ffplay/snapshot | jq -r '.version')
+		echo "\n===FFMPEG UPDATE===\nLocal: "$lver" & Remote: "$rver
+		if (not (eq $lver $rver)) {
+			echo "\tDownloading new ffmpeg:"
+			curl -JL --output ff.7z https://evermeet.cx/ffmpeg/get
+			7z -y -o$E:HOME/bin/ e ff.7z
+			if (is-path $E:HOME"/Library/Application Support/FFmpegTools") {
+				cp -f -v ~/bin/ffmpeg $E:HOME"/Library/Application Support/FFmpegTools/"
+			}
+			rm ff.7z
+			ffmpeg -version
+		} else {
+			echo "\tNo need to update ffmpeg…"
 		}
-		rm ff.7z
-		ffmpeg -version
-	} else {
-		echo "\tNo need to update ffmpeg…"
-	}
-	echo "\n===FFPLAY UPDATE===\nLocal: "$lverp" & Remote: "$rverp
-	if (not (eq $lverp $rverp)) {
-		echo "\tDownloading new ffplay:"
-		curl -JL --output fp.7z https://evermeet.cx/ffmpeg/get/ffplay
-		7z -y -o$E:HOME/bin/ e fp.7z
-		rm fp.7z
-		ffplay -version
-	} else {
-		echo "\tNo need to update ffplay"
+		echo "\n===FFPLAY UPDATE===\nLocal: "$lverp" & Remote: "$rverp
+		if (not (eq $lverp $rverp)) {
+			echo "\tDownloading new ffplay:"
+			curl -JL --output fp.7z https://evermeet.cx/ffmpeg/get/ffplay
+			7z -y -o$E:HOME/bin/ e fp.7z
+			rm fp.7z
+			ffplay -version
+		} else {
+			echo "\tNo need to update ffplay"
+		}
 	}
 	cd $olddir
 	rm -rf $tmpdir

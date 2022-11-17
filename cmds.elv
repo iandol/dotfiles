@@ -25,7 +25,7 @@ fn is-win { eq $platform:os 'windows' }
 
 ################################################ Utils
 fn if-external { |prog lambda|
-	if (has-external $prog) { try { $lambda } catch e { print "\n---> Could't run: "; pprint $lambda[def]; pprint $e[reason][content] } }
+	if (has-external $prog) { try { $lambda } catch e { print "\n---> Could't run: "; pprint $lambda[def]; pprint $e[reason] } }
 }
 fn is-path { |p|
 	path:is-dir &follow-symlink $p

@@ -32,6 +32,7 @@ let &t_ZR="\e[23m"
 call plug#begin()
 	Plug 'tpope/vim-sensible'
 	Plug 'itchyny/lightline.vim'
+	Plug 'lambdalisue/suda.vim'
 	Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 	Plug 'dmix/elvish.vim', { 'for': 'elvish'}
 	Plug 'vim-pandoc/vim-pandoc'
