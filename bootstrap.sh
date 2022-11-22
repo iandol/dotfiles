@@ -23,7 +23,7 @@ if [ $PLATFORM = "Darwin" ]; then
 		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 		printf 'Homebrew now installed...\n'
 	fi
-	printf 'Added Caskroom fonts to Homebrew...\n'
+	printf 'Add Caskroom fonts to Homebrew...\n'
 	brew tap homebrew/cask-fonts
 	#make sure our minimum packages are installed
 	if [ -e $(which brew) ]; then
@@ -31,6 +31,8 @@ if [ $PLATFORM = "Darwin" ]; then
 		brew install bat p7zip ruby-build rbenv pyenv zsh neovim git figlet jq
 		brew install fzf prettyping ansiweather media-info starship tmux 
 		brew install diff-so-fancy mosh pandoc pandoc-crossref multimarkdown libusb exodriver youtube-dl
+		brew tap rsteube/tap
+		brew install carapace
 		#cask fonts
 		brew install font-fantasque-sans-mono font-fira-code font-jetbrains-mono \
 		font-cascadia-code font-libertinus font-alegreya font-alegreya-sans
@@ -55,10 +57,11 @@ if [ $PLATFORM = "Darwin" ]; then
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
-	sudo apt -my install build-essential zsh git gparted neovim curl file mc
-	sudo apt -my install freeglut3 gawk mesa-utils
-	sudo apt -my install p7zip-full p7zip-rar figlet jq ansiweather exfat-fuse exfat-utils htop 
+	sudo apt -my install build-essential zsh git gparted vim curl file mc
+	sudo apt -my install freeglut3 gawk mesa-utils exfatprogs
+	sudo apt -my install p7zip-full p7zip-rar figlet jq ansiweather htop 
 	sudo apt -my install libunrar5 libdc1394-25 libraw1394-11
+	sudo apt -my install synaptic
 	
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
@@ -70,14 +73,17 @@ elif [ $PLATFORM = "Linux" ]; then
 	fi
 	if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping
+		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping starship httping
+		brew tap rsteube/tap
+		brew install carapace
 		brew tap linuxbrew/fonts
 		brew install font-fantasque-sans-mono font-fira-code \
 		font-jetbrains-mono font-cascadia-code font-libertinus 
-		brew install --HEAD font-source-sans-3
+		#brew install --HEAD font-source-sans-3
 		sudo ln -s /home/linuxbrew/.linuxbrew/share/fonts /usr/local/share/fonts/
 		sudo fc-cache -fv
 	fi
+	sudo snap install code arduino rpi-imager obs-studio
 elif [ $PLATFORM = "LinuxRPi" ]; then
 	printf 'Assume we are setting up a Raspberry Pi machine\n'
 	#make sure our minimum packages are installed
