@@ -111,7 +111,7 @@ edit:add-var installTeX~ {
 	titling titlesec preprint layouts glossaries tabulary soul xargs todonotes ^
 	mfirstuc xfor wallpaper datatool substr adjustbox collectbox ^
 	sttools wrapfig footnotebackref fvextra zref ^
-	libertinus libertsinus-fonts libertinus-otf threeparttable ^
+	libertinus libertinus-fonts libertinus-otf threeparttable ^
 	elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex ^
 	stackengine xltabular booktabs orcidlink ^
 	ltablex cleveref makecell threeparttablex tabu multirow ^
@@ -182,10 +182,11 @@ edit:add-var updateElvish~ {
 	var os = 'linux'; if (is-macos) { set os = 'darwin' }
 	var pr = 'amd64'; 
 	if (or (eq (uname -m) 'arm64') (eq (uname -m) 'aarch64')) { set pr = 'arm64'}
+	echo "\n===ELVISH===\nOS: "$os" & Arch: "$pr
 	curl -C - -O 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$os'-'$pr'/elvish-HEAD.tar.gz'
 	tar xvf elvish-HEAD.tar.gz
 	chmod +x elvish-HEAD
-	sudo cp elvish-HEAD /usr/local/bin/elvish
+	sudo mv -vf elvish-HEAD /usr/local/bin/elvish
 	cd $olddir
 	rm -rf $tmpdir
 	if-external elvish { elvish -version }
@@ -199,7 +200,7 @@ edit:add-var updateFFmpeg~ {
 	if-external ffmpeg { set lver = (ffmpeg -version | grep -owE 'N-\d+-[^- ]+') }
 	if-external ffplay { set lverp = (ffplay -version | grep -owE 'N-\d+-[^- ]+') }
 	if (eq (uname -m) 'arm64') {
-		echo "\tDownloading new ffmpeg:"
+		echo "\tDownloading ARM64 ffmpeg:"
 		curl -JL --output ff.zip https://ffmpeg.martin-riedl.de/redirect/latest/macos/arm64/snapshot/ffmpeg.zip
 		unzip -o ff.zip -d $E:HOME/bin/
 		curl -JL --output fp.zip https://ffmpeg.martin-riedl.de/redirect/latest/macos/arm64/snapshot/ffplay.zip

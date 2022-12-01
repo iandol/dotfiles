@@ -28,9 +28,11 @@ if [ $PLATFORM = "Darwin" ]; then
 	#make sure our minimum packages are installed
 	if [ -e $(which brew) ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install bat p7zip ruby-build rbenv pyenv zsh neovim git figlet jq
-		brew install fzf prettyping ansiweather media-info starship tmux 
-		brew install diff-so-fancy mosh pandoc pandoc-crossref multimarkdown libusb exodriver youtube-dl
+		brew install git zsh bat p7zip ruby-build rbenv pyenv
+		brew install starship procs ripgrep neovim jq figlet
+		brew install fzf prettyping ansiweather media-info tmux 
+		brew install diff-so-fancy mosh pandoc pandoc-crossref 
+		brew install multimarkdown libusb exodriver youtube-dl
 		brew tap rsteube/tap
 		brew install carapace
 		#cask fonts
@@ -43,8 +45,8 @@ if [ $PLATFORM = "Darwin" ]; then
 		if [ $ans == 'y' ]; then
 			#cask apps
 			brew install alfred basictex bettertouchtool betterzip bitwarden
-			brew install bookends calibre visual-studio-code
-			brew install deckset ff-works forklift fsnotes hex-fiend
+			brew install bookends calibre deckset visual-studio-code
+			brew install ff-works forklift fsnotes hex-fiend
 			brew install iina imageoptim kitty knockknock launchcontrol mpv
 			brew install prince proxyman scrivener suspicious-package tex-live-utility textmate
 			brew install zerotier-one

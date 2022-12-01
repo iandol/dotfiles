@@ -100,6 +100,7 @@ if (is-macos) {
 if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…  " bold italic white) }
+if-external procs { eval (procs --completion-out elvish | slurp ) }
 python:deactivate
 
 ############################################################ Aliases
