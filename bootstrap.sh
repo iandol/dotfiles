@@ -31,7 +31,7 @@ if [ $PLATFORM = "Darwin" ]; then
 		brew install git zsh bat p7zip ruby-build rbenv pyenv
 		brew install starship procs ripgrep neovim jq figlet
 		brew install fzf prettyping ansiweather media-info tmux 
-		brew install diff-so-fancy mosh pandoc pandoc-crossref 
+		brew install less git-delta diff-so-fancy mosh pandoc pandoc-crossref 
 		brew install multimarkdown libusb exodriver youtube-dl
 		brew tap rsteube/tap
 		brew install carapace
@@ -75,12 +75,14 @@ elif [ $PLATFORM = "Linux" ]; then
 	fi
 	if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install gcc diff-so-fancy bat rbenv ruby-build fzf prettyping starship httping
+		brew install gcc git-delta diff-so-fancy bat rbenv ruby-build fzf 
+		brew install procs ripgrep prettyping starship httping
 		brew tap rsteube/tap
 		brew install carapace
 		brew tap linuxbrew/fonts
 		brew install font-fantasque-sans-mono font-fira-code \
-		font-jetbrains-mono font-cascadia-code font-libertinus 
+		font-jetbrains-mono font-cascadia-code font-libertinus \
+		font-alegreya font-alegreya-sans
 		#brew install --HEAD font-source-sans-3
 		sudo ln -s /home/linuxbrew/.linuxbrew/share/fonts /usr/local/share/fonts/
 		sudo fc-cache -fv
@@ -225,8 +227,15 @@ if [ -f $(which git) ]; then
 	else
 		git config --global --replace-all credential.helper 'cache --timeout=86400'
 	fi
-	git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
-	git config --global interactive.diffFilter "diff-so-fancy --patch"
+	if [ -f $(which delta) ]; then
+		git config --global core.pager "delta --line-numbers"
+		git config --global interactive.diffFilter "delta --color-only --features=interactive"
+		git config --global delta.features "decorations"
+		git config --global delta.navigate "true"
+	elif [ -f $(which diff-so-fancy) ]; then
+		git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+		git config --global interactive.diffFilter "diff-so-fancy --patch"
+	fi
 	git config --global color.ui true
 	git config --global color.diff-highlight.oldNormal    "red bold"
 	git config --global color.diff-highlight.oldHighlight "red bold 52"
