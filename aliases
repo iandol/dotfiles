@@ -336,7 +336,7 @@ lips() {
 function update() {
 	printf "\n=====>>> Start Update @ \e[93m$(date)\e[m <<<=====\n"
 	myolddir=$(pwd)
-	ul=(.dotfiles Code/opticka Code/Titta
+	ul=(.dotfiles Code/opticka Code/octicka Code/Titta
 		Code/AfterImage Code/isoluminant Code/Pinna Code/spikes
 		Code/Psychtoolbox-3 Code/fieldtrip
 		Code/Training Code/Palamedes 

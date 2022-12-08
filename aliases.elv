@@ -122,7 +122,7 @@ edit:add-var update~ {
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 	var olddir = (pwd)
 	var oldbranch = ''
-	var ul = [.dotfiles Code/opticka Code/Titta Code/AfterImage Code/isoluminant Code/Pinna Code/spikes ^
+	var ul = [.dotfiles Code/opticka Code/octicka Code/Titta Code/AfterImage Code/isoluminant Code/Pinna Code/spikes ^
 	Code/Psychtoolbox-3 Code/fieldtrip Code/Training Code/Palamedes Code/Mymou ^
 	Documents/MATLAB/gramm Code/scrivomatic Code/dotpandoc Code/bookends-tools ^
 	Code/gears Code/pandocomatic Code/paru]
