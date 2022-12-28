@@ -24,6 +24,7 @@ set edit:abbr['>so'] = '2>&1'
 ################################################ Aliases
 echo (styled "…loading command aliases…" bold italic white)
 
+edit:add-var help~ {|@in| doc:show $@in }
 if ( is-macos ) {
 	edit:add-var lls~ {|@in| e:ls -alFGhtr@ $@in }
 	edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
@@ -73,8 +74,15 @@ edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" 
 edit:add-var kittylight~ { sed -i '' 's/background_tint 0.755/background_tint 0.955/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 edit:add-var kittydark~ { sed -i '' 's/background_tint 0.955/background_tint 0.755/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 
-edit:add-var startarp~ { sudo launchctl start com.sangfor.EasyMonitor; launchctl start com.sangfor.ECAgentProxy; open "https://portal.arp.cn" }
-edit:add-var stoparp~ { sudo launchctl stop com.sangfor.EasyMonitor; launchctl stop com.sangfor.ECAgentProxy; }
+edit:add-var startarp~ { 
+	sudo launchctl start /Library/LaunchDaemons/com.sangfor.EasyMonitor.plist
+	launchctl start /Library/LaunchAgents/com.sangfor.ECAgentProxy.plist
+	open "https://portal.arp.cn"
+}
+edit:add-var stoparp~ { 
+	sudo launchctl stop /Library/LaunchDaemons/com.sangfor.EasyMonitor.plist
+	launchctl stop /Library/LaunchAgents/com.sangfor.ECAgentProxy.plist
+}
 
 edit:add-var setproxy~ { |@argin|
 	var @plist = {http,https,ftp,all}_proxy
@@ -115,7 +123,7 @@ edit:add-var installTeX~ {
 	elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex ^
 	stackengine xltabular booktabs orcidlink ^
 	ltablex cleveref makecell threeparttablex tabu multirow ^
-	changepage marginnote sidenotes environ fontawesome5
+	changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol
 }
 
 edit:add-var update~ {

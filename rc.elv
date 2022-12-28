@@ -52,6 +52,7 @@ set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:a
 ############################################################ Paths
 set paths = [
 	~/bin
+	/opt/homebrew/bin
 	/usr/local/bin
 	/usr/local/sbin
 	$@paths
