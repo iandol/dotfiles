@@ -98,6 +98,7 @@ if (is-macos) {
 	if (is-path /Applications/MATLAB/MATLAB_Runtime/v912/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v912/ }
 	if (is-path /usr/local/Cellar/openjdk/19) { set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
 }
+if-external vim { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…  " bold italic white) }

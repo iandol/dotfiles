@@ -218,7 +218,8 @@ alias fs="stat -f \"%z bytes\""
 alias rot13='tr a-zA-Z n-za-mN-ZA-M'
 
 # URL-encode strings
-alias urlencode='python -c "import sys, urllib as ul; print ul.quote_plus(sys.argv[1]);"'
+alias urlencode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))"'
+alias urldecode='python3 -c "import urllib.parse, sys; print(urllib.parse.unquote(sys.argv[1]))"'
 
 function ffmpeg-update() {
 	cd ~

@@ -5,6 +5,7 @@ use math
 use epm
 use platform
 use cmds
+use doc
 
 ################################################ Export Utils
 var if-external~ = $cmds:if-external~
@@ -44,7 +45,10 @@ if ( is-macos ) {
 }
 
 if-external bat { edit:add-var cat~ {|@in| e:bat $@in }}
-if-external python3 { edit:add-var urlencode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } }
+if-external python3 { 
+	edit:add-var urlencode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } 
+	edit:add-var urldecode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
+}
 if-external kitty { edit:add-var kssh~ {|@in| kitty +kitten ssh $@in } }
 if-external nvim { edit:add-var vi~ {|@in| nvim $@in }}
 
@@ -82,6 +86,24 @@ edit:add-var startarp~ {
 edit:add-var stoparp~ { 
 	sudo launchctl stop /Library/LaunchDaemons/com.sangfor.EasyMonitor.plist
 	launchctl stop /Library/LaunchAgents/com.sangfor.ECAgentProxy.plist
+}
+
+edit:add-var avahi-reset~ {
+	if ( is-linux) {
+		sudo systemctl stop avahi-daemon.socket
+		sudo systemctl stop avahi-daemon.service
+		sudo systemctl start avahi-daemon.socket
+		sudo systemctl start avahi-daemon.service
+		sudo systemctl status avahi-daemon.service
+	}
+}
+
+edit:add-var avahi-stop~ {
+	if ( is-linux) {
+		sudo systemctl stop avahi-daemon.socket
+		sudo systemctl stop avahi-daemon.service
+		sudo systemctl status avahi-daemon.service
+	}
 }
 
 edit:add-var setproxy~ { |@argin|
@@ -136,19 +158,19 @@ edit:add-var update~ {
 	Code/gears Code/pandocomatic Code/paru]
 	for x $ul {
 		if (is-path ~/$x/.git) {
-			cd ~/$x
+			tmp pwd = ~/$x
 			set oldbranch = (git branch --show-current)
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
 			echo (styled "\n--->>> Updating "(styled $x bold)":"$oldbranch"…\n" bg-blue)
 			for x $branches {
-				if (re:match '^(main|master|umaster)' $x) { git checkout $x }
+				if (re:match '^(main|master|umaster)' $x) { git checkout -q $x }
 			}
-			try { git fetch --all 2>/dev/null; git pull 2>/dev/null; git status } catch { echo "\t\t…couldn't pull!" }
+			try { git fetch -q --all 2>/dev/null; git pull -q 2>/dev/null; git status } catch { echo "\t\t…couldn't pull!" }
 			if (re:match 'upstream' (git remote | slurp)) {
 				print "\t\t---> Fetching upstream…"
 				try { git fetch -v upstream } catch { echo "\t…couldn't fetch upstream!" }
 			}
-			git checkout $oldbranch
+			git checkout -q $oldbranch 2>/dev/null
 		}
 	}
 	cd $olddir
@@ -160,11 +182,11 @@ edit:add-var update~ {
 	if (is-linux) {
 		echo (styled "\n\n---> Updating APT…\n" bold bg-red)
 		try {
-		sudo apt update
-		sudo apt autoremove
-		apt list --upgradable
-		if-external snap { sudo snap refresh }
-		if-external fwupdmgr { fwupdmgr get-upgrades }
+			sudo apt update
+			sudo apt autoremove
+			apt list --upgradable
+			if-external snap { sudo snap refresh }
+			if-external fwupdmgr { fwupdmgr get-upgrades }
 		} catch e {
 			echo "\t…couldn't update APT or Snap or FWUPDATE!"
 		}
