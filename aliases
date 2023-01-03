@@ -2,11 +2,11 @@
 export PLATFORM=$(uname -s)
 export PROC=$(uname -m)
 if [[ $PLATFORM = 'Darwin' ]]; then 
-	alias la="ls -alGhF"
-	alias las="ls -alGhFeLH"
-	alias ll="ls -alFGh"
-	alias lls="-alFGhtr@"
-	alias llm="ls -alFGh@"
+	alias la='ls -alGhF'
+	alias las='ls -alGhFeLH'
+	alias ll='ls -alFGh'
+	alias lls='-alFGhtr@'
+	alias llm='ls -alFGh@'
 	alias dir='ls -alfG'
 else
 	alias ls='ls --color=auto'
@@ -21,14 +21,14 @@ alias resetorigin='git fetch origin && git reset --hard origin/master && git cle
 alias resetupstream='git fetch upstream && git reset --hard upstream/master && git clean -f -d'
 alias untar='tar -zxvf '
 alias wget='wget -c '
-alias makepassword="openssl rand -base64 15"
+alias makepassword='openssl rand -base64 15'
 alias dir='ls -alfG'
 alias cls='clear; ls'
 alias l.='ls -d .[^.]*' #only show .dot files
-alias grep="grep --color=auto"
-alias gzip="gzip -9n" # set strongest compression level as ‘default’ for gzip
-alias ping="ping -c 5" # ping 5 times ‘by default’
-[[ -x $(which prettyping) ]] && alias ping="prettyping -c 5 --nolegend"
+alias grep='grep --color=auto'
+alias gzip='gzip -9n' # set strongest compression level as ‘default’ for gzip
+alias ping='ping -c 5' # ping 5 times ‘by default’
+[[ -x $(which prettyping) ]] && alias ping='prettyping -c 5 --nolegend'
 [[ -x $(which bat) ]] && alias cat='bat'
 # Enable aliases to be sudo’ed
 #alias sudo='sudo '

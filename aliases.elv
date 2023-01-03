@@ -5,7 +5,7 @@ use math
 use epm
 use platform
 use cmds
-use doc
+try { use doc } catch { }
 
 ################################################ Export Utils
 var if-external~ = $cmds:if-external~
