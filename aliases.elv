@@ -15,6 +15,7 @@ var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~
 var flatten~ = $cmds:flatten~
 
 ################################################ Abbreviations
+set edit:command-abbr['help'] = doc:show
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>so'] = '2>&1'
@@ -25,7 +26,6 @@ set edit:abbr['>so'] = '2>&1'
 ################################################ Aliases
 echo (styled "…loading command aliases…" bold italic white)
 
-edit:add-var help~ {|@in| doc:show $@in }
 if ( is-macos ) {
 	edit:add-var lls~ {|@in| e:ls -alFGhtr@ $@in }
 	edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
@@ -186,6 +186,7 @@ edit:add-var update~ {
 			sudo apt autoremove
 			apt list --upgradable
 			if-external snap { sudo snap refresh }
+			if-external flatpak { flatpak update }
 			if-external fwupdmgr { fwupdmgr get-upgrades }
 		} catch e {
 			echo "\t…couldn't update APT or Snap or FWUPDATE!"

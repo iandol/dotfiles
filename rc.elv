@@ -17,6 +17,7 @@ if (not (path:is-regular &follow-symlink ~/.config/elvish/lib/cmds.elv)) {
 use cmds
 #use readline-binding
 if $platform:is-unix { use unix; edit:add-var unix: $unix: }
+try { use doc } catch { }
 
 ############################################################ External modules
 epm:install &silent-if-installed ^
