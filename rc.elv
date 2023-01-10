@@ -21,12 +21,11 @@ try { use doc } catch { }
 
 ############################################################ External modules
 epm:install &silent-if-installed ^
+	github.com/iwoloschin/elvish-packages ^
 	github.com/zzamboni/elvish-modules ^
 	github.com/zzamboni/elvish-themes ^
 	github.com/zzamboni/elvish-completions ^
-	github.com/xiaq/edit.elv ^
-	github.com/iwoloschin/elvish-packages
-	#github.com/muesli/elvish-libs ^
+	github.com/xiaq/edit.elv 
 
 use github.com/zzamboni/elvish-modules/proxy
 use github.com/zzamboni/elvish-modules/bang-bang
@@ -53,7 +52,6 @@ set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:a
 ############################################################ Paths
 set paths = [
 	~/bin
-	/opt/homebrew/bin
 	/usr/local/bin
 	/usr/local/sbin
 	$@paths
@@ -63,7 +61,7 @@ var ppaths = [/Library/TeX/texbin /opt/local/bin
 each {|p| if (is-path $p) { prepend-to-path $p }} $ppaths
 var apaths = [/Library/Frameworks/GStreamer.framework/Commands]
 each {|p| if (is-path $p) { append-to-path $p }} $apaths
-each {|p| if (not (is-path $p)) { echo (styled "🥺—"$p" in $paths no longer exists…" bg-red) } } $paths
+#each {|p| if (not (is-path $p)) { echo (styled "🥺—"$p" in $paths no longer exists…" bg-red) } } $paths
 
 var releases = [R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a]
 var match = $false; var prefix; var suffix
@@ -114,28 +112,16 @@ if (not (is-file ~/.config/elvish/lib/aliases.elv)) {
 use aliases
 
 ############################################################ setup brew
-if ( and (is-linux) (is-path /home/linuxbrew/.linuxbrew/bin/) ) {
-	echo (styled "…configuring "$platform:os" brew… " bold italic white)
-	prepend-to-path /home/linuxbrew/.linuxbrew/bin/
-	prepend-to-path /home/linuxbrew/.linuxbrew/sbin/
-	set-env MANPATH '/usr/local/share/man:'$E:MANPATH
-	set-env INFOPATH '/usr/local/share/info:'$E:INFOPATH
-} elif ( and (is-macos) (is-path /usr/local/Homebrew/bin) ) {
-	echo (styled "…configuring "$platform:os" brew… " bold italic white)
-	set-env HOMEBREW_PREFIX '/usr/local'
-	set-env HOMEBREW_CELLAR '/usr/local/Cellar'
-	set-env HOMEBREW_REPOSITORY '/usr/local/Homebrew'
-	set-env MANPATH '/usr/local/share/man:'$E:MANPATH
-	set-env INFOPATH '/usr/local/share/info:'$E:INFOPATH
-} elif ( and (is-macos) (is-path /opt/homebrew/bin ) ) {
-	echo (styled "…configuring "$platform:os" on Apple Silicon brew… " bold italic white)
-	set-env HOMEBREW_PREFIX '/opt/homebrew'
-	set-env HOMEBREW_CELLAR '/opt/homebrew/Cellar'
-	set-env HOMEBREW_REPOSITORY '/opt/homebrew'
-	set-env MANPATH $E:HOMEBREW_PREFIX'/share/man:'$E:MANPATH
-	set-env INFOPATH $E:HOMEBREW_PREFIX'/share/info:'$E:INFOPATH
-	prepend-to-path $E:HOMEBREW_PREFIX'/bin'
-	prepend-to-path $E:HOMEBREW_PREFIX'/sbin'
+if-external brew {
+	var pfix = (brew --prefix)
+	echo (styled "…configuring "$platform:os"-"$platform:arch" brew… " bold italic white)
+	set-env HOMEBREW_PREFIX $pfix
+	set-env HOMEBREW_CELLAR $pfix'/Cellar'
+	set-env HOMEBREW_REPOSITORY $pfix'/Homebrew'
+	set-env MANPATH $pfix'/share/man:'$E:MANPATH
+	set-env INFOPATH $pfix'/share/info:'$E:INFOPATH
+	prepend-to-path $pfix'/bin'
+	prepend-to-path $pfix'/sbin'
 }
 
 ############################################################ Theme

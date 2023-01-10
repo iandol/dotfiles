@@ -31,13 +31,11 @@ autoload run-help # use ESC + H to bring up help, see https://man.archlinux.org/
 alias help=run-help
 
 #------------------------------------PATHS/ENVS ETC.
-([[ -f $(which brew) ]] && [[ -d "$(brew --prefix)/share/zsh/site-functions/" ]]) && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
+([[ -x $(which brew) ]] && [[ -d "$(brew --prefix)/share/zsh/site-functions/" ]]) && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
 
+ul=("R2023b" "R2023a" "R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
+match=0
 if [[ $PLATFORM == 'Darwin' ]]; then
-#	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
-#	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	ul=("R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
-	match=0
 	for x in $ul; do
 		if ( [[ $match == 0 ]] && [[ -d "/Applications/MATLAB_${x}.app/bin" ]] ); then
 			match=1
@@ -46,14 +44,11 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 			ln -sf "/Applications/MATLAB_${x}.app/bin/maci64/mlint" ~/bin/mlint # matlab
 		fi
 	done
-	[[ -d "/Applications/Araxis Merge.app/Contents/Utilities" ]] && path+="/Applications/Araxis Merge.app/Contents/Utilities"
+	#[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
+	#[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
 	[[ -d "/Library/TeX/texbin" ]] && path+="/Library/TeX/texbin" # MacTeX
 	[[ -d "/Library/Frameworks/GStreamer.framework/Commands" ]] && path+="/Library/Frameworks/GStreamer.framework/Commands" # GStreamer
 else
-	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/" # Linux Java
-	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
-	ul=("R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
-	match=0
 	for x in $ul; do
 		if ( [[ $match == 0 ]] && [[ -d "/usr/local/MATLAB/${x}/bin" ]]); then
 			match=1
@@ -62,7 +57,8 @@ else
 			ln -sf "/usr/local/MATLAB/${x}/bin/glnxa64/mlint" ~/bin/mlint &> /dev/null # matlab
 		fi
 	done
-	[[ -d "/home/linuxbrew/.linuxbrew" ]] && path=("/home/linuxbrew/.linuxbrew/bin" "/home/linuxbrew/.linuxbrew/sbin" $path)
+	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/" # Linux Java
+	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
 fi
 
 if [[ -d "$HOME/miniconda3/" ]]; then
@@ -87,6 +83,7 @@ fi
 [[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
+[[ -x $(which brew) ]] && eval "$(brew shellenv)"
 export PATH
 
 #------------------------------------FINALISE OTHERS
