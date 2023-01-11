@@ -56,10 +56,17 @@ set paths = [
 	/usr/local/sbin
 	$@paths
 ]
-var ppaths = [/Library/TeX/texbin /opt/local/bin 
-	/usr/local/opt/python@3.10/libexec/bin ~/.rbenv/shims ~/.pyenv/shims]
+var ppaths = [
+	/Library/TeX/texbin
+	/opt/local/bin
+	/usr/local/opt/python@3.10/libexec/bin
+	~/.rbenv/shims
+	~/.pyenv/shims
+]
+var apaths = [
+	/Library/Frameworks/GStreamer.framework/Commands
+]
 each {|p| if (is-path $p) { prepend-to-path $p }} $ppaths
-var apaths = [/Library/Frameworks/GStreamer.framework/Commands]
 each {|p| if (is-path $p) { append-to-path $p }} $apaths
 #each {|p| if (not (is-path $p)) { echo (styled "🥺—"$p" in $paths no longer exists…" bg-red) } } $paths
 
@@ -73,7 +80,7 @@ if (is-macos) {
 each {|p|
 	if (and (eq $match $false) (is-path $prefix$p$suffix)) {
 		set match = $true
-		append-to-path $prefix$p$suffix
+		prepend-to-path $prefix$p$suffix
 		set-env MATLAB_EXECUTABLE $prefix$p$suffix"/matlab" # matlab
 		if (is-macos) { ln -sf $prefix$p$suffix"/maci64/mlint" ~/bin/mlint }
 	}
@@ -83,8 +90,8 @@ if (is-path ~/.venv/) { set python:virtualenv-directory = $E:HOME'/.venv' }
 ############################################################ Key bindings
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
 set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
-#set edit:insert:binding[Ctrl-l] = { $edit:move-dot-eol~; $edit:kill-line-left~ }
 set edit:insert:binding[Ctrl-b] = $cmds:external_edit_command~
+#set edit:insert:binding[Ctrl-l] = { $edit:move-dot-eol~; $edit:kill-line-left~ }
 
 ############################################################ general ENV
 set-env PAPERSIZE A4

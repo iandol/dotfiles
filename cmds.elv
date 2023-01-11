@@ -22,6 +22,7 @@ fn is-nil {|x| eq $x $nil }
 fn is-macos { eq $platform:os 'darwin' }
 fn is-linux { eq $platform:os 'linux' }
 fn is-win { eq $platform:os 'windows' }
+fn is-arm64 { or (eq (uname -m) 'arm64') (eq (uname -m) 'aarch64') }
 
 ################################################ Utils
 fn if-external { |prog lambda|
