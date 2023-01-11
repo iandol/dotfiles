@@ -210,11 +210,8 @@ edit:add-var updateElvish~ {
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
-	var os = 'linux'; if (is-macos) { set os = 'darwin' }
-	var pr = 'amd64'; 
-	if (or (eq (uname -m) 'arm64') (eq (uname -m) 'aarch64')) { set pr = 'arm64'}
-	echo "\n===ELVISH===\nOS: "$os" & Arch: "$pr
-	curl -C - -O 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$os'-'$pr'/elvish-HEAD.tar.gz'
+	echo (styled "\n===ELVISH===\nOS: "$platform:os" & Arch: "$platform:arch bold yellow)
+	curl -C - -O 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz'
 	tar xvf elvish-HEAD.tar.gz
 	chmod +x elvish-HEAD
 	sudo mv -vf elvish-HEAD /usr/local/bin/elvish
@@ -226,47 +223,23 @@ edit:add-var updateElvish~ {
 edit:add-var updateFFmpeg~ {
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
-	var lver rver lverp rverp = '' '' '' ''
 	cd $tmpdir
-	if-external ffmpeg { set lver = (ffmpeg -version | grep -owE 'N-\d+-[^- ]+') }
-	if-external ffplay { set lverp = (ffplay -version | grep -owE 'N-\d+-[^- ]+') }
-	if (eq (uname -m) 'arm64') {
-		echo "\tDownloading ARM64 ffmpeg:"
-		curl -JL --output ff.zip https://ffmpeg.martin-riedl.de/redirect/latest/macos/arm64/snapshot/ffmpeg.zip
-		unzip -o ff.zip -d $E:HOME/bin/
-		curl -JL --output fp.zip https://ffmpeg.martin-riedl.de/redirect/latest/macos/arm64/snapshot/ffplay.zip
-		unzip -o fp.zip -d $E:HOME/bin/
-		if-external ffmpeg { set rver = (ffmpeg -version | grep -owE 'N-\d+-[^- ]+') }
-		if-external ffplay { set rverp = (ffplay -version | grep -owE 'N-\d+-[^- ]+') }
-		echo "\n===FFMPEG UPDATE===\nOld: "$lver" & New: "$rver
-		echo "\n===FFPLAY UPDATE===\nOld: "$lverp" & New: "$rverp
-	} else {
-		var rver = "N-"(curl -s https://evermeet.cx/ffmpeg/info/ffmpeg/snapshot | jq -r '.version')
-		var rverp = "N-"(curl -s https://evermeet.cx/ffplay/info/ffplay/snapshot | jq -r '.version')
-		echo "\n===FFMPEG UPDATE===\nLocal: "$lver" & Remote: "$rver
-		if (not (eq $lver $rver)) {
-			echo "\tDownloading new ffmpeg:"
-			curl -JL --output ff.7z https://evermeet.cx/ffmpeg/get
-			7z -y -o$E:HOME/bin/ e ff.7z
-			if (is-path $E:HOME"/Library/Application Support/FFmpegTools") {
-				cp -f -v ~/bin/ffmpeg $E:HOME"/Library/Application Support/FFmpegTools/"
-			}
-			rm ff.7z
-			ffmpeg -version
-		} else {
-			echo "\tNo need to update ffmpeg…"
-		}
-		echo "\n===FFPLAY UPDATE===\nLocal: "$lverp" & Remote: "$rverp
-		if (not (eq $lverp $rverp)) {
-			echo "\tDownloading new ffplay:"
-			curl -JL --output fp.7z https://evermeet.cx/ffmpeg/get/ffplay
-			7z -y -o$E:HOME/bin/ e fp.7z
-			rm fp.7z
-			ffplay -version
-		} else {
-			echo "\tNo need to update ffplay"
-		}
+	var lv rv lvp rvp lvpp rvpp = '' '' '' '' '' ''
+	if-external ffmpeg { set lv = (ffmpeg -version | grep -owE 'version [^ :]+') }
+	if-external ffplay { set lvp = (ffplay -version | grep -owE 'version [^ :]+') }
+	if-external ffprobe { set lvpp = (ffprobe -version | grep -owE 'version [^ :]+') }
+	echo (styled "\n===FFMPEG===\nOS: "$platform:os" & Arch: "$platform:arch bold yellow)
+	var tnames = [ffmpeg ffplay ffprobe]
+	for x $tnames {
+		wget -O $x.zip 'https://ffmpeg.martin-riedl.de/redirect/latest/'$platform:os'/'$platform:arch'/snapshot/'$x'.zip'
+		unzip -o $x.zip -d $E:HOME/bin/
 	}
+	if-external ffmpeg { set rv = (ffmpeg -version | grep -owE 'version [^ :]+') }
+	if-external ffplay { set rvp = (ffplay -version | grep -owE 'version [^ :]+') }
+	if-external ffprobe { set rvpp = (ffprobe -version | grep -owE 'version [^ :]+') }
+	echo "===FFMPEG UPDATE===\nOld: "$lv" & New: "$rv
+	echo "===FFPLAY UPDATE===\nOld: "$lvp" & New: "$rvp
+	echo "===FFPROBE UPDATE===\nOld: "$lvpp" & New: "$rvpp
 	cd $olddir
 	rm -rf $tmpdir
 }
