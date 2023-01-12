@@ -31,7 +31,7 @@ if ( is-macos ) {
 	edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
 	edit:add-var ll~ {|@in| e:ls -alFGh $@in }
 	edit:add-var ls~ {|@in| e:ls -GF $@in }
-	edit:add-var manpdf~ {|@cmds|
+	edit:add-var mano~ {|@cmds|
 		each {|c| man -t $c | open -f -a /System/Applications/Preview.app } $cmds
 	}
 	edit:add-var ql~ {|@in| e:qlmanage -p $@in }
@@ -42,6 +42,9 @@ if ( is-macos ) {
 } elif ( is-linux ) {
 	edit:add-var ls~ {|@in| e:ls --color -GhFLH $@in }
 	edit:add-var ll~ {|@in| e:ls --color -alFGh $@in }
+	edit:add-var mano~ {|@cmds|
+		each {|c| man -Tps $c | ps2pdf - | zathura - & } $cmds
+	}
 }
 
 if-external bat { edit:add-var cat~ {|@in| e:bat $@in }}

@@ -63,7 +63,7 @@ elif [ $PLATFORM = "Linux" ]; then
 	sudo apt -my install freeglut3 gawk mesa-utils exfatprogs
 	sudo apt -my install p7zip-full p7zip-rar figlet jq ansiweather htop 
 	sudo apt -my install libunrar5 libdc1394-25 libraw1394-11
-	sudo apt -my install synaptic
+	sudo apt -my install synaptic zathura
 	
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
@@ -93,7 +93,7 @@ elif [ $PLATFORM = "LinuxRPi" ]; then
 	#make sure our minimum packages are installed
 	sudo apt update
 	sudo apt -my install build-essential gparted vim curl file zsh git mc
-	sudo apt -my install freeglut3 gawk mesa-utils
+	sudo apt -my install freeglut3 gawk mesa-utils zathura
 	sudo apt -my install p7zip-full figlet jq ansiweather exfat-fuse exfat-utils htop 
 	sudo apt -my install libdc1394-25 libraw1394-11
 	sudo apt -my install code snapd synaptic
