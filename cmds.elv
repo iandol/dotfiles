@@ -40,6 +40,9 @@ fn append-to-path { |@path|
 fn prepend-to-path { |path|
 	set paths = [ $path $@paths ]
 }
+fn check-paths {
+	each {|p| if (not (is-path $p)) { echo (styled "🥺—"$p" in $paths no longer exists…" bg-red) } } $paths
+}
 fn newelves { 
 	var sep = "----------------------------"
 	curl "https://api.github.com/repos/elves/elvish/commits?per_page=8" |
@@ -142,21 +145,6 @@ fn rest    { |li| put $li[1:] }
 fn end     { |li| put $li[-1] }
 fn butlast { |li| put $li[:(dec (count $li))] }
 
-fn min2 { |a b|
-	if (< $a $b) {
-		put $a
-	} else {
-		put $b
-	}
-}
-
-fn max2 { |a b|
-	if (> $a $b) {
-		put $a
-	} else {
-		put $b
-	}
-}
 
 fn nth { |li n &not-found=$false|
 	if (and $not-found (> $n (count $li))) {

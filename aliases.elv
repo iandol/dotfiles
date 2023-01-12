@@ -81,12 +81,12 @@ edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" 
 edit:add-var kittylight~ { sed -i '' 's/background_tint 0.755/background_tint 0.955/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 edit:add-var kittydark~ { sed -i '' 's/background_tint 0.955/background_tint 0.755/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 
-edit:add-var startarp~ { 
+edit:add-var startarp~ {
 	sudo launchctl start /Library/LaunchDaemons/com.sangfor.EasyMonitor.plist
 	launchctl start /Library/LaunchAgents/com.sangfor.ECAgentProxy.plist
 	open "https://portal.arp.cn"
 }
-edit:add-var stoparp~ { 
+edit:add-var stoparp~ {
 	sudo launchctl stop /Library/LaunchDaemons/com.sangfor.EasyMonitor.plist
 	launchctl stop /Library/LaunchAgents/com.sangfor.ECAgentProxy.plist
 }
@@ -182,6 +182,7 @@ edit:add-var update~ {
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		try { brew update; brew outdated; brew upgrade; brew cleanup } catch { echo "\t\t …can't upgrade!"}
 	}
+	if (is-macos) { try { softwareupdate --list } catch { } }
 	if (is-linux) {
 		echo (styled "\n\n---> Updating APT…\n" bold bg-red)
 		try {

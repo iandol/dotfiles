@@ -44,6 +44,7 @@ var is-path~			= $cmds:is-path~
 var is-file~			= $cmds:is-file~
 var is-macos~			= $cmds:is-macos~
 var is-linux~			= $cmds:is-linux~
+var is-arm64~			= $cmds:is-arm64~
 var pya~				= $python:activate~
 var pyd~				= $python:deactivate~
 var pyl~				= $python:list-virtualenvs~
@@ -62,13 +63,14 @@ var ppaths = [
 	/usr/local/opt/python@3.10/libexec/bin
 	~/.rbenv/shims
 	~/.pyenv/shims
+	/opt/homebrew/bin
+	/home/linuxbrew/.linuxbrew/bin
 ]
 var apaths = [
 	/Library/Frameworks/GStreamer.framework/Commands
 ]
 each {|p| if (is-path $p) { prepend-to-path $p }} $ppaths
 each {|p| if (is-path $p) { append-to-path $p }} $apaths
-#each {|p| if (not (is-path $p)) { echo (styled "🥺—"$p" in $paths no longer exists…" bg-red) } } $paths
 
 var releases = [R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a]
 var match = $false; var prefix; var suffix
