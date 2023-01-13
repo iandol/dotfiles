@@ -11,8 +11,8 @@ flags:
     -b, --build: For LaTeX output, run latexmk
     -B, --buildclean: For LaTeX output, run latexmk and cleanup
     -d, --dry-run: Dry run.
-    -v, --verbose, --no-verbose: Verbose output.
-    -l, --log, --no-log: View log in Console.app.
+    -v, --verbose: Verbose output.
+    -l, --log: View log in Console.app.
     -h, --help: display this help and exit
 completion:
     positionalany: ["$files"]

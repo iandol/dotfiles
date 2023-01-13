@@ -11,9 +11,9 @@ flags:
     -v, --version: Version info.
     -h, --help: display help and exit
 completion:
+    positionalany: ["$files"]
     flag:
         input: ["$files"]
         output: ["$files"]
         data-dir: ["$directories"]
         config: ["$files"]
-    positionalany: ["$files"]
