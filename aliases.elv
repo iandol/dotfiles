@@ -39,12 +39,35 @@ if ( is-macos ) {
 	edit:add-var spotlighter~ {|@in| e:mdfind -onlyin (pwd) $@in }
 	edit:add-var dequarantine~ {|@in| e:xattr -v -d com.apple.quarantine $@in }
 	edit:add-var nitenite~ { e:exec pmset sleepnow }
+	edit:add-var startarp~ {
+		try { sudo launchctl start system/com.sangfor.EasyMonitor } catch { echo "EasyMonitor start error" }
+		try { launchctl start gui/501/com.sangfor.ECAgentProxy } catch { echo "ECAgentProxy start error" }
+		open "https://portal.arp.cn"
+	}
+	edit:add-var stoparp~ {
+		try { sudo launchctl stop system/com.sangfor.EasyMonitor } catch { echo "Can't stop EasyMonitor" }
+		try { launchctl stop gui/501/com.sangfor.ECAgentProxy } catch { echo "Can't stop ECAgentProxy" }
+	}
 } elif ( is-linux ) {
 	edit:add-var ls~ {|@in| e:ls --color -GhFLH $@in }
 	edit:add-var ll~ {|@in| e:ls --color -alFGh $@in }
 	edit:add-var mano~ {|@cmds|
 		each {|c| man -Tps $c | ps2pdf - | zathura - & } $cmds
 	}
+	edit:add-var avahi-reset~ {
+		sudo systemctl stop avahi-daemon.socket
+		sudo systemctl stop avahi-daemon.service
+		sudo systemctl start avahi-daemon.socket
+		sudo systemctl start avahi-daemon.service
+		sudo systemctl status avahi-daemon.service
+
+	}
+	edit:add-var avahi-stop~ {
+		sudo systemctl stop avahi-daemon.socket
+		sudo systemctl stop avahi-daemon.service
+		sudo systemctl status avahi-daemon.service
+	}
+
 }
 
 if-external bat { edit:add-var cat~ {|@in| e:bat $@in }}
@@ -71,43 +94,14 @@ edit:add-var gst~ {|@in| e:git status $@in }
 edit:add-var gca~ {|@in| e:git commit --all $@in }
 edit:add-var resetorigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
 edit:add-var resetupstream~ { e:git fetch upstream; e:git reset --hard upstream/master; e:git clean -f -d }
-edit:add-var untar~  {|@in| e:tar -zxvf $@in }
+edit:add-var untar~  {|@in| e:tar xvf $@in }
 edit:add-var wget~  {|@in| e:wget -c $@in }
 edit:add-var makepwd~ { e:openssl rand -base64 15 }
 edit:add-var dl~  {|@in| e:curl -C - -O '{}' $@in }
 edit:add-var ping~ {|@in| e:ping -c 5 $@in }
-edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" $c | cmds:first [(all)
-] | echo (one) }) }
+edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" $c | cmds:first [(all)] }) }
 edit:add-var kittylight~ { sed -i '' 's/background_tint 0.755/background_tint 0.955/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 edit:add-var kittydark~ { sed -i '' 's/background_tint 0.955/background_tint 0.755/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
-
-edit:add-var startarp~ {
-	sudo launchctl start /Library/LaunchDaemons/com.sangfor.EasyMonitor.plist
-	launchctl start /Library/LaunchAgents/com.sangfor.ECAgentProxy.plist
-	open "https://portal.arp.cn"
-}
-edit:add-var stoparp~ {
-	sudo launchctl stop /Library/LaunchDaemons/com.sangfor.EasyMonitor.plist
-	launchctl stop /Library/LaunchAgents/com.sangfor.ECAgentProxy.plist
-}
-
-edit:add-var avahi-reset~ {
-	if ( is-linux) {
-		sudo systemctl stop avahi-daemon.socket
-		sudo systemctl stop avahi-daemon.service
-		sudo systemctl start avahi-daemon.socket
-		sudo systemctl start avahi-daemon.service
-		sudo systemctl status avahi-daemon.service
-	}
-}
-
-edit:add-var avahi-stop~ {
-	if ( is-linux) {
-		sudo systemctl stop avahi-daemon.socket
-		sudo systemctl stop avahi-daemon.service
-		sudo systemctl status avahi-daemon.service
-	}
-}
 
 edit:add-var setproxy~ { |@argin|
 	var @plist = {http,https,ftp,all}_proxy
@@ -215,35 +209,39 @@ edit:add-var updateElvish~ {
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
 	echo (styled "\n===ELVISH===\nOS: "$platform:os" & Arch: "$platform:arch bold yellow)
-	curl -C - -O 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz'
-	tar xvf elvish-HEAD.tar.gz
-	chmod +x elvish-HEAD
-	sudo mv -vf elvish-HEAD /usr/local/bin/elvish
-	cd $olddir
-	rm -rf $tmpdir
-	if-external elvish { elvish -version }
+	try { 
+		wget 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz'
+	} catch { 
+		echo "Couldn't download for some reason!" 
+	} else { 
+		tar xvf elvish-HEAD.tar.gz
+		chmod +x elvish-HEAD
+		sudo mv -vf elvish-HEAD /usr/local/bin/elvish
+		if-external elvish { elvish -version }
+	} finally {
+		cd $olddir
+		rm -rf $tmpdir
+	}
 }
 
 edit:add-var updateFFmpeg~ {
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
-	var lv rv lvp rvp lvpp rvpp = '' '' '' '' '' ''
-	if-external ffmpeg { set lv = (ffmpeg -version | grep -owE 'version [^ :]+') }
-	if-external ffplay { set lvp = (ffplay -version | grep -owE 'version [^ :]+') }
-	if-external ffprobe { set lvpp = (ffprobe -version | grep -owE 'version [^ :]+') }
-	echo (styled "\n===FFMPEG===\nOS: "$platform:os" & Arch: "$platform:arch bold yellow)
+	var lv rv  = '' ''
+	var os = $platform:os
+	if (eq $os 'darwin') { set os = 'macos'}
+	if-external ffmpeg { set lv = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
+	echo (styled "\n===FFMPEG UPDATE===\nOS: "$os" & Arch: "$platform:arch bold yellow)
 	var tnames = [ffmpeg ffplay ffprobe]
 	for x $tnames {
-		wget -O $x.zip 'https://ffmpeg.martin-riedl.de/redirect/latest/'$platform:os'/'$platform:arch'/snapshot/'$x'.zip'
-		unzip -o $x.zip -d $E:HOME/bin/
+		try {
+			wget -O $x.zip 'https://ffmpeg.martin-riedl.de/redirect/latest/'$os'/'$platform:arch'/snapshot/'$x'.zip'
+			unzip -o $x.zip -d $E:HOME/bin/
+		} catch { echo "Can't download "$x }
 	}
-	if-external ffmpeg { set rv = (ffmpeg -version | grep -owE 'version [^ :]+') }
-	if-external ffplay { set rvp = (ffplay -version | grep -owE 'version [^ :]+') }
-	if-external ffprobe { set rvpp = (ffprobe -version | grep -owE 'version [^ :]+') }
-	echo "===FFMPEG UPDATE===\nOld: "$lv" & New: "$rv
-	echo "===FFPLAY UPDATE===\nOld: "$lvp" & New: "$rvp
-	echo "===FFPROBE UPDATE===\nOld: "$lvpp" & New: "$rvpp
+	if-external ffmpeg { set rv = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
+	echo "===UPDATED:===\nOld: "$lv" & New: "$rv
 	cd $olddir
 	rm -rf $tmpdir
 }
