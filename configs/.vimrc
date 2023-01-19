@@ -32,6 +32,7 @@ highlight Comment cterm=italic
 
 call plug#begin()
 	Plug 'tpope/vim-sensible'
+	Plug 'tpope/vim-repeat'
 	Plug 'itchyny/lightline.vim'
 	Plug 'lambdalisue/suda.vim'
 	Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
