@@ -34,11 +34,11 @@ fn is-path { |p|
 fn is-file { |p|
 	path:is-regular &follow-symlink $p
 }
-fn append-to-path { |@path|
-	each {|p| set paths = [ $@paths $p ] } $path
+fn append-to-path { |path|
+	if (not (has-value $paths $path)) { set paths = [ $@paths $path ] }
 }
 fn prepend-to-path { |path|
-	set paths = [ $path $@paths ]
+	if (not (has-value $paths $path)) { set paths = [ $path $@paths ] }
 }
 fn check-paths {
 	each {|p| if (not (is-path $p)) { echo (styled "🥺—"$p" in $paths no longer exists…" bg-red) } } $paths

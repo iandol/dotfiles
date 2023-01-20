@@ -19,6 +19,8 @@ use cmds
 if $platform:is-unix { use unix; edit:add-var unix: $unix: }
 try { use doc } catch { }
 
+echo (styled "Elvish V"$version" > "$platform:os"|"$platform:arch bold italic white)
+
 ############################################################ External modules
 epm:install &silent-if-installed ^
 	github.com/iwoloschin/elvish-packages ^
@@ -49,6 +51,19 @@ var pya~				= $python:activate~
 var pyd~				= $python:deactivate~
 var pyl~				= $python:list-virtualenvs~
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
+
+############################################################ setup brew
+if-external brew {
+	var pfix = (brew --prefix)
+	echo (styled "…configuring "$platform:os"-"$platform:arch" brew… " bold italic white)
+	set-env HOMEBREW_PREFIX $pfix
+	set-env HOMEBREW_CELLAR $pfix'/Cellar'
+	set-env HOMEBREW_REPOSITORY $pfix'/Homebrew'
+	set-env MANPATH $pfix'/share/man:'$E:MANPATH
+	set-env INFOPATH $pfix'/share/info:'$E:INFOPATH
+	prepend-to-path $pfix'/bin'
+	prepend-to-path $pfix'/sbin'
+}
 
 ############################################################ Paths
 set paths = [
@@ -101,7 +116,6 @@ set-env XDG_CONFIG_HOME $E:HOME"/.config"
 set-env XDG_DATA_HOME $E:HOME"/.local/share"
 set-env DF $E:HOME"/.dotfiles"
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
-echo (styled "Elvish V"$version" running on "$E:PLATFORM bold italic white)
 if (is-macos) {
 	if (is-path /Applications/MATLAB/MATLAB_Runtime/v912/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v912/ }
 	if (is-path /usr/local/Cellar/openjdk/19) { set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
@@ -111,6 +125,7 @@ if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…  " bold italic white) }
 if-external procs { eval (procs --completion-out elvish | slurp ) }
+if-external pyenv { set-env PYENV_SHELL elvish }
 python:deactivate
 
 ############################################################ Aliases
@@ -119,19 +134,6 @@ if (not (is-file ~/.config/elvish/lib/aliases.elv)) {
 	ln -s ~/.dotfiles/aliases.elv ~/.config/elvish/lib/
 }
 use aliases
-
-############################################################ setup brew
-if-external brew {
-	var pfix = (brew --prefix)
-	echo (styled "…configuring "$platform:os"-"$platform:arch" brew… " bold italic white)
-	set-env HOMEBREW_PREFIX $pfix
-	set-env HOMEBREW_CELLAR $pfix'/Cellar'
-	set-env HOMEBREW_REPOSITORY $pfix'/Homebrew'
-	set-env MANPATH $pfix'/share/man:'$E:MANPATH
-	set-env INFOPATH $pfix'/share/info:'$E:INFOPATH
-	prepend-to-path $pfix'/bin'
-	prepend-to-path $pfix'/sbin'
-}
 
 ############################################################ Theme
 var theme = chain
@@ -150,5 +152,5 @@ if (eq $theme starship) {
 }
 
 ############################################################ end
-fn helpme { echo (styled "\n ! – last cmd | ⌃N – 🚀navigate | ⌃R – 🔍history | ⌃L – 🔍dirs\n ⌃B – Edit command-line | ⌃L – Clear line | ⌃a,e – ⇄ | 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane split=§| §a- close=§x focus=§o\n tmux window create=§c switch=§n close=§&\n" bold italic) }
+fn helpme { echo (styled "\n ! – last cmd | ⌃N – 🚀navigate | ⌃R – 🔍history | ⌃L – 🔍dirs\n ⌃B – Edit command-line | ⌃a,e – ⇄ |  ⌃u – Clear line | 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane split=§| §a- close=§x focus=§o\n tmux window create=§c switch=§n close=§&\n" bold italic) }
 helpme

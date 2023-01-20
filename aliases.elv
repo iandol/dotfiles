@@ -26,6 +26,9 @@ set edit:abbr['>so'] = '2>&1'
 ################################################ Aliases
 echo (styled "…loading command aliases…" bold italic white)
 
+edit:add-var pp~ {|@in| pprint $@in }
+edit:add-var shortcuts~ { pp $edit:insert:binding }
+
 if ( is-macos ) {
 	edit:add-var lls~ {|@in| e:ls -alFGhtr@ $@in }
 	edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
@@ -87,17 +90,16 @@ edit:add-var listTCP~ {|@in|
 	sudo lsof -i TCP -P | grep -E $@in
 }
 
-edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var sizes~ { e:du -sh * | e:sort -rh | e:bat --color never }
 edit:add-var fs~ {|@in| e:du -sh $@in }
 edit:add-var gst~ {|@in| e:git status $@in }
 edit:add-var gca~ {|@in| e:git commit --all $@in }
 edit:add-var resetorigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
 edit:add-var resetupstream~ { e:git fetch upstream; e:git reset --hard upstream/master; e:git clean -f -d }
-edit:add-var untar~  {|@in| e:tar xvf $@in }
-edit:add-var wget~  {|@in| e:wget -c $@in }
+edit:add-var untar~ {|@in| e:tar xvf $@in }
+edit:add-var wget~ {|@in| e:wget -c $@in }
 edit:add-var makepwd~ { e:openssl rand -base64 15 }
-edit:add-var dl~  {|@in| e:curl -C - -O '{}' $@in }
+edit:add-var dl~ {|@in| e:curl -C - -O '{}' $@in }
 edit:add-var ping~ {|@in| e:ping -c 5 $@in }
 edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" $c | cmds:first [(all)] }) }
 edit:add-var kittylight~ { sed -i '' 's/background_tint 0.755/background_tint 0.955/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
@@ -109,7 +111,7 @@ edit:add-var setproxy~ { |@argin|
 		if (eq $argin[0] "-l") {
 			echo "Proxy Settings:"
 		} else {
-			echo "Proxy set: " 
+			echo "Proxy set: "
 			set-env no_proxy "localhost, 127.0.0.1, ::1"
 			put $plist | cmds:flatten | each {|t| set-env $t $argin[0]}
 			if (str:contains $argin[0] "socks5") {
@@ -121,7 +123,7 @@ edit:add-var setproxy~ { |@argin|
 			}
 		}
 	} else {
-		echo "Will unset the proxy..."
+		echo "Will unset the proxy…"
 		unset-env no_proxy
 		put $plist | cmds:flatten | each {|t| unset-env $t}
 		try { git config --global --unset http.proxy } catch { }
@@ -160,7 +162,7 @@ edit:add-var update~ {
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
 			echo (styled "\n--->>> Updating "(styled $x bold)":"$oldbranch"…\n" bg-blue)
 			for x $branches {
-				if (re:match '^(main|master|umaster)' $x) { git checkout -q $x }
+				if (re:match '^(main|master|umaster)' $x) { try { git checkout -q $x } catch { } }
 			}
 			try { git fetch -q --all 2>/dev/null; git pull -q 2>/dev/null; git status } catch { echo "\t\t…couldn't pull!" }
 			if (re:match 'upstream' (git remote | slurp)) {
@@ -172,34 +174,32 @@ edit:add-var update~ {
 	}
 	cd $olddir
 	if-external brew {
-		echo (styled "\n\n---> Updating Homebrew...\n" bold bg-red)
+		echo (styled "\n\n---> Updating Homebrew…\n" bold bg-red)
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		try { brew update; brew outdated; brew upgrade; brew cleanup } catch { echo "\t\t …can't upgrade!"}
 	}
 	if (is-macos) { try { softwareupdate --list } catch { } }
 	if (is-linux) {
-		echo (styled "\n\n---> Updating APT…\n" bold bg-red)
-		try {
+		try { echo (styled "\n\n---> Updating APT…\n" bold bg-red)
 			sudo apt update
 			sudo apt autoremove
 			apt list --upgradable
-			if-external snap { sudo snap refresh }
-			if-external flatpak { flatpak update }
-			if-external fwupdmgr { fwupdmgr get-upgrades }
-		} catch e {
-			echo "\t…couldn't update APT or Snap or FWUPDATE!"
-		}
+		} catch { echo "\t…couldn't update APT!" }
+		echo (styled "\n\n---> Updating snap/flatpak/firmware…\n" bold bg-red)
+		if-external snap { try { sudo snap refresh } catch { } }
+		if-external flatpak { try { flatpak update } catch { } }
+		if-external fwupdmgr { try { fwupdmgr get-upgrades } catch { } }
 	}
 	if-external rbenv { echo "\n---> Rehash RBENV…\n"; rbenv rehash }
 	if-external pyenv { echo "\n---> Rehash PYENV…\n"; pyenv rehash }
 	try { if-external tlmgr { echo "\n---> Check TeX-Live…\n"; tlmgr update --list } } catch { }
 	if-external vim {
-		echo "\n---> Update VIM Plug.vim…\n"; 
+		echo (styled "\n---> Update VIM Plug.vim…\n" bold)
 		try { curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim} catch { echo "Failed to download..." }
 	}
 	if-external nvim { echo "\n---> Update NVIM Plug.vim…\n"; mkdir -p $E:XDG_DATA_HOME/nvim/site/autoload; cp -v $E:HOME/.vim/autoload/plug.vim $E:XDG_DATA_HOME/nvim/site/autoload/ }
 	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-red)
-	try { epm:upgrade } catch { echo "Couldn't update EPM packages..."}
+	try { epm:upgrade } catch { echo "Couldn't update EPM packages…"}
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
 
@@ -261,6 +261,6 @@ edit:add-var updateOptickaPages~ {
 		#git checkout $oldbranch
 		#cd $olddir
 		echo "Updated gh-pages from README.md"
-		echo "Check and push manually..."
+		echo "Check and push manually…"
 	}
 }
