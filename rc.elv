@@ -52,19 +52,6 @@ var pyd~				= $python:deactivate~
 var pyl~				= $python:list-virtualenvs~
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
 
-############################################################ setup brew
-if-external brew {
-	var pfix = (brew --prefix)
-	echo (styled "…configuring "$platform:os"-"$platform:arch" brew… " bold italic white)
-	set-env HOMEBREW_PREFIX $pfix
-	set-env HOMEBREW_CELLAR $pfix'/Cellar'
-	set-env HOMEBREW_REPOSITORY $pfix'/Homebrew'
-	set-env MANPATH $pfix'/share/man:'$E:MANPATH
-	set-env INFOPATH $pfix'/share/info:'$E:INFOPATH
-	prepend-to-path $pfix'/bin'
-	prepend-to-path $pfix'/sbin'
-}
-
 ############################################################ Paths
 set paths = [
 	~/bin
@@ -103,6 +90,20 @@ each {|p|
 	}
 } $releases
 if (is-path ~/.venv/) { set python:virtualenv-directory = $E:HOME'/.venv' }
+
+############################################################ setup brew
+if-external brew {
+	var pfix = (brew --prefix)
+	echo (styled "…configuring "$platform:os"-"$platform:arch" brew… " bold italic white)
+	set-env HOMEBREW_PREFIX $pfix
+	set-env HOMEBREW_CELLAR $pfix'/Cellar'
+	set-env HOMEBREW_REPOSITORY $pfix'/Homebrew'
+	set-env MANPATH $pfix'/share/man:'$E:MANPATH
+	set-env INFOPATH $pfix'/share/info:'$E:INFOPATH
+	prepend-to-path $pfix'/bin'
+	prepend-to-path $pfix'/sbin'
+}
+put ~/.rbenv/shims ~/.pyenv/shims | each {|p| prepend-to-path $p}
 
 ############################################################ Key bindings
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
