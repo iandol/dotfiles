@@ -37,6 +37,7 @@ if ( is-macos ) {
 	edit:add-var mano~ {|@cmds|
 		each {|c| man -t $c | open -f -a /System/Applications/Preview.app } $cmds
 	}
+	edit:add-var fix~ {|@in| e:codesign --force --deep -s - $@in }
 	edit:add-var ql~ {|@in| e:qlmanage -p $@in }
 	edit:add-var quicklook~ {|@in| e:qlmanage -p $@in }
 	edit:add-var spotlighter~ {|@in| e:mdfind -onlyin (pwd) $@in }
@@ -105,15 +106,15 @@ edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" 
 edit:add-var kittylight~ { sed -i '' 's/background_tint 0.755/background_tint 0.955/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 edit:add-var kittydark~ { sed -i '' 's/background_tint 0.955/background_tint 0.755/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 
-edit:add-var setproxy~ { |@argin|
+edit:add-var setproxy~ {|@argin|
 	var @plist = {http,https,ftp,all}_proxy
 	if (eq (count $argin) (num 1)) {
 		if (eq $argin[0] "-l") {
 			echo "Proxy Settings:"
 		} else {
-			echo "Proxy set: "
+			echo "Set Proxy: "
 			set-env no_proxy "localhost, 127.0.0.1, ::1"
-			put $plist | cmds:flatten | each {|t| set-env $t $argin[0]}
+			put $plist | cmds:flatten | each {|t| set-env $t $argin[0]; set-env (str:to-upper $t) $argin[0] }
 			if (str:contains $argin[0] "socks5") {
 				git config --global http.proxy $E:http_proxy
 				git config --global https.proxy $E:https_proxy
@@ -123,15 +124,14 @@ edit:add-var setproxy~ { |@argin|
 			}
 		}
 	} else {
-		echo "Will unset the proxy…"
+		echo "Unset proxy: "
 		unset-env no_proxy
-		put $plist | cmds:flatten | each {|t| unset-env $t}
+		put $plist | cmds:flatten | each {|t| unset-env $t; unset-env (str:to-upper $t) }
 		try { git config --global --unset http.proxy } catch { }
 		try { git config --global --unset https.proxy } catch { }
 	}
-	echo "PROXY: HTTP = "$E:http_proxy" | HTTPS = "$E:https_proxy" | ALL = "$E:all_proxy
-	echo "BYPASS: "$E:no_proxy
-	try { echo "GIT:"(git config --global --get-regexp http)"\n" } catch { }
+	echo "PROXY: HTTP = "$E:http_proxy" | HTTPS = "$E:https_proxy" | ALL = "$E:all_proxy "\nBYPASS: "$E:no_proxy
+	try { echo "GIT:"; git config --global --get-regexp http } catch { }
 }
 
 edit:add-var installTeX~ {

@@ -103,7 +103,6 @@ if-external brew {
 	prepend-to-path $pfix'/bin'
 	prepend-to-path $pfix'/sbin'
 }
-put ~/.rbenv/shims ~/.pyenv/shims | each {|p| prepend-to-path $p}
 
 ############################################################ Key bindings
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
@@ -151,6 +150,9 @@ if (eq $theme starship) {
 	set chain:glyph[arrow] = "⇝"
 	set chain:prompt-segment-delimiters = [ "⎛" "⎞" ]
 }
+
+############################################################ Add shim folders
+put $E:HOME/.pyenv/shims $E:HOME/.rbenv/shims | each {|p| prepend-to-path $p} # needs to go after brew init
 
 ############################################################ end
 fn helpme { echo (styled "\n ! – last cmd | ⌃N – 🚀navigate | ⌃R – 🔍history | ⌃L – 🔍dirs\n ⌃B – Edit command-line | ⌃a,e – ⇄ |  ⌃u – Clear line | 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane split=§| §a- close=§x focus=§o\n tmux window create=§c switch=§n close=§&\n" bold italic) }
