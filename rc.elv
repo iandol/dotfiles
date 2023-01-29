@@ -125,7 +125,8 @@ if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…  " bold italic white) }
 if-external procs { eval (procs --completion-out elvish | slurp ) }
-if-external pyenv { set-env PYENV_SHELL elvish }
+if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbenv' }
+if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pyenv' }
 python:deactivate
 
 ############################################################ Aliases
@@ -152,7 +153,7 @@ if (eq $theme starship) {
 }
 
 ############################################################ Add shim folders
-put $E:HOME/.pyenv/shims $E:HOME/.rbenv/shims | each {|p| prepend-to-path $p} # needs to go after brew init
+put $E:HOME{/.pyenv/shims /.rbenv/shims} | each {|p| prepend-to-path $p} # needs to go after brew init
 
 ############################################################ end
 fn helpme { echo (styled "\n ! – last cmd | ⌃N – 🚀navigate | ⌃R – 🔍history | ⌃L – 🔍dirs\n ⌃B – Edit command-line | ⌃a,e – ⇄ |  ⌃u – Clear line | 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane split=§| §a- close=§x focus=§o\n tmux window create=§c switch=§n close=§&\n" bold italic) }

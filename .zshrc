@@ -87,7 +87,8 @@ fi
 export PATH
 
 #------------------------------------FINALISE OTHERS
-[[ -x $(which rbenv) ]] && eval "$(rbenv init -)"
+[[ -x $(which pyenv) ]] && eval "$(pyenv init - zsh)"
+[[ -x $(which rbenv) ]] && eval "$(rbenv init - zsh)"
 #[[ -x $(which archey) ]] && archey -c -o
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which fzf) ]] && source $DF/configs/.fzf.zsh
