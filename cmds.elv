@@ -40,13 +40,13 @@ fn is-file		{|p| path:is-regular &follow-symlink $p }
 fn filter {|func~ @in|
 	each {|item| if (func $item) { put $item }} $@in
 }
-fn filterOut {|func~ @in|
+fn filter-out {|func~ @in|
 	each {|item| if (not (func $item)) { put $item }} $@in
 }
 fn filter-re {|re @in|
 	each {|item| if (is-match $item $re) { put $item } } $@in
 }
-fn filterOut-re {|re @in|
+fn filter-re-out {|re @in|
 	each {|item| if (not-match $item $re) { put $item } } $@in
 }
 fn cond {|cond v1 v2|
@@ -96,10 +96,10 @@ fn if-external { |prog lambda|
 	if (has-external $prog) { try { $lambda } catch e { print "\n---> Could't run: "; pprint $lambda[def]; pprint $e[reason] } }
 }
 fn append-to-path { |path|
-	if (is-path $path) { set paths = [ $@paths $path ] }
+	if (is-path $path) { var @p = (filter-re-out (re:quote $path) $paths); set paths = [ $@p $path ] }
 }
 fn prepend-to-path { |path|
-	if (is-path $path) { set paths = [ $path $@paths ] }
+	if (is-path $path) { var @p = (filter-re-out (re:quote $path) $paths); set paths = [ $path $@p ] }
 }
 fn check-paths {
 	each {|p| if (not (is-path $p)) { echo (styled "🥺—"$p" in $paths no longer exists…" bg-red) } } $paths

@@ -169,7 +169,7 @@ edit:add-var update~ {
 				print "\t\t---> Fetching upstream…"
 				try { git fetch -v upstream } catch { echo "\t…couldn't fetch upstream!" }
 			}
-			git checkout -q $oldbranch 2>/dev/null
+			git checkout -q $oldbranch 2>$path:dev-null
 		}
 	}
 	cd $olddir
