@@ -35,7 +35,7 @@ if ( is-macos ) {
 	edit:add-var ll~ {|@in| e:ls -alFGh $@in }
 	edit:add-var ls~ {|@in| e:ls -GF $@in }
 	edit:add-var mano~ {|@cmds|
-		each {|c| man -t $c | open -f -a /System/Applications/Preview.app } $cmds
+		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
 	}
 	edit:add-var fix~ {|@in| e:codesign --force --deep -s - $@in }
 	edit:add-var ql~ {|@in| e:qlmanage -p $@in }
