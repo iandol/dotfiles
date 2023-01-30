@@ -174,31 +174,31 @@ edit:add-var update~ {
 	}
 	cd $olddir
 	if-external brew {
-		echo (styled "\n\n---> Updating Homebrew…\n" bold bg-red)
+		echo (styled "\n\n---> Updating Homebrew…\n" bold bg-color5)
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		try { brew update; brew outdated; brew upgrade; brew cleanup } catch { echo "\t\t …can't upgrade!"}
 	}
-	if (is-macos) { try { softwareupdate --list } catch { } }
+	if (is-macos) { try { echo (styled "\n\n---> Check macOS updates…\n" bold bg-color5); softwareupdate --list } catch { } }
 	if (is-linux) {
-		try { echo (styled "\n\n---> Updating APT…\n" bold bg-red)
+		try { echo (styled "\n\n---> Updating APT…\n" bold bg-color5)
 			sudo apt update
 			sudo apt autoremove
 			apt list --upgradable
 		} catch { echo "\t…couldn't update APT!" }
-		echo (styled "\n\n---> Updating snap/flatpak/firmware…\n" bold bg-red)
+		echo (styled "\n\n---> Updating snap/flatpak/firmware…\n" bold bg-color5)
 		if-external snap { try { sudo snap refresh } catch { } }
 		if-external flatpak { try { flatpak update } catch { } }
 		if-external fwupdmgr { try { fwupdmgr get-upgrades } catch { } }
 	}
-	if-external rbenv { echo "\n---> Rehash RBENV…\n"; rbenv rehash }
-	if-external pyenv { echo "\n---> Rehash PYENV…\n"; pyenv rehash }
-	try { if-external tlmgr { echo "\n---> Check TeX-Live…\n"; tlmgr update --list } } catch { }
+	if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
+	if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
+	try { if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --list } } catch { }
 	if-external vim {
-		echo (styled "\n---> Update VIM Plug.vim…\n" bold)
+		echo (styled "\n\n---> Update VIM Plug.vim…\n" bold bg-color5)
 		try { curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim} catch { echo "Failed to download..." }
+		if-external nvim { echo "\t---> Update NVIM Plug.vim…\n"; mkdir -p $E:XDG_DATA_HOME/nvim/site/autoload; cp -v $E:HOME/.vim/autoload/plug.vim $E:XDG_DATA_HOME/nvim/site/autoload/ }
 	}
-	if-external nvim { echo "\n---> Update NVIM Plug.vim…\n"; mkdir -p $E:XDG_DATA_HOME/nvim/site/autoload; cp -v $E:HOME/.vim/autoload/plug.vim $E:XDG_DATA_HOME/nvim/site/autoload/ }
-	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-red)
+	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5)
 	try { epm:upgrade } catch { echo "Couldn't update EPM packages…"}
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
