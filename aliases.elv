@@ -162,9 +162,9 @@ edit:add-var update~ {
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
 			echo (styled "\n--->>> Updating "(styled $x bold)":"$oldbranch"…\n" bg-blue)
 			for x $branches {
-				if (re:match '^(main|master|umaster)' $x) { try { git checkout -q $x } catch { } }
+				if (re:match '^(main|master|umaster)' $x) { try { git checkout -q $x 2>$path:dev-null } catch { } }
 			}
-			try { git fetch -q --all 2>/dev/null; git pull -q 2>/dev/null; git status } catch { echo "\t\t…couldn't pull!" }
+			try { git fetch -q --all 2>$path:dev-null; git pull } catch { echo "\t\t…couldn't pull!" }
 			if (re:match 'upstream' (git remote | slurp)) {
 				print "\t\t---> Fetching upstream…"
 				try { git fetch -v upstream } catch { echo "\t…couldn't fetch upstream!" }
