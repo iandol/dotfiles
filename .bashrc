@@ -35,7 +35,7 @@ else
 	fi
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/" # Linux Java
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export PATH="${JAVA_HOME}bin:$PATH" # Linux JDK
-	[[ -d "/home/linuxbrew/.linuxbrew/bin/" ]] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+	[[ -d "/home/linuxbrew/" ]] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
 if [[ -x $(which brew) ]]; then
@@ -43,6 +43,7 @@ if [[ -x $(which brew) ]]; then
 fi
 
 [[ -x $(which rbenv) ]] && eval "$(rbenv init -)"
+[[ -x $(which pyenv) ]] && eval "$(pyenv init -)"
 [[ -x $(which fzf) ]] && source $DF/configs/.fzf.bash
 [[ -f $(which starship) ]] && eval "$(starship init bash)"
 [[ -f "$DF/env" ]] && source "$DF/env"

@@ -88,7 +88,6 @@ fi
 [[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
-[[ -x $(which brew) ]] && eval "$(brew shellenv)"
 export PATH
 
 #------------------------------------FINALISE OTHERS

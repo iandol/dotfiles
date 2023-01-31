@@ -1,4 +1,3 @@
-#!/usr/bin/env zsh
 export PLATFORM=$(uname -s)
 export PROC=$(uname -m)
 if [[ $PLATFORM = 'Darwin' ]]; then 
@@ -47,21 +46,21 @@ alias sizes='du -sh * | sort -h'
 
 # Minimal additional TeX packages for Pandoc templates with BasicTeX
 alias installTeX='sudo tlmgr install lualatex-math luatexja abstract \
-latexmk csquotes pagecolor relsize mdframed needspace sectsty \
-titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
-mfirstuc xfor wallpaper datatool substr adjustbox collectbox \
-sttools wrapfig footnotebackref fvextra zref \
-libertinus libertinus-fonts libertinus-otf threeparttable \
-elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex \
-stackengine xltabular booktabs orcidlink'
+	latexmk csquotes pagecolor relsize mdframed needspace sectsty \
+	titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
+	mfirstuc xfor wallpaper datatool substr adjustbox collectbox \
+	sttools wrapfig footnotebackref fvextra zref \
+	libertinus libertinus-fonts libertinus-otf threeparttable \
+	elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex \
+	stackengine xltabular booktabs orcidlink \
+	ltablex cleveref makecell threeparttablex tabu multirow \
+	changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol'
 
 #manage bash/zsh
 if [[ -x $(which code) ]]; then 
 	alias edit='code -nw';
-	alias s='subl';
-	alias e='code';
 else
-	alias edit='vim';
+	alias edit='nvim';
 fi
 alias reloadbash='clear;source ~/.bashrc'
 alias reloadzsh='clear;source ~/.zshrc'
@@ -337,13 +336,10 @@ lips() {
 function update() {
 	printf "\n=====>>> Start Update @ \e[93m$(date)\e[m <<<=====\n"
 	myolddir=$(pwd)
-	ul=(.dotfiles Code/opticka Code/octicka Code/Titta
-		Code/AfterImage Code/isoluminant Code/Pinna Code/spikes
-		Code/Psychtoolbox-3 Code/fieldtrip
-		Code/Training Code/Palamedes 
-		Code/Mymou 
-		Documents/MATLAB/gramm
-		Code/scrivomatic Code/dotpandoc Code/bookends-tools Code/pandocomatic Code/paru)
+	ul=(.dotfiles Code/opticka Code/octicka Code/Titta Code/AfterImage Code/isoluminant Code/Pinna Code/spikes 
+	Code/Psychtoolbox-3 Code/fieldtrip Code/Training Code/Palamedes Code/Mymou 
+	Documents/MATLAB/gramm Code/scrivomatic Code/dotpandoc Code/bookends-tools 
+	Code/gears Code/pandocomatic Code/paru)
 	for x in $ul; do
 		if [[ -d ~/${x}/.git ]]; then
 			printf "\n\n---> Updating \e[92m${x}\e[m...\n"
@@ -386,7 +382,7 @@ function update() {
 		brew update
 		brew outdated
 		brew upgrade --force-bottle 
-		[[ $PLATFORM = 'Darwin' ]] && brew upgrade --cask
+		brew cleanup
 	fi
 
 	if [[ $PLATFORM = "Linux" ]]; then
@@ -395,6 +391,7 @@ function update() {
 		sudo apt autoremove
 		apt list --upgradable
 		[[ -x $(which snap) ]] && sudo snap refresh
+		[[ -x $(which flatpak) ]] && flatpak update
 		[[ -x $(which fwupdmgr) ]] && fwupdmgr get-upgrades
 	fi
 
@@ -410,7 +407,6 @@ function updateElvish () {
 	old_dir=$(pwd)
 	tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
 	cd $tmp_dir
-	rm -rf elvish-HEAD*
 	tos='linux'; [[ $PLATFORM = "Darwin" ]] && tos='darwin'
 	tpr='amd64'; 
 	if [[ $(uname -m) = 'arm64' || $(uname -m) = 'aarch64' ]]; then
