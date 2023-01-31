@@ -1,6 +1,12 @@
 export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
+echo $PATH
+
+#-------------------------------Bootstrap homebrew
+[[ $PLATFORM == 'Darwin' ]] && [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ $PLATFORM == 'Darwin' ]] && [[ -d /usr/local/homebrew ]] && eval "$(/usr/local/bin/brew shellenv)"
+[[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #-------------------------------PREFER nvim
 if [[ -f $(which nvim) ]]; then
