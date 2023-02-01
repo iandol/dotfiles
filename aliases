@@ -271,7 +271,7 @@ function transfer() {
 	rm -f $tmpfile;
 }
 
-function setproxy() {
+function sp() {
 	if [[ $# -eq 0 ]]; then
 		echo "Will unset the proxy..."
 		unset {http,https,ftp,all,no}_proxy
@@ -313,6 +313,7 @@ function setproxy() {
 	echo -e "BYPASS: $no_proxy"
 	echo -e "GIT:\n$(git config --global --get-regexp http)"
 }
+alias setproxy='sp'
 
 # l(ist)ips Get local and WAN IP adddresses
 lips() {

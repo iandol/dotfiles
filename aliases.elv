@@ -11,7 +11,7 @@ try { use doc } catch { }
 var if-external~ = $cmds:if-external~
 var is-path~ = $cmds:is-path~
 var is-file~ = $cmds:is-file~
-var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~
+var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~; var is-arm64~ = $cmds:is-arm64~
 var flatten~ = $cmds:flatten~
 
 ################################################ Abbreviations
@@ -106,11 +106,11 @@ edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" 
 edit:add-var kittylight~ { sed -i '' 's/background_tint 0.755/background_tint 0.955/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 edit:add-var kittydark~ { sed -i '' 's/background_tint 0.955/background_tint 0.755/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 
-edit:add-var setproxy~ {|@argin|
+edit:add-var sp~ {|@argin|
 	var @plist = {http,https,ftp,all}_proxy
 	if (eq (count $argin) (num 1)) {
 		if (eq $argin[0] "-l") {
-			echo "Proxy Settings:"
+			echo "Proxy settings:\n==============="
 		} else {
 			echo "Set Proxy: "
 			set-env no_proxy "localhost, 127.0.0.1, ::1"
@@ -133,6 +133,7 @@ edit:add-var setproxy~ {|@argin|
 	echo "PROXY: HTTP = "$E:http_proxy" | HTTPS = "$E:https_proxy" | ALL = "$E:all_proxy "\nBYPASS: "$E:no_proxy
 	try { echo "GIT:"; git config --global --get-regexp http } catch { }
 }
+set edit:command-abbr['setproxy'] = 'sp'
 
 edit:add-var installTeX~ {
 	sudo tlmgr install lualatex-math luatexja abstract ^
