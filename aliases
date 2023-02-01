@@ -29,6 +29,7 @@ alias gzip='gzip -9n' # set strongest compression level as ‘default’ for gzi
 alias ping='ping -c 5' # ping 5 times ‘by default’
 [[ -x $(which prettyping) ]] && alias ping='prettyping -c 5 --nolegend'
 [[ -x $(which bat) ]] && alias cat='bat'
+[[ -x $(which kitty) ]] && alias kssh='kitty +kitten ssh'
 # Enable aliases to be sudo’ed
 #alias sudo='sudo '
 # howdoi is a python pip install
