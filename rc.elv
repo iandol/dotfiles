@@ -1,9 +1,9 @@
-############################################################ Elvish Config
+#==================================================== - ELVISH CONFIG
 # elvish shell config: https://elv.sh/learn/tour.html
 # see a sample here: https://gitlab.com/zzamboni/dot-elvish/-/blob/master/rc.org
-############################################################
+#===============================================
 
-############################################################ Internal modules
+#==================================================== - INTERNAL MODULES
 use re
 use str
 use path
@@ -19,9 +19,9 @@ use cmds
 if $platform:is-unix { use unix; edit:add-var unix: $unix: }
 try { use doc } catch { }
 
-echo (styled "Elvish V"$version" > "$platform:os"|"$platform:arch bold italic white)
+echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic white)
 
-############################################################ External modules
+#==================================================== - EXTERNAL MODULES
 epm:install &silent-if-installed ^
 	github.com/iwoloschin/elvish-packages ^
 	github.com/zzamboni/elvish-modules ^
@@ -38,7 +38,7 @@ use github.com/iwoloschin/elvish-packages/python
 #use github.com/zzamboni/elvish-completions/cd
 #use github.com/zzamboni/elvish-completions/ssh
 
-############################################################ Import util names
+#==================================================== - IMPORT UTIL NAMES
 var if-external~		= $cmds:if-external~
 var append-to-path~		= $cmds:append-to-path~
 var prepend-to-path~	= $cmds:prepend-to-path~
@@ -52,7 +52,7 @@ var pyd~				= $python:deactivate~
 var pyl~				= $python:list-virtualenvs~
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
 
-############################################################ Paths
+#==================================================== - PATHS
 set paths = [
 	~/bin
 	/usr/local/bin
@@ -91,7 +91,7 @@ each {|p|
 } $releases
 if (is-path ~/.venv/) { set python:virtualenv-directory = $E:HOME'/.venv' }
 
-############################################################ setup brew
+#==================================================== - SETUP BREW
 if-external brew {
 	var pfix = (brew --prefix)
 	echo (styled "…configuring "$platform:os"-"$platform:arch" brew… " bold italic white)
@@ -104,13 +104,21 @@ if-external brew {
 	prepend-to-path $pfix'/sbin'
 }
 
-############################################################ Key bindings
+#==================================================== - KEY BINDINGS
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
 set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
 set edit:insert:binding[Ctrl-b] = $cmds:external_edit_command~
 #set edit:insert:binding[Ctrl-l] = { $edit:move-dot-eol~; $edit:kill-line-left~ }
 
-############################################################ general ENV
+#==================================================== - KITTY INTEGRATION
+if (has-env KITTY_INSTALLATION_DIR) {
+	fn esc { |t| print "\e]"$t"\a" }
+	set edit:before-readline = [ { esc '133;A' } ]
+	set edit:after-readline = [ { |c| esc '133;C' } ]
+	echo (styled "…kitty integration…" bold italic white)
+}
+
+#==================================================== - GENERAL ENVIRONMENT
 set-env PAPERSIZE A4
 set-env XDG_CONFIG_HOME $E:HOME"/.config"
 set-env XDG_DATA_HOME $E:HOME"/.local/share"
@@ -123,20 +131,20 @@ if (is-macos) {
 if-external vim { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
-if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…  " bold italic white) }
+if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…" bold italic white) }
 if-external procs { eval (procs --completion-out elvish | slurp ) }
 if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbenv' }
 if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pyenv' }
 python:deactivate
 
-############################################################ Aliases
+#==================================================== - ALIASES
 if (not (is-file ~/.config/elvish/lib/aliases.elv)) {
 	mkdir -p ~/.config/elvish/lib/
 	ln -s ~/.dotfiles/aliases.elv ~/.config/elvish/lib/
 }
 use aliases
 
-############################################################ Theme
+#==================================================== - THEME
 var theme = chain
 if-external starship { set theme = starship }
 if (eq $theme starship) {
@@ -152,9 +160,9 @@ if (eq $theme starship) {
 	set chain:prompt-segment-delimiters = [ "⎛" "⎞" ]
 }
 
-############################################################ Add shim folders
+#==================================================== - SHIM FOLDERS
 put $E:HOME{/.pyenv/shims /.rbenv/shims} | each {|p| prepend-to-path $p} # needs to go after brew init
 
-############################################################ end
+#==================================================== - END
 fn helpme { echo (styled "\n ! – last cmd | ⌃N – 🚀navigate | ⌃R – 🔍history | ⌃L – 🔍dirs\n ⌃B – Edit command-line | ⌃a,e – ⇄ |  ⌃u – Clear line | 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane split=§| §a- close=§x focus=§o\n tmux window create=§c switch=§n close=§&\n" bold italic) }
 helpme

@@ -84,6 +84,14 @@ if [[ -d "$HOME/miniconda3/" ]]; then
 	# <<< conda initialize <<<
 fi
 
+#------------------------------------KITTY INTEGRATION
+if test -n "$KITTY_INSTALLATION_DIR"; then
+	export KITTY_SHELL_INTEGRATION="enabled"
+	autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
+	kitty-integration
+	unfunction kitty-integration
+fi
+
 #------------------------------------FINALISE PATH
 [[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
@@ -102,8 +110,8 @@ if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
   print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
   command mkdir -p "$HOME/.zi" && command chmod go-rwX "$HOME/.zi"
   command git clone -q --depth=1 --branch "main" https://github.com/z-shell/zi "$HOME/.zi/bin" && \
-    print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-    print -P "%F{160}▓▒░ The clone has failed.%f%b"
+	print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
+	print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
 source "$HOME/.zi/bin/zi.zsh"
 autoload -Uz _zi
