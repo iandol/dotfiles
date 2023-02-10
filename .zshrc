@@ -85,12 +85,12 @@ if [[ -d "$HOME/miniconda3/" ]]; then
 fi
 
 #------------------------------------KITTY INTEGRATION
-if test -n "$KITTY_INSTALLATION_DIR"; then
-	export KITTY_SHELL_INTEGRATION="enabled"
-	autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
-	kitty-integration
-	unfunction kitty-integration
-fi
+#if test -n "$KITTY_INSTALLATION_DIR"; then
+#	export KITTY_SHELL_INTEGRATION="enabled"
+#	autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
+#	kitty-integration
+#	unfunction kitty-integration
+#fi
 
 #------------------------------------FINALISE PATH
 [[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"

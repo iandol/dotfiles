@@ -112,9 +112,12 @@ set edit:insert:binding[Ctrl-b] = $cmds:external_edit_command~
 
 #==================================================== - KITTY INTEGRATION
 if (has-env KITTY_INSTALLATION_DIR) {
-	fn esc { |t| print "\e]"$t"\a" }
-	set edit:before-readline = [ { esc '133;A' } ]
-	set edit:after-readline = [ { |c| esc '133;C' } ]
+	fn osc {|c| print "\e]"$c"\a" }
+	fn send-title {|t| osc '0;ɛ'$t }
+	fn send-pwd { send-title (tilde-abbr $pwd | path:base (one)); osc '7;'(put $pwd)}
+	set edit:before-readline = [ { send-pwd } { osc '133;A' } ]
+	set edit:after-readline = [ {|c| send-title (str:split ' ' $c | take 1) } {|c| osc '133;C' } ]
+	set after-chdir = [ {|_| send-pwd } ]
 	echo (styled "…kitty integration…" bold italic white)
 }
 
