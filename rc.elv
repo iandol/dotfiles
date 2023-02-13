@@ -151,7 +151,9 @@ use aliases
 var theme = chain
 if-external starship { set theme = starship }
 if (eq $theme starship) {
+	echo (styled "…carapace init…" bold italic yellow)
 	eval ((which starship) init elvish)
+	eval ((which starship) completions elvish | slurp)
 } elif (eq $theme powerline) {
 	use github.com/muesli/elvish-libs/theme/powerline
 } else {
