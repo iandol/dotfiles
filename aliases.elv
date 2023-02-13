@@ -24,7 +24,7 @@ set edit:abbr['>so'] = '2>&1'
 # set edit:small-word-abbr['ls'] = 'ls -GF'
 
 ################################################ Aliases
-echo (styled "…loading command aliases…" bold italic white)
+echo (styled "…loading command aliases…" bold italic yellow)
 
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pp $edit:insert:binding }

@@ -94,7 +94,7 @@ if (is-path ~/.venv/) { set python:virtualenv-directory = $E:HOME'/.venv' }
 #==================================================== - SETUP BREW
 if-external brew {
 	var pfix = (brew --prefix)
-	echo (styled "…configuring "$platform:os"-"$platform:arch" brew… " bold italic white)
+	echo (styled "…configuring "$platform:os"-"$platform:arch" brew… " bold italic yellow)
 	set-env HOMEBREW_PREFIX $pfix
 	set-env HOMEBREW_CELLAR $pfix'/Cellar'
 	set-env HOMEBREW_REPOSITORY $pfix'/Homebrew'
@@ -118,7 +118,7 @@ if (has-env KITTY_INSTALLATION_DIR) {
 	set edit:before-readline = [ { send-pwd } { osc '133;A' } ]
 	set edit:after-readline = [ {|c| send-title (str:split ' ' $c | take 1) } {|c| osc '133;C' } ]
 	set after-chdir = [ {|_| send-pwd } ]
-	echo (styled "…kitty integration…" bold italic white)
+	echo (styled "…kitty integration…" bold italic yellow)
 }
 
 #==================================================== - GENERAL ENVIRONMENT
@@ -134,7 +134,7 @@ if (is-macos) {
 if-external vim { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
-if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…" bold italic white) }
+if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…" bold italic yellow) }
 if-external procs { eval (procs --completion-out elvish | slurp ) }
 if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbenv' }
 if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pyenv' }
@@ -167,5 +167,5 @@ if (eq $theme starship) {
 put $E:HOME{/.pyenv/shims /.rbenv/shims} | each {|p| prepend-to-path $p} # needs to go after brew init
 
 #==================================================== - END
-fn helpme { echo (styled "\n ! – last cmd | ⌃N – 🚀navigate | ⌃R – 🔍history | ⌃L – 🔍dirs\n ⌃B – Edit command-line | ⌃a,e – ⇄ |  ⌃u – Clear line | 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane split=§| §a- close=§x focus=§o\n tmux window create=§c switch=§n close=§&\n" bold italic) }
+fn helpme { echo (styled "\n ! – last cmd ░ ⌃N – 🚀navigate ░ ⌃R – 🔍history ░ ⌃L – 🔍dirs\n ⌃B – 🖊️cmd ░ ⌃a,e – ⇄ ░ ⌃u – ⌫line ░ 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane: split=§| §- close=§x focus=§o\n tmux window create=§c switch=§n close=§&\n" bold italic fg-yellow ) }
 helpme

@@ -17,7 +17,7 @@ fn pos			{|n| > $n 0 }
 fn neg			{|n| < $n 0 }
 
 ################################################ IS
-# see https://github.com/crinklywrappr/rivendell 
+# inspired by https://github.com/crinklywrappr/rivendell 
 fn is-empty		{|li| == (count $li) 0 }
 fn not-empty	{|li| not (== (count $li) 0) }
 fn is-match		{|s re| re:match $re $s }
