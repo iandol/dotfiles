@@ -16,8 +16,8 @@ set whichwrap=b,s,h,l,<,>,[,]	" backspace and cursor keys wrap to
 set list listchars=tab:»·,trail:· " show EOL spaces, tabs etc.
 set nowrap						" wrap long lines
 set autoindent					" indent at the same level of the previous line
-set shiftwidth=4				" use indents of 2 spaces
-"set expandtab					" tabs are spaces, not tabs
+set shiftwidth=4				" use indents of 4 spaces
+set noexpandtab					" tabs are tabs, not spaces
 set tabstop=4					" an indentation every 4 columns
 set softtabstop=4				" let backspace delete indent
 set pastetoggle=<F12>			" pastetoggle (sane indentation on pastes)
@@ -29,6 +29,9 @@ set hlsearch					" highlight search result
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
 highlight Comment cterm=italic
+
+command Wrap :set wrap linebreak
+command Nowrap :set nowrap
 
 call plug#begin()
 	Plug 'tpope/vim-sensible'
