@@ -177,7 +177,12 @@ edit:add-var update~ {
 	if-external brew {
 		echo (styled "\n\n---> Updating Homebrew…\n" bold bg-color5)
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
-		try { brew update; brew outdated; brew upgrade; brew cleanup } catch { echo "\t\t …can't upgrade!"}
+		try { 
+			brew update
+			brew outdated
+			brew upgrade --no-quarantine --display-times
+			brew cleanup --prune=1
+		} catch { echo "\t\t …can't upgrade!"}
 	}
 	if (is-macos) { try { echo (styled "\n\n---> Check macOS updates…\n" bold bg-color5); softwareupdate --list } catch { } }
 	if (is-linux) {
