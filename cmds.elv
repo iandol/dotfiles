@@ -3,6 +3,7 @@ use str
 use path
 use file
 use platform
+echo (styled "…loading cmds module…" bold italic yellow)
 
 ################################################ Platform shortcuts
 fn is-macos		{ eq $platform:os 'darwin' }
@@ -92,8 +93,12 @@ fn nth     { |li n &not-found=$false|
 }
 
 ################################################ Utils
-fn if-external { |prog lambda|
-	if (has-external $prog) { try { $lambda } catch e { print "\n---> Could't run: "; pprint $lambda[def]; pprint $e[reason] } }
+fn if-external { |prog fcn ofcn|
+	if (has-external $prog) { 
+		try { $fcn } catch e { print "\n---> Could't run: "; pprint $fcn[def]; pprint $e[reason] } 
+	} else {
+		try { $ofcn } catch e { print "\n---> Could't run: "; pprint $ofcn[def]; pprint $e[reason] } 
+	}
 }
 fn append-to-path { |path|
 	if (is-path $path) { var @p = (filter-re-out (re:quote $path) $paths); set paths = [ $@p $path ] }

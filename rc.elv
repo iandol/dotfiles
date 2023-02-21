@@ -6,37 +6,33 @@
 #==================================================== - INTERNAL MODULES
 use re
 use str
+use epm
 use path
 use math
-use epm
 use platform
-if (not (path:is-regular &follow-symlink ~/.config/elvish/lib/cmds.elv)) {
-	mkdir -p ~/.config/elvish/lib/
-	ln -s ~/.dotfiles/cmds.elv ~/.config/elvish/lib/
+if $platform:is-unix {
+	set-env XDG_CONFIG_HOME $E:HOME/.config
+	use unix; edit:add-var unix: $unix:
+} else { 
+	set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME
+	set-env XDG_CONFIG_HOME $E:HOME/AppData/Local
 }
 use cmds
-#use readline-binding
-if $platform:is-unix { use unix; edit:add-var unix: $unix: }
-try { use doc } catch { }
+use doc
 
+#==================================================== - Say Hello
 echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic white)
 
 #==================================================== - EXTERNAL MODULES
-epm:install &silent-if-installed ^
+try { epm:install &silent-if-installed ^
 	github.com/iwoloschin/elvish-packages ^
 	github.com/zzamboni/elvish-modules ^
-	github.com/zzamboni/elvish-themes ^
-	github.com/zzamboni/elvish-completions ^
-	github.com/xiaq/edit.elv 
+	github.com/muesli/elvish-libs ^
+	github.com/xiaq/edit.elv } catch { echo "Cannot install external modules..." }
 
-use github.com/zzamboni/elvish-modules/proxy
 use github.com/zzamboni/elvish-modules/bang-bang
 use github.com/zzamboni/elvish-modules/spinners
-use github.com/href/elvish-gitstatus/gitstatus
 use github.com/iwoloschin/elvish-packages/python
-#use github.com/zzamboni/elvish-completions/git
-#use github.com/zzamboni/elvish-completions/cd
-#use github.com/zzamboni/elvish-completions/ssh
 
 #==================================================== - IMPORT UTIL NAMES
 var if-external~		= $cmds:if-external~
@@ -65,6 +61,7 @@ var ppaths = [
 	/usr/local/opt/python@3.10/libexec/bin
 	~/.rbenv/shims
 	~/.pyenv/shims
+	~/scoop/shims
 	/opt/homebrew/bin
 	/home/linuxbrew/.linuxbrew/bin
 ]
@@ -141,29 +138,20 @@ if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pye
 python:deactivate
 
 #==================================================== - ALIASES
-if (not (is-file ~/.config/elvish/lib/aliases.elv)) {
-	mkdir -p ~/.config/elvish/lib/
-	ln -s ~/.dotfiles/aliases.elv ~/.config/elvish/lib/
+if (not (is-file $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv)) {
+	mkdir -p $E:XDG_CONFIG_HOME/elvish/lib/
+	ln -s $E:HOME/.dotfiles/aliases.elv $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv
 }
 use aliases
 
 #==================================================== - THEME
-var theme = chain
+var theme = ''
 if-external starship { set theme = starship }
 if (eq $theme starship) {
 	echo (styled "…carapace init…" bold italic yellow)
-	eval ((which starship) init elvish)
-	eval ((which starship) completions elvish | slurp)
-} elif (eq $theme powerline) {
-	use github.com/muesli/elvish-libs/theme/powerline
-} else {
-	use github.com/zzamboni/elvish-themes/chain
-	chain:init
-	set chain:bold-prompt = $true
-	set chain:show-last-chain = $false
-	set chain:glyph[arrow] = "⇝"
-	set chain:prompt-segment-delimiters = [ "⎛" "⎞" ]
-}
+	eval ((search-external starship) init elvish)
+	eval ((search-external starship) completions elvish | slurp)
+} else { use github.com/muesli/elvish-libs/theme/powerline } 
 
 #==================================================== - SHIM FOLDERS
 put $E:HOME{/.pyenv/shims /.rbenv/shims} | each {|p| prepend-to-path $p} # needs to go after brew init

@@ -30,10 +30,17 @@ edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pp $edit:insert:binding }
 
 if ( is-macos ) {
-	edit:add-var lls~ {|@in| e:ls -alFGhtr@ $@in }
-	edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
-	edit:add-var ll~ {|@in| e:ls -alFGh $@in }
-	edit:add-var ls~ {|@in| e:ls -GF $@in }
+	if-external lsd {
+		edit:add-var lls~ {|@in| e:lsd -alFh $@in }
+		edit:add-var lm~ {|@in| e:lsd -alFhS $@in }
+		edit:add-var ll~ {|@in| e:lsd -alFh $@in }
+		edit:add-var ls~ {|@in| e:lsd -F $@in }
+	} {
+		edit:add-var lls~ {|@in| e:ls -alFGhtr@ $@in }
+		edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
+		edit:add-var ll~ {|@in| e:ls -alFGh $@in }
+		edit:add-var ls~ {|@in| e:ls -GF $@in }
+	}
 	edit:add-var mano~ {|@cmds|
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
 	}

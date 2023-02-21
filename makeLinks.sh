@@ -1,13 +1,20 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 cd ~
 printf "\n\n--->>> Make links in $SHELL, current directory is $(pwd)\n\n"
-
+MOD=""
 [[ $(uname -a | grep -i "microsoft") ]] && MOD="WSL"
 [[ $(uname -a | grep -Ei "aarch64|armv7") ]] && MOD="RPi"
+[[ $(uname -a | grep -Ei "MINGW64") ]] && MOD="WIN"
 export PLATFORM=$(uname -s)$MOD
+export XDG_CONFIG_HOME="$HOME/.config"
 printf "Using $PLATFORM...\n"
 
-XDG_CONFIG_HOME="$HOME/.config"
+if [[ $MOD == "WIN" ]]; then
+	export USER=$USERNAME
+	export HOME=$USERPROFILE
+	XDG_CONFIG_HOME="$HOME\AppData\Local"
+fi
+
 DF="$HOME/.dotfiles"
 CONFIGS="$DF/configs"
 
