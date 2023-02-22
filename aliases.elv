@@ -15,7 +15,7 @@ var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~; var is-arm64~ 
 var flatten~ = $cmds:flatten~
 
 ################################################ Abbreviations
-set edit:command-abbr['help'] = doc:show
+#set edit:command-abbr['help'] = doc:show
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>so'] = '2>&1'
@@ -26,6 +26,12 @@ set edit:abbr['>so'] = '2>&1'
 ################################################ Aliases
 echo (styled "…loading command aliases…" bold italic yellow)
 
+edit:add-var help~ {|&search=$false @args|
+	use doc
+	if (and (eq $search $false) (== 1 (count $args))) {
+	try { doc:show $args[0] } catch { try { doc:show '$'$args[0] } catch { doc:find $args[0] } }
+	} else { doc:find $@args }
+}
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pp $edit:insert:binding }
 

@@ -35,7 +35,9 @@ fn is-bool		{|x| eq (kind-of $x) bool }
 fn is-number	{|x| eq (kind-of $x) !!float64 }
 fn is-nil		{|x| eq $x $nil }
 fn is-path		{|p| path:is-dir &follow-symlink $p }
+fn not-path		{|p| not (is-path $p) }
 fn is-file		{|p| path:is-regular &follow-symlink $p }
+fn not-file		{|p| not (is-file $p) }
 
 ################################################ filtering functions
 fn filter {|func~ @in|
@@ -93,10 +95,11 @@ fn nth     { |li n &not-found=$false|
 }
 
 ################################################ Utils
-fn if-external { |prog fcn ofcn|
+fn if-external { |prog fcn @ofcn|
 	if (has-external $prog) { 
 		try { $fcn } catch e { print "\n---> Could't run: "; pprint $fcn[def]; pprint $e[reason] } 
-	} else {
+	} elif (not-empty $ofcn) {
+		set ofcn = (flatten $ofcn)
 		try { $ofcn } catch e { print "\n---> Could't run: "; pprint $ofcn[def]; pprint $e[reason] } 
 	}
 }

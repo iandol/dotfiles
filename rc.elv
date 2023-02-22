@@ -10,8 +10,10 @@ use epm
 use path
 use math
 use platform
+echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic white)
 if $platform:is-unix {
 	set-env XDG_CONFIG_HOME $E:HOME/.config
+	set-env XDG_DATA_HOME $E:HOME"/.local/share"
 	use unix; edit:add-var unix: $unix:
 } else { 
 	set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME
@@ -19,9 +21,6 @@ if $platform:is-unix {
 }
 use cmds
 use doc
-
-#==================================================== - Say Hello
-echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic white)
 
 #==================================================== - EXTERNAL MODULES
 try { epm:install &silent-if-installed ^
@@ -40,6 +39,8 @@ var append-to-path~		= $cmds:append-to-path~
 var prepend-to-path~	= $cmds:prepend-to-path~
 var is-path~			= $cmds:is-path~
 var is-file~			= $cmds:is-file~
+var not-path~			= $cmds:is-path~
+var not-file~			= $cmds:not-file~
 var is-macos~			= $cmds:is-macos~
 var is-linux~			= $cmds:is-linux~
 var is-arm64~			= $cmds:is-arm64~
@@ -88,7 +89,7 @@ each {|p|
 } $releases
 if (is-path ~/.venv/) { set python:virtualenv-directory = $E:HOME'/.venv' }
 
-#==================================================== - SETUP BREW
+#==================================================== - SETUP HOMEBREW
 if-external brew {
 	var pfix = (brew --prefix)
 	echo (styled "…configuring "$platform:os"-"$platform:arch" brew… " bold italic yellow)
@@ -120,16 +121,12 @@ if (has-env KITTY_INSTALLATION_DIR) {
 
 #==================================================== - GENERAL ENVIRONMENT
 set-env PAPERSIZE A4
-set-env XDG_CONFIG_HOME $E:HOME"/.config"
-set-env XDG_DATA_HOME $E:HOME"/.local/share"
-set-env DF $E:HOME"/.dotfiles"
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
 if (is-macos) {
 	if (is-path /Applications/MATLAB/MATLAB_Runtime/v912/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v912/ }
 	if (is-path /usr/local/Cellar/openjdk/19) { set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
 }
-if-external vim { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
-if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' }
+if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…" bold italic yellow) }
 if-external procs { eval (procs --completion-out elvish | slurp ) }
@@ -138,20 +135,18 @@ if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pye
 python:deactivate
 
 #==================================================== - ALIASES
-if (not (is-file $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv)) {
+if (not-file $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv) {
 	mkdir -p $E:XDG_CONFIG_HOME/elvish/lib/
 	ln -s $E:HOME/.dotfiles/aliases.elv $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv
 }
 use aliases
 
 #==================================================== - THEME
-var theme = ''
-if-external starship { set theme = starship }
-if (eq $theme starship) {
+if-external starship { 
 	echo (styled "…carapace init…" bold italic yellow)
 	eval ((search-external starship) init elvish)
 	eval ((search-external starship) completions elvish | slurp)
-} else { use github.com/muesli/elvish-libs/theme/powerline } 
+} { use github.com/muesli/elvish-libs/theme/powerline } 
 
 #==================================================== - SHIM FOLDERS
 put $E:HOME{/.pyenv/shims /.rbenv/shims} | each {|p| prepend-to-path $p} # needs to go after brew init
