@@ -35,18 +35,24 @@ edit:add-var help~ {|&search=$false @args|
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pp $edit:insert:binding }
 
-if ( is-macos ) {
-	if-external lsd {
-		edit:add-var lls~ {|@in| e:lsd -alFh $@in }
-		edit:add-var lm~ {|@in| e:lsd -alFhS $@in }
-		edit:add-var ll~ {|@in| e:lsd -alFh $@in }
-		edit:add-var ls~ {|@in| e:lsd -F $@in }
-	} {
+if-external lsd {
+	edit:add-var lls~ {|@in| e:lsd -alFht $@in }
+	edit:add-var lm~ {|@in| e:lsd -alFhS $@in }
+	edit:add-var ll~ {|@in| e:lsd -alFh $@in }
+	edit:add-var ls~ {|@in| e:lsd -F $@in }
+} {
+	if is-macos { 
 		edit:add-var lls~ {|@in| e:ls -alFGhtr@ $@in }
 		edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
 		edit:add-var ll~ {|@in| e:ls -alFGh $@in }
 		edit:add-var ls~ {|@in| e:ls -GF $@in }
+	} else {
+		edit:add-var ls~ {|@in| e:ls --color -GhFLH $@in }
+		edit:add-var ll~ {|@in| e:ls --color -alFGh $@in }
 	}
+}
+
+if ( is-macos ) {
 	edit:add-var mano~ {|@cmds|
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
 	}
@@ -66,8 +72,6 @@ if ( is-macos ) {
 		try { launchctl stop gui/501/com.sangfor.ECAgentProxy } catch { echo "Can't stop ECAgentProxy" }
 	}
 } elif ( is-linux ) {
-	edit:add-var ls~ {|@in| e:ls --color -GhFLH $@in }
-	edit:add-var ll~ {|@in| e:ls --color -alFGh $@in }
 	edit:add-var mano~ {|@cmds|
 		each {|c| man -Tps $c | ps2pdf - | zathura - & } $cmds
 	}

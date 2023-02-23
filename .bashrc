@@ -4,9 +4,9 @@ export HOMEBREW_INSTALL_CLEANUP=true
 
 [[ $PLATFORM = 'darwin'* ]] && source $DF/myinfo
 
-if [[ -f $(which nvim) ]]; then
+if [[ -f $(which nvim 2> /dev/null) ]]; then
 	export EDITOR='nvim'
-elif [[ -f $(which vim) ]]; then
+elif [[ -f $(which vim 2> /dev/null) ]]; then
 	export EDITOR='vim'
 fi
 
@@ -20,7 +20,7 @@ export HISTCONTROL=ignoredups
 # Make some commands not show up in history
 export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
 
-export PATH=$HOME/bin:/usr/local/bin:/usr/local/sbin:$HOME:$PATH
+export PATH=$HOME/bin:$HOME/scoop/shims:/usr/local/bin:/usr/local/sbin:$HOME:$PATH
 
 if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
@@ -38,14 +38,14 @@ else
 	[[ -d "/home/linuxbrew/" ]] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
-if [[ -x $(which brew) ]]; then
+if [[ -x $(which brew 2> /dev/null) ]]; then
 	[[ -d `brew --prefix`/etc/bash_completion.d ]] &&	source $(brew --prefix)/etc/bash_completion.d/*
 fi
 
-[[ -x $(which rbenv) ]] && eval "$(rbenv init -)"
-[[ -x $(which pyenv) ]] && eval "$(pyenv init -)"
-[[ -x $(which fzf) ]] && source $DF/configs/.fzf.bash
-[[ -f $(which starship) ]] && eval "$(starship init bash)"
+[[ -x $(which rbenv 2> /dev/null) ]] && eval "$(rbenv init -)"
+[[ -x $(which pyenv 2> /dev/null) ]] && eval "$(pyenv init -)"
+[[ -x $(which fzf 2> /dev/null) ]] && source $DF/configs/.fzf.bash
+[[ -f $(which starship 2> /dev/null) ]] && eval "$(starship init bash)"
 [[ -f "$DF/env" ]] && source "$DF/env"
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
-[[ -x $(which figlet) ]] && figlet "Totoro Hai!"
+[[ -x $(which figlet 2> /dev/null) ]] && figlet "Totoro Hai!"

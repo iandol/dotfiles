@@ -12,15 +12,15 @@ use math
 use platform
 echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic white)
 if $platform:is-unix {
-	set-env XDG_CONFIG_HOME $E:HOME/.config
-	set-env XDG_DATA_HOME $E:HOME"/.local/share"
 	use unix; edit:add-var unix: $unix:
 } else { 
 	set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME
-	set-env XDG_CONFIG_HOME $E:HOME/AppData/Local
 }
-use cmds
+use cmds 
 use doc
+
+set-env XDG_CONFIG_HOME $E:HOME/.config
+set-env XDG_DATA_HOME $E:HOME/.local/share
 
 #==================================================== - EXTERNAL MODULES
 try { epm:install &silent-if-installed ^
@@ -143,7 +143,7 @@ use aliases
 
 #==================================================== - THEME
 if-external starship { 
-	echo (styled "…carapace init…" bold italic yellow)
+	echo (styled "…Starship init…" bold italic yellow)
 	eval ((search-external starship) init elvish)
 	eval ((search-external starship) completions elvish | slurp)
 } { use github.com/muesli/elvish-libs/theme/powerline } 
