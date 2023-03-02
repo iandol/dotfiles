@@ -50,12 +50,6 @@ var pyl~				= $python:list-virtualenvs~
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
 
 #==================================================== - PATHS
-set paths = [
-	~/bin
-	/usr/local/bin
-	/usr/local/sbin
-	$@paths
-]
 var ppaths = [
 	/Library/TeX/texbin
 	/opt/local/bin
@@ -65,6 +59,9 @@ var ppaths = [
 	~/scoop/shims
 	/opt/homebrew/bin
 	/home/linuxbrew/.linuxbrew/bin
+	~/bin
+	/usr/local/bin
+	/usr/local/sbin
 ]
 var apaths = [
 	/Library/Frameworks/GStreamer.framework/Commands
@@ -87,6 +84,7 @@ each {|p|
 		if (is-macos) { ln -sf $prefix$p$suffix"/maci64/mlint" ~/bin/mlint }
 	}
 } $releases
+
 if (is-path ~/.venv/) { set python:virtualenv-directory = $E:HOME'/.venv' }
 
 #==================================================== - SETUP HOMEBREW
@@ -149,7 +147,7 @@ if-external starship {
 } { use github.com/muesli/elvish-libs/theme/powerline } 
 
 #==================================================== - SHIM FOLDERS
-put $E:HOME{/.pyenv/shims /.rbenv/shims} | each {|p| prepend-to-path $p} # needs to go after brew init
+put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims} | each {|p| prepend-to-path $p} # needs to go after brew init
 
 #==================================================== - END
 fn helpme { echo (styled "\n ! – last cmd ░ ⌃N – 🚀navigate ░ ⌃R – 🔍history ░ ⌃L – 🔍dirs\n ⌃B – 🖊️cmd ░ ⌃a,e – ⇄ ░ ⌃u – ⌫line ░ 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane: split=§| §- close=§x focus=§o\n tmux window create=§c switch=§n close=§&\n" bold italic fg-yellow ) }
