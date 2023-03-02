@@ -4,9 +4,9 @@ export HOMEBREW_INSTALL_CLEANUP=true
 
 [[ $PLATFORM = 'darwin'* ]] && source $DF/myinfo
 
-if [[ -f $(which nvim 2> /dev/null) ]]; then
+if [[ -f $(which nvim > /dev/null 2>&1) ]]; then
 	export EDITOR='nvim'
-elif [[ -f $(which vim 2> /dev/null) ]]; then
+elif [[ -f $(which vim > /dev/null 2>&1) ]]; then
 	export EDITOR='vim'
 fi
 
@@ -38,14 +38,14 @@ else
 	[[ -d "/home/linuxbrew/" ]] && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
-if [[ -x $(which brew 2> /dev/null) ]]; then
+if [[ -x $(which brew > /dev/null 2>&1) ]]; then
 	[[ -d `brew --prefix`/etc/bash_completion.d ]] &&	source $(brew --prefix)/etc/bash_completion.d/*
 fi
 
-[[ -x $(which rbenv 2> /dev/null) ]] && eval "$(rbenv init -)"
-[[ -x $(which pyenv 2> /dev/null) ]] && eval "$(pyenv init -)"
-[[ -x $(which fzf 2> /dev/null) ]] && source $DF/configs/.fzf.bash
-[[ -f $(which starship 2> /dev/null) ]] && eval "$(starship init bash)"
+[[ -x $(which rbenv > /dev/null 2>&1) ]] && eval "$(rbenv init -)"
+[[ -x $(which pyenv > /dev/null 2>&1) ]] && eval "$(pyenv init -)"
+[[ -x $(which fzf > /dev/null 2>&1) ]] && source $DF/configs/.fzf.bash
+[[ -f $(which starship > /dev/null 2>&1) ]] && eval "$(starship init bash)"
 [[ -f "$DF/env" ]] && source "$DF/env"
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
-[[ -x $(which figlet 2> /dev/null) ]] && figlet "Totoro Hai!"
+[[ -x $(which figlet > /dev/null 2>&1) ]] && figlet "Totoro Hai!"

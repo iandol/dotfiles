@@ -233,7 +233,7 @@ edit:add-var updateElvish~ {
 	cd $tmpdir
 	echo (styled "\n===ELVISH===\nOS: "$platform:os" & Arch: "$platform:arch bold yellow)
 	try { 
-		wget 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz'
+		wget --no-check-certificate 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz'
 	} catch { 
 		echo "Couldn't download for some reason!" 
 	} else { 
@@ -259,7 +259,7 @@ edit:add-var updateFFmpeg~ {
 	var tnames = [ffmpeg ffplay ffprobe]
 	for x $tnames {
 		try {
-			wget -O $x.zip 'https://ffmpeg.martin-riedl.de/redirect/latest/'$os'/'$platform:arch'/snapshot/'$x'.zip'
+			wget --no-check-certificate -O $x.zip 'https://ffmpeg.martin-riedl.de/redirect/latest/'$os'/'$platform:arch'/snapshot/'$x'.zip'
 			unzip -o $x.zip -d $E:HOME/bin/
 		} catch { echo "Can't download "$x }
 	}
