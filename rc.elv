@@ -10,15 +10,16 @@ use epm
 use path
 use math
 use platform
+use cmds 
+use doc
+
 echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic white)
 if $platform:is-unix {
 	use unix; edit:add-var unix: $unix:
 } else { 
 	set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME
+	if (cmds:is-path $E:HOME/scoop/apps/msys2) { cmds:prepend-to-path $E:HOME/scoop/apps/msys2/current/usr/bin }
 }
-use cmds 
-use doc
-
 set-env XDG_CONFIG_HOME $E:HOME/.config
 set-env XDG_DATA_HOME $E:HOME/.local/share
 
