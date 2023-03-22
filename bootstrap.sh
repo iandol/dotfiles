@@ -81,6 +81,7 @@ elif [ $PLATFORM = "Linux" ]; then
 		brew install carapace
 		brew tap linuxbrew/fonts
 		brew install font-fantasque-sans-mono font-fira-code \
+		font-fantasque-sans-mono-nerd-font font-fira-code-nerd-font \
 		font-jetbrains-mono font-cascadia-code font-libertinus \
 		font-alegreya font-alegreya-sans
 		#brew install --HEAD font-source-sans-3
