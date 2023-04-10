@@ -3,7 +3,7 @@
 # see a sample here: https://gitlab.com/zzamboni/dot-elvish/-/blob/master/rc.org
 #===============================================
 
-#==================================================== - INTERNAL MODULES
+#==================================================== - BASE MODULES
 use re
 use str
 use epm
@@ -142,7 +142,7 @@ use aliases
 #==================================================== - THEME
 if-external starship { 
 	echo (styled "…Starship init…" bold italic yellow)
-	eval ((search-external starship) init elvish)
+	eval ((search-external starship) init elvish --print-full-init | slurp)
 	eval ((search-external starship) completions elvish | slurp)
 } { use github.com/muesli/elvish-libs/theme/powerline } 
 

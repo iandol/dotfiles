@@ -26,14 +26,14 @@ set edit:abbr['>so'] = '2>&1'
 ################################################ Aliases
 echo (styled "…loading command aliases…" bold italic yellow)
 
-edit:add-var help~ {|&search=$false @args|
+edit:add-var help~ { |&search=$false @args|
 	use doc
 	if (and (eq $search $false) (== 1 (count $args))) {
 	try { doc:show $args[0] } catch { try { doc:show '$'$args[0] } catch { doc:find $args[0] } }
 	} else { doc:find $@args }
 }
 edit:add-var pp~ {|@in| pprint $@in }
-edit:add-var shortcuts~ { pp $edit:insert:binding }
+edit:add-var shortcuts~ { pprint $edit:insert:binding }
 
 if-external lsd {
 	edit:add-var lls~ {|@in| e:lsd -alFht $@in }
@@ -91,7 +91,7 @@ if ( is-macos ) {
 
 }
 
-if-external bat { edit:add-var cat~ {|@in| e:bat $@in }}
+if-external bat { edit:add-var cat~ {|@in| e:bat -n $@in }}
 if-external python3 { 
 	edit:add-var urlencode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } 
 	edit:add-var urldecode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
@@ -108,8 +108,8 @@ edit:add-var listTCP~ {|@in|
 	sudo lsof -i TCP -P | grep -E $@in
 }
 
-edit:add-var sizes~ { e:du -sh * | e:sort -rh | e:bat --color never }
-edit:add-var fs~ {|@in| e:du -sh $@in }
+edit:add-var sizes~ {|@in| if (cmds:is-empty $in) { set @in = * }; e:du -sh $@in | e:sort -rh | cat }
+edit:add-var fs~ {|@in| e:du -sh $@in | e:sort -rh } 
 edit:add-var gst~ {|@in| e:git status $@in }
 edit:add-var gca~ {|@in| e:git commit --all $@in }
 edit:add-var resetorigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
