@@ -162,7 +162,8 @@ edit:add-var installTeX~ {
 	elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex ^
 	stackengine xltabular booktabs orcidlink ^
 	ltablex cleveref makecell threeparttablex tabu multirow ^
-	changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol
+	changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol ^
+	tikzfill
 }
 
 edit:add-var update~ {
@@ -272,10 +273,15 @@ edit:add-var updateFFmpeg~ {
 edit:add-var updateOptickaPages~ {
 	var opath = $E:HOME'/Code/opticka'
 	if (is-path $opath) {
-		echo "Trying to sync gh-pages from: "$opath
 		var olddir = $pwd
-		var tmpdir = (path:temp-dir)
 		cd $opath
+		echo "Building HTML files vis Pandoc"
+		var list = ["uihelpvars" "uihelpstims" "uihelpstate" "uihelpfunctions" "uihelptask"]
+		for x $list {
+			pandoc -d "help/help.yaml" -o "help/"$x".html" "help/"$x".md"
+		}
+		echo "Trying to sync gh-pages from: "$opath
+		var tmpdir = (path:temp-dir)
 		var oldbranch = (git branch --show-current)
 		git checkout master
 		cp README.md $tmpdir
