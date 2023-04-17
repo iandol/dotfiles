@@ -131,14 +131,15 @@ edit:add-var sp~ {|@argin|
 		} else {
 			echo "Set Proxy: "
 			set-env no_proxy "localhost, 127.0.0.1, ::1"
-			put $plist | cmds:flatten | each {|t| set-env $t $argin[0]; set-env (str:to-upper $t) $argin[0] }
 			if (str:contains $argin[0] "socks5") {
-				git config --global http.proxy $E:http_proxy
-				git config --global https.proxy $E:https_proxy
+				put $plist | cmds:flatten | each {|t| set-env $t $argin[0]; set-env (str:to-upper $t) $argin[0] }
+			} elif (str:contains $argin[0] "http") {
+				put $plist | cmds:flatten | each {|t| set-env $t "http://"$argin[0]; set-env (str:to-upper $t) $argin[0] }
 			} else {
-				git config --global http.proxy "http://"$E:http_proxy
-				git config --global https.proxy "https://"$E:https_proxy
+				put $plist | cmds:flatten | each {|t| set-env $t "http://"$argin[0]; set-env (str:to-upper $t) "http://"$argin[0] }
 			}
+			git config --global http.proxy $E:http_proxy
+			git config --global https.proxy $E:https_proxy
 		}
 	} else {
 		echo "Unset proxy: "
@@ -279,7 +280,7 @@ edit:add-var updateOptickaPages~ {
 		var list = ["uihelpvars" "uihelpstims" "uihelpstate" "uihelpfunctions" "uihelptask"]
 		for x $list {
 			pandoc -d "help/help.yaml" -o "help/"$x".html" "help/"$x".md"
-		}
+			}
 		echo "Trying to sync gh-pages from: "$opath
 		var tmpdir = (path:temp-dir)
 		var oldbranch = (git branch --show-current)
