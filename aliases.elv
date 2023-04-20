@@ -96,7 +96,16 @@ if-external python3 {
 	edit:add-var urlencode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } 
 	edit:add-var urldecode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
 }
-if-external kitty { edit:add-var kssh~ {|@in| kitty +kitten ssh $@in } }
+if-external kitty { 
+	edit:add-var kssh~ {|@in| kitty +kitten ssh $@in }
+	if (is-macos) {
+		edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.95/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
+		edit:add-var kittydark~ { sed -Ei '' 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
+	} else {
+		edit:add-var kittylight~ { sed -Ei 's/background_tint .+/background_tint 0.95/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
+		edit:add-var kittydark~ { sed -Ei 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
+	}
+}
 if-external nvim { edit:add-var vi~ {|@in| nvim $@in }}
 
 edit:add-var listUDP~ {|@in| 
@@ -120,8 +129,6 @@ edit:add-var makepwd~ { e:openssl rand -base64 15 }
 edit:add-var dl~ {|@in| e:curl -C - -O '{}' $@in }
 edit:add-var ping~ {|@in| e:ping -c 5 $@in }
 edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" $c | cmds:first [(all)] }) }
-edit:add-var kittylight~ { sed -i '' 's/background_tint 0.755/background_tint 0.955/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
-edit:add-var kittydark~ { sed -i '' 's/background_tint 0.955/background_tint 0.755/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes }
 
 edit:add-var sp~ {|@argin|
 	var @plist = {http,https,ftp,all}_proxy
@@ -197,8 +204,7 @@ edit:add-var update~ {
 		echo (styled "\n\n---> Updating Homebrew…\n" bold bg-color5)
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		try { 
-			brew update
-			brew outdated
+			brew update; brew outdated
 			brew upgrade --no-quarantine --display-times
 			brew cleanup --prune=1
 		} catch { echo "\t\t …can't upgrade!"}
@@ -212,7 +218,7 @@ edit:add-var update~ {
 		} catch { echo "\t…couldn't update APT!" }
 		echo (styled "\n\n---> Updating snap/flatpak/firmware…\n" bold bg-color5)
 		if-external snap { try { sudo snap refresh } catch { } }
-		if-external flatpak { try { flatpak update } catch { } }
+		if-external flatpak { try { flatpak update -y } catch { } }
 		if-external fwupdmgr { try { fwupdmgr get-upgrades } catch { } }
 	}
 	if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
