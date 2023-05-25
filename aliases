@@ -1,6 +1,11 @@
 export PLATFORM=$(uname -s)
 export PROC=$(uname -m)
-if [[ $PLATFORM = 'Darwin' ]]; then 
+if [[ -f $(which lsd) ]]; then
+	alias lls='lsd -alFht'
+	alias lm='lsd -alFhS'
+	alias ll='lsd -alFh'
+	alias ls='lsd -F'
+elif [[ $PLATFORM = 'Darwin' ]]; then 
 	alias la='ls -alGhF'
 	alias las='ls -alGhFeLH'
 	alias ll='ls -alFGh'

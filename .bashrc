@@ -2,6 +2,11 @@ export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
 
+#-------------------------------Bootstrap homebrew[s]
+[[ $PLATFORM == 'Darwin' ]] && [[ -d /usr/local/homebrew ]] && eval "$(/usr/local/homebrew/bin/brew shellenv)"
+[[ $PLATFORM == 'Darwin' ]] && [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
 [[ $PLATFORM = 'darwin'* ]] && source $DF/myinfo
 
 if [[ -f $(which nvim > /dev/null 2>&1) ]]; then
@@ -25,13 +30,13 @@ export PATH=$HOME/bin:$HOME/scoop/shims:/usr/local/bin:/usr/local/sbin:$HOME:$PA
 if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	[[ -d "/Applications/MATLAB_R2022b.app/bin" ]] && path=("/Applications/MATLAB_R2022b.app/bin" $path) # matlab
-	[[ -x "/Applications/MATLAB_R2022b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2022b.app/bin/maci64/mlint" ~/bin/mlint # matlab
+	[[ -d "/Applications/MATLAB_R2023a.app/bin" ]] && path=("/Applications/MATLAB_R2023a.app/bin" $path) # matlab
+	[[ -x "/Applications/MATLAB_R2023a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2023a.app/bin/maci64/mlint" ~/bin/mlint # matlab
 else
-	if [[ -d "/usr/local/MATLAB/R2022b/bin" ]]; then
-		export PATH="/usr/local/MATLAB/R2022b/bin:$PATH" # matlab
-		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2022b/bin" # matlab
-		ln -sf "/usr/local/MATLAB/R2022b/bin/glnxa64/mlint" ~/bin/ # mlint
+	if [[ -d "/usr/local/MATLAB/R2023a/bin" ]]; then
+		export PATH="/usr/local/MATLAB/R2023a/bin:$PATH" # matlab
+		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2023a/bin" # matlab
+		ln -sf "/usr/local/MATLAB/R2023a/bin/glnxa64/mlint" ~/bin/ # mlint
 	fi
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/" # Linux Java
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export PATH="${JAVA_HOME}bin:$PATH" # Linux JDK

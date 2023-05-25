@@ -6,3 +6,4 @@
 .byebug_history
 *.bak
 .vim/plugged
+.vim/.netrwhist

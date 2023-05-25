@@ -2,9 +2,9 @@ export DF="$HOME/.dotfiles"
 export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
 
-#-------------------------------Bootstrap homebrew
+#-------------------------------Bootstrap homebrew[s]
+[[ $PLATFORM == 'Darwin' ]] && [[ -d /usr/local/homebrew ]] && eval "$(/usr/local/homebrew/bin/brew shellenv)"
 [[ $PLATFORM == 'Darwin' ]] && [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
-[[ $PLATFORM == 'Darwin' ]] && [[ -d /usr/local/homebrew ]] && eval "$(/usr/local/bin/brew shellenv)"
 [[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #-------------------------------PREFER nvim
@@ -82,6 +82,24 @@ if [[ -d "$HOME/miniconda3/" ]]; then
 	fi
 	unset __conda_setup
 	# <<< conda initialize <<<
+elif [[ -d "$HOME/micromamba/" ]]; then
+	
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'mamba init' !!
+export MAMBA_EXE="/opt/homebrew/bin/micromamba";
+export MAMBA_ROOT_PREFIX="/Users/ian/micromamba";
+__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__mamba_setup"
+else
+    if [ -f "/Users/ian/micromamba/etc/profile.d/micromamba.sh" ]; then
+        . "/Users/ian/micromamba/etc/profile.d/micromamba.sh"
+    else
+        export  PATH="/Users/ian/micromamba/bin:$PATH"  # extra space after export prevents interference from conda init
+    fi
+fi
+unset __mamba_setup
+# <<< mamba initialize <<<
 fi
 
 #------------------------------------KITTY INTEGRATION
@@ -141,3 +159,4 @@ fi
 
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
+

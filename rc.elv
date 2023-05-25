@@ -1,7 +1,6 @@
 #==================================================== - ELVISH CONFIG
 # elvish shell config: https://elv.sh/learn/tour.html
-# see a sample here: https://gitlab.com/zzamboni/dot-elvish/-/blob/master/rc.org
-#===============================================
+#====================================================
 
 #==================================================== - BASE MODULES
 use re
@@ -10,17 +9,10 @@ use epm
 use path
 use math
 use platform
-use cmds 
 use doc
-
-if $platform:is-unix {
-	use unix; edit:add-var unix: $unix:
-} else { 
-	set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME
-	if (cmds:is-path $E:HOME/scoop/apps/msys2) { cmds:prepend-to-path $E:HOME/scoop/apps/msys2/current/usr/bin }
-}
-set-env XDG_CONFIG_HOME $E:HOME/.config
-set-env XDG_DATA_HOME $E:HOME/.local/share
+use cmds # my utility module
+use mamba # for conda/mamba support
+if $platform:is-unix { use unix; edit:add-var unix: $unix: } 
 
 #==================================================== - EXTERNAL MODULES
 try { epm:install &silent-if-installed ^
@@ -32,6 +24,11 @@ try { epm:install &silent-if-installed ^
 use github.com/zzamboni/elvish-modules/bang-bang
 use github.com/zzamboni/elvish-modules/spinners
 use github.com/iwoloschin/elvish-packages/python
+
+#==================================================== - BASIC ENVIRONMENT
+set-env XDG_CONFIG_HOME $E:HOME/.config
+set-env XDG_DATA_HOME $E:HOME/.local/share
+if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
 
 #==================================================== - IMPORT UTIL NAMES
 var if-external~		= $cmds:if-external~
@@ -47,13 +44,17 @@ var is-arm64~			= $cmds:is-arm64~
 var pya~				= $python:activate~
 var pyd~				= $python:deactivate~
 var pyl~				= $python:list-virtualenvs~
+var mama~				= $mamba:activate~
+var mamd~				= $mamba:deactivate~
+var maml~				= $mamba:list-envs~
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
+set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:activate]
 
-#==================================================== - PATHS
+#==================================================== - PATHS + VENVS
 var ppaths = [
 	/Library/TeX/texbin
+	~/scoop/apps/msys2/current/usr/bin
 	/opt/local/bin
-	/usr/local/opt/python@3.10/libexec/bin
 	~/.rbenv/shims
 	~/.pyenv/shims
 	~/scoop/shims
@@ -64,10 +65,12 @@ var ppaths = [
 	/usr/local/sbin
 ]
 var apaths = [
+	/usr/local/opt/python@3.10/libexec/bin
+	/usr/local/opt/python@3.11/libexec/bin
 	/Library/Frameworks/GStreamer.framework/Commands
 ]
-each {|p| if (is-path $p) { prepend-to-path $p }} $ppaths
-each {|p| if (is-path $p) { append-to-path $p }} $apaths
+each {|p| prepend-to-path $p } $ppaths
+each {|p| append-to-path $p } $apaths
 
 var releases = [R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a]
 var match = $false; var prefix; var suffix
@@ -85,7 +88,8 @@ each {|p|
 	}
 } $releases
 
-if (is-path ~/.venv/) { set python:virtualenv-directory = $E:HOME'/.venv' }
+if (is-path $E:HOME/.venv/) { set python:virtualenv-directory = $E:HOME/.venv }
+if (is-path $E:HOME/micromamba) { set mamba:root = $E:HOME/micromamba; set-env MAMBA_ROOT_DIRECTORY $mamba:root }
 
 #==================================================== - SETUP HOMEBREW
 if-external brew {
@@ -124,6 +128,7 @@ if (is-macos) {
 	if (is-path /Applications/MATLAB/MATLAB_Runtime/v912/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v912/ }
 	if (is-path /usr/local/Cellar/openjdk/19) { set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
 }
+
 if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…" bold italic yellow) }
@@ -132,7 +137,7 @@ if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbe
 if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pyenv' }
 python:deactivate
 
-#==================================================== - ALIASES
+#==================================================== - MAIN ALIASES
 if (not-file $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv) {
 	mkdir -p $E:XDG_CONFIG_HOME/elvish/lib/
 	ln -s $E:HOME/.dotfiles/aliases.elv $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv

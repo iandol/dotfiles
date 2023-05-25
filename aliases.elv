@@ -19,6 +19,7 @@ var flatten~ = $cmds:flatten~
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>so'] = '2>&1'
+set edit:command-abbr['mm'] = 'micromamba'
 # set edit:abbr['sudo '] = 'sudo -- '
 # set edit:small-word-abbr['ll'] = 'ls -alFGh@'			
 # set edit:small-word-abbr['ls'] = 'ls -GF'
@@ -90,6 +91,8 @@ if ( is-macos ) {
 	}
 
 }
+
+if (is-file /usr/local/homebrew/bin/brew) { edit:add-var axbrew~ {|@in| arch -x86_64 /usr/local/homebrew/bin/brew $@in }}
 
 if-external bat { edit:add-var cat~ {|@in| e:bat -n $@in }}
 if-external python3 { 

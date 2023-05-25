@@ -21,6 +21,8 @@ fn neg			{|n| < $n 0 }
 # inspired by https://github.com/crinklywrappr/rivendell 
 fn is-empty		{|li| == (count $li) 0 }
 fn not-empty	{|li| not (== (count $li) 0) }
+fn is-member	{|li s| not-eq	$ok ?(each {|it| if (re:match $s $it) { return } } $li) }
+fn not-member	{|li s| eq		$ok ?(each {|it| if (re:match $s $it) { return } } $li) }
 fn is-match		{|s re| re:match $re $s }
 fn not-match	{|s re| not (re:match $re $s) }
 fn is-zero		{|n| == 0 $n }
@@ -108,6 +110,9 @@ fn append-to-path { |path|
 }
 fn prepend-to-path { |path|
 	if (is-path $path) { var @p = (filter-re-out (re:quote $path) $paths); set paths = [ $path $@p ] }
+}
+fn remove-from-path { |pathfragment|
+	set paths = [(filter-re-out (re:quote $pathfragment) $paths)]
 }
 fn check-paths {
 	each {|p| if (not (is-path $p)) { echo (styled "🥺—"$p" in $paths no longer exists…" bg-red) } } $paths
