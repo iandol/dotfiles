@@ -11,9 +11,9 @@
 # — for standard environment variables this is fine, but we can't handle
 # sourced extra scripts easily
 #
-# > mamba:activate — activates a virtual environment mamba:deactivate —
-# > deactivates a virtual environment 
-# > mamba:list — lists all virtual environments 
+# > mamba:activate — activates an environment 
+# > mamba:deactivate — deactivates an environment 
+# > mamba:list — lists all environments in the root
 #
 # This file is licensed under the terms of the MIT license.
 
