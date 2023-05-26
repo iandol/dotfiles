@@ -13,7 +13,7 @@
 #
 # > mamba:root — variable to store the mamba/conda root folder
 # > mamba:list — lists all environments in the envs folder of the root folder 
-# > mamba:activate — activates an environment  
+# > mamba:activate — activates an environment (tab autocomplete should work here)
 # > mamba:deactivate — deactivates an environment  
 #
 # Example:
