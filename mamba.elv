@@ -11,9 +11,23 @@
 # — for standard environment variables this is fine, but we can't handle
 # sourced extra scripts easily
 #
-# > mamba:activate — activates an environment 
-# > mamba:deactivate — deactivates an environment 
-# > mamba:list — lists all environments in the root
+# > mamba:root — variable to store the mamba/conda root folder
+# > mamba:list — lists all environments in the envs folder of the root folder 
+# > mamba:activate — activates an environment  
+# > mamba:deactivate — deactivates an environment  
+#
+# Example:
+# ```
+# ~> use mamba
+# ~> set mamba:root = ~/micromamba
+# ~> mamba:list
+# Mamba ENVS in /Users/ian/micromamba/envs: 
+# ▶ octave
+# ▶ pupil
+# ▶ test
+# ~> mamba:activate pupil
+# ~> mamba:deactivate
+# ```
 #
 # This file is licensed under the terms of the MIT license.
 
