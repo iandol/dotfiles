@@ -46,7 +46,7 @@ var pyd~				= $python:deactivate~
 var pyl~				= $python:list-virtualenvs~
 var mama~				= $mamba:activate~
 var mamd~				= $mamba:deactivate~
-var maml~				= $mamba:list-envs~
+var maml~				= $mamba:list~
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
 set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:activate]
 
