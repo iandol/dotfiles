@@ -10,20 +10,20 @@ use path
 use math
 use platform
 use doc
-use cmds # my utility module
-use mamba # for conda/mamba support
 if $platform:is-unix { use unix; edit:add-var unix: $unix: } 
 
 #==================================================== - EXTERNAL MODULES
 try { epm:install &silent-if-installed ^
-	github.com/iwoloschin/elvish-packages ^
+	github.com/iandol/elvish-modules ^
 	github.com/zzamboni/elvish-modules ^
 	github.com/muesli/elvish-libs ^
 	github.com/xiaq/edit.elv } catch { echo "Cannot install external modules..." }
 
+use github.com/iandol/elvish-modules/cmds # my utility module
+use github.com/iandol/elvish-modules/python # for python venv support
+use github.com/iandol/elvish-modules/mamba # for conda/mamba support
 use github.com/zzamboni/elvish-modules/bang-bang
 use github.com/zzamboni/elvish-modules/spinners
-use github.com/iwoloschin/elvish-packages/python
 
 #==================================================== - BASIC ENVIRONMENT
 set-env XDG_CONFIG_HOME $E:HOME/.config
@@ -43,7 +43,7 @@ var is-linux~			= $cmds:is-linux~
 var is-arm64~			= $cmds:is-arm64~
 var pya~				= $python:activate~
 var pyd~				= $python:deactivate~
-var pyl~				= $python:list-virtualenvs~
+var pyl~				= $python:list-venvs~
 var mama~				= $mamba:activate~
 var mamd~				= $mamba:deactivate~
 var maml~				= $mamba:list~
@@ -88,7 +88,7 @@ each {|p|
 	}
 } $releases
 
-if (is-path $E:HOME/.venv/) { set python:virtualenv-directory = $E:HOME/.venv }
+if (is-path $E:HOME/.venv/) { set python:venv-directory = $E:HOME/.venv }
 if (is-path $E:HOME/micromamba) { set mamba:root = $E:HOME/micromamba; set-env MAMBA_ROOT_DIRECTORY $mamba:root }
 
 #==================================================== - SETUP HOMEBREW
