@@ -16,8 +16,7 @@ if $platform:is-unix { use unix; edit:add-var unix: $unix: }
 try { epm:install &silent-if-installed ^
 	github.com/iandol/elvish-modules ^
 	github.com/zzamboni/elvish-modules ^
-	github.com/muesli/elvish-libs ^
-	github.com/xiaq/edit.elv } catch { echo "Cannot install external modules..." }
+	github.com/muesli/elvish-libs } catch { echo "Cannot install external modules..." }
 
 use github.com/iandol/elvish-modules/cmds # my utility module
 use github.com/iandol/elvish-modules/python # for python venv support
@@ -34,6 +33,7 @@ if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME 
 var if-external~		= $cmds:if-external~
 var append-to-path~		= $cmds:append-to-path~
 var prepend-to-path~	= $cmds:prepend-to-path~
+var do-if-path~			= $cmds:do-if-path~
 var is-path~			= $cmds:is-path~
 var is-file~			= $cmds:is-file~
 var not-path~			= $cmds:is-path~
@@ -41,17 +41,17 @@ var not-file~			= $cmds:not-file~
 var is-macos~			= $cmds:is-macos~
 var is-linux~			= $cmds:is-linux~
 var is-arm64~			= $cmds:is-arm64~
-var pya~				= $python:activate~
-var pyd~				= $python:deactivate~
-var pyl~				= $python:list-venvs~
 var mama~				= $mamba:activate~
 var mamd~				= $mamba:deactivate~
 var maml~				= $mamba:list~
+var pya~				= $python:activate~
+var pyd~				= $python:deactivate~
+var pyl~				= $python:list-venvs~
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
 set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:activate]
 
 #==================================================== - PATHS + VENVS
-var ppaths = [
+each {|p| prepend-to-path $p } [
 	/Library/TeX/texbin
 	~/scoop/apps/msys2/current/usr/bin
 	/opt/local/bin
@@ -64,32 +64,27 @@ var ppaths = [
 	/usr/local/bin
 	/usr/local/sbin
 ]
-var apaths = [
+each {|p| append-to-path $p } [
 	/usr/local/opt/python@3.10/libexec/bin
 	/usr/local/opt/python@3.11/libexec/bin
 	/Library/Frameworks/GStreamer.framework/Commands
 ]
-each {|p| prepend-to-path $p } $ppaths
-each {|p| append-to-path $p } $apaths
 
-var releases = [R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a]
-var match = $false; var prefix; var suffix
+var prefix; var suffix
 if (is-macos) {
 	set prefix = "/Applications/MATLAB_"; set suffix = ".app/bin"
 } else {
 	set prefix = "/usr/local/MATLAB/"; set suffix = "/bin"
 }
-each {|p|
-	if (and (eq $match $false) (is-path $prefix$p$suffix)) {
-		set match = $true
-		prepend-to-path $prefix$p$suffix
-		set-env MATLAB_EXECUTABLE $prefix$p$suffix"/matlab" # matlab
-		if (is-macos) { ln -sf $prefix$p$suffix"/maci64/mlint" ~/bin/mlint }
-	}
-} $releases
+var releases = [$prefix{R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a}$suffix]
+do-if-path $releases {|p|
+	prepend-to-path $p
+	set-env MATLAB_EXECUTABLE $p"/matlab" # matlab
+	if (is-macos) { ln -sf $p"/maci64/mlint" ~/bin/mlint }
+}
 
-if (is-path $E:HOME/.venv/) { set python:venv-directory = $E:HOME/.venv }
-if (is-path $E:HOME/micromamba) { set mamba:root = $E:HOME/micromamba; set-env MAMBA_ROOT_DIRECTORY $mamba:root }
+do-if-path $E:HOME/.venv/ {|p| set python:venv-directory = $p }
+do-if-path [$E:HOME/micromamba /media/cog/data/micromamba] {|p| set mamba:root = $p; set-env MAMBA_ROOT_DIRECTORY $mamba:root }
 
 #==================================================== - SETUP HOMEBREW
 if-external brew {
@@ -119,14 +114,14 @@ if (has-env KITTY_INSTALLATION_DIR) {
 	set edit:after-readline = [ {|c| send-title (str:split ' ' $c | take 1) } {|c| osc '133;C' } ]
 	set after-chdir = [ {|_| send-pwd } ]
 	echo (styled "…kitty integration…" bold italic yellow)
-}
+} 
 
 #==================================================== - GENERAL ENVIRONMENT
 set-env PAPERSIZE A4
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
 if (is-macos) {
-	if (is-path /Applications/MATLAB/MATLAB_Runtime/v912/) { set-env MRT /Applications/MATLAB/MATLAB_Runtime/v912/ }
-	if (is-path /usr/local/Cellar/openjdk/19) { set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
+	do-if-path /Applications/MATLAB/MATLAB_Runtime/v912/ {|p| set-env MRT $p }
+	do-if-path /usr/local/Cellar/openjdk/19 { set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
 }
 
 if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }

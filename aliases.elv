@@ -4,10 +4,9 @@ use path
 use math
 use epm
 use platform
-use cmds
-try { use doc } catch { }
+use github.com/iandol/elvish-modules/cmds # my utility module
 
-################################################ Export Utils
+################################################ Import Functions
 var if-external~ = $cmds:if-external~
 var is-path~ = $cmds:is-path~
 var is-file~ = $cmds:is-file~
