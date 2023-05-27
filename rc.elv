@@ -121,7 +121,7 @@ set-env PAPERSIZE A4
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
 if (is-macos) {
 	do-if-path /Applications/MATLAB/MATLAB_Runtime/v912/ {|p| set-env MRT $p }
-	do-if-path /usr/local/Cellar/openjdk/19 { set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
+	do-if-path [/usr/local/Cellar/openjdk/19] {|p| set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
 }
 
 if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
