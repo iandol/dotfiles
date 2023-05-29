@@ -141,7 +141,7 @@ use aliases
 
 #==================================================== - THEME
 if-external starship { 
-	echo (styled "…Starship init…" bold italic yellow)
+	echo (styled "…starship init…" bold italic yellow)
 	eval ((search-external starship) init elvish --print-full-init | slurp)
 	eval ((search-external starship) completions elvish | slurp)
 } { use github.com/muesli/elvish-libs/theme/powerline } 
@@ -149,8 +149,8 @@ if-external starship {
 #==================================================== - SHIM FOLDERS
 put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims} | each {|p| prepend-to-path $p} # needs to go after brew init
 
-#==================================================== - END
+#==================================================== - THIS IS THE END, MY FRIEND
 fn helpme { echo (styled "\n ! – last cmd ░ ⌃N – 🚀navigate ░ ⌃R – 🔍history ░ ⌃L – 🔍dirs\n ⌃B – 🖊️cmd ░ ⌃a,e – ⇄ ░ ⌃u – ⌫line ░ 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane: split=§| §- close=§x focus=§o\n tmux window create=§c switch=§n close=§&\n" bold italic fg-yellow ) }
 helpme
-echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic white)
+echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic yellow)
 

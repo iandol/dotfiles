@@ -5,28 +5,20 @@ use math
 use epm
 use platform
 use github.com/iandol/elvish-modules/cmds # my utility module
+echo (styled "…loading command aliases…" bold italic yellow)
 
-################################################ Import Functions
-var if-external~ = $cmds:if-external~
-var is-path~ = $cmds:is-path~
-var is-file~ = $cmds:is-file~
-var is-macos~ = $cmds:is-macos~; var is-linux~ = $cmds:is-linux~; var is-arm64~ = $cmds:is-arm64~
-var flatten~ = $cmds:flatten~
-
-################################################ Abbreviations
+#=================================================== - Abbreviations
 #set edit:command-abbr['help'] = doc:show
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>so'] = '2>&1'
 set edit:command-abbr['mm'] = 'micromamba'
 # set edit:abbr['sudo '] = 'sudo -- '
-# set edit:small-word-abbr['ll'] = 'ls -alFGh@'			
+# set edit:small-word-abbr['ll'] = 'ls -alFGh@'
 # set edit:small-word-abbr['ls'] = 'ls -GF'
 
-################################################ Aliases
-echo (styled "…loading command aliases…" bold italic yellow)
-
-edit:add-var help~ { |&search=$false @args|
+#==================================================== - ELVISH
+edit:add-var help~ { |&search=$false @args| # from @krader
 	use doc
 	if (and (eq $search $false) (== 1 (count $args))) {
 	try { doc:show $args[0] } catch { try { doc:show '$'$args[0] } catch { doc:find $args[0] } }
@@ -35,13 +27,14 @@ edit:add-var help~ { |&search=$false @args|
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pprint $edit:insert:binding }
 
-if-external lsd {
+#==================================================== - LS
+cmds:if-external lsd {
 	edit:add-var lls~ {|@in| e:lsd -alFht $@in }
 	edit:add-var lm~ {|@in| e:lsd -alFhS $@in }
 	edit:add-var ll~ {|@in| e:lsd -alFh $@in }
 	edit:add-var ls~ {|@in| e:lsd -F $@in }
 } {
-	if is-macos { 
+	if cmds:is-macos { 
 		edit:add-var lls~ {|@in| e:ls -alFGhtr@ $@in }
 		edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
 		edit:add-var ll~ {|@in| e:ls -alFGh $@in }
@@ -52,7 +45,8 @@ if-external lsd {
 	}
 }
 
-if ( is-macos ) {
+#==================================================== - GENERAL
+if ( cmds:is-macos ) {
 	edit:add-var mano~ {|@cmds|
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
 	}
@@ -71,7 +65,7 @@ if ( is-macos ) {
 		try { sudo launchctl stop system/com.sangfor.EasyMonitor } catch { echo "Can't stop EasyMonitor" }
 		try { launchctl stop gui/501/com.sangfor.ECAgentProxy } catch { echo "Can't stop ECAgentProxy" }
 	}
-} elif ( is-linux ) {
+} elif ( cmds:is-linux ) {
 	edit:add-var mano~ {|@cmds|
 		each {|c| man -Tps $c | ps2pdf - | zathura - & } $cmds
 	}
@@ -91,16 +85,16 @@ if ( is-macos ) {
 
 }
 
-if (is-file /usr/local/homebrew/bin/brew) { edit:add-var axbrew~ {|@in| arch -x86_64 /usr/local/homebrew/bin/brew $@in }}
+if (cmds:is-file /usr/local/homebrew/bin/brew) { edit:add-var axbrew~ {|@in| arch -x86_64 /usr/local/homebrew/bin/brew $@in }}
 
-if-external bat { edit:add-var cat~ {|@in| e:bat -n $@in }}
-if-external python3 { 
+cmds:if-external bat { edit:add-var cat~ {|@in| e:bat -n $@in }}
+cmds:if-external python3 { 
 	edit:add-var urlencode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } 
 	edit:add-var urldecode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
 }
-if-external kitty { 
+cmds:if-external kitty { 
 	edit:add-var kssh~ {|@in| kitty +kitten ssh $@in }
-	if (is-macos) {
+	if (cmds:is-macos) {
 		edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.95/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
 		edit:add-var kittydark~ { sed -Ei '' 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
 	} else {
@@ -108,7 +102,7 @@ if-external kitty {
 		edit:add-var kittydark~ { sed -Ei 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
 	}
 }
-if-external nvim { edit:add-var vi~ {|@in| nvim $@in }}
+cmds:if-external nvim { edit:add-var vi~ {|@in| nvim $@in }}
 
 edit:add-var listUDP~ {|@in| 
 	echo "Searching for: "$@in
@@ -132,6 +126,8 @@ edit:add-var dl~ {|@in| e:curl -C - -O '{}' $@in }
 edit:add-var ping~ {|@in| e:ping -c 5 $@in }
 edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" $c | cmds:first [(all)] }) }
 
+#==================================================== - FUNCTIONS
+# --- Setproxy [-l] [address]
 edit:add-var sp~ {|@argin|
 	var @plist = {http,https,ftp,all}_proxy
 	if (eq (count $argin) (num 1)) {
@@ -162,6 +158,7 @@ edit:add-var sp~ {|@argin|
 }
 set edit:command-abbr['setproxy'] = 'sp'
 
+# --- Install required TeX packages for BasicTex
 edit:add-var installTeX~ {
 	sudo tlmgr install lualatex-math luatexja abstract ^
 	latexmk csquotes pagecolor relsize mdframed needspace sectsty ^
@@ -176,6 +173,7 @@ edit:add-var installTeX~ {
 	tikzfill
 }
 
+# --- Update code and OS
 edit:add-var update~ {
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 	var olddir = (pwd)
@@ -185,7 +183,7 @@ edit:add-var update~ {
 	Documents/MATLAB/gramm Code/scrivomatic Code/dotpandoc Code/bookends-tools ^
 	Code/gears Code/pandocomatic Code/paru]
 	for x $ul {
-		if (is-path ~/$x/.git) {
+		if (cmds:is-path ~/$x/.git) {
 			tmp pwd = ~/$x
 			set oldbranch = (git branch --show-current)
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
@@ -202,7 +200,7 @@ edit:add-var update~ {
 		}
 	}
 	cd $olddir
-	if-external brew {
+	cmds:if-external brew {
 		echo (styled "\n\n---> Updating Homebrew…\n" bold bg-color5)
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		try { 
@@ -211,33 +209,34 @@ edit:add-var update~ {
 			brew cleanup --prune=1
 		} catch { echo "\t\t …can't upgrade!"}
 	}
-	if (is-macos) { try { echo (styled "\n\n---> Check macOS updates…\n" bold bg-color5); softwareupdate --list } catch { } }
-	if (is-linux) {
+	if (cmds:is-macos) { try { echo (styled "\n\n---> Check macOS updates…\n" bold bg-color5); softwareupdate --list } catch { } }
+	if (cmds:is-linux) {
 		try { echo (styled "\n\n---> Updating APT…\n" bold bg-color5)
 			sudo apt update
 			sudo apt autoremove
 			apt list --upgradable
 		} catch { echo "\t…couldn't update APT!" }
 		echo (styled "\n\n---> Updating snap/flatpak/firmware…\n" bold bg-color5)
-		if-external snap { try { sudo snap refresh } catch { } }
-		if-external flatpak { try { flatpak update -y } catch { } }
-		if-external fwupdmgr { try { fwupdmgr get-upgrades } catch { } }
+		cmds:if-external snap { try { sudo snap refresh } catch { } }
+		cmds:if-external flatpak { try { flatpak update -y } catch { } }
+		cmds:if-external fwupdmgr { try { fwupdmgr get-upgrades } catch { } }
 	}
-	if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
-	if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
-	try { if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --list } } catch { }
-	if-external vim {
+	cmds:if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
+	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
+	try { cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --list } } catch { }
+	cmds:if-external vim {
 		echo (styled "\n\n---> Update VIM Plug.vim…\n" bold bg-color5)
 		try { curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim} catch { echo "Failed to download..." }
-		if-external nvim { echo "\t---> Update NVIM Plug.vim…\n"; mkdir -p $E:XDG_DATA_HOME/nvim/site/autoload; cp -v $E:HOME/.vim/autoload/plug.vim $E:XDG_DATA_HOME/nvim/site/autoload/ }
+		cmds:if-external nvim { echo "\t---> Update NVIM Plug.vim…\n"; mkdir -p $E:XDG_DATA_HOME/nvim/site/autoload; cp -v $E:HOME/.vim/autoload/plug.vim $E:XDG_DATA_HOME/nvim/site/autoload/ }
 	}
 	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5)
 	try { epm:upgrade } catch { echo "Couldn't update EPM packages…"}
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
 
+# --- Update Elvish
 edit:add-var updateElvish~ {
-	if-external elvish { elvish -version }
+	cmds:if-external elvish { elvish -version }
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
@@ -250,13 +249,14 @@ edit:add-var updateElvish~ {
 		tar xvf elvish-HEAD.tar.gz
 		chmod +x elvish-HEAD
 		sudo mv -vf elvish-HEAD /usr/local/bin/elvish
-		if-external elvish { elvish -version }
+		cmds:if-external elvish { elvish -version }
 	} finally {
 		cd $olddir
 		rm -rf $tmpdir
 	}
 }
 
+# --- Update FFMPEG
 edit:add-var updateFFmpeg~ {
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
@@ -264,7 +264,7 @@ edit:add-var updateFFmpeg~ {
 	var lv rv  = '' ''
 	var os = $platform:os
 	if (eq $os 'darwin') { set os = 'macos'}
-	if-external ffmpeg { set lv = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
+	cmds:if-external ffmpeg { set lv = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
 	echo (styled "\n===FFMPEG UPDATE===\nOS: "$os" & Arch: "$platform:arch bold yellow)
 	var tnames = [ffmpeg ffplay ffprobe]
 	for x $tnames {
@@ -273,15 +273,16 @@ edit:add-var updateFFmpeg~ {
 			unzip -o $x.zip -d $E:HOME/bin/
 		} catch { echo "Can't download "$x }
 	}
-	if-external ffmpeg { set rv = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
+	cmds:if-external ffmpeg { set rv = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
 	echo "===UPDATED:===\nOld: "$lv" & New: "$rv
 	cd $olddir
 	rm -rf $tmpdir
 }
 
+# --- Update Opticka
 edit:add-var updateOptickaPages~ {
 	var opath = $E:HOME'/Code/opticka'
-	if (is-path $opath) {
+	if (cmds:is-path $opath) {
 		var olddir = $pwd
 		cd $opath
 		echo "Building HTML files vis Pandoc"
