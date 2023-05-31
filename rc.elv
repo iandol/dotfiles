@@ -65,8 +65,7 @@ each {|p| prepend-to-path $p } [
 	/usr/local/sbin
 ]
 each {|p| append-to-path $p } [
-	/usr/local/opt/python@3.10/libexec/bin
-	/usr/local/opt/python@3.11/libexec/bin
+	/usr/local/opt/python@{3.12 3.11 3.10 3.9}/libexec/bin
 	/Library/Frameworks/GStreamer.framework/Commands
 ]
 
