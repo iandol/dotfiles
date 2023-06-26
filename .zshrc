@@ -66,37 +66,21 @@ else
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
 fi
 
-if [[ -d "$HOME/miniconda3/" ]]; then
-	#-------------------------------------CONDA
-	# >>> conda initialize >>>
-	# !! Contents within this block are managed by 'conda init' !!
-	__conda_setup="$("$HOME/miniconda3/bin/conda" 'shell.zsh' 'hook' 2> /dev/null)"
-	if [ $? -eq 0 ]; then
-		eval "$__conda_setup"
-	else
-		if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
-			. "$HOME/miniconda3/etc/profile.d/conda.sh"
-		else
-			path=("$HOME/miniconda3/bin" $path)
-		fi
-	fi
-	unset __conda_setup
-	# <<< conda initialize <<<
-elif [[ -d "$HOME/micromamba/" ]]; then
-	
+
+if [[ -d "$HOME/micromamba/" ]]; then
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba init' !!
-export MAMBA_EXE="/opt/homebrew/bin/micromamba";
-export MAMBA_ROOT_PREFIX="/Users/ian/micromamba";
+export MAMBA_EXE="$HOME/.local/bin/micromamba";
+export MAMBA_ROOT_PREFIX="$HOME/micromamba";
 __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
 if [ $? -eq 0 ]; then
-    eval "$__mamba_setup"
+	eval "$__mamba_setup"
 else
-    if [ -f "/Users/ian/micromamba/etc/profile.d/micromamba.sh" ]; then
-        . "/Users/ian/micromamba/etc/profile.d/micromamba.sh"
-    else
-        export  PATH="/Users/ian/micromamba/bin:$PATH"  # extra space after export prevents interference from conda init
-    fi
+	if [ -f "$HOME/micromamba/etc/profile.d/micromamba.sh" ]; then
+		. "$HOME/micromamba/etc/profile.d/micromamba.sh"
+	else
+		export  PATH="$HOME/micromamba/bin:$PATH"  # extra space after export prevents interference from conda init
+	fi
 fi
 unset __mamba_setup
 # <<< mamba initialize <<<

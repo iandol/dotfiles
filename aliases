@@ -18,6 +18,7 @@ else
 	alias la='ls -A'
 	alias l='ls -CF'
 fi
+alias mm='micromamba'
 alias gst='git status'
 alias gca='git commit --all'
 alias gdt='git difftool'
