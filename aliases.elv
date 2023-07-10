@@ -170,7 +170,7 @@ edit:add-var installTeX~ {
 	stackengine xltabular booktabs orcidlink ^
 	ltablex cleveref makecell threeparttablex tabu multirow ^
 	changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol ^
-	tikzfill
+	tikzfill luacolor lua-ul xpatch selnolig
 }
 
 # --- Update code and OS
@@ -206,7 +206,7 @@ edit:add-var update~ {
 		try { 
 			brew update; brew outdated
 			brew upgrade --no-quarantine --display-times
-			brew cleanup --prune=1
+			brew cleanup --prune=all
 		} catch { echo "\t\t …can't upgrade!"}
 	}
 	if (cmds:is-macos) { try { echo (styled "\n\n---> Check macOS updates…\n" bold bg-color5); softwareupdate --list } catch { } }
@@ -225,9 +225,9 @@ edit:add-var update~ {
 	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
 	try { cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --list } } catch { }
 	cmds:if-external vim {
-		echo (styled "\n\n---> Update VIM Plug.vim…\n" bold bg-color5)
-		try { curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim} catch { echo "Failed to download..." }
-		cmds:if-external nvim { echo "\t---> Update NVIM Plug.vim…\n"; mkdir -p $E:XDG_DATA_HOME/nvim/site/autoload; cp -v $E:HOME/.vim/autoload/plug.vim $E:XDG_DATA_HOME/nvim/site/autoload/ }
+		#echo (styled "\n\n---> Update VIM Plug.vim…\n" bold bg-color5)
+		#try { curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim} catch { echo "Failed to download..." }
+		#cmds:if-external nvim { echo "\t---> Update NVIM Plug.vim…\n"; mkdir -p $E:XDG_DATA_HOME/nvim/site/autoload; cp -v $E:HOME/.vim/autoload/plug.vim $E:XDG_DATA_HOME/nvim/site/autoload/ }
 	}
 	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5)
 	try { epm:upgrade } catch { echo "Couldn't update EPM packages…"}
