@@ -221,6 +221,7 @@ edit:add-var update~ {
 		cmds:if-external flatpak { try { flatpak update -y } catch { } }
 		cmds:if-external fwupdmgr { try { fwupdmgr get-upgrades } catch { } }
 	}
+	cmds:if-external micromamba { echo (styled "\n---> Update Micromamba…\n" bold bg-color5); micromamba self-update }
 	cmds:if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
 	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
 	try { cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --list } } catch { }
