@@ -83,7 +83,7 @@ do-if-path $releases {|p|
 }
 
 do-if-path $E:HOME/.venv/ {|p| set python:venv-directory = $p }
-do-if-path [$E:HOME/micromamba /media/cog/data/micromamba] {|p| set mamba:root = $p; set-env MAMBA_ROOT_DIRECTORY $mamba:root }
+do-if-path [$E:HOME/micromamba /media/cog/data/micromamba] {|p| set mamba:root = $p; set-env MAMBA_ROOT_PREFIX $mamba:root }
 
 #==================================================== - SETUP HOMEBREW
 if-external brew {
