@@ -134,7 +134,7 @@ edit:add-var sp~ {|@argin|
 		if (eq $argin[0] "-l") {
 			echo "Proxy settings:\n==============="
 		} else {
-			echo "Set Proxy: "
+			echo "Set proxy:\n==============="
 			set-env no_proxy "localhost, 127.0.0.1, ::1"
 			if (str:contains $argin[0] "socks5") {
 				put $plist | cmds:flatten | each {|t| set-env $t $argin[0]; set-env (str:to-upper $t) $argin[0] }
@@ -147,14 +147,14 @@ edit:add-var sp~ {|@argin|
 			git config --global https.proxy $E:https_proxy
 		}
 	} else {
-		echo "Unset proxy: "
+		echo "Unset proxy:\n==============="
 		unset-env no_proxy
 		put $plist | cmds:flatten | each {|t| unset-env $t; unset-env (str:to-upper $t) }
 		try { git config --global --unset http.proxy } catch { }
 		try { git config --global --unset https.proxy } catch { }
 	}
 	echo "PROXY: HTTP = "$E:http_proxy" | HTTPS = "$E:https_proxy" | ALL = "$E:all_proxy "\nBYPASS: "$E:no_proxy
-	try { echo "GIT:"; git config --global --get-regexp http } catch { }
+	try { echo "GIT: "(git config --global --get-regexp http | slurp | str:replace "\n" " " (one)) } catch { }
 }
 set edit:command-abbr['setproxy'] = 'sp'
 

@@ -66,12 +66,14 @@ else
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
 fi
 
+[[ -f "$HOME/.local/bin/micromamba" ]] && export MAMBA_EXE="$HOME/.local/bin/micromamba"
+[[ -f "/opt/homebrew/bin/micromamba" ]] && export MAMBA_EXE="/opt/homebrew/bin/micromamba"
+[[ -d "$HOME/micromamba" ]] && export MAMBA_ROOT_PREFIX="$HOME/micromamba"
+[[ -d /media/cog/data/micromamba ]] && export MAMBA_ROOT_PREFIX="/media/cog/data/micromamba"
 
 if [[ -d "$HOME/micromamba/" ]]; then
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba init' !!
-export MAMBA_EXE="$HOME/.local/bin/micromamba";
-export MAMBA_ROOT_PREFIX="$HOME/micromamba";
 __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__mamba_setup"
