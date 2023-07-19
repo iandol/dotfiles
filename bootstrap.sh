@@ -36,10 +36,11 @@ if [ $PLATFORM = "Darwin" ]; then
 		brew tap rsteube/tap
 		brew install carapace
 		#cask fonts
-		brew install font-fantasque-sans-mono font-fira-code font-jetbrains-mono \
+		brew install font-recursive-code font-fantasque-sans-mono font-fira-code font-jetbrains-mono \
 		font-cascadia-code font-libertinus font-alegreya font-alegreya-sans
-		brew install iandol/adobe-fonts/font-source-sans
-		brew install iandol/adobe-fonts/font-source-serif
+		brew tap iandol/adobe-fonts
+		brew install font-source-sans
+		brew install font-source-serif
 		printf 'Do you want to install Apps? (y / n): '
 		read ans
 		if [ $ans == 'y' ]; then
@@ -59,6 +60,7 @@ if [ $PLATFORM = "Darwin" ]; then
 elif [ $PLATFORM = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
+	sudo apt update
 	sudo apt -my install build-essential zsh git gparted vim curl file mc
 	sudo apt -my install freeglut3 gawk mesa-utils exfatprogs
 	sudo apt -my install p7zip-full p7zip-rar figlet jq ansiweather htop 
@@ -107,6 +109,7 @@ elif [ $PLATFORM = "LinuxRPi" ]; then
 elif [ $PLATFORM = "LinuxWSL" ]; then
 	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
+	sudo apt update
 	sudo apt-get install build-essential vim curl p7zip-full p7zip-rar file zsh git figlet jq ansiweather wget rbenv ruby gawk
 	printf 'We will not install homebrew under WSL, try scoop in PS...'
 	mkdir -p bin
