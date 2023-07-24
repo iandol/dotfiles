@@ -1,3 +1,4 @@
+# to run this you may need this first: `Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser`
 $proxy='http://127.0.0.1:16005'
 $ENV:HTTP_PROXY=$proxy
 $ENV:HTTPS_PROXY=$proxy
@@ -19,14 +20,14 @@ scoop bucket add nerd-fonts
 scoop bucket add nonportable
 scoop install sysinternals
 
-scoop install process-explorer starship less delta curl gzip tar lsd bat coreutils msys2 vim neovim
-scoop install libreoffice sumatrapdf vcredist2022 vivaldi-snapshop wechat 
+scoop install starship less delta curl gzip tar lsd bat coreutils msys2 vim neovim
+scoop install libreoffice sumatrapdf vcredist2022 vivaldi wechat 
 
 scoop install vscode
-reg import "C:\Users\Ian\scoop\apps\vscode\current\install-context.reg"
-reg import "C:\Users\Ian\scoop\apps\vscode\current\install-associations.reg"
+reg import "$ENV:HOME\scoop\apps\vscode\current\install-context.reg"
+reg import "$ENV:HOME\scoop\apps\vscode\current\install-associations.reg"
 
-sudo scoop install files-np Cascadia-Code FantasqueSansMono-NF FiraCode-NF
+sudo scoop install Cascadia-Code FantasqueSansMono-NF FiraCode-NF
 
 cd ~
 git clone https://github.com/iandol/dotfiles .dotfiles
