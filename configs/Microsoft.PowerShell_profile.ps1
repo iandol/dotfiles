@@ -34,14 +34,15 @@ function Remove-Proxy (){
     Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings' -name ProxyEnable -Value 0
 }
 
-Invoke-Expression (& 'C:\Users\Ian\scoop\shims\starship.exe' init powershell --print-full-init | Out-String)
+$ENV:HOME=$ENV:USERPROFILE
+$ENV:USER=$ENV:USERNAME
+$ENV:XDG_CONFIG_HOME=$ENV:USERPROFILE+"\.config"
+
+Invoke-Expression (& "$ENV:HOME\scoop\shims\starship.exe" init powershell --print-full-init | Out-String)
 
 $proxy='http://127.0.0.1:16005'
 $ENV:HTTP_PROXY=$proxy
 $ENV:HTTPS_PROXY=$proxy
 $ENV:ALL_PROXY=$proxy
-$ENV:HOME=$ENV:USERPROFILE
-$ENV:USER=$ENV:USERNAME
-$ENV:XDG_CONFIG_HOME=$ENV:USERPROFILE+"\.config"
 
 Write-Output "Welcome stranger..."
