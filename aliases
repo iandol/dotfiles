@@ -18,6 +18,7 @@ else
 	alias la='ls -A'
 	alias l='ls -CF'
 fi
+alias hping='httping -K'
 alias installmicromamba='"${SHELL}" <(curl -L micro.mamba.pm/install.sh)'
 alias installkitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
 alias mm='micromamba'
