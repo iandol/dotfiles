@@ -20,7 +20,7 @@ else
 fi
 alias hping='httping -K'
 alias installmicromamba='"${SHELL}" <(curl -L micro.mamba.pm/install.sh)'
-alias installkitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
+alias installkitty='curl -L sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
 alias mm='micromamba'
 alias gst='git status'
 alias gca='git commit --all'

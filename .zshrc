@@ -74,15 +74,11 @@ fi
 if [[ -d "$HOME/micromamba/" ]]; then
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba init' !!
-__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
 if [ $? -eq 0 ]; then
-    eval "$__mamba_setup"
+	eval "$__mamba_setup"
 else
-    if [ -f "$HOME/micromamba/etc/profile.d/micromamba.sh" ]; then
-        . "$HOME/micromamba/etc/profile.d/micromamba.sh"
-    else
-        export  PATH="$HOME/micromamba/bin:$PATH"  # extra space after export prevents interference from conda init
-    fi
+	alias micromamba="$MAMBA_EXE"  # Fallback on help from mamba activate
 fi
 unset __mamba_setup
 # <<< mamba initialize <<<
