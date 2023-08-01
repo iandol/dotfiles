@@ -46,6 +46,8 @@ cmds:if-external lsd {
 }
 
 #==================================================== - GENERAL
+edit:add-var installkitty~ { curl -L sw.kovidgoyal.net/kitty/installer.sh | zsh /dev/stdin }
+edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/stdin }
 if ( cmds:is-macos ) {
 	edit:add-var mano~ {|@cmds|
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
