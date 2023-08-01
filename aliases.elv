@@ -87,13 +87,13 @@ if ( cmds:is-macos ) {
 
 if (cmds:is-file /usr/local/homebrew/bin/brew) { edit:add-var axbrew~ {|@in| arch -x86_64 /usr/local/homebrew/bin/brew $@in }}
 
-cmds:if-external httping {edit:add-var hping~ {|@in| e:httping -K $@in } }
+cmds:if-external httping { edit:add-var hping~ {|@in| e:httping -K $@in } }
 cmds:if-external bat { edit:add-var cat~ {|@in| e:bat -n $@in } }
 cmds:if-external python3 { 
 	edit:add-var urlencode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } 
 	edit:add-var urldecode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
 }
-cmds:if-external kitty { 
+cmds:if-external kitty {
 	edit:add-var kssh~ {|@in| kitty +kitten ssh $@in }
 	if (cmds:is-macos) {
 		edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.95/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
