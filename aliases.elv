@@ -29,14 +29,15 @@ edit:add-var shortcuts~ { pprint $edit:insert:binding }
 
 #==================================================== - LS
 cmds:if-external lsd {
-	edit:add-var lls~ {|@in| e:lsd -alFht $@in }
-	edit:add-var lm~ {|@in| e:lsd -alFhS $@in }
-	edit:add-var ll~ {|@in| e:lsd -alFh $@in }
+	edit:add-var llt~ {|@in| e:lsd --header --group-directories-first -alFht $@in }
+	edit:add-var lls~ {|@in| e:lsd --header --group-directories-first -alFhS $@in }
+	edit:add-var ll~ {|@in| e:lsd --header --group-directories-first -alFh $@in }
 	edit:add-var ls~ {|@in| e:lsd -F $@in }
 } {
 	if cmds:is-macos { 
-		edit:add-var lls~ {|@in| e:ls -alFGhtr@ $@in }
-		edit:add-var lm~ {|@in| e:ls -alFGh@ $@in }
+		edit:add-var lls~ {|@in| e:ls -alFGhS $@in }
+		edit:add-var llt~ {|@in| e:ls -alFGht $@in }
+		edit:add-var llm~ {|@in| e:ls -alFGh@ $@in }
 		edit:add-var ll~ {|@in| e:ls -alFGh $@in }
 		edit:add-var ls~ {|@in| e:ls -GF $@in }
 	} else {
