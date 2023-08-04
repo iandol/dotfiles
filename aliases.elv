@@ -50,14 +50,14 @@ cmds:if-external lsd {
 edit:add-var installkitty~ { curl -L sw.kovidgoyal.net/kitty/installer.sh | zsh /dev/stdin }
 edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/stdin }
 if ( cmds:is-macos ) {
-	edit:add-var mano~ {|@cmds|
+	edit:add-var mano~ { |@cmds|
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
 	}
-	edit:add-var fix~ {|@in| e:codesign --force --deep -s - $@in }
-	edit:add-var ql~ {|@in| e:qlmanage -p $@in }
-	edit:add-var quicklook~ {|@in| e:qlmanage -p $@in }
-	edit:add-var spotlighter~ {|@in| e:mdfind -onlyin (pwd) $@in }
-	edit:add-var dequarantine~ {|@in| e:xattr -v -d com.apple.quarantine $@in }
+	edit:add-var fix~ { |@in| e:codesign --force --deep -s - $@in }
+	edit:add-var ql~ { |@in| e:qlmanage -p $@in }
+	edit:add-var quicklook~ { |@in| e:qlmanage -p $@in }
+	edit:add-var spotlighter~ { |@in| e:mdfind -onlyin (pwd) $@in }
+	edit:add-var dequarantine~ { |@in| e:xattr -v -d com.apple.quarantine $@in }
 	edit:add-var nitenite~ { e:exec pmset sleepnow }
 	edit:add-var startarp~ {
 		try { sudo launchctl start system/com.sangfor.EasyMonitor } catch { echo "EasyMonitor start error" }
@@ -68,10 +68,12 @@ if ( cmds:is-macos ) {
 		try { sudo launchctl stop system/com.sangfor.EasyMonitor } catch { echo "Can't stop EasyMonitor" }
 		try { launchctl stop gui/501/com.sangfor.ECAgentProxy } catch { echo "Can't stop ECAgentProxy" }
 	}
+	if (cmds:is-file /usr/local/homebrew/bin/brew) { edit:add-var axbrew~ {|@in| arch -x86_64 /usr/local/homebrew/bin/brew $@in } }
 } elif ( cmds:is-linux ) {
 	edit:add-var mano~ {|@cmds|
 		each {|c| man -Tps $c | ps2pdf - | zathura - & } $cmds
 	}
+	edit:add-var smbfix~ { kill (pidof gvfsd-smb-browse) }
 	edit:add-var avahi-reset~ {
 		sudo systemctl stop avahi-daemon.socket
 		sudo systemctl stop avahi-daemon.service
@@ -88,16 +90,14 @@ if ( cmds:is-macos ) {
 
 }
 
-if (cmds:is-file /usr/local/homebrew/bin/brew) { edit:add-var axbrew~ {|@in| arch -x86_64 /usr/local/homebrew/bin/brew $@in }}
-
 cmds:if-external httping { edit:add-var hping~ {|@in| e:httping -K $@in } }
 cmds:if-external bat { edit:add-var cat~ {|@in| e:bat -n $@in } }
 cmds:if-external python3 { 
-	edit:add-var urlencode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } 
-	edit:add-var urldecode~ {|@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
+	edit:add-var urlencode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } 
+	edit:add-var urldecode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
 }
 cmds:if-external kitty {
-	edit:add-var kssh~ {|@in| kitty +kitten ssh $@in }
+	edit:add-var kssh~ { |@in| kitty +kitten ssh $@in }
 	if (cmds:is-macos) {
 		edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.95/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
 		edit:add-var kittydark~ { sed -Ei '' 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
@@ -106,28 +106,28 @@ cmds:if-external kitty {
 		edit:add-var kittydark~ { sed -Ei 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
 	}
 }
-cmds:if-external nvim { edit:add-var vi~ {|@in| nvim $@in }}
+cmds:if-external nvim { edit:add-var vi~ { |@in| nvim $@in }}
 
-edit:add-var listUDP~ {|@in| 
+edit:add-var listUDP~ { |@in| 
 	echo "Searching for: "$@in
 	sudo lsof -i UDP -P | grep -E $@in
 }
-edit:add-var listTCP~ {|@in| 
+edit:add-var listTCP~ { |@in| 
 	echo "Searching for: "$@in
 	sudo lsof -i TCP -P | grep -E $@in
 }
 
-edit:add-var sizes~ {|@in| if (cmds:is-empty $in) { set @in = * }; e:du -sh $@in | e:sort -rh | cat }
-edit:add-var fs~ {|@in| e:du -sh $@in | e:sort -rh } 
-edit:add-var gst~ {|@in| e:git status $@in }
-edit:add-var gca~ {|@in| e:git commit --all $@in }
+edit:add-var sizes~ { |@in| if (cmds:is-empty $in) { set @in = * }; e:du -sh $@in | e:sort -rh | cat }
+edit:add-var fs~ { |@in| e:du -sh $@in | e:sort -rh } 
+edit:add-var gst~ { |@in| e:git status $@in }
+edit:add-var gca~ { |@in| e:git commit --all $@in }
 edit:add-var resetorigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
 edit:add-var resetupstream~ { e:git fetch upstream; e:git reset --hard upstream/master; e:git clean -f -d }
-edit:add-var untar~ {|@in| e:tar xvf $@in }
-edit:add-var wget~ {|@in| e:wget -c $@in }
+edit:add-var untar~ { |@in| e:tar xvf $@in }
+edit:add-var wget~ { |@in| e:wget -c $@in }
 edit:add-var makepwd~ { e:openssl rand -base64 15 }
-edit:add-var dl~ {|@in| e:curl -C - -O '{}' $@in }
-edit:add-var ping~ {|@in| e:ping -c 5 $@in }
+edit:add-var dl~ { |@in| e:curl -C - -O '{}' $@in }
+edit:add-var ping~ { |@in| e:ping -c 5 $@in }
 edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" $c | cmds:first [(all)] }) }
 
 #==================================================== - FUNCTIONS

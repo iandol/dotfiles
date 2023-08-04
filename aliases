@@ -17,7 +17,12 @@ else
 	alias ll='ls -AFlh'
 	alias la='ls -A'
 	alias l='ls -CF'
+	alias dir='ls -alfG'
+	alias cls='clear; ls'
+	alias l.='ls -d .[^.]*' #only show .dot files
+
 fi
+alias smbfix='kill `pidof gvfsd-smb-browse`'
 alias hping='httping -K'
 alias installmicromamba='"${SHELL}" <(curl -L micro.mamba.pm/install.sh)'
 alias installkitty='curl -L sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
@@ -30,9 +35,6 @@ alias resetupstream='git fetch upstream && git reset --hard upstream/master && g
 alias untar='tar -zxvf '
 alias wget='wget -c '
 alias makepassword='openssl rand -base64 15'
-alias dir='ls -alfG'
-alias cls='clear; ls'
-alias l.='ls -d .[^.]*' #only show .dot files
 alias grep='grep --color=auto'
 alias gzip='gzip -9n' # set strongest compression level as ‘default’ for gzip
 alias ping='ping -c 5' # ping 5 times ‘by default’
