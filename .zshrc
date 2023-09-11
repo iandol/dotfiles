@@ -3,8 +3,8 @@ export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
 
 #-------------------------------Bootstrap homebrew[s]
-[[ $PLATFORM == 'Darwin' ]] && [[ -d /usr/local/homebrew ]] && eval "$(/usr/local/homebrew/bin/brew shellenv)"
-[[ $PLATFORM == 'Darwin' ]] && [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ $PLATFORM == 'Darwin' ]] && [[ -d /usr/local/homebrew ]] && [[ "$(arch)" == "i386" ]] && eval "$(/usr/local/homebrew/bin/brew shellenv)"
+[[ $PLATFORM == 'Darwin' ]] && [[ -d /opt/homebrew ]] && [[ "$(arch)" == "arm64" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 [[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #-------------------------------PREFER nvim
@@ -71,7 +71,7 @@ fi
 [[ -d "$HOME/micromamba" ]] && export MAMBA_ROOT_PREFIX="$HOME/micromamba"
 [[ -d /media/cog/data/micromamba ]] && export MAMBA_ROOT_PREFIX="/media/cog/data/micromamba"
 
-if [[ -d "$HOME/micromamba/" ]]; then
+if [[ -d $MAMBA_ROOT_PREFIX ]]; then
 # >>> mamba initialize >>>
 # !! Contents within this block are managed by 'mamba init' !!
 __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"

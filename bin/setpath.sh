@@ -9,14 +9,14 @@ echo "---HOME: " $HOME
 echo "\n---1 $1 $2 $3 $4" 
 
 export DROOPY=42
-path=("/usr/local/bin" "$HOME/bin" $path)
+path=("/opt/homebrew/bin" "/usr/local/bin" "$HOME/bin" $path)
 
-[[ -d $HOME/anaconda3 ]] && path=("$HOME/anaconda3/bin" $path) # anaconda scientific python
+[[ -d $HOME/miniconda ]] && path=("$HOME/miniconda/bin" $path) # anaconda scientific python
 [[ -d $HOME/.rbenv ]] && path=("$HOME/.rbenv/shims" $path) #ruby manager
 
 export path
 
-echo "\n---PATH: " $PATH 
+echo "\n---MODIFIED PATH: " $PATH 
 echo "\n---DROOPY: " $DROOPY 
 
 #[[ -f $(which rbenv) ]] && rbenv local system
