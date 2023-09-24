@@ -65,7 +65,7 @@ each {|p| prepend-to-path $p } [
 	/usr/local/sbin
 ]
 each {|p| append-to-path $p } [
-	/usr/local/opt/python@{3.12 3.11 3.10 3.9}/libexec/bin
+	/usr/local/opt/python@{3.14 3.13 3.12 3.11 3.10 3.9}/libexec/bin
 	/Library/Frameworks/GStreamer.framework/Commands
 ]
 
@@ -75,7 +75,7 @@ if (is-macos) {
 } else {
 	set prefix = "/usr/local/MATLAB/"; set suffix = "/bin"
 }
-var releases = [$prefix{R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a}$suffix]
+var releases = [$prefix{R2024a R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a}$suffix]
 do-if-path $releases {|p|
 	prepend-to-path $p
 	set-env MATLAB_EXECUTABLE $p"/matlab" # matlab

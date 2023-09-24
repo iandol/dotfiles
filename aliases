@@ -294,14 +294,19 @@ function sp() {
 		if [[ $1 == "-l" ]]; then
 			echo -e "Proxy settings:\n==============="
 		else
-			echo "Proxy set: " 
-			export {http,https,ftp,all}_proxy="$1"
+			echo "Proxy set:\n===============" 
 			if [[ $1 =~ ^socks5 ]]; then
+				export {http,https,ftp,all}_proxy="$1"
 				git config --global http.proxy "$1"
 				git config --global https.proxy "$1"
+			elif [[ $1 =~ ^http ]]; then
+				export {http,https,ftp,all}_proxy="$1"
+				git config --global http.proxy "$http_proxy"
+				git config --global https.proxy "$https_proxy"
 			else
-				git config --global http.proxy "http://$http_proxy"
-				git config --global https.proxy "https://$https_proxy"
+				export {http,https,ftp,all}_proxy="http://$1"
+				git config --global http.proxy "$http_proxy"
+				git config --global https.proxy "$https_proxy"
 			fi
 		fi
 	elif [[ $# -eq 2 ]]; then
@@ -309,7 +314,7 @@ function sp() {
 		if [[ $1 == "-a" ]]; then # TODO add apt proxy setup
 			echo -e "TODO:\n==============="
 		else
-			echo "Proxy set: " 
+			echo "Proxy set:\n===============" 
 			export {http,ftp,all}_proxy="$1"
 			export https_proxy="$2"
 			if [[ $1 =~ ^socks5 ]]; then
