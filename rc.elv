@@ -137,7 +137,7 @@ if (not-file $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv) {
 	ln -s $E:HOME/.dotfiles/aliases.elv $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv
 }
 use aliases
-# set edit:insert:binding[Ctrl-R] = { aliases:history >/dev/tty 2>&1 }
+if-external fzf { set edit:insert:binding[Ctrl-R] = { aliases:history >/dev/tty 2>&1 } }
 
 #==================================================== - THEME
 if-external starship { 
