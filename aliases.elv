@@ -131,6 +131,24 @@ edit:add-var ping~ { |@in| e:ping -c 5 $@in }
 edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" $c | cmds:first [(all)] }) }
 
 #==================================================== - FUNCTIONS
+# Filter the command history through the fzf program. This is normally bound
+# to Ctrl-R.
+fn history { 
+	var new-cmd = (
+		edit:command-history &dedup &newest-first &cmd-only |
+		to-terminated "\x00" |
+		try {
+			fzf --tabstop=4 --color=dark --no-sort --read0 --layout=reverse --info=hidden --exact ^
+			--query=$edit:current-command | slurp
+		} catch {
+			# If the user presses [Escape] to cancel the fzf operation it will exit
+			# with a non-zero status. Ignore that we ran this function in that case.
+			return
+		}
+	)
+	set edit:current-command = (str:trim-right $new-cmd " \n")
+}
+
 # --- Setproxy [-l] [address]
 edit:add-var sp~ {|@argin|
 	var @plist = {http,https,ftp,all}_proxy
