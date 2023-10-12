@@ -70,6 +70,7 @@ fi
 [[ -f "/opt/homebrew/bin/micromamba" ]] && export MAMBA_EXE="/opt/homebrew/bin/micromamba"
 [[ -d "$HOME/micromamba" ]] && export MAMBA_ROOT_PREFIX="$HOME/micromamba"
 [[ -d /media/cog/data/micromamba ]] && export MAMBA_ROOT_PREFIX="/media/cog/data/micromamba"
+[[ -d /media/cogp/micromamba ]] && export MAMBA_ROOT_PREFIX="/media/cogp/micromamba"
 
 if [[ -d $MAMBA_ROOT_PREFIX ]]; then
 # >>> mamba initialize >>>
