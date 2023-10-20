@@ -47,7 +47,14 @@ cmds:if-external lsd {
 }
 
 #==================================================== - GENERAL
-edit:add-var installkitty~ { curl -L sw.kovidgoyal.net/kitty/installer.sh | zsh /dev/stdin }
+edit:add-var updateKitty~ { 
+	curl -L sw.kovidgoyal.net/kitty/installer.sh | zsh /dev/stdin 
+	ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/bin; \
+	cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
+	cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
+	sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
+	sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+}
 edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/stdin }
 if ( cmds:is-macos ) {
 	edit:add-var mano~ { |@cmds|
