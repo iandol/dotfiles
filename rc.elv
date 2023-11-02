@@ -53,6 +53,7 @@ set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:a
 #==================================================== - PATHS + VENVS
 each {|p| prepend-to-path $p } [
 	/Library/TeX/texbin
+	~/Library/TinyTeX/bin/universal-darwin
 	~/scoop/apps/msys2/current/usr/bin
 	/opt/local/bin
 	~/.rbenv/shims

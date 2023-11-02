@@ -34,7 +34,7 @@ cmds:if-external lsd {
 	edit:add-var ll~ {|@in| e:lsd --header --group-directories-first -alFh $@in }
 	edit:add-var ls~ {|@in| e:lsd -F $@in }
 } {
-	if cmds:is-macos { 
+	if ( cmds:is-macos ) { 
 		edit:add-var lls~ {|@in| e:ls -alFGhS $@in }
 		edit:add-var llt~ {|@in| e:ls -alFGht $@in }
 		edit:add-var llm~ {|@in| e:ls -alFGh@ $@in }
@@ -47,14 +47,6 @@ cmds:if-external lsd {
 }
 
 #==================================================== - GENERAL
-edit:add-var updateKitty~ { 
-	curl -L sw.kovidgoyal.net/kitty/installer.sh | zsh /dev/stdin 
-	ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/bin; \
-	cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
-	cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
-	sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
-	sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
-}
 edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/stdin }
 if ( cmds:is-macos ) {
 	edit:add-var mano~ { |@cmds|
@@ -95,6 +87,14 @@ if ( cmds:is-macos ) {
 		sudo systemctl status avahi-daemon.service
 	}
 
+	edit:add-var updateKitty~ { 
+		curl -L sw.kovidgoyal.net/kitty/installer.sh | zsh /dev/stdin 
+		ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/bin; \
+		cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
+		cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
+		sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
+		sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+	}
 }
 
 cmds:if-external httping { edit:add-var hping~ {|@in| e:httping -K $@in } }
