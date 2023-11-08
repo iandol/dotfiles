@@ -66,6 +66,7 @@ else
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
 fi
 
+[[ -f "$HOME/.local/share/pandoc/filters" ]] && export LUA-PATH="$HOME/.local/share/pandoc/filters/?.lua;;"
 [[ -f "$HOME/.local/bin/micromamba" ]] && export MAMBA_EXE="$HOME/.local/bin/micromamba"
 [[ -f "/opt/homebrew/bin/micromamba" ]] && export MAMBA_EXE="/opt/homebrew/bin/micromamba"
 [[ -d "$HOME/micromamba" ]] && export MAMBA_ROOT_PREFIX="$HOME/micromamba"
