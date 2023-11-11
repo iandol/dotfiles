@@ -95,6 +95,8 @@ fi
 #fi
 
 #------------------------------------FINALISE PATH
+[[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path)
+[[ -d "$HOME/Library/TinyTeX/bin/universal-darwin" ]] && path+="$HOME/Library/TinyTeX/bin/universal-darwin"
 [[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
 [[ -d "/snap/bin" ]] && path=("/snap/bin" $path)
