@@ -199,7 +199,8 @@ edit:add-var installTeX~ {
 	stackengine xltabular booktabs orcidlink ^
 	ltablex cleveref makecell threeparttablex tabu multirow ^
 	changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol ^
-	tikzfill luacolor lua-ul xpatch selnolig
+	tikzfill luacolor lua-ul xpatch selnolig ^
+	lua-visual-debug lipsum svg newfile
 }
 
 # --- Update code and OS

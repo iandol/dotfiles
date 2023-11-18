@@ -85,7 +85,7 @@ do-if-path $releases {|p|
 
 do-if-path $E:HOME/.venv/ {|p| set python:venv-directory = $p }
 do-if-path [/media/cogp/micromamba /media/cog/data/micromamba $E:HOME/micromamba ] {|p| set mamba:root = $p; set-env MAMBA_ROOT_PREFIX $mamba:root }
-do-if-path $E:HOME/.local/share/pandoc/filters {|p| set-env LUA-PATH $p"/?.lua;;" }
+do-if-path $E:HOME/.local/share/pandoc/filters {|p| set-env LUA_PATH $p"/?.lua;;" }
 
 #==================================================== - SETUP HOMEBREW
 if-external brew {
