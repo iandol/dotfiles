@@ -85,7 +85,6 @@ do-if-path $releases {|p|
 
 do-if-path $E:HOME/.venv/ {|p| set python:venv-directory = $p }
 do-if-path [/media/cogp/micromamba /media/cog/data/micromamba $E:HOME/micromamba ] {|p| set mamba:root = $p; set-env MAMBA_ROOT_PREFIX $mamba:root }
-do-if-path $E:HOME/.local/share/pandoc/filters {|p| set-env LUA_PATH $p"/?.lua;;" }
 
 #==================================================== - SETUP HOMEBREW
 if-external brew {
@@ -124,6 +123,11 @@ if (is-macos) {
 	do-if-path /Applications/MATLAB/MATLAB_Runtime/v912/ {|p| set-env MRT $p }
 	do-if-path [/usr/local/Cellar/openjdk/19] {|p| set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
 }
+
+if (not (has-env LUA_PATH)) { set-env LUA_PATH ';'; set-env LUA_CPATH ';' }
+do-if-path $E:HOME/.local/share/pandoc/filters {|p| set-env LUA_PATH $p'/?.lua;'$E:LUA_PATH }
+do-if-path /opt/homebrew/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
+do-if-path /opt/homebrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
 
 if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
