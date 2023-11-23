@@ -89,12 +89,12 @@ if ( cmds:is-macos ) {
 	}
 
 	edit:add-var updateKitty~ { 
-		curl -L sw.kovidgoyal.net/kitty/installer.sh | zsh /dev/stdin 
-		ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/bin; \
-		cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
-		cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
-		sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
-		sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+		curl -L sw.kovidgoyal.net/kitty/installer.sh | zsh /dev/stdin
+		ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/bin
+		cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
+		cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
+		sed -i "s|Icon=kitty|Icon="$E:HOME"/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+		sed -i "s|Exec=kitty|Exec="$E:HOME"/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
 	}
 }
 
@@ -209,7 +209,7 @@ edit:add-var update~ {
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 	var olddir = (pwd)
 	var oldbranch = ''
-	var ul = [.dotfiles Code/opticka Code/octicka Code/Titta Code/AfterImage Code/isoluminant Code/Pinna Code/spikes ^
+	var ul = [.dotfiles Code/opticka Code/octicka Code/Titta Code/AfterImage Code/equiluminance Code/Pinna Code/spikes ^
 	Code/Psychtoolbox-3 Code/fieldtrip Code/Training Code/Palamedes Code/Mymou ^
 	Documents/MATLAB/gramm Code/scrivomatic Code/dotpandoc Code/bookends-tools ^
 	Code/gears Code/pandocomatic Code/paru]
