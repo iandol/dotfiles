@@ -31,12 +31,12 @@ if [ $PLATFORM = "Darwin" ]; then
 		brew install git zsh bat p7zip ruby-build rbenv pyenv
 		brew install starship procs ripgrep neovim jq figlet
 		brew install fzf prettyping ansiweather media-info tmux 
-		brew install less git-delta diff-so-fancy mosh pandoc pandoc-crossref 
-		brew install multimarkdown libusb exodriver youtube-dl
+		brew install less git-delta diff-so-fancy mosh pandoc pandoc-crossref
+		brew install multimarkdown libusb exodriver yt-dlp
 		brew tap rsteube/tap
 		brew install carapace
 		#cask fonts
-		brew install font-recursive-code font-fantasque-sans-mono font-fira-code font-jetbrains-mono \
+		brew install font-symbols-only-nerd-font font-recursive-code font-fantasque-sans-mono font-fira-code font-jetbrains-mono \
 		font-cascadia-code font-libertinus font-alegreya font-alegreya-sans
 		brew tap iandol/adobe-fonts
 		brew install font-source-sans
@@ -47,9 +47,9 @@ if [ $PLATFORM = "Darwin" ]; then
 			#cask apps
 			brew install alfred basictex bettertouchtool betterzip bitwarden
 			brew install bookends calibre deckset visual-studio-code
-			brew install ff-works forklift fsnotes hex-fiend
+			brew install ff-works forklift fsnotes hex-fiend daisydisk
 			brew install iina imageoptim kitty knockknock launchcontrol mpv
-			brew install prince proxyman scrivener suspicious-package tex-live-utility textmate
+			brew install prince proxyman r scrivener suspicious-package tex-live-utility textmate
 			brew install zerotier-one
 			# other software
 			#brew install libreoffice microsoft-word microsoft-powerpoint microsoft-excel
@@ -82,10 +82,9 @@ elif [ $PLATFORM = "Linux" ]; then
 		brew tap rsteube/tap
 		brew install carapace
 		brew tap linuxbrew/fonts
-		brew install font-fantasque-sans-mono font-fira-code \
-		font-fantasque-sans-mono-nerd-font font-fira-code-nerd-font \
+		brew install font-symbols-only-nerd-font font-fantasque-sans-mono font-fira-code \
 		font-jetbrains-mono font-cascadia-code font-libertinus \
-		font-alegreya font-alegreya-sans
+		font-alegreya font-alegreya-sans font-stix
 		#brew install --HEAD font-source-sans-3
 		sudo ln -s /home/linuxbrew/.linuxbrew/share/fonts /usr/local/share/fonts/
 		sudo fc-cache -fv
