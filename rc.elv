@@ -29,80 +29,70 @@ set-env XDG_CONFIG_HOME $E:HOME/.config
 set-env XDG_DATA_HOME $E:HOME/.local/share
 if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
 
-#==================================================== - IMPORT UTIL NAMES
-var if-external~		= $cmds:if-external~
-var append-to-path~		= $cmds:append-to-path~
-var prepend-to-path~	= $cmds:prepend-to-path~
-var do-if-path~			= $cmds:do-if-path~
-var is-path~			= $cmds:is-path~
-var is-file~			= $cmds:is-file~
-var not-path~			= $cmds:is-path~
-var not-file~			= $cmds:not-file~
-var is-macos~			= $cmds:is-macos~
-var is-linux~			= $cmds:is-linux~
-var is-arm64~			= $cmds:is-arm64~
-var mama~				= $mamba:activate~
-var mamd~				= $mamba:deactivate~
-var maml~				= $mamba:list~
-var pya~				= $python:activate~
-var pyd~				= $python:deactivate~
-var pyl~				= $python:list-venvs~
+#==================================================== - IMPORT UTIL NAMES TO REPL
+each {|c|
+	var code = 'edit:add-var '$c' $mod:'$c
+	eval $code &ns=(ns [&mod:=$cmds:])
+} [if-external~ append-to-path~ prepend-to-path~ do-if-path~
+  is-path~ is-file~ not-path~ not-file~ is-macos~ is-linux~ 
+  is-arm64~ is-macintel~ is-macarm~]
+edit:add-var mama~			{ mamba:activate }
+edit:add-var mamd~			{ mamba:deactivate }
+edit:add-var maml~			{ mamba:list }
+edit:add-var pya~			{ python:activate }
+edit:add-var pyd~			{ python:deactivate }
+edit:add-var pyl~			{ python:list-venvs }
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
 set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:activate]
 
 #==================================================== - PATHS + VENVS
-each {|p| prepend-to-path $p } [
-	/Library/TeX/texbin
-	~/Library/TinyTeX/bin/universal-darwin
-	~/scoop/apps/msys2/current/usr/bin
-	/opt/local/bin
-	~/.rbenv/shims
-	~/.pyenv/shims
-	~/scoop/shims
-	/opt/homebrew/bin
-	/home/linuxbrew/.linuxbrew/bin
-	~/bin
-	/usr/local/bin
-	/usr/local/sbin
-]
-each {|p| append-to-path $p } [
-	/usr/local/opt/python@{3.14 3.13 3.12 3.11 3.10 3.9}/libexec/bin
-	/Library/Frameworks/GStreamer.framework/Commands
-]
-
 var prefix; var suffix
-if (is-macos) {
+if (cmds:is-macos) {
 	set prefix = "/Applications/MATLAB_"; set suffix = ".app/bin"
 } else {
 	set prefix = "/usr/local/MATLAB/"; set suffix = "/bin"
 }
 var releases = [$prefix{R2024a R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a}$suffix]
-do-if-path $releases {|p|
-	prepend-to-path $p
+cmds:do-if-path $releases {|p|
+	cmds:prepend-to-path $p
 	set-env MATLAB_EXECUTABLE $p"/matlab" # matlab
-	if (is-macos) { ln -sf $p"/maci64/mlint" ~/bin/mlint }
+	if (cmds:is-macos) { ln -sf $p"/maci64/mlint" $E:HOME/bin/mlint }
 }
+each {|p| cmds:prepend-to-path $p } [
+	/Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin
+	~/scoop/apps/msys2/current/usr/bin
+	~/.rbenv/shims  ~/.pyenv/shims ~/scoop/shims
+	~/bin
+	/usr/local/bin  /usr/local/sbin
+	/home/linuxbrew/.linuxbrew/bin
+	/opt/local/bin  /opt/homebrew/bin
+]
+each {|p| cmds:append-to-path $p } [
+	/usr/local/opt/python@{3.14 3.13 3.12 3.11 3.10 3.9}/libexec/bin
+	/Library/Frameworks/GStreamer.framework/Commands
+]
 
-do-if-path $E:HOME/.venv/ {|p| set python:venv-directory = $p }
-do-if-path [/media/cogp/micromamba /media/cog/data/micromamba $E:HOME/micromamba ] {|p| set mamba:root = $p; set-env MAMBA_ROOT_PREFIX $mamba:root }
+cmds:do-if-path $E:HOME/.venv/ {|p| set python:venv-directory = $p }
+cmds:do-if-path [/media/cogp/micromamba /media/cog/data/micromamba $E:HOME/micromamba ] {|p| set mamba:root = $p; set-env MAMBA_ROOT_PREFIX $mamba:root }
 
 #==================================================== - SETUP HOMEBREW
-if-external brew {
+if (cmds:is-macintel) { cmds:prepend-to-path '/usr/local/bin' }
+cmds:if-external brew {
 	var pfix = (brew --prefix)
-	echo (styled "…configuring "$platform:os"-"$platform:arch" brew… " bold italic yellow)
+	if (cmds:is-macintel) { var pfix = '/usr/local' }
+	echo (styled "…configuring homebrew "$platform:os"-"$platform:arch" [runmode:"(uname -m)"] prefix: "$pfix" …" bold italic yellow)
 	set-env HOMEBREW_PREFIX $pfix
 	set-env HOMEBREW_CELLAR $pfix'/Cellar'
 	set-env HOMEBREW_REPOSITORY $pfix'/Homebrew'
 	set-env MANPATH $pfix'/share/man:'$E:MANPATH
 	set-env INFOPATH $pfix'/share/info:'$E:INFOPATH
-	prepend-to-path $pfix'/bin'
-	prepend-to-path $pfix'/sbin'
+	each {|p| cmds:prepend-to-path $p } [ $pfix'/bin' $pfix'/sbin']
 }
 
 #==================================================== - KEY BINDINGS
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
 set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
-set edit:insert:binding[Ctrl-b] = $cmds:external_edit_command~
+set edit:insert:binding[Ctrl-b] = $cmds:external-edit-command~
 #set edit:insert:binding[Ctrl-l] = { $edit:move-dot-eol~; $edit:kill-line-left~ }
 
 #==================================================== - KITTY INTEGRATION
@@ -114,46 +104,47 @@ if (has-env KITTY_INSTALLATION_DIR) {
 	set edit:after-readline = [ {|c| send-title (str:split ' ' $c | take 1) } {|c| osc '133;C' } ]
 	set after-chdir = [ {|_| send-pwd } ]
 	echo (styled "…kitty integration…" bold italic yellow)
-} 
+}
 
 #==================================================== - GENERAL ENVIRONMENT
 set-env PAPERSIZE A4
+set-env PROCESSOR (str:to-lower (uname -m))
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
-if (is-macos) {
-	do-if-path /Applications/MATLAB/MATLAB_Runtime/v912/ {|p| set-env MRT $p }
-	do-if-path [/usr/local/Cellar/openjdk/19] {|p| set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
+if (cmds:is-macos) {
+	cmds:do-if-path /Applications/MATLAB/MATLAB_Runtime/v912/ {|p| set-env MRT $p }
+	cmds:do-if-path [/usr/local/Cellar/openjdk/19] {|p| set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
 }
 
 if (not (has-env LUA_PATH)) { set-env LUA_PATH ';'; set-env LUA_CPATH ';' }
-do-if-path $E:HOME/.local/share/pandoc/filters {|p| set-env LUA_PATH $p'/?.lua;'$E:LUA_PATH }
-do-if-path /opt/homebrew/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
-do-if-path /opt/homebrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
+cmds:do-if-path $E:HOME/.local/share/pandoc/filters {|p| set-env LUA_PATH $p'/?.lua;'$E:LUA_PATH }
+cmds:do-if-path /opt/homebrew/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
+cmds:do-if-path /opt/homebrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
 
-if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
+cmds:if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
-if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…" bold italic yellow) }
-if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
-if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbenv' }
-if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pyenv' }
+cmds:if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…" bold italic yellow) }
+cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
+cmds:if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbenv' }
+cmds:if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pyenv' }
 python:deactivate
 
 #==================================================== - MAIN ALIASES
-if (not-file $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv) {
+if (cmds:not-file $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv) {
 	mkdir -p $E:XDG_CONFIG_HOME/elvish/lib/
 	ln -s $E:HOME/.dotfiles/aliases.elv $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv
 }
 use aliases
-if-external fzf { set edit:insert:binding[Ctrl-R] = { aliases:history >/dev/tty 2>&1 } }
+cmds:if-external fzf { set edit:insert:binding[Ctrl-R] = { aliases:history >/dev/tty 2>&1 } }
 
 #==================================================== - THEME
-if-external starship { 
+cmds:if-external starship { 
 	echo (styled "…starship init…" bold italic yellow)
 	eval ((search-external starship) init elvish --print-full-init | slurp)
 	eval ((search-external starship) completions elvish | slurp)
 } { use github.com/muesli/elvish-libs/theme/powerline } 
 
 #==================================================== - SHIM FOLDERS
-put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims} | each {|p| prepend-to-path $p} # needs to go after brew init
+put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims} | each {|p| cmds:prepend-to-path $p} # needs to go after brew init
 
 #==================================================== - THIS IS THE END, MY FRIEND
 fn helpme { echo (styled "\n ! – last cmd ░ ⌃N – 🚀navigate ░ ⌃R – 🔍history ░ ⌃L – 🔍dirs\n ⌃B – 🖊️cmd ░ ⌃a,e – ⇄ ░ ⌃u – ⌫line ░ 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane: split=§| §- close=§x focus=§o \n tmux sessions=§s detach=§d window create=§c switch=§n close=§&\n tmux commands=§: help=§? navigate=§w" bold italic fg-yellow ) }

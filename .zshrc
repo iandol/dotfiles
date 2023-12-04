@@ -3,7 +3,7 @@ export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
 
 #-------------------------------Bootstrap homebrew[s]
-[[ $PLATFORM == 'Darwin' ]] && [[ -d /usr/local/homebrew ]] && [[ "$(arch)" == "i386" ]] && eval "$(/usr/local/homebrew/bin/brew shellenv)"
+[[ $PLATFORM == 'Darwin' ]] && [[ -f /usr/local/bin/brew ]] && [[ "$(arch)" == "i386" ]] && eval "$(/usr/local/bin/brew shellenv)"
 [[ $PLATFORM == 'Darwin' ]] && [[ -d /opt/homebrew ]] && [[ "$(arch)" == "arm64" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 [[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 

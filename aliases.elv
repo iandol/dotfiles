@@ -14,12 +14,13 @@ set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>so'] = '2>&1'
 set edit:command-abbr['mm'] = 'micromamba'
 set edit:command-abbr['edit'] = 'nvim'
+set edit:command-abbr['arch'] = 'arch -x86_64'
 # set edit:abbr['sudo '] = 'sudo -- '
 # set edit:small-word-abbr['ll'] = 'ls -alFGh@'
 # set edit:small-word-abbr['ls'] = 'ls -GF'
 
 #==================================================== - ELVISH
-edit:add-var help~ { |&search=$false @args| # from @krader
+edit:add-var help~ { |&search=$false @args| # from @krader https://skepticism.us/elvish/learn/useful-customizations.html#add-a-help-command
 	use doc
 	if (and (eq $search $false) (== 1 (count $args))) {
 	try { doc:show $args[0] } catch { try { doc:show '$'$args[0] } catch { doc:find $args[0] } }
@@ -53,6 +54,8 @@ if ( cmds:is-macos ) {
 	edit:add-var mano~ { |@cmds|
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
 	}
+	edit:add-var ibrew~ { |@in| arch -x86_64 /usr/local/homebrew/bin/brew $@in }
+	edit:add-var mbrew~ { |@in| arch -arm64e /opt/homebrew/bin/brew $@in }
 	edit:add-var fix~ { |@in| e:codesign --force --deep -s - $@in }
 	edit:add-var ql~ { |@in| e:qlmanage -p $@in }
 	edit:add-var quicklook~ { |@in| e:qlmanage -p $@in }
