@@ -36,7 +36,7 @@ each {|c|
 } [if-external~ append-to-path~ prepend-to-path~ do-if-path~
   is-path~ is-file~ not-path~ not-file~ is-macos~ is-linux~ 
   is-arm64~ is-macintel~ is-macarm~]
-edit:add-var mama~			{ mamba:activate }
+edit:add-var mama~			{ |@in| mamba:activate $@in }
 edit:add-var mamd~			{ mamba:deactivate }
 edit:add-var maml~			{ mamba:list }
 edit:add-var pya~			{ python:activate }
