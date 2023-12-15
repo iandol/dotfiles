@@ -30,7 +30,7 @@ set-env XDG_DATA_HOME $E:HOME/.local/share
 if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
 
 #==================================================== - IMPORT UTIL NAMES TO REPL
-each {|c|
+each {|c| # this adds function names from cmds module to REPL
 	var code = 'edit:add-var '$c' $mod:'$c
 	eval $code &ns=(ns [&mod:=$cmds:])
 } [if-external~ append-to-path~ prepend-to-path~ do-if-path~
@@ -76,7 +76,7 @@ cmds:do-if-path $E:HOME/.venv/ {|p| set python:venv-directory = $p }
 cmds:do-if-path [/media/cogp/micromamba /media/cog/data/micromamba $E:HOME/micromamba ] {|p| set mamba:root = $p; set-env MAMBA_ROOT_PREFIX $mamba:root }
 
 #==================================================== - SETUP HOMEBREW
-if (cmds:is-macintel) { cmds:prepend-to-path '/usr/local/bin' }
+if (cmds:is-macintel) { cmds:prepend-to-path '/usr/local/bin' } # intel homebrew (native or via Rosetta 2)
 cmds:if-external brew {
 	var pfix = (brew --prefix)
 	if (cmds:is-macintel) { var pfix = '/usr/local' }

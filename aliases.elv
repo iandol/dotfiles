@@ -192,8 +192,10 @@ edit:add-var sp~ {|@argin|
 set edit:command-abbr['setproxy'] = 'sp'
 
 # --- Install required TeX packages for BasicTex
+# tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
 edit:add-var installTeX~ {
-	sudo tlmgr install lualatex-math luatexja abstract ^
+	tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
+	tlmgr install lualatex-math luatexja abstract ^
 	latexmk csquotes pagecolor relsize mdframed needspace sectsty ^
 	titling titlesec preprint layouts glossaries tabulary soul xargs todonotes ^
 	mfirstuc xfor wallpaper datatool substr adjustbox collectbox ^
@@ -212,23 +214,26 @@ edit:add-var update~ {
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 	var olddir = (pwd)
 	var oldbranch = ''
-	var ul = [.dotfiles Code/opticka Code/octicka Code/Titta Code/AfterImage Code/equiluminance Code/Pinna Code/spikes ^
-	Code/Psychtoolbox-3 Code/fieldtrip Code/Training Code/Palamedes Code/Mymou ^
-	Documents/MATLAB/gramm Code/scrivomatic Code/dotpandoc Code/bookends-tools ^
-	Code/gears Code/pandocomatic Code/paru]
+	var ul = [~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ^
+	~/Code/AfterImage ~/Code/equiluminance ~/Code/Pinna ~/Code/spikes ^
+	~/Code/Psychtoolbox-3 ~/Code/fieldtrip ~/Code/Training ~/Code/Palamedes ^
+	~/Code/Mymou ~/Documents/MATLAB/gramm ~/Code/scrivomatic ^
+	~/Code/dotpandoc ~/Code/bookends-tools ^
+	~/Code/gears ~/Code/pandocomatic ~/Code/paru ^
+	/media/$E:USER/data/Code/octicka /media/$E:USER/data/Code/Psychtoolbox-3]
 	for x $ul {
-		if (cmds:is-path ~/$x/.git) {
-			tmp pwd = ~/$x
+		if (cmds:is-path $x/.git) {
+			tmp pwd = $x
 			set oldbranch = (git branch --show-current)
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
 			echo (styled "\n--->>> Updating "(styled $x bold)":"$oldbranch"…\n" bg-blue)
 			for x $branches {
 				if (re:match '^(main|master|umaster)' $x) { try { git checkout -q $x 2>$path:dev-null } catch { } }
 			}
-			try { git fetch -q --all 2>$path:dev-null; git pull } catch { echo "\t\t…couldn't pull!" }
+			try { git fetch -q --all 2>$path:dev-null; git pull } catch { echo "\t…couldn't pull!" }
 			if (re:match 'upstream' (git remote | slurp)) {
-				print "\t\t---> Fetching upstream…"
-				try { git fetch -v upstream } catch { echo "\t…couldn't fetch upstream!" }
+				print "------> Fetching upstream…  "
+				try { git fetch -v upstream } catch { echo "  …couldn't fetch upstream!" }
 			}
 			git checkout -q $oldbranch 2>$path:dev-null
 		}
