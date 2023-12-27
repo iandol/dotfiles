@@ -122,6 +122,7 @@ cmds:do-if-path /opt/homebrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?
 
 cmds:if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
+cmds:if-external nnn { set-env NNN_FIFO /tmp/nnn.fifo; set-env NNN_TERMINAL (which kitty); set-env NNN_PLUG 'f:finder;o:fzopen;p:preview-tui' }
 cmds:if-external carapace { eval (carapace _carapace elvish | slurp); echo (styled "…carapace init…" bold italic yellow) }
 cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
 cmds:if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbenv' }
