@@ -201,7 +201,7 @@ edit:add-var installTeX~ {
 	mfirstuc xfor wallpaper datatool substr adjustbox collectbox ^
 	sttools wrapfig footnotebackref fvextra zref ^
 	libertinus libertinus-fonts libertinus-otf threeparttable ^
-	elsarticle algorithms algorithmicx siunitx bbding biblatex biber ctex ^
+	elsarticle algorithms algorithmicx siunitx bbding biblatex biber ^
 	stackengine xltabular booktabs orcidlink ^
 	ltablex cleveref makecell threeparttablex tabu multirow ^
 	changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol ^
