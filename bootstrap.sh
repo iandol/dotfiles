@@ -105,6 +105,9 @@ elif [ $PLATFORM = "LinuxRPi" ]; then
 	mkdir -p bin
 	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
 	chmod +x bin/diff-so-fancy
+	#cd ~/Downloads/
+	#wget https://github.com/dandavison/delta/releases/download/0.16.5/git-delta_0.16.5_arm64.deb
+	#sudo dpkg -i git-delta_0.16.5_arm64.deb
 elif [ $PLATFORM = "LinuxWSL" ]; then
 	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
