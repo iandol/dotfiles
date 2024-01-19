@@ -28,6 +28,7 @@ use github.com/zzamboni/elvish-modules/spinners
 set-env XDG_CONFIG_HOME $E:HOME/.config
 set-env XDG_DATA_HOME $E:HOME/.local/share
 if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
+if $platform:is-unix { set-env TMPDIR '/tmp/' }
 
 #==================================================== - IMPORT UTIL NAMES TO REPL
 each {|c| # this adds function names from cmds module to REPL
