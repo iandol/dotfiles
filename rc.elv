@@ -149,7 +149,17 @@ cmds:if-external starship {
 put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims} | each {|p| cmds:prepend-to-path $p} # needs to go after brew init
 
 #==================================================== - THIS IS THE END, MY FRIEND
-fn helpme { echo (styled "\n ! – last cmd ░ ⌃N – 🚀navigate ░ ⌃R – 🔍history ░ ⌃L – 🔍dirs\n ⌃B – 🖊️cmd ░ ⌃a,e – ⇄ ░ ⌃u – ⌫line ░ 💡 curl cheat.sh/?\n tmux prefix §=^a — tmux-pane: split=§| §- close=§x focus=§o \n tmux sessions=§s detach=§d window create=§c switch=§n close=§&\n tmux commands=§: help=§? navigate=§w" bold italic fg-yellow ) }
+fn helpme { echo (styled "
+! – last cmd 🔹 ⌃N – 🚀navigate 🔹 ⌃R – 🔍history 🔹 ⌃L – 🔍dirs
+⌃B – 🖊️cmd 🔹 ⌃a,e – ⇄ 🔹 ⌃u – ⌫line 🔹 💡 curl cheat.sh/?
+VIM :e load-buf 🔹 :bn next-buf 🔹 :ls list-buf 🔹 :bd close-buf
+  :tab ba buf>tabs 🔹 gt next-tab 🔹 :vert ba vertical
+  ^w[s|v] split-viewport 🔹 ^ww switch-vp 🔹 ^wx exchange-vp
+  [N]yy=yank 🔹 [N]dd=cut 🔹 p=paste 🔹 *# jump to word
+  / pattern-search 🔹 n=next
+TMUX prefix §=^a 🔹 tmux-pane: split=§| §- close=§x focus=§o
+  sessions=§s detach=§d window-create=§c switch=§n close=§&
+  commands=§: help=§? navigate=§w" bold italic fg-yellow ) }
 helpme
 echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic yellow)
 
