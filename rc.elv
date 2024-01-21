@@ -41,6 +41,7 @@ edit:add-var mama~			{ |@in| mamba:activate $@in }
 edit:add-var mamd~			{ mamba:deactivate }
 edit:add-var maml~			{ mamba:list }
 edit:add-var pya~			{ |@in| python:activate $@in }
+edit:add-var pyc~			{ |@in| python -m venv $python:venv-directory$@in }
 edit:add-var pyd~			{ python:deactivate }
 edit:add-var pyl~			{ python:list-venvs }
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]

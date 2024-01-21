@@ -25,7 +25,7 @@ fi
 alias smbfix='kill `pidof gvfsd-smb-browse`'
 alias hping='httping -K'
 alias installmicromamba='"${SHELL}" <(curl -L micro.mamba.pm/install.sh)'
-alias installkitty='curl -L sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin; \
+alias updateKitty='curl -L sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin; \
 ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/bin; \
 cp -fi ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
 cp -fi ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
