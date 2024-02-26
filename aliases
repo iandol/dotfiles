@@ -62,7 +62,10 @@ fi
 alias sizes='du -sh * | sort -h'
 
 # Minimal additional TeX packages for Pandoc templates with BasicTeX
-alias installTeX='sudo tlmgr install lualatex-math luatexja abstract \
+alias updateTeX='tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
+tlmgr update --self
+tlmgr update --all
+sudo tlmgr install lualatex-math luatexja abstract \
 latexmk csquotes pagecolor relsize mdframed needspace sectsty \
 titling titlesec preprint layouts glossaries tabulary soul xargs todonotes \
 mfirstuc xfor wallpaper datatool substr adjustbox collectbox \

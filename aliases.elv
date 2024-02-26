@@ -54,7 +54,7 @@ if ( cmds:is-macos ) {
 	edit:add-var mano~ { |@cmds|
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
 	}
-	edit:add-var ibrew~ { |@in| arch -x86_64 /usr/local/homebrew/bin/brew $@in }
+	if (cmds:is-file /usr/local/homebrew/bin/brew) { edit:add-var ibrew~ { |@in| arch -x86_64 /usr/local/homebrew/bin/brew $@in } }
 	edit:add-var mbrew~ { |@in| arch -arm64e /opt/homebrew/bin/brew $@in }
 	edit:add-var fix~ { |@in| e:codesign --force --deep -s - $@in }
 	edit:add-var ql~ { |@in| e:qlmanage -p $@in }
@@ -71,7 +71,6 @@ if ( cmds:is-macos ) {
 		try { sudo launchctl stop system/com.sangfor.EasyMonitor } catch { echo "Can't stop EasyMonitor" }
 		try { launchctl stop gui/501/com.sangfor.ECAgentProxy } catch { echo "Can't stop ECAgentProxy" }
 	}
-	if (cmds:is-file /usr/local/homebrew/bin/brew) { edit:add-var axbrew~ {|@in| arch -x86_64 /usr/local/homebrew/bin/brew $@in } }
 } elif ( cmds:is-linux ) {
 	edit:add-var mano~ {|@cmds|
 		each {|c| man -Tps $c | ps2pdf - | zathura - & } $cmds
@@ -91,7 +90,7 @@ if ( cmds:is-macos ) {
 		sudo systemctl status avahi-daemon.service
 	}
 
-	edit:add-var updateKitty~ { 
+	edit:add-var installKitty~ { 
 		curl -L sw.kovidgoyal.net/kitty/installer.sh | zsh /dev/stdin
 		ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/bin
 		cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
@@ -160,6 +159,18 @@ fn history {
 	set edit:current-command = (str:trim-right $new-cmd " \n")
 }
 
+edit:add-var askai~ {|q &model=openorca|
+	if (eq $model "openorca") { set model = "mistral-7b-openorca.gguf2.Q4_0.gguf" 
+	} elif (eq $model "instruct") { set model = "mistral-7b-instruct-v0.1.Q4_0.gguf" 
+	} elif (eq $model "gemma") { set model = "gemma-2b-it-q8_0.gguf" 
+	} else { set model = "phi-2.Q4_K_S.gguf" }
+	echo "Ask AI (model: "$model"): "$q
+	var x = (curl -s -X POST http://localhost:4891/v1/completions -H "Content-Type: application/json" -H "Authorization: Bearer NO_API_KEY" -d "{\"prompt\": \"You are a helpful technical assistant. "$q"\", \"temperature\": 1.0, \"max_tokens\": 2048, \"n\": 1, \"stream\": false, \"model\": \""$model"\"}" | from-json)
+	var resp = $x[choices][0][text]
+	print "================\nAnswer:\n\n"
+	print $resp"\n\n" | bat -n -l md
+}
+
 # --- Setproxy [-l] [address]
 edit:add-var sp~ {|@argin|
 	var @plist = {http,https,ftp,all}_proxy
@@ -193,8 +204,10 @@ set edit:command-abbr['setproxy'] = 'sp'
 
 # --- Install required TeX packages for BasicTex
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
-edit:add-var installTeX~ {
+edit:add-var updateTeX~ {
 	tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
+	tlmgr update --self
+	tlmgr update --all
 	tlmgr install lualatex-math luatexja abstract ^
 	latexmk csquotes pagecolor relsize mdframed needspace sectsty ^
 	titling titlesec preprint layouts glossaries tabulary soul xargs todonotes ^
