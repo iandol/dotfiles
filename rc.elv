@@ -10,6 +10,7 @@ use path
 use math
 use platform
 use doc
+use md
 if $platform:is-unix { use unix; edit:add-var unix: $unix: } 
 
 #==================================================== - EXTERNAL MODULES

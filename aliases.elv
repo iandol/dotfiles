@@ -4,6 +4,7 @@ use path
 use math
 use epm
 use platform
+use md
 use github.com/iandol/elvish-modules/cmds # my utility module
 echo (styled "…loading command aliases…" bold italic yellow)
 
@@ -159,16 +160,18 @@ fn history {
 	set edit:current-command = (str:trim-right $new-cmd " \n")
 }
 
-edit:add-var askai~ {|q &model=openorca|
-	if (eq $model "openorca") { set model = "mistral-7b-openorca.gguf2.Q4_0.gguf" 
-	} elif (eq $model "instruct") { set model = "mistral-7b-instruct-v0.1.Q4_0.gguf" 
-	} elif (eq $model "gemma") { set model = "gemma-2b-it-q8_0.gguf" 
-	} else { set model = "phi-2.Q4_K_S.gguf" }
-	echo "Ask AI (model: "$model"): "$q
-	var x = (curl -s -X POST http://localhost:4891/v1/completions -H "Content-Type: application/json" -H "Authorization: Bearer NO_API_KEY" -d "{\"prompt\": \"You are a helpful technical assistant. "$q"\", \"temperature\": 1.0, \"max_tokens\": 2048, \"n\": 1, \"stream\": false, \"model\": \""$model"\"}" | from-json)
-	var resp = $x[choices][0][text]
-	print "================\nAnswer:\n\n"
-	print $resp"\n\n" | bat -n -l md
+edit:add-var askai~ {|q &model=gemma|
+	if (eq $model "openorca") { set model = "mistral-7b-openorca.gguf2.Q4_0.gguf"
+	} elif (eq $model "instruct") { set model = "mistral-7b-instruct-v0.1.Q4_0.gguf"
+	} elif (eq $model "phi") { set model = "phi-2.Q4_K_S.gguf"
+	} else { set model = "gemma-2b-it-q8_0.gguf" }
+	print "\n===============Question (model: "$model")===============\n\n"$q" … \n"
+	var ans = (curl -s -X POST http://localhost:4891/v1/completions -H "Content-Type: application/json" ^
+		-H "Authorization: Bearer NO_API_KEY" ^
+		-d "{\"prompt\": \"You are a helpful technical assistant: "$q"\", \"temperature\": 1.0, \"max_tokens\": 2048, \"n\": 1, \"stream\": false, \"model\": \""$model"\"}" | from-json)
+	print "\n=============================Answer:===============================\n\n"
+	var txt = (cmds:protect-brackets $ans[choices][0][text])
+	md:show $txt
 }
 
 # --- Setproxy [-l] [address]
@@ -288,20 +291,21 @@ edit:add-var update~ {
 }
 
 # --- Update Elvish
-edit:add-var updateElvish~ {
+edit:add-var updateElvish~ {|&source=tuna|
+	var url = 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz'
+	if (!=s $source 'tuna') { set url = 'https://dl.elv.sh/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz' }
 	cmds:if-external elvish { elvish -version }
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
-	echo (styled "\n===ELVISH===\nOS: "$platform:os" & Arch: "$platform:arch bold yellow)
-	try { 
-		wget --no-check-certificate 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz'
-	} catch { 
-		echo "Couldn't download for some reason!" 
+	echo (styled "\n===GET ELVISH===\nURL: "$url bold yellow)
+	try { wget --no-check-certificate $url
+	} catch { echo "Couldn't download for some reason!" 
 	} else { 
 		tar xvf elvish-HEAD.tar.gz
-		chmod +x elvish-HEAD
-		sudo mv -vf elvish-HEAD /usr/local/bin/elvish
+		if (is-file ./elvish-HEAD) { mv ./elvish-HEAD ./elvish }
+		chmod +x ./elvish
+		sudo mv -vf ./elvish /usr/local/bin/elvish
 		cmds:if-external elvish { elvish -version }
 	} finally {
 		cd $olddir
