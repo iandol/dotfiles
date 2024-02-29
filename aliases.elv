@@ -303,7 +303,7 @@ edit:add-var updateElvish~ {|&source=tuna|
 	} catch { echo "Couldn't download for some reason!" 
 	} else { 
 		tar xvf elvish-HEAD.tar.gz
-		if (is-file ./elvish-HEAD) { mv ./elvish-HEAD ./elvish }
+		if (cmds:is-file ./elvish-HEAD) { mv ./elvish-HEAD ./elvish }
 		chmod +x ./elvish
 		sudo mv -vf ./elvish /usr/local/bin/elvish
 		cmds:if-external elvish { elvish -version }
