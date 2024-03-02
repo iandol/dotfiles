@@ -55,7 +55,7 @@ if (cmds:is-macos) {
 } else {
 	set prefix = "/usr/local/MATLAB/"; set suffix = "/bin"
 }
-var releases = [$prefix{R2024a R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a}$suffix]
+var releases = [$prefix{R2024b R2024a R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a}$suffix]
 cmds:do-if-path $releases {|p|
 	cmds:prepend-to-path $p
 	set-env MATLAB_EXECUTABLE $p"/matlab" # matlab

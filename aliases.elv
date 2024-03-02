@@ -160,18 +160,37 @@ fn history {
 	set edit:current-command = (str:trim-right $new-cmd " \n")
 }
 
-edit:add-var askai~ {|q &model=gemma|
-	if (eq $model "openorca") { set model = "mistral-7b-openorca.gguf2.Q4_0.gguf"
-	} elif (eq $model "instruct") { set model = "mistral-7b-instruct-v0.1.Q4_0.gguf"
-	} elif (eq $model "phi") { set model = "phi-2.Q4_K_S.gguf"
-	} else { set model = "gemma-2b-it-q8_0.gguf" }
-	print "\n===============Question (model: "$model")===============\n\n"$q" … \n"
-	var ans = (curl -s -X POST http://localhost:4891/v1/completions -H "Content-Type: application/json" ^
+edit:add-var ask~ {|q &model="hermes" &max=2048 &temperature=0.8|
+	var models = [&hermes="Nous-Hermes-2-Mistral-7B-DPO.Q4_0.gguf" &openorca="mistral-7b-openorca.gguf2.Q4_0.gguf" &instruct="mistral-instruct-7b-2.43bpw.gguf" &instruct1="mistral-7b-instruct-v0.1.Q4_0.gguf" &phi="phi-2.Q4_K_S.gguf" &gemma="gemma-2b-it-q8_0.gguf"]
+	if (has-key $models $model) { set model = $models[$model] }
+	if (==s $model "") { set max = -1 }
+	var message = (put [&model=$model &temperature=(num $temperature) &max_tokens=(num $max) &n=(num 1) &stream=false
+		&messages=[[&role=system &content="You are a helpful technical assistant that replies in english and explains your answers in detail"]
+		[&role=user &content=$q]]] | to-json)
+	print "\n=============Question (model sent: "$model")\n\n"$q" … \n"
+	var ans = (curl -s -X POST http://localhost:4891/v1/chat/completions -H "Content-Type: application/json" ^
 		-H "Authorization: Bearer NO_API_KEY" ^
-		-d "{\"prompt\": \"You are a helpful technical assistant: "$q"\", \"temperature\": 1.0, \"max_tokens\": 2048, \"n\": 1, \"stream\": false, \"model\": \""$model"\"}" | from-json)
-	print "\n=============================Answer:===============================\n\n"
-	var txt = (cmds:protect-brackets $ans[choices][0][text])
+		-d $message | from-json)
+	if (has-key $ans "model") { set model = [(str:split "/" $ans[model])][-1] } else { set model = "?" }
+	print "\n=============Answer (model used:"$model")\n\n"
+	var txt = (cmds:protect-brackets $ans[choices][0][message][content])
 	md:show $txt
+}
+
+# --- Transfer a file (using either transfer.sh or 0x0.st)
+edit:add-var transfer~ {|@in &use=transfer| 
+	var url = ''
+	if (==s $use "transfer") { set url = (e:curl --upload-file $@in 'https://transfer.sh/'$@in) 
+	} else { set url = (e:curl -F 'file=@'$@in 'https://0x0.st') }
+	echo "\n======================================================="
+	md:show "The *online URL* for the file is: "$url
+}
+
+# --- Cl1p service
+edit:add-var cl1p~ {|in name|
+	var key = (e:cat ~/.cl1papitoken)
+	e:curl -H "Content-Type: text/html; charset=UTF-8" -H "cl1papitoken: "$key -X POST --data $in https://api.cl1p.net/$name
+	md:show (echo "Read data using `curl https://api.cl1p.net/"$name"`")
 }
 
 # --- Setproxy [-l] [address]
