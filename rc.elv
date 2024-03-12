@@ -11,6 +11,7 @@ use math
 use platform
 use doc
 use md
+use os
 if $platform:is-unix { use unix; edit:add-var unix: $unix: } 
 
 #==================================================== - EXTERNAL MODULES
@@ -20,6 +21,7 @@ try { epm:install &silent-if-installed ^
 	github.com/muesli/elvish-libs } catch { echo "Cannot install external modules..." }
 
 use github.com/iandol/elvish-modules/cmds # my utility module
+use github.com/iandol/elvish-modules/ai # my ai module
 use github.com/iandol/elvish-modules/python # for python venv support
 use github.com/iandol/elvish-modules/mamba # for conda/mamba support
 use github.com/zzamboni/elvish-modules/bang-bang
