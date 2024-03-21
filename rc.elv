@@ -44,7 +44,7 @@ edit:add-var mama~			{ |@in| mamba:activate $@in }
 edit:add-var mamd~			{ mamba:deactivate }
 edit:add-var maml~			{ mamba:list }
 edit:add-var pya~			{ |@in| python:activate $@in }
-edit:add-var pyc~			{ |@in| python -m venv $python:venv-directory$@in }
+edit:add-var pyc~			{ |@in| python -m venv $python:venv-directory"/"$@in }
 edit:add-var pyd~			{ python:deactivate }
 edit:add-var pyl~			{ python:list-venvs }
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
@@ -77,7 +77,7 @@ each {|p| cmds:append-to-path $p } [
 	/Library/Frameworks/GStreamer.framework/Commands
 ]
 
-cmds:do-if-path $E:HOME/.venv/ {|p| set python:venv-directory = $p }
+cmds:do-if-path $E:HOME/.venv {|p| set python:venv-directory = $p }
 cmds:do-if-path [/media/cogp/micromamba /media/cog/data/micromamba $E:HOME/micromamba ] {|p| set mamba:root = $p; set-env MAMBA_ROOT_PREFIX $mamba:root }
 
 #==================================================== - SETUP HOMEBREW
