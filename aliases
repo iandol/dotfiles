@@ -445,7 +445,8 @@ function updateElvish () {
 	curl -C - -O "https://mirrors.tuna.tsinghua.edu.cn/elvish/$tos-$tpr/elvish-HEAD.tar.gz"
 	tar xvf elvish-HEAD.tar.gz 
 	sudo mkdir -p /usr/local/bin
-	sudo cp elvish-HEAD /usr/local/bin/elvish
+	sudo rm -rf /usr/local/bin/elvish
+	sudo cp elvish /usr/local/bin
 	sudo chown $USER /usr/local/bin/elvish
 	sudo chmod +x /usr/local/bin/elvish
 	cd $old_dir
