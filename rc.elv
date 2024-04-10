@@ -31,7 +31,7 @@ use github.com/zzamboni/elvish-modules/spinners
 set-env XDG_CONFIG_HOME $E:HOME/.config
 set-env XDG_DATA_HOME $E:HOME/.local/share
 if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
-if $platform:is-unix { set-env TMPDIR '/tmp/' }
+if (==s $platform:os "linux") { set-env TMPDIR '/tmp' }
 
 #==================================================== - IMPORT UTIL NAMES TO REPL
 each {|c| # this adds function names from cmds module to REPL
@@ -135,9 +135,9 @@ cmds:if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env
 python:deactivate
 
 #==================================================== - MAIN ALIASES
-if (cmds:not-file $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv) {
-	mkdir -p $E:XDG_CONFIG_HOME/elvish/lib/
-	ln -s $E:HOME/.dotfiles/aliases.elv $E:XDG_CONFIG_HOME/elvish/lib/aliases.elv
+if (cmds:not-file $E:HOME/.config/elvish/lib/aliases.elv) {
+	mkdir -p $E:HOME/.config/elvish/lib/
+	ln -s $E:HOME/.dotfiles/aliases.elv $E:HOME/.config/elvish/lib/aliases.elv
 }
 use aliases
 cmds:if-external fzf { set edit:insert:binding[Ctrl-R] = { aliases:history >/dev/tty 2>&1 } }
