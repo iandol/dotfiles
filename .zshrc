@@ -104,6 +104,7 @@ fi
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
 [[ -d "/snap/bin" ]] && path=("/snap/bin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
+[[ -d "$HOME/.cache/lm-studio/bin" ]] && path=("$PATH:$HOME/.cache/lm-studio/bin" $path)
 export PATH
 
 #------------------------------------FINALISE OTHERS

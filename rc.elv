@@ -67,7 +67,7 @@ each {|p| cmds:prepend-to-path $p } [
 	/Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin
 	~/scoop/apps/msys2/current/usr/bin
 	~/.rbenv/shims  ~/.pyenv/shims ~/scoop/shims
-	~/bin
+	~/bin  ~/.cache/lm-studio/bin
 	/usr/local/bin  /usr/local/sbin
 	/home/linuxbrew/.linuxbrew/bin
 	/opt/local/bin  /opt/homebrew/bin
