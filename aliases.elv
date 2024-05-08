@@ -209,8 +209,8 @@ set edit:command-abbr['setproxy'] = 'sp'
 
 # --- Install required TeX packages for BasicTex
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
-edit:add-var updateTeX~ {
-	tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
+edit:add-var updateTeX~ {|&repo=tuna|
+	if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
 	tlmgr update --self
 	tlmgr update --all
 	tlmgr install lualatex-math luatexja abstract ^

@@ -68,6 +68,8 @@ fi
 
 # LUA
 [[ -d "$HOME/.local/share/pandoc/filters" ]] && export LUA_PATH="$HOME/.local/share/pandoc/filters/?.lua;;"
+[[ -d /opt/homebrew/share/lua/5.4 ]] && export LUA_PATH="/opt/homebrew/share/lua/5.4/?.lua;$LUA_PATH"
+[[ -d /opt/homebrew/lib/lua/5.4 ]] && export LUA_CPATH="/opt/homebrew/lib/lua/5.4/?.so;/opt/homebrew/lib/lua/5.4/?/?.so;;"
 
 # MicroMamba (Conda)
 [[ -f "$HOME/.local/bin/micromamba" ]] && export MAMBA_EXE="$HOME/.local/bin/micromamba"
