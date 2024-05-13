@@ -36,8 +36,9 @@ if [ $PLATFORM = "Darwin" ]; then
 		brew tap rsteube/tap
 		brew install carapace
 		#cask fonts
-		brew install font-symbols-only-nerd-font font-recursive-code font-fantasque-sans-mono font-fira-code font-jetbrains-mono \
-		font-cascadia-code font-libertinus font-alegreya font-alegreya-sans
+		brew install font-symbols-only-nerd-font font-recursive-code \
+		font-fantasque-sans-mono font-fira-code font-jetbrains-mono \
+		font-cascadia-code font-libertinus font-stix font-alegreya font-alegreya-sans
 		brew tap iandol/adobe-fonts
 		brew install font-source-sans
 		brew install font-source-serif
@@ -82,11 +83,12 @@ elif [ $PLATFORM = "Linux" ]; then
 		brew tap rsteube/tap
 		brew install carapace
 		brew tap linuxbrew/fonts
-		brew install font-symbols-only-nerd-font font-fantasque-sans-mono font-fira-code \
+		brew install font-symbols-only-nerd-font font-recursive-code \
+		font-fantasque-sans-mono font-fira-code \
 		font-jetbrains-mono font-cascadia-code font-libertinus \
 		font-alegreya font-alegreya-sans font-stix
 		#brew install --HEAD font-source-sans-3
-		sudo ln -s /home/linuxbrew/.linuxbrew/share/fonts /usr/local/share/fonts/
+		sudo ln -v -f -L /home/linuxbrew/.linuxbrew/share/fonts/* /usr/local/share/fonts/
 		sudo fc-cache -fv
 	fi
 	sudo snap install code arduino rpi-imager obs-studio

@@ -5,6 +5,7 @@ use math
 use epm
 use platform
 use md
+use os
 use github.com/iandol/elvish-modules/cmds # my utility module
 echo (styled "…loading command aliases…" bold italic yellow)
 
@@ -21,12 +22,26 @@ set edit:command-abbr['arch'] = 'arch -x86_64'
 # set edit:small-word-abbr['ls'] = 'ls -GF'
 
 #==================================================== - ELVISH
-edit:add-var help~ { |&search=$false @args| # from @krader https://skepticism.us/elvish/learn/useful-customizations.html#add-a-help-command
+fn help { |&search=$false @args| # from @krader https://skepticism.us/elvish/learn/useful-customizations.html#add-a-help-command
 	use doc
 	if (and (eq $search $false) (== 1 (count $args))) {
 	try { doc:show $args[0] } catch { try { doc:show '$'$args[0] } catch { doc:find $args[0] } }
 	} else { doc:find $@args }
 }
+# edit current command in editor, from @Kurtis-Rader
+fn external-edit-command {
+	var temp-file = (os:temp-file '*.elv')
+	echo $edit:current-command > $temp-file
+	try {
+		(external $E:EDITOR) $temp-file[name] <$os:dev-tty >$os:dev-tty 2>&1
+		set edit:current-command = (str:trim-right (slurp < $temp-file[name]) " \n")
+	} finally {
+		file:close $temp-file
+		os:remove $temp-file[name]
+	}
+}
+edit:add-var help~ $help~
+edit:add-var external-edit-command~ $external-edit-command~
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pprint $edit:insert:binding }
 
@@ -161,23 +176,25 @@ fn history {
 }
 
 # --- Transfer a file (using either transfer.sh or 0x0.st)
-edit:add-var transfer~ {|@in &use=transfer| 
+fn transfer {|@in &use=transfer| 
 	var url = ''
 	if (==s $use "transfer") { set url = (e:curl --upload-file $@in 'https://transfer.sh/'$@in) 
 	} else { set url = (e:curl -F 'file=@'$@in 'https://0x0.st') }
 	echo "\n======================================================="
 	md:show "The *online URL* for the file is: "$url
 }
+edit:add-var transfer~ $transfer~
 
 # --- Cl1p service
-edit:add-var cl1p~ {|in name|
+fn cl1p {|in name|
 	var key = (e:cat ~/.cl1papitoken)
 	e:curl -H "Content-Type: text/html; charset=UTF-8" -H "cl1papitoken: "$key -X POST --data $in https://api.cl1p.net/$name
 	md:show (echo "Read data using `curl https://api.cl1p.net/"$name"`")
 }
+edit:add-var cl1p~ $cl1p~
 
 # --- Setproxy [-l] [address]
-edit:add-var sp~ {|@argin|
+fn sp {|@argin|
 	var @plist = {http,https,ftp,all}_proxy
 	if (eq (count $argin) (num 1)) {
 		if (eq $argin[0] "-l") {
@@ -205,11 +222,12 @@ edit:add-var sp~ {|@argin|
 	echo "PROXY: HTTP = "$E:http_proxy" | HTTPS = "$E:https_proxy" | ALL = "$E:all_proxy "\nBYPASS: "$E:no_proxy
 	try { echo "GIT: "(git config --global --get-regexp http | slurp | str:replace "\n" " " (one)) } catch { }
 }
+edit:add-var sp~ $sp~
 set edit:command-abbr['setproxy'] = 'sp'
 
 # --- Install required TeX packages for BasicTex
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
-edit:add-var updateTeX~ {|&repo=tuna|
+fn updateTeX {|&repo=tuna|
 	if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
 	tlmgr update --self
 	tlmgr update --all
@@ -226,9 +244,10 @@ edit:add-var updateTeX~ {|&repo=tuna|
 	tikzfill luacolor lua-ul xpatch selnolig ^
 	lua-visual-debug lipsum svg newfile
 }
+edit:add-var udpdateTeX~ $updateTeX~
 
 # --- Update code and OS
-edit:add-var update~ {
+fn update {
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 	var olddir = (pwd)
 	var oldbranch = ''
@@ -291,9 +310,10 @@ edit:add-var update~ {
 	try { epm:upgrade } catch { echo "Couldn't update EPM packages…"}
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
+edit:add-var update~ $update~
 
 # --- Update Elvish
-edit:add-var updateElvish~ {|&source=tuna|
+fn updateElvish {|&source=tuna|
 	var url = 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz'
 	if (!=s $source 'tuna') { set url = 'https://dl.elv.sh/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz' }
 	cmds:if-external elvish { elvish -version }
@@ -314,9 +334,10 @@ edit:add-var updateElvish~ {|&source=tuna|
 		rm -rf $tmpdir
 	}
 }
+edit:add-var updateElvish~ $updateElvish~
 
 # --- Update FFMPEG
-edit:add-var updateFFmpeg~ {
+fn updateFFmpeg {
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
@@ -337,9 +358,10 @@ edit:add-var updateFFmpeg~ {
 	cd $olddir
 	rm -rf $tmpdir
 }
+edit:add-var updateFFmpeg~ $updateFFmpeg~
 
 # --- Update Opticka
-edit:add-var updateOptickaPages~ {
+fn updateOptickaPages {
 	var opath = $E:HOME'/Code/opticka'
 	if (cmds:is-path $opath) {
 		var olddir = $pwd
@@ -362,3 +384,4 @@ edit:add-var updateOptickaPages~ {
 		echo "Check and push manually…"
 	}
 }
+edit:add-var updateOptickaPages~ $updateOptickaPages~
