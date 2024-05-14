@@ -22,26 +22,6 @@ set edit:command-abbr['arch'] = 'arch -x86_64'
 # set edit:small-word-abbr['ls'] = 'ls -GF'
 
 #==================================================== - ELVISH
-fn help { |&search=$false @args| # from @krader https://skepticism.us/elvish/learn/useful-customizations.html#add-a-help-command
-	use doc
-	if (and (eq $search $false) (== 1 (count $args))) {
-	try { doc:show $args[0] } catch { try { doc:show '$'$args[0] } catch { doc:find $args[0] } }
-	} else { doc:find $@args }
-}
-# edit current command in editor, from @Kurtis-Rader
-fn external-edit-command {
-	var temp-file = (os:temp-file '*.elv')
-	echo $edit:current-command > $temp-file
-	try {
-		(external $E:EDITOR) $temp-file[name] <$os:dev-tty >$os:dev-tty 2>&1
-		set edit:current-command = (str:trim-right (slurp < $temp-file[name]) " \n")
-	} finally {
-		file:close $temp-file
-		os:remove $temp-file[name]
-	}
-}
-edit:add-var help~ $help~
-edit:add-var external-edit-command~ $external-edit-command~
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pprint $edit:insert:binding }
 
@@ -157,22 +137,50 @@ edit:add-var ping~ { |@in| e:ping -c 5 $@in }
 edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" $c | cmds:first [(all)] }) }
 
 #==================================================== - FUNCTIONS
+# from @krader https://skepticism.us/elvish/learn/useful-customizations.html#add-a-help-command
+fn help { |&search=$false @args|
+	use doc
+	if (and (eq $search $false) (== 1 (count $args))) {
+	try { doc:show $args[0] } catch { try { doc:show '$'$args[0] } catch { doc:find $args[0] } }
+	} else { doc:find $@args }
+}
+edit:add-var help~ $help~
+
+# edit current command in editor, from @Kurtis-Rader
+fn external-edit-command {
+	var temp-file = (os:temp-file '*.elv')
+	echo $edit:current-command > $temp-file
+	try {
+		(external $E:EDITOR) $temp-file[name] <$os:dev-tty >$os:dev-tty 2>&1
+		set edit:current-command = (str:trim-right (slurp < $temp-file[name]) " \n")
+	} finally {
+		file:close $temp-file
+		os:remove $temp-file[name]
+	}
+}
+edit:add-var external-edit-command~ $external-edit-command~
 # Filter the command history through the fzf program. This is normally bound
 # to Ctrl-R.
 fn history { 
+	if ( not (has-external "fzf") ) {
+		edit:history:start
+		return
+	}
 	var new-cmd = (
 		edit:command-history &dedup &newest-first &cmd-only |
 		to-terminated "\x00" |
 		try {
-			fzf --tabstop=4 --color=dark --no-sort --read0 --layout=reverse --info=hidden --exact ^
+			fzf --tabstop=2 --color=dark --no-sort --read0 --layout=reverse --info=hidden --exact ^
 			--query=$edit:current-command | slurp
 		} catch {
 			# If the user presses [Escape] to cancel the fzf operation it will exit
 			# with a non-zero status. Ignore that we ran this function in that case.
+			edit:redraw &full=$true
 			return
 		}
 	)
-	set edit:current-command = (str:trim-right $new-cmd " \n")
+	edit:redraw &full=$true
+	set edit:current-command = $new-cmd
 }
 
 # --- Transfer a file (using either transfer.sh or 0x0.st)

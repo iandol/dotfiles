@@ -134,12 +134,12 @@ if (cmds:not-file $E:HOME/.config/elvish/lib/aliases.elv) {
 	ln -s $E:HOME/.dotfiles/aliases.elv $E:HOME/.config/elvish/lib/aliases.elv
 }
 use aliases
-cmds:if-external fzf { set edit:insert:binding[Ctrl-R] = { aliases:history >/dev/tty 2>&1 } }
 
 #==================================================== - KEY BINDINGS
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
 set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
-set edit:insert:binding[Ctrl-b] = $aliases:external-edit-command~
+set edit:insert:binding[Ctrl-b] = { aliases:external-edit-command }
+cmds:if-external fzf { set edit:insert:binding[Ctrl-R] = { aliases:history >/dev/tty 2>&1 } }
 #set edit:insert:binding[Ctrl-l] = { $edit:move-dot-eol~; $edit:kill-line-left~ }
 
 #==================================================== - THEME
