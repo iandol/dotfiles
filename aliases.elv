@@ -158,7 +158,7 @@ fn external-edit-command {
 		os:remove $temp-file[name]
 	}
 }
-edit:add-var external-edit-command~ $external-edit-command~
+
 # Filter the command history through the fzf program. This is normally bound
 # to Ctrl-R.
 fn history { 
@@ -252,7 +252,7 @@ fn updateTeX {|&repo=tuna|
 	tikzfill luacolor lua-ul xpatch selnolig ^
 	lua-visual-debug lipsum svg newfile
 }
-edit:add-var udpdateTeX~ $updateTeX~
+edit:add-var updateTeX~ $updateTeX~
 
 # --- Update code and OS
 fn update {
