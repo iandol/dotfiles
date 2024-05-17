@@ -64,7 +64,7 @@ cmds:do-if-path $releases {|p|
 	if (cmds:is-macos) { ln -sf $p"/maci64/mlint" $E:HOME/bin/mlint }
 }
 each {|p| cmds:prepend-to-path $p } [
-	/Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin
+	/Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin ~/.TinyTeX/bin/x86_64-linux 
 	~/scoop/apps/msys2/current/usr/bin
 	~/.rbenv/shims  ~/.pyenv/shims ~/scoop/shims
 	~/bin  ~/.cache/lm-studio/bin
