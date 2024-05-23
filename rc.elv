@@ -139,7 +139,7 @@ use aliases
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
 set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
 set edit:insert:binding[Ctrl-b] = { aliases:external-edit-command }
-set edit:insert:binding[Ctrl-y] = { echo $edit:current-command | pbcopy; edit:replace-input "" }
+set edit:insert:binding[Ctrl-y] = { echo $edit:current-command | pbcopy; edit:replace-input ""; edit:notify "Cut ✂️" }
 cmds:if-external fzf { set edit:insert:binding[Ctrl-R] = { aliases:history >/dev/tty 2>&1 } }
 #set edit:insert:binding[Ctrl-l] = { $edit:move-dot-eol~; $edit:kill-line-left~ }
 
