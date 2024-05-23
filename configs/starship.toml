@@ -1,12 +1,11 @@
 # Inserts a blank line between shell prompts
 add_newline = true
-
 scan_timeout = 10
 command_timeout = 750
 
 [character] 
-success_symbol = "[▶︎](bold green)"
-error_symbol = "[▷](bold red)"
+success_symbol = "[➪](bold green)"
+error_symbol = "[◎](bold red)"
 
 #[env_var]
 #variable = "PLATFORM"
@@ -18,9 +17,9 @@ style = "dimmed yellow"
 disabled = true
 
 [shell]
-bash_indicator = "ⓑ"
-zsh_indicator = "ⓩ"
-elvish_indicator = "ⓔ"
+bash_indicator = "β"
+zsh_indicator = "ζ"
+elvish_indicator = "ε"
 style = "dimmed gray"
 disabled = false
 

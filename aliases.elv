@@ -24,6 +24,18 @@ set edit:command-abbr['arch'] = 'arch -x86_64'
 #==================================================== - ELVISH
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pprint $edit:insert:binding }
+fn helpme { echo (styled "
+! – last cmd 🔘 ⌃N – 🚀navigate 🔘 ⌃R – 🔍history 🔘 ⌃L – 🔍dirs
+⌃B – 🖊️cmd 🔘 ⌃a,e – ⇄ 🔘 ⌃u – ⌫line 🔘 💡 curl cheat.sh/?
+[VIM] :e load-buf 🔘 :bn next-buf 🔘 :ls list-buf 🔘 :bd close-buf
+  :tab ba buf>tabs 🔘 gt next-tab 🔘 :vert ba vertical
+  ^w[s|v] split-viewport 🔘 ^ww switch-vp 🔘 ^wx exchange-vp
+  [N]yy=yank 🔘 [N]dd=cut 🔘 p=paste 🔘 *# jump to word
+  / pattern-search 🔘 n=next
+[TMUX] prefix §=^a 🔘 tmux-pane: split=§| §- close=§x focus=§o
+  sessions=§s detach=§d window-create=§c switch=§n close=§&
+  commands=§: help=§? navigate=§w" bold italic fg-yellow ) }
+edit:add-var helpme~ $helpme~
 
 #==================================================== - LS
 cmds:if-external lsd {
@@ -171,7 +183,7 @@ fn history {
 		to-terminated "\x00" |
 		try {
 			fzf --tabstop=2 --color=dark --no-sort --read0 --layout=reverse --info=hidden --exact ^
-			--query=$edit:current-command | slurp
+			--query=$edit:current-command | slurp | str:trim-space (all)
 		} catch {
 			# If the user presses [Escape] to cancel the fzf operation it will exit
 			# with a non-zero status. Ignore that we ran this function in that case.
