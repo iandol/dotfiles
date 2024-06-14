@@ -37,7 +37,7 @@ fn helpme { echo (styled "
   commands=§: help=§? navigate=§w" bold italic fg-yellow ) }
 edit:add-var helpme~ $helpme~
 
-#==================================================== - LS
+#==================================================== - LS, prefer lsd if available
 cmds:if-external lsd {
 	edit:add-var llt~ {|@in| e:lsd --header --group-directories-first -alFht $@in }
 	edit:add-var lls~ {|@in| e:lsd --header --group-directories-first -alFhS $@in }
@@ -97,14 +97,15 @@ if ( cmds:is-macos ) {
 		sudo systemctl stop avahi-daemon.service
 		sudo systemctl status avahi-daemon.service
 	}
-
+	# Linux way to update/install kitty
 	edit:add-var installKitty~ { 
-		curl -L sw.kovidgoyal.net/kitty/installer.sh | zsh /dev/stdin
-		ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/bin
+		curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+		ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/
 		cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
 		cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
-		sed -i "s|Icon=kitty|Icon="$E:HOME"/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
-		sed -i "s|Exec=kitty|Exec="$E:HOME"/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+		sed -i "s|Icon=kitty|Icon=/home/"$E:USER"/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+		sed -i "s|Exec=kitty|Exec=/home/"$E:USER"/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+		echo "kitty.desktop" > ~/.config/xdg-terminals.list
 	}
 }
 
@@ -124,7 +125,7 @@ cmds:if-external kitty {
 		edit:add-var kittydark~ { sed -Ei 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
 	}
 }
-cmds:if-external nvim { edit:add-var vi~ { |@in| nvim $@in }}
+cmds:if-external nvim { edit:add-var vi~ $e:nvim~ }
 
 edit:add-var listUDP~ { |@in| 
 	echo "Searching for: "$@in

@@ -20,17 +20,20 @@ else
 	alias dir='ls -alfG'
 	alias cls='clear; ls'
 	alias l.='ls -d .[^.]*' #only show .dot files
-
 fi
 alias smbfix='kill `pidof gvfsd-smb-browse`'
 alias hping='httping -K'
+
 alias installmicromamba='"${SHELL}" <(curl -L micro.mamba.pm/install.sh)'
-alias updateKitty='curl -L sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin; \
-ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/bin; \
-cp -fi ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
-cp -fi ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
+
+alias updateKitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin \
+ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ \
+cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
+cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
 sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
-sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop'
+sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop \
+echo "kitty.desktop" > ~/.config/xdg-terminals.list'
+
 alias mm='micromamba'
 alias gst='git status'
 alias gca='git commit --all'
