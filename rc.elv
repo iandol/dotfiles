@@ -12,7 +12,7 @@ use platform
 use doc
 use md
 use os
-if $platform:is-unix { use unix; edit:add-var unix: $unix: } 
+if $platform:is-unix { use unix; edit:add-var unix: $unix: }
 
 #==================================================== - EXTERNAL MODULES
 try { epm:install &silent-if-installed ^
@@ -64,9 +64,9 @@ cmds:do-if-path $releases {|p|
 	if (cmds:is-macos) { ln -sf $p"/maci64/mlint" $E:HOME/bin/mlint }
 }
 each {|p| cmds:prepend-to-path $p } [
-	/Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin ~/.TinyTeX/bin/x86_64-linux 
+	/Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
 	~/scoop/apps/msys2/current/usr/bin
-	~/.rbenv/shims  ~/.pyenv/shims ~/scoop/shims
+	~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims
 	~/bin  ~/.cache/lm-studio/bin
 	/usr/local/bin  /usr/local/sbin
 	/home/linuxbrew/.linuxbrew/bin
@@ -144,11 +144,11 @@ cmds:if-external fzf { set edit:insert:binding[Ctrl-R] = { aliases:history >/dev
 #set edit:insert:binding[Ctrl-l] = { $edit:move-dot-eol~; $edit:kill-line-left~ }
 
 #==================================================== - THEME
-cmds:if-external starship { 
+cmds:if-external starship {
 	echo (styled "…starship init…" bold italic yellow)
 	eval ((search-external starship) init elvish --print-full-init | slurp)
 	eval ((search-external starship) completions elvish | slurp)
-} { use github.com/muesli/elvish-libs/theme/powerline } 
+} { use github.com/muesli/elvish-libs/theme/powerline }
 
 #==================================================== - SHIM FOLDERS
 put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims} | each {|p| cmds:prepend-to-path $p} # needs to go after brew init

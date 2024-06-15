@@ -159,7 +159,7 @@ fn help { |&search=$false @args|
 }
 edit:add-var help~ $help~
 
-# edit current command in editor, from @Kurtis-Rader
+# edit current command in editor, from @Kurtis-Rader set edit:insert:binding[Ctrl-b] = { aliases:external-edit-command }
 fn external-edit-command {
 	var temp-file = (os:temp-file '*.elv')
 	echo $edit:current-command > $temp-file
@@ -173,7 +173,7 @@ fn external-edit-command {
 }
 
 # Filter the command history through the fzf program. This is normally bound
-# to Ctrl-R.
+# to Ctrl-R. set edit:insert:binding[Ctrl-R] = { aliases:history >/dev/tty 2>&1 }
 fn history { 
 	if ( not (has-external "fzf") ) {
 		edit:history:start
