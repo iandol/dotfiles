@@ -63,6 +63,7 @@ if ( cmds:is-macos ) {
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
 	}
 	if (cmds:is-file /usr/local/homebrew/bin/brew) { edit:add-var ibrew~ { |@in| arch -x86_64 /usr/local/homebrew/bin/brew $@in } }
+	edit:add-var iterm~ { arch -x86_64 /System/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal &}
 	edit:add-var mbrew~ { |@in| arch -arm64e /opt/homebrew/bin/brew $@in }
 	edit:add-var fix~ { |@in| e:codesign --force --deep -s - $@in }
 	edit:add-var ql~ { |@in| e:qlmanage -p $@in }
