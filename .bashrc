@@ -54,5 +54,5 @@ fi
 [[ -f "$DF/env" ]] && source "$DF/env"
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which figlet > /dev/null 2>&1) ]] && figlet "Totoro Hai!"
-
-[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
+[[ ! -f "$HOME/.x-cmd.root/X" ]] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
+[[ -x $(which pkgx > /dev/null 2>&1) ]] && eval "$(pkgx --shellcode)"  #docs.pkgx.sh/shellcode

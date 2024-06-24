@@ -8,10 +8,12 @@ var sshrunning = ?(systemctl status sshd | grep 'active (running)' >$os:dev-null
 var ztactive = ?(sudo zerotier-cli -j info | jq '.online' > $os:dev-null 2>&1)
 
 if (cmds:is-ok $ztrunning) { 
+	echo (styled "Zerotier Status:" bold green)
 	sudo systemctl --no-pager status zerotier-one
 } else { 
-	echo "Restarting Zerotier"
+	echo (styled "Restarting Zerotier!" bold red)
 	sudo systemctl restart zerotier-one
+	sudo systemctl --no-pager status zerotier-one
 }
 if (cmds:is-ok $ztactive) { 
 	echo (styled "\n\nZerotier Server is ONLINE!\n\n" bold green)
@@ -19,8 +21,10 @@ if (cmds:is-ok $ztactive) {
 	echo (styled "\n\nZerotier NOT OFFLINE :-(\n\n" bold red)
 }
 if (cmds:is-ok $sshrunning) { 
-	sudo systemctl --no-pager status sshd 
+	echo (styled "SSHD Status:" bold green)
+	sudo systemctl --no-pager status sshd
 } else { 
-	echo "Restarting SSHD"
+	echo (styled "Restarting SSHD!" bold red)
 	sudo systemctl restart sshd
+	sudo systemctl --no-pager status sshd 
 }
