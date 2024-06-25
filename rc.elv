@@ -40,13 +40,13 @@ each {|c| # this adds function names from cmds module to REPL, from Kurtis
 } [if-external~ append-to-path~ prepend-to-path~ do-if-path~
 	is-path~ is-file~ not-path~ not-file~ is-macos~ is-linux~ 
 	is-arm64~ is-macintel~ is-macarm~]
-edit:add-var mama~	$mamba:activate~
-edit:add-var mamd~	$mamba:deactivate~
-edit:add-var maml~	$mamba:list~
-edit:add-var pya~	$python:activate~
-edit:add-var pyc~	{ |@in| python -m venv $python:venv-directory"/"$@in }
-edit:add-var pyd~	$python:deactivate~
-edit:add-var pyl~	$python:list-venvs~
+edit:add-vars [&mama~=$mamba:activate~
+&mamd~=$mamba:deactivate~
+&maml~=$mamba:list~
+&pya~=$python:activate~
+&pyc~={ |@in| python -m venv $python:venv-directory"/"$@in }
+&pyd~=$python:deactivate~
+&pyl~=$python:list-venvs~]
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
 set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:activate]
 
