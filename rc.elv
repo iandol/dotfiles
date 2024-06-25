@@ -137,8 +137,7 @@ use aliases
 
 #==================================================== - X-CMD 文
 if (os:is-regular $E:HOME/.config/elvish/lib/x.elv) {
-	use x; use a; x:init; edit:add-var x~ $x:x~; edit:add-var xw~ $x:xw~; edit:add-var xg~ $x:xg~; edit:add-var c~ $x:c~ # boot up x-cmd.
-	echo (styled "…x-cmd 文 integration…" bold italic yellow)
+	use x; use a; x:init; echo (styled "…x-cmd 文 integration…" bold italic yellow)
 }
 
 #==================================================== - KEY BINDINGS
@@ -163,3 +162,5 @@ put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims} | each {|p| cmds:prepend-t
 aliases:helpme
 echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic yellow)
 
+
+use os; if (os:is-regular $E:HOME/.config/elvish/lib/x.elv) { use x; x:init; }     # boot up x-cmd in Elvish.
