@@ -85,10 +85,5 @@ ln -siv $CONFIGS/.tmux.conf ~
 chown $USER ~/.tmux.conf
 
 # carapace setup
-if [[ $PLATFORM == 'Darwin' ]]; then
-	mkdir -p $HOME/Library/Application\ Support/carapace/specs
-	ln -siv $DF/completions/* $HOME/Library/Application\ Support/carapace/specs/
-else
-	mkdir -p $XDG_CONFIG_HOME/carapace/specs
-	ln -siv $DF/completions/* $XDG_CONFIG_HOME/carapace/specs
-fi
+mkdir -p $XDG_CONFIG_HOME/carapace/specs
+ln -siv $DF/completions/* $XDG_CONFIG_HOME/carapace/specs

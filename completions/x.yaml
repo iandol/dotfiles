@@ -1,0 +1,48 @@
+# yaml-language-server: $schema=https://carapace.sh/schemas/command.json
+name: x
+aliases: [x, X]
+description: x-cmd multi-shell utility
+commands:
+- name: proxy
+  description: proxy management
+  commands:
+  - name: ls
+    description: list proxy settings
+  - name: set
+    description: set proxy
+  - name: unset
+    description: unset proxy
+  - name: wrap
+    description: wrap command with proxy
+- name: cd
+  description: cd command enhancements
+  commands:
+  - name: ls
+    description: list cd history
+- name: cleanup
+  description: Clear cache for x-cmd
+  commands:
+  - name: all
+    description: Clear all cache files 
+  - name: log
+    description: Clear log files
+  - name: tmp
+    description: Clear temporary files
+  - name: removable
+    description: Clear removable files
+- name: cowsay
+  description: cowsay command enhancements
+  commands:
+  - name: cow
+    description: use cow
+  - name: tux
+    description: use tux
+- name: date
+  description: date command enhancements
+  commands:
+  - name: iso
+    description: convert date to iso
+  - name: str
+    description: convert date to str
+  - name: timestamp
+    description: convert date to timestamp

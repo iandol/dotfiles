@@ -120,7 +120,7 @@ cmds:do-if-path /opt/homebrew/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'
 cmds:do-if-path /opt/homebrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
 
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
-cmds:if-external carapace { set-env CARAPACE_BRIDGES 'zsh,bash'; eval (carapace _carapace|slurp); echo (styled "…carapace init…" bold italic yellow) }
+cmds:if-external carapace { set-env CARAPACE_BRIDGES 'zsh,bash'; eval (carapace _carapace | slurp); echo (styled "…carapace init…" bold italic yellow) }
 cmds:if-external nnn { set-env NNN_FIFO /tmp/nnn.fifo; set-env NNN_TERMINAL (which kitty); set-env NNN_PLUG 'f:finder;o:fzopen;p:preview-tui' }
 cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
 cmds:if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbenv' }
@@ -137,6 +137,7 @@ use aliases
 
 #==================================================== - X-CMD 文
 if (os:is-regular $E:HOME/.config/elvish/lib/x.elv) {
+	set-env ___X_CMD_HELP_LANGUAGE en
 	use x; use a; x:init; echo (styled "…x-cmd 文 integration…" bold italic yellow)
 }
 
@@ -161,6 +162,3 @@ put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims} | each {|p| cmds:prepend-t
 #==================================================== - THIS IS THE END, MY FRIEND
 aliases:helpme
 echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic yellow)
-
-
-use os; if (os:is-regular $E:HOME/.config/elvish/lib/x.elv) { use x; x:init; }     # boot up x-cmd in Elvish.

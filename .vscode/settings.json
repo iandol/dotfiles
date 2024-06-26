@@ -1,0 +1,9 @@
+{
+	"yaml.schemas": {
+		"https://carapace.sh/schemas/command.json": [
+			"file:///Users/ian/.dotfiles/completions/scrivomatic.yaml",
+			"file:///Users/ian/.dotfiles/completions/pandocomatic.yaml",
+			"file:///Users/ian/.dotfiles/completions/x.yaml"
+		]
+	}
+}
