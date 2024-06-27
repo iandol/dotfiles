@@ -2,19 +2,19 @@
 name: pandocomatic
 description: recipe manager for pandoc
 flags:
-    -i, --input=: Input file.
-    -o, --output=: Output file.
-    -d, --data-dir=: Pandoc data dir.
-    -c, --config=: Specify which YAML file.
-    -b, --debug: Debug mode.
-    -y, --dry-run: Dry run mode.
-    -q, --quiet: Quiet mode.
-    -v, --version: Version info.
-    -h, --help: display help and exit
+  -i, --input=: Input file.
+  -o, --output=: Output file.
+  -d, --data-dir=: Pandoc data dir.
+  -c, --config=: Specify which YAML file.
+  -b, --debug: Debug mode.
+  -y, --dry-run: Dry run mode.
+  -q, --quiet: Quiet mode.
+  -v, --version: Version info.
+  -h, --help: display help and exit
 completion:
-    positionalany: ["$files"]
-    flag:
-        input: ["$files"]
-        output: ["$files"]
-        data-dir: ["$directories"]
-        config: ["$files"]
+  positionalany: ["$files"]
+  flag:
+    input: ["$files"]
+    output: ["$files"]
+    data-dir: ["$directories"]
+    config: ["$files"]

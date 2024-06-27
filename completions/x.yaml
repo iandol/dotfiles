@@ -6,37 +6,43 @@ commands:
 - name: proxy
   description: proxy management
   commands:
-  - name: ls
-    description: list proxy settings
-  - name: set
-    description: set proxy
-  - name: unset
-    description: unset proxy
-  - name: wrap
-    description: wrap command with proxy
+    - name: ls
+      description: list proxy settings
+    - name: set
+      description: set proxy
+    - name: unset
+      description: unset proxy
+    - name: wrap
+      description: wrap command with proxy
+      commands:
+        - name: use
+        - name: unuse
+        - name: try
+        - name: untry
+        - name: run
 - name: cd
   description: cd command enhancements
   commands:
-  - name: ls
-    description: list cd history
+    - name: ls
+      description: list cd history
 - name: cleanup
   description: Clear cache for x-cmd
   commands:
-  - name: all
-    description: Clear all cache files 
-  - name: log
-    description: Clear log files
-  - name: tmp
-    description: Clear temporary files
-  - name: removable
-    description: Clear removable files
+    - name: all
+      description: Clear all cache files 
+    - name: log
+      description: Clear log files
+    - name: tmp
+      description: Clear temporary files
+    - name: removable
+      description: Clear removable files
 - name: cowsay
   description: cowsay command enhancements
   commands:
-  - name: cow
-    description: use cow
-  - name: tux
-    description: use tux
+    - name: cow
+      description: use cow
+    - name: tux
+      description: use tux
 - name: date
   description: date command enhancements
   commands:
@@ -46,3 +52,25 @@ commands:
     description: convert date to str
   - name: timestamp
     description: convert date to timestamp
+- name: brew
+  description: brew command enhancements
+  commands:
+    - name: install
+      description: '[i] install package'
+    - name: nv
+      description: use UI to select
+    - name: mirror
+      description: mirror management
+      commands:
+        - name: set
+        - name: ls
+        - name: current
+        - name: unset
+    - name: ls
+      description: list installed software
+      flags:
+        -i, --installed: list installed
+        -a, --all: list all
+        -l, --local: list local
+        -A, --available: list available
+        --app: use interactive
