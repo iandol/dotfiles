@@ -138,7 +138,9 @@ use aliases
 #==================================================== - X-CMD 文
 if (os:is-regular $E:HOME/.config/elvish/lib/x.elv) {
 	set-env ___X_CMD_HELP_LANGUAGE en
-	use x; use a; x:init; echo (styled "…x-cmd 文 integration…" bold italic yellow)
+	use x; use a; x:init; 
+	edit:add-var •~ { |@in| use x; x:x chat --sendalias lms $@in; }
+	echo (styled "…x-cmd 文 integration…" bold italic yellow)
 }
 
 #==================================================== - KEY BINDINGS

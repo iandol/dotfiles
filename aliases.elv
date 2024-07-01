@@ -14,6 +14,8 @@ echo (styled "…loading command aliases…" bold italic yellow)
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>so'] = '2>&1'
+set edit:command-abbr['xp'] = 'x proxy set 127.0.0.1:'
+set edit:command-abbr['xpu'] = 'x proxy unset'
 set edit:command-abbr['mm'] = 'micromamba'
 set edit:command-abbr['edit'] = 'nvim'
 set edit:command-abbr['arch'] = 'arch -x86_64'

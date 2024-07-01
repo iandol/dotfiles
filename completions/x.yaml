@@ -3,6 +3,21 @@ name: x
 aliases: [x, X]
 description: x-cmd multi-shell utility
 commands:
+- name: chat
+  description: LLM Integration
+  commands:
+    - name: init
+      description: initialise config
+    - name: send
+      description: send message to LLM
+  flags:
+    -n: number of messages as conext
+    -c: confirm before send
+    --profile: specify profile
+    --config: config file
+    --cfg: config file
+    --cur: current session config
+    --send: send message
 - name: proxy
   description: proxy management
   commands:
