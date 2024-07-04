@@ -14,8 +14,8 @@ else
 fi
 cd $dn
 mydir=$(pwd)
-printf "\n\n============================================\n"
-printf "---> Processing Bibliography file $filename in $mydir @ $(date)...\n"
+printf "\n\n======================================@$(date)\n"
+printf "---> Processing Bibliography file $filename in $mydir\n"
 if [[ ! -s $filename ]]; then # make sure file exists
 	printf "\nCannot find $filename\n"
 	return -1
