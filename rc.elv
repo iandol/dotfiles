@@ -66,9 +66,10 @@ cmds:do-if-path $releases {|p|
 each {|p| cmds:prepend-to-path $p } [
 	/Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
 	~/scoop/apps/msys2/current/usr/bin
-	~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims
-	~/bin  ~/.cache/lm-studio/bin
+	~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims  
+	~/.cache/lm-studio/bin
 	/usr/local/bin  /usr/local/sbin
+	~/.pixi/bin  ~/.local/bin  ~/bin
 	/home/linuxbrew/.linuxbrew/bin
 	/opt/local/bin  /opt/homebrew/bin
 ]

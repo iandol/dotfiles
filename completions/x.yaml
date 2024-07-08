@@ -67,6 +67,49 @@ commands:
     description: convert date to str
   - name: timestamp
     description: convert date to timestamp
+- name: env
+  description: package installation
+  flags:
+    --app: Use the interactive app to view and install packages                                                                                                        
+  commands:
+    - name: ls
+      description: List candidate version in use or available                                                                                                                  
+      flags:
+        --all,-a: List all available versions for the specified package                                                                                                     
+        --use,-u: list all in use package version                                                                                                                     
+        --try,-t: list all in try package version                                                                                                                     
+        --installed,-i: list all installed packages 
+    - name: ll
+      description: Display all software packages and their classifications                                                                                                     
+    - name: la
+      description: List all available versions for the specified package                                                                                                       
+    - name: depend
+      description: Check package dependencies
+      commands:
+        - name: dependent    
+          description: Find dependencies of a specified package                                                                                                                
+        - name: dependency   
+          description: Find installed packages that depend on a specified software                                                                                                                                
+    - name: which
+      description: Display path of Show the path of installed commands                                                                                                         
+    - name: use
+      description: Set the specified package to the global environment for use                                                                                                  
+    - name: unuse
+      description: Remove the environment where the specified package has use link                                                                                              
+    - name: try
+      description: Set the specified package to try in the context of the current shell session                                                                                 
+    - name: untry
+      description: Cancel the package currently being tryed in the shell session environment                                                                                    
+    - name: gc
+      description: Try to recycle and remove pkg packages                                                                                                                       
+    - name: boot
+      description: Inject corresponding environment variables into the specified pkg application. For example, JAVA_HOME of java                                               
+    - name: unboot
+      description: Clear the environment variables injected by the `env boot` command                                                                                          
+    - name: exec
+      description: Run the executable file using the specified pkg application                                                                                                 
+    - name: var
+      description: Backup or recover environment                             
 - name: brew
   description: brew command enhancements
   commands:
