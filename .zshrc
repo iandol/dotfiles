@@ -7,6 +7,9 @@ export HOMEBREW_INSTALL_CLEANUP=true
 [[ $PLATFORM == 'Darwin' ]] && [[ -d /opt/homebrew ]] && [[ "$(arch)" == "arm64" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 [[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+#------------------------------------X-CMD SETUP
+[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
+
 #-------------------------------PREFER nvim
 if [[ -f $(which nvim) ]]; then
 	export EDITOR='nvim'
@@ -153,6 +156,3 @@ fi
 
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
-
-
-[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
