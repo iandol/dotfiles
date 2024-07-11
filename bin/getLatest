@@ -1,0 +1,21 @@
+#!/bin/bash
+
+REPO="owner/repo"
+API_URL="https://api.github.com/repos/$REPO/releases/latest"
+
+# Get the latest release info
+RELEASE_INFO=$(curl -s $API_URL)
+
+# Extract the version (tag name)
+VERSION=$(echo $RELEASE_INFO | jq -r .tag_name)
+
+# Extract the download URL for the asset you want
+DOWNLOAD_URL=$(echo $RELEASE_INFO | jq -r '.assets[0].browser_download_url')
+
+echo "Latest version: $VERSION"
+echo "Download URL: $DOWNLOAD_URL"
+
+# Download the release
+curl -L -o latest_release.zip $DOWNLOAD_URL
+
+echo "Downloaded latest release to latest_release.zip"

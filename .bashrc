@@ -49,7 +49,7 @@ fi
 
 [[ -x $(which rbenv > /dev/null 2>&1) ]] && eval "$(rbenv init -)"
 [[ -x $(which pyenv > /dev/null 2>&1) ]] && eval "$(pyenv init -)"
-[[ -x $(which fzf > /dev/null 2>&1) ]] && source $DF/configs/.fzf.bash
+[[ -x $(which fzf > /dev/null 2>&1) ]] && eval <(fzf --bash)
 [[ -f $(which starship > /dev/null 2>&1) ]] && eval "$(starship init bash)"
 [[ -f "$DF/env" ]] && source "$DF/env"
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"

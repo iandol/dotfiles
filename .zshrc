@@ -8,6 +8,7 @@ export HOMEBREW_INSTALL_CLEANUP=true
 [[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #------------------------------------X-CMD SETUP
+export ___X_CMD_HELP_LANGUAGE="en"
 [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
 
 #-------------------------------PREFER nvim
@@ -24,15 +25,17 @@ setopt AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_MINUS PUSHD_SILENT
 HISTSIZE=20000
 SAVEHIST=20000
 HISTFILE=~/.zsh_history
-setopt EXTENDED_GLOB
-setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
-setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
-setopt HIST_IGNORE_ALL_DUPS      # Delete old recorded entry if new entry is a duplicate.
-setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
-setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history file.
-setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
-export MANPAGER='less -X'        # don't clear after quitting man
-typeset -U PATH path             # don't allow duplicates in path
+setopt extended_glob
+setopt extended_history 
+setopt hist_expire_dups_first	# Expire duplicate entries first when trimming history.
+setopt hist_ignore_dups			# Don't record an entry that was just recorded again.
+setopt hist_ignore_all_dups		# Delete old recorded entry if new entry is a duplicate.
+setopt hist_ignore_space		# Don't record an entry starting with a space.
+setopt hist_save_no_dups		# Don't write duplicate entries in the history file.
+setopt hist_reduce_blanks		# Remove superfluous blanks before recording entry.
+setopt inc_append_history     	# write to the history file immediately, not when the shell exits.
+setopt share_history          	# share command history dataexport MANPAGER='less -X'        # don't clear after quitting man
+typeset -U PATH path			# don't allow duplicates in path
 
 unalias run-help >& /dev/null
 autoload run-help # use ESC + H to bring up help, see https://man.archlinux.org/man/extra/zsh/zshcontrib.1.en
@@ -94,14 +97,6 @@ unset __mamba_setup
 # <<< mamba initialize <<<
 fi
 
-#------------------------------------KITTY INTEGRATION
-#if test -n "$KITTY_INSTALLATION_DIR"; then
-#	export KITTY_SHELL_INTEGRATION="enabled"
-#	autoload -Uz -- "$KITTY_INSTALLATION_DIR"/shell-integration/zsh/kitty-integration
-#	kitty-integration
-#	unfunction kitty-integration
-#fi
-
 #------------------------------------FINALISE PATH
 [[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path)
 [[ -d "$HOME/Library/TinyTeX/bin/universal-darwin" ]] && path+="$HOME/Library/TinyTeX/bin/universal-darwin"
@@ -115,9 +110,8 @@ export PATH
 #------------------------------------FINALISE OTHERS
 [[ -x $(which pyenv) ]] && eval "$(pyenv init - zsh)"
 [[ -x $(which rbenv) ]] && eval "$(rbenv init - zsh)"
-#[[ -x $(which archey) ]] && archey -c -o
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
-[[ -x $(which fzf) ]] && source $DF/configs/.fzf.zsh
+[[ -x $(which fzf) ]] && source <(fzf --zsh)
 [[ -x $(which pkgx) ]] && source <(pkgx --shellcode)  #docs.pkgx.sh/shellcode
 
 #-------------------------------------ZINIT SETUP
@@ -133,18 +127,9 @@ autoload -Uz _zi
 (( ${+_comps} )) && _comps[zi]=_zi
 zi light zsh-users/zsh-completions
 zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
-zi light zsh-users/zsh-history-substring-search
-zi light z-shell/H-S-MW 
+#zi light z-shell/H-S-MW 
 zi light z-shell/F-Sy-H 
 zi light zsh-users/zsh-autosuggestions
-
-if [[ $PLATFORM = 'Darwin' ]]; then
-	bindkey "^[[A" history-substring-search-up
-	bindkey "^[[B" history-substring-search-down
-else
-	bindkey "$terminfo[kcuu1]" history-substring-search-up # see https://github.com/zsh-users/zsh-history-substring-search/issues/92
-	bindkey "$terminfo[kcud1]" history-substring-search-down
-fi
 ### End of Zi's installer chunk
 
 #---------------------------------------STARSHIP
