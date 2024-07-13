@@ -24,7 +24,6 @@ if [ $PLATFORM = "Darwin" ]; then
 		printf 'Homebrew now installed...\n'
 	fi
 	printf 'Add Caskroom fonts to Homebrew...\n'
-	brew tap homebrew/cask-fonts
 	#make sure our minimum packages are installed
 	if [ -e $(which brew) ]; then
 		printf 'Adding Homebrew packages...\n'

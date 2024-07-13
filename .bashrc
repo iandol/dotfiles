@@ -27,6 +27,10 @@ export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
 
 export PATH=$HOME/bin:$HOME/scoop/shims:/usr/local/bin:/usr/local/sbin:$HOME:$PATH
 
+#------------------------------------X-CMD SETUP
+export ___X_CMD_HELP_LANGUAGE="en"
+[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
+
 if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
@@ -55,4 +59,3 @@ fi
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which figlet > /dev/null 2>&1) ]] && figlet "Totoro Hai!"
 [[ -x $(which pkgx > /dev/null 2>&1) ]] && eval "$(pkgx --shellcode)"  #docs.pkgx.sh/shellcode
-[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.

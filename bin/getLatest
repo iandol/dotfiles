@@ -1,21 +1,10 @@
-#!/bin/bash
-
-REPO="owner/repo"
-API_URL="https://api.github.com/repos/$REPO/releases/latest"
-
+#!/usr/bin/env elvish
+# build URL
+var apiURL = "https://api.github.com/repos/"$args[0]"/releases/latest"
 # Get the latest release info
-RELEASE_INFO=$(curl -s $API_URL)
-
-# Extract the version (tag name)
-VERSION=$(echo $RELEASE_INFO | jq -r .tag_name)
-
-# Extract the download URL for the asset you want
-DOWNLOAD_URL=$(echo $RELEASE_INFO | jq -r '.assets[0].browser_download_url')
-
-echo "Latest version: $VERSION"
-echo "Download URL: $DOWNLOAD_URL"
-
-# Download the release
-curl -L -o latest_release.zip $DOWNLOAD_URL
-
-echo "Downloaded latest release to latest_release.zip"
+var x
+try { set x = (curl -s $apiURL | from-json) } catch e { put $e[reason]; exit 1 }
+if (has-key $x assets) {
+	var assets = $x[assets]
+}
+echo $x

@@ -95,6 +95,14 @@ cmds:if-external brew {
 	each {|p| cmds:prepend-to-path $p } [ $pfix'/bin' $pfix'/sbin']
 }
 
+#==================================================== - X-CMD 文
+if (os:is-regular $E:HOME/.config/elvish/lib/x.elv) {
+	set-env ___X_CMD_HELP_LANGUAGE en
+	use x; use a; x:init; 
+	edit:add-var •~ { |@in| use x; x:x chat --sendalias lms $@in; }
+	echo (styled "…x-cmd 文 integration…" bold italic yellow)
+}
+
 #==================================================== - KITTY INTEGRATION
 if (has-env KITTY_INSTALLATION_DIR) {
 	fn osc {|c| print "\e]"$c"\a" }
@@ -135,14 +143,6 @@ if (cmds:not-file $E:HOME/.config/elvish/lib/aliases.elv) {
 	ln -s $E:HOME/.dotfiles/aliases.elv $E:HOME/.config/elvish/lib/aliases.elv
 }
 use aliases
-
-#==================================================== - X-CMD 文
-if (os:is-regular $E:HOME/.config/elvish/lib/x.elv) {
-	set-env ___X_CMD_HELP_LANGUAGE en
-	use x; use a; x:init; 
-	edit:add-var •~ { |@in| use x; x:x chat --sendalias lms $@in; }
-	echo (styled "…x-cmd 文 integration…" bold italic yellow)
-}
 
 #==================================================== - KEY BINDINGS
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
