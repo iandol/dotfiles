@@ -41,10 +41,11 @@ edit:add-var helpme~ $helpme~
 
 #==================================================== - LS, prefer lsd if available
 cmds:if-external lsd {
-	edit:add-var llt~ {|@in| e:lsd --header --group-directories-first -alFht $@in }
-	edit:add-var lls~ {|@in| e:lsd --header --group-directories-first -alFhS $@in }
-	edit:add-var ll~ {|@in| e:lsd --header --group-directories-first -alFh $@in }
-	edit:add-var ls~ {|@in| e:lsd -F $@in }
+	edit:add-var llt~ {|@in| e:eza --icons=auto -al -r -s time --group-directories-first $@in }
+	edit:add-var lls~ {|@in| e:eza --icons=auto -al -r -s size --group-directories-first $@in }
+	edit:add-var lll~ {|@in| e:eza --icons=auto --git -alO@ --group-directories-first $@in }
+	edit:add-var ll~ {|@in| e:eza --icons=auto -al --group-directories-first $@in }
+	edit:add-var ls~ {|@in| e:eza --icons=auto --group-directories-first $@in }
 } {
 	if ( cmds:is-macos ) { 
 		edit:add-var lls~ {|@in| e:ls -alFGhS $@in }

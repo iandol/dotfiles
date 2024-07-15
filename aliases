@@ -1,10 +1,11 @@
 export PLATFORM=$(uname -s)
 export PROC=$(uname -m)
-if [[ -f $(which lsd) ]]; then
-	alias lls='lsd -alFhS'
-	alias llt='lsd -alFht'
-	alias ll='lsd -alFh'
-	alias ls='lsd -F'
+if [[ -f $(which eza) ]]; then
+	alias lls='eza --icons=auto -al -r -s size'
+	alias llt='eza --icons=auto -al -r -s time'
+	alias ll='eza --icons=auto -al@'
+	alias dir='eza --icons=auto -al'
+	alias ls='eza --icons=auto'
 elif [[ $PLATFORM = 'Darwin' ]]; then 
 	alias la='ls -alGhF@'
 	alias las='ls -alGhFeLH'

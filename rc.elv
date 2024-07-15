@@ -28,25 +28,25 @@ use github.com/zzamboni/elvish-modules/bang-bang
 use github.com/zzamboni/elvish-modules/spinners
 
 #==================================================== - BASIC ENVIRONMENT
+if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
 set-env XDG_CONFIG_HOME $E:HOME/.config
 set-env XDG_DATA_HOME $E:HOME/.local/share
-if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
 if (==s $platform:os "linux") { set-env TMPDIR '/tmp' }
 
 #==================================================== - IMPORT UTIL NAMES TO REPL
 each {|c| # this adds function names from cmds module to REPL, from Kurtis
-	var code = 'edit:add-var '$c' $mod:'$c
-	eval $code &ns=(ns [&mod:=$cmds:])
-} [if-external~ append-to-path~ prepend-to-path~ do-if-path~
+	var code = 'edit:add-var '$c' $mod:'$c; eval $code &ns=(ns [&mod:=$cmds:])
+	} [if-external~ append-to-path~ prepend-to-path~ do-if-path~
 	is-path~ is-file~ not-path~ not-file~ is-macos~ is-linux~ 
 	is-arm64~ is-macintel~ is-macarm~]
-edit:add-vars [&mama~=$mamba:activate~
-&mamd~=$mamba:deactivate~
-&maml~=$mamba:list~
-&pya~=$python:activate~
-&pyc~={ |@in| python -m venv $python:venv-directory"/"$@in }
-&pyd~=$python:deactivate~
-&pyl~=$python:list-venvs~]
+edit:add-vars [
+	&mama~=$mamba:activate~
+	&mamd~=$mamba:deactivate~
+	&maml~=$mamba:list~
+	&pya~=$python:activate~
+	&pyc~={ |@in| python -m venv $python:venv-directory"/"$@in }
+	&pyd~=$python:deactivate~
+	&pyl~=$python:list-venvs~]
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
 set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:activate]
 
@@ -127,6 +127,8 @@ if (not (has-env LUA_PATH)) { set-env LUA_PATH ';'; set-env LUA_CPATH ';' }
 cmds:do-if-path $E:HOME/.local/share/pandoc/filters {|p| set-env LUA_PATH $p'/?.lua;'$E:LUA_PATH }
 cmds:do-if-path /opt/homebrew/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
 cmds:do-if-path /opt/homebrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
+
+cmds:do-if-path $E:HOME/.local/share/pandoc/ {|p| set-env PD $p }
 
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 cmds:if-external carapace { set-env CARAPACE_BRIDGES 'zsh,bash'; eval (carapace _carapace | slurp); echo (styled "…carapace init…" bold italic yellow) }

@@ -75,10 +75,10 @@ commands:
     - name: ls
       description: List candidate version in use or available                                                                                                                  
       flags:
-        --all,-a: List all available versions for the specified package                                                                                                     
-        --use,-u: list all in use package version                                                                                                                     
-        --try,-t: list all in try package version                                                                                                                     
-        --installed,-i: list all installed packages 
+        -a, --all: List all available versions for the specified package                                                                                                     
+        -u, --use: list all in use package version                                                                                                                     
+        -t, --try: list all in try package version                                                                                                                     
+        -i, --installed: list all installed packages 
     - name: ll
       description: Display all software packages and their classifications                                                                                                     
     - name: la
