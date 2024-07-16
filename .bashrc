@@ -3,8 +3,8 @@ export PLATFORM=$(uname -s)
 export HOMEBREW_INSTALL_CLEANUP=true
 
 #-------------------------------Bootstrap homebrew[s]
-[[ $PLATFORM == 'Darwin' ]] && [[ -d /usr/local/homebrew ]] && eval "$(/usr/local/homebrew/bin/brew shellenv)"
-[[ $PLATFORM == 'Darwin' ]] && [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ $PLATFORM == 'Darwin' ]] && [[ -f /usr/local/bin/brew ]] && [[ "$(arch)" == "i386" ]] && eval "$(/usr/local/bin/brew shellenv)"
+[[ $PLATFORM == 'Darwin' ]] && [[ -d /opt/homebrew ]] && [[ "$(arch)" == "arm64" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 [[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 [[ $PLATFORM = 'darwin'* ]] && source $DF/myinfo
@@ -34,13 +34,13 @@ export ___X_CMD_HELP_LANGUAGE="en"
 if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
 	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	[[ -d "/Applications/MATLAB_R2023a.app/bin" ]] && path=("/Applications/MATLAB_R2023a.app/bin" $path) # matlab
-	[[ -x "/Applications/MATLAB_R2023a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2023a.app/bin/maci64/mlint" ~/bin/mlint # matlab
+	[[ -d "/Applications/MATLAB_R2024a.app/bin" ]] && path=("/Applications/MATLAB_R2024a.app/bin" $path) # matlab
+	[[ -x "/Applications/MATLAB_R2024a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2024a.app/bin/maci64/mlint" ~/bin/mlint # matlab
 else
-	if [[ -d "/usr/local/MATLAB/R2023a/bin" ]]; then
-		export PATH="/usr/local/MATLAB/R2023a/bin:$PATH" # matlab
-		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2023a/bin" # matlab
-		ln -sf "/usr/local/MATLAB/R2023a/bin/glnxa64/mlint" ~/bin/ # mlint
+	if [[ -d "/usr/local/MATLAB/R2024a/bin" ]]; then
+		export PATH="/usr/local/MATLAB/R2024a/bin:$PATH" # matlab
+		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2024a/bin" # matlab
+		ln -sf "/usr/local/MATLAB/R2024a/bin/glnxa64/mlint" ~/bin/ # mlint
 	fi
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/" # Linux Java
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export PATH="${JAVA_HOME}bin:$PATH" # Linux JDK
@@ -55,6 +55,7 @@ fi
 [[ -x $(which pyenv > /dev/null 2>&1) ]] && eval "$(pyenv init -)"
 [[ -x $(which fzf > /dev/null 2>&1) ]] && eval <(fzf --bash)
 [[ -f $(which starship > /dev/null 2>&1) ]] && eval "$(starship init bash)"
+[[ -f $(which pixi > /dev/null 2>&1) ]] && eval "$(pixi completion --shell bash)"
 [[ -f "$DF/env" ]] && source "$DF/env"
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which figlet > /dev/null 2>&1) ]] && figlet "Totoro Hai!"

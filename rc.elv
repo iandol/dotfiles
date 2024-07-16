@@ -131,6 +131,7 @@ cmds:do-if-path /opt/homebrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?
 cmds:do-if-path $E:HOME/.local/share/pandoc/ {|p| set-env PD $p }
 
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
+cmds:if-external pixi { eval (pixi completion --shell elvish | slurp) }
 cmds:if-external carapace { set-env CARAPACE_BRIDGES 'zsh,bash'; eval (carapace _carapace | slurp); echo (styled "…carapace init…" bold italic yellow) }
 cmds:if-external nnn { set-env NNN_FIFO /tmp/nnn.fifo; set-env NNN_TERMINAL (which kitty); set-env NNN_PLUG 'f:finder;o:fzopen;p:preview-tui' }
 cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }

@@ -44,7 +44,7 @@ alias help=run-help
 #------------------------------------PATHS/ENVS ETC.
 ([[ -x $(which brew) ]] && [[ -d "$(brew --prefix)/share/zsh/site-functions/" ]]) && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
 
-ul=("R2023b" "R2023a" "R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
+ul=("R2024a" "R2023b" "R2023a" "R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
 match=0
 if [[ $PLATFORM == 'Darwin' ]]; then
 	for x in $ul; do
@@ -112,6 +112,7 @@ export PATH
 [[ -x $(which rbenv) ]] && eval "$(rbenv init - zsh)"
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which fzf) ]] && source <(fzf --zsh)
+[[ -x $(which pixi) ]] && eval "$(pixi completion --shell zsh)"
 [[ -x $(which pkgx) ]] && source <(pkgx --shellcode)  #docs.pkgx.sh/shellcode
 
 #-------------------------------------ZINIT SETUP
