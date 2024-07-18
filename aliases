@@ -3,7 +3,8 @@ export PROC=$(uname -m)
 if [[ -f $(which eza) ]]; then
 	alias lls='eza --icons=auto -al -r -s size'
 	alias llt='eza --icons=auto -al -r -s time'
-	alias ll='eza --icons=auto -al@'
+	alias lll='eza --icons=auto -al@'
+	alias ll='eza --icons=auto -al'
 	alias dir='eza --icons=auto -al'
 	alias ls='eza --icons=auto'
 elif [[ $PLATFORM = 'Darwin' ]]; then 
@@ -419,7 +420,7 @@ function update() {
 	fi
 
 	if [[ $PLATFORM = "Linux" ]]; then
-		printf '\n\n---> Updating \e[92mApt\e[m...\n'
+		printf '\n\n---> Updating \e[92mApt/snap/flatpak/firmware\e[m...\n'
 		sudo apt update
 		sudo apt autoremove
 		apt list --upgradable
@@ -428,10 +429,11 @@ function update() {
 		[[ -x $(which fwupdmgr) ]] && fwupdmgr get-upgrades
 	fi
 
+	[[ -f $(which pixi) ]] && (printf '\n\n---> Updating \e[92mPIXI\e[m...\n'; pixi self-update)
+	[[ -f $(which pkgx) ]] && (printf '\n\n---> Updating \e[92mPKGX\e[m...\n'; pkgx --sync; pkgx --update)
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
 	[[ -f $(which pyenv) ]] && (printf '\n\n---> Rehash \e[92mPYENV\e[m...\n'; pyenv rehash)
 	[[ -e "$HOME/.zi" ]] && (printf '\n\n---> Updating \e[92mZINIT\e[m...\n';zi self-update; zi update -p --all)
-	#[[ $SHELL = *zsh* ]] && (printf '\n\n---> Updating \e[92mcompinit\e[m...\n'; rm -f "$HOME/.zcompdump"; compinit)
 	printf "\n=====>>> Finish Update @ \e[93m$(date)\e[m <<<=====\n"
 }
 

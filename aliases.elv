@@ -40,7 +40,7 @@ fn helpme { echo (styled "
 edit:add-var helpme~ $helpme~
 
 #==================================================== - LS, prefer lsd if available
-cmds:if-external lsd {
+cmds:if-external eza {
 	edit:add-var llt~ {|@in| e:eza --icons=auto -al -r -s time --group-directories-first $@in }
 	edit:add-var lls~ {|@in| e:eza --icons=auto -al -r -s size --group-directories-first $@in }
 	edit:add-var lll~ {|@in| e:eza --icons=auto --git -alO@ --group-directories-first $@in }
@@ -303,7 +303,7 @@ fn update {
 	}
 	cd $olddir
 	cmds:if-external brew {
-		echo (styled "\n\n---> Updating Homebrew…\n" bold bg-color5)
+		echo (styled "\n\n---> Updating BREW…\n" bold bg-color5)
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		try { 
 			brew update; brew outdated
@@ -313,7 +313,7 @@ fn update {
 	}
 	if (cmds:is-macos) { try { echo (styled "\n\n---> Check macOS updates…\n" bold bg-color5); softwareupdate --list } catch { } }
 	if (cmds:is-linux) {
-		try { echo (styled "\n\n---> Updating APT…\n" bold bg-color5)
+		try { echo (styled "\n\n---> Updating APT/SNAP/FLATPAK etc…\n" bold bg-color5)
 			sudo apt update
 			sudo apt autoremove
 			apt list --upgradable
@@ -323,15 +323,15 @@ fn update {
 		cmds:if-external flatpak { try { flatpak update -y } catch { } }
 		cmds:if-external fwupdmgr { try { fwupdmgr get-upgrades } catch { } }
 	}
-	cmds:if-external x { echo (styled "\n---> Update x-cmd\n" bold bg-color5); x upgrade }
+	# cmds:if-external x { echo (styled "\n---> Update x-cmd\n" bold bg-color5); x upgrade }
 	cmds:if-external pixi { echo (styled "\n---> Update pixi\n" bold bg-color5); pixi self-update }
+	cmds:if-external pkgx { echo (styled "\n---> Update pkgx\n" bold bg-color5); pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { echo (styled "\n---> Update Micromamba…\n" bold bg-color5); micromamba self-update }
 	cmds:if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
 	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
 	try { cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --list } } catch { }
-	cmds:if-external elvish { 
-		echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5)
-		try { epm:upgrade } catch { echo "Couldn't update EPM packages…" } }
+	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5)
+	try { epm:upgrade } catch { echo "Couldn't update EPM packages…" }
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
 edit:add-var update~ $update~
