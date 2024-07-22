@@ -1,8 +1,8 @@
-#==================================================== - ELVISH CONFIG
+#====================================================
 # elvish shell config: https://elv.sh/learn/tour.html
 #====================================================
 
-#==================================================== - BASE MODULES
+#==================================================== - CORE MODULES
 use re
 use str
 use epm
@@ -52,13 +52,10 @@ set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:a
 
 #==================================================== - PATHS + VENVS
 var prefix; var suffix
-if (cmds:is-macos) {
-	set prefix = "/Applications/MATLAB_"; set suffix = ".app/bin"
-} else {
-	set prefix = "/usr/local/MATLAB/"; set suffix = "/bin"
-}
+if (cmds:is-macos) { set prefix = "/Applications/MATLAB_"; set suffix = ".app/bin"
+} else { set prefix = "/usr/local/MATLAB/"; set suffix = "/bin" }
 var releases = [$prefix{R2024b R2024a R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a}$suffix]
-cmds:do-if-path $releases {|p|
+cmds:do-if-path $releases { |p|
 	cmds:prepend-to-path $p
 	set-env MATLAB_EXECUTABLE $p"/matlab" # matlab
 	if (cmds:is-macos) { ln -sf $p"/maci64/mlint" $E:HOME/bin/mlint }
@@ -69,9 +66,10 @@ each {|p| cmds:prepend-to-path $p } [
 	~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims  
 	~/.cache/lm-studio/bin
 	/usr/local/bin  /usr/local/sbin
-	~/.pixi/bin  ~/.local/bin  ~/bin
+	~/.local/bin  ~/bin
 	/home/linuxbrew/.linuxbrew/bin
 	/opt/local/bin  /opt/homebrew/bin
+	~/.pixi/bin
 ]
 each {|p| cmds:append-to-path $p } [
 	/usr/local/opt/python@{3.14 3.13 3.12 3.11 3.10 3.9}/libexec/bin
@@ -98,7 +96,7 @@ cmds:if-external brew {
 #==================================================== - X-CMD 文
 if (os:is-regular $E:HOME/.config/elvish/lib/x.elv) {
 	set-env ___X_CMD_HELP_LANGUAGE en
-	use x; use a; x:init; 
+	use x; x:init; 
 	edit:add-var •~ { |@in| use x; x:x chat --sendalias lms $@in; }
 	echo (styled "…x-cmd 文 integration…" bold italic yellow)
 }
@@ -119,8 +117,8 @@ set-env PAPERSIZE A4
 set-env PROCESSOR (str:to-lower (uname -m))
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
 if (cmds:is-macos) {
-	cmds:do-if-path /Applications/MATLAB/MATLAB_Runtime/v912/ {|p| set-env MRT $p }
-	cmds:do-if-path [/usr/local/Cellar/openjdk/19] {|p| set-env JAVA_HOME (/usr/libexec/java_home -v 19) }
+	cmds:do-if-path [/Applications/MATLAB/MATLAB_Runtime/v{241 234 912}] {|p| set-env MRT $p }
+	cmds:do-if-path [/opt/homebrew/Caskroom/corretto/] {|p| set-env JAVA_HOME (/usr/libexec/java_home -v 22) }
 }
 
 if (not (has-env LUA_PATH)) { set-env LUA_PATH ';'; set-env LUA_CPATH ';' }

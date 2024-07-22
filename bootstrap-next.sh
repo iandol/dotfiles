@@ -11,4 +11,4 @@ printf "Using $PLATFORM...\n"
 
 printf '\e[0m'
 curl https://get.x-cmd.com | sh -i
-x env use 
+x env use eza fzf jq yq

@@ -1,4 +1,4 @@
-#!/usr/local/bin/elvish
+#!/usr/bin/env elvish
 
 use os
 use github.com/iandol/elvish-modules/cmds

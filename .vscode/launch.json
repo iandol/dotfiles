@@ -57,13 +57,13 @@
 			"script": "${file}",
 			"args": [],
 			"askParameters": true,
-			"rdbgPath": "~/.rbenv/shims/rdbg"
+			"rdbgPath": "~/.pixi/bin/rdbg"
 		},
 		{ // Name: VSCode rdbg Ruby Debugger https://marketplace.visualstudio.com/items?itemName=KoichiSasada.vscode-rdbg
 			"type": "rdbg",
 			"name": "Attach with Ruby Debug rdbg",
 			"request": "attach",
-			"rdbgPath": "~/.rbenv/shims/rdbg"
+			"rdbgPath": "~/.pixi/bin/rdbg"
 		}
 	]
 }

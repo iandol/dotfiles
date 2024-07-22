@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 # https://github.com/thisredone/rb
+File.join(Dir.home, '.rbrc').tap { |f| load f if File.exist?(f) }
+
 def execute(_, code)
   puts _.instance_eval(&code)
 rescue Errno::EPIPE
   exit
 end
 
-single_line = ARGV[0] == '-l'
-
-code = ARGV.drop(single_line ? 1 : 0).join(' ')
-code = eval("Proc.new { #{code} }")
-single_line ? STDIN.each { |l| execute(l, code) } : execute(STDIN.readlines, code)
+single_line = ARGV.delete('-l')
+code = eval("Proc.new { #{ARGV.join(' ')} }")
+single_line ? STDIN.each { |l| execute(l.chomp, code) } : execute(STDIN.each_line, code)
