@@ -1,14 +1,17 @@
 #!/bin/bash
-cd ~
-printf "\n\n--->>> Bootstrap terminal $SHELL setup, current directory is $(pwd)\n\n"
+cd ~ || return
+printf "\n\n--->>> Bootstrap terminal %s setup, current directory is %s\n\n" "$SHELL" "$(pwd)"
 printf '\e[36m'
-[[ $(uname -a | grep -i "microsoft") ]] && MOD="WSL"
-[[ $(uname -a | grep -Ei "aarch64|armv7") ]] && MOD="RPi"
-export PLATFORM=$(uname -s)$MOD
-printf "Using $PLATFORM...\n"
+uname -a | grep -iq "microsoft" && MOD="WSL"
+uname -a | grep -iq "aarch64|armv7" && MOD="RPi"
+PLATFORM=$(uname -s)$MOD
+printf "Using %s...\n" "$PLATFORM"
+
+[[ -x $(which curl) ]] && eval "$(curl https://get.x-cmd.com)"
+[[ -x $(which wget) ]] && eval "$(wget -O- https://get.x-cmd.com)"
 
 #try to install homebrew on macOS
-if [ $PLATFORM = "Darwin" ]; then
+if [ "$PLATFORM" = "Darwin" ]; then
 	if [ ! -e /usr/bin/clang ]; then
 		printf 'We will need to install Command-line tools ... '
 		xcode-select --install
@@ -17,7 +20,7 @@ if [ $PLATFORM = "Darwin" ]; then
 	fi
 	chflags nohidden ~/Library
 	printf 'Let us bootstrap Homebrew if not present ... '
-	if [ -e $(which brew) ]; then
+	if [ -e "$(which brew)" ]; then
 		printf 'Homebrew is present!\n'
 	else
 		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -25,7 +28,7 @@ if [ $PLATFORM = "Darwin" ]; then
 	fi
 	printf 'Add Caskroom fonts to Homebrew...\n'
 	#make sure our minimum packages are installed
-	if [ -e $(which brew) ]; then
+	if [ -e "$(which brew)" ]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install git zsh bat p7zip ruby-build rbenv pyenv
 		brew install starship procs ripgrep neovim jq figlet
@@ -42,8 +45,8 @@ if [ $PLATFORM = "Darwin" ]; then
 		brew install font-source-sans
 		brew install font-source-serif
 		printf 'Do you want to install Apps? (y / n): '
-		read ans
-		if [ $ans == 'y' ]; then
+		read -r ans
+		if [ "$ans" == 'y' ]; then
 			#cask apps
 			brew install alfred basictex bettertouchtool betterzip bitwarden
 			brew install bookends calibre deckset visual-studio-code
@@ -57,7 +60,7 @@ if [ $PLATFORM = "Darwin" ]; then
 			#brew install adoptopenjdk android-studio mono-mdk
 		fi
 	fi
-elif [ $PLATFORM = "Linux" ]; then
+elif [ "$PLATFORM" = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
 	sudo apt update
@@ -70,10 +73,10 @@ elif [ $PLATFORM = "Linux" ]; then
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
 		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-		eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 	else
 		printf 'Homebrew already installed...\n'
-		eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 	fi
 	if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
 		printf 'Adding Homebrew packages...\n'
@@ -91,7 +94,7 @@ elif [ $PLATFORM = "Linux" ]; then
 		sudo fc-cache -fv
 	fi
 	sudo snap install code arduino rpi-imager obs-studio
-elif [ $PLATFORM = "LinuxRPi" ]; then
+elif [ "$PLATFORM" = "LinuxRPi" ]; then
 	printf 'Assume we are setting up a Raspberry Pi machine\n'
 	#make sure our minimum packages are installed
 	sudo apt update
@@ -109,7 +112,7 @@ elif [ $PLATFORM = "LinuxRPi" ]; then
 	#cd ~/Downloads/
 	#wget https://github.com/dandavison/delta/releases/download/0.16.5/git-delta_0.16.5_arm64.deb
 	#sudo dpkg -i git-delta_0.16.5_arm64.deb
-elif [ $PLATFORM = "LinuxWSL" ]; then
+elif [ "$PLATFORM" = "LinuxWSL" ]; then
 	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
 	sudo apt update
@@ -122,15 +125,15 @@ fi
 
 sleep 1
 
-if [ -d "~/.rbenv/" ]; then
-	git clone https://github.com/rbenv/rbenv-default-gems.git $(rbenv root)/plugins/rbenv-default-gems
-	ln -s $HOME/.dotfiles/default-gems $HOME/.rbenv/
+if [ -d "$HOME/.rbenv/" ]; then
+	git clone https://github.com/rbenv/rbenv-default-gems.git "$(rbenv root)/plugins/rbenv-default-gems"
+	ln -s "$HOME/.dotfiles/default-gems" "$HOME/.rbenv/"
 fi
 
 #few python packages
 printf "Do you want to add Python packages? [y / n]:  "
-read ans
-if [ $ans == 'y' ]; then
+read -r ans
+if [ "$ans" == 'y' ]; then
 	printf 'Install a few python packages ... '
 	pip3 install howdoi black pylint
 fi
@@ -138,13 +141,13 @@ fi
 sleep 2
 
 printf 'Let us bootstrap .dotfiles if not present ... '
-read -p "Press any key to continue... " -n1 -s; printf '\n'
+read -rp "Press any key to continue... " -n1 -s; printf '\n'
 if [ -d ~/.dotfiles/.git ]; then
 	printf ' .dotfiles are present! \n'
-	cd ~/.dotfiles; git pull; cd ~
+	cd "$HOME/.dotfiles" || return; git pull; cd "$HOME" || return
 else
 	git clone https://github.com/iandol/dotfiles.git ~/.dotfiles
-	chown -R $USER ~/.dotfiles
+	chown -R "$USER" ~/.dotfiles
 	printf 'We cloned a new .dotfiles...\n'
 fi
 
@@ -187,19 +190,19 @@ fi
 printf 'Linking some bin files in ~/bin/: \n'
 printf '\e[32m'
 mkdir -pv ~/bin/
-if [ $PLATFORM = "Darwin" ]; then
+if [ "$PLATFORM" = "Darwin" ]; then
 	ln -sv ~/.dotfiles/bin/* $HOME/bin
 else
 	ln -sv ~/.dotfiles/bin/*.sh $HOME/bin
 	ln -sv ~/.dotfiles/bin/*.rb $HOME/bin
 fi
-chown -R $USER ~/bin/*
+chown -R "$USER" ~/bin/*
 printf '\e[36m\n\n'
 
-if [ $PLATFORM = "Darwin" ]; then
+if [ "$PLATFORM" = "Darwin" ]; then
 	printf "Do you want to set up OS X defaults? [y / n]:  "
-	read ans
-	if [ $ans == 'y' ]; then
+	read -r ans
+	if [ "$ans" == 'y' ]; then
 		echo 'Enter password for setup command:'
 		sudo echo -n "..."
 		zsh ~/.dotfiles/macos.sh
@@ -208,7 +211,7 @@ fi
 
 sleep 1
 
-if [ -f $(which git) ]; then
+if [ -f "$(which git)" ]; then
 	printf 'Setting some GIT defaults...\n'
 	git config --global --replace-all user.email 'iandol@machine'
 	git config --global --replace-all user.name 'iandol'
@@ -229,17 +232,17 @@ if [ -f $(which git) ]; then
 	git config --global --replace-all alias.dta 'difftool -d'
 	git config --global --replace-all alias.dtl 'difftool HEAD^'
 	git config --global --replace-all difftool.prompt false
-	if [ $PLATFORM = 'Darwin' ]; then
+	if [ "$PLATFORM" = 'Darwin' ]; then
 		git config --global --replace-all credential.helper osxkeychain
 	else
 		git config --global --replace-all credential.helper 'cache --timeout=86400'
 	fi
-	if [ -f $(which delta) ]; then
+	if [ -f "$(which delta)" ]; then
 		git config --global core.pager "delta --line-numbers"
 		git config --global interactive.diffFilter "delta --color-only --features=interactive"
 		git config --global delta.features "decorations"
 		git config --global delta.navigate "true"
-	elif [ -f $(which diff-so-fancy) ]; then
+	elif [ -f "$(which diff-so-fancy)" ]; then
 		git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
 		git config --global interactive.diffFilter "diff-so-fancy --patch"
 	fi
@@ -261,12 +264,12 @@ fi
 
 sleep 2
 
-if [ -x `which zsh` ]; then
+if [ -x "$(which zsh)" ]; then
 	printf 'Switching to use ZSH, you will need to reboot...\n'
 	if [ $PLATFORM = "Darwin" ]; then
 		chsh -s /usr/local/bin/zsh && source ~/.zshrc #installed via brew
 	else
-		chsh -s $(which zsh) && source ~/.zshrc
+		chsh -s "$(which zsh)" && source ~/.zshrc
 	fi
 fi
 printf '\n\n--->>> All Done...\n'
