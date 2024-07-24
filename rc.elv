@@ -129,13 +129,13 @@ cmds:do-if-path /opt/homebrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?
 cmds:do-if-path $E:HOME/.local/share/pandoc/ {|p| set-env PD $p }
 
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
-cmds:if-external pixi { eval (pixi completion --shell elvish | slurp) }
-cmds:if-external carapace { set-env CARAPACE_BRIDGES 'zsh,bash'; eval (carapace _carapace | slurp); echo (styled "…carapace init…" bold italic yellow) }
 cmds:if-external nnn { set-env NNN_FIFO /tmp/nnn.fifo; set-env NNN_TERMINAL (which kitty); set-env NNN_PLUG 'f:finder;o:fzopen;p:preview-tui' }
 cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
 cmds:if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbenv' }
 cmds:if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pyenv' }
 cmds:if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
+cmds:if-external carapace { set-env CARAPACE_BRIDGES 'zsh,bash'; eval (carapace _carapace | slurp); echo (styled "…carapace init…" bold italic yellow) }
+cmds:if-external pixi { eval (pixi completion --shell elvish | slurp) }
 python:deactivate
 
 #==================================================== - MAIN ALIASES
@@ -161,7 +161,7 @@ cmds:if-external starship {
 } { use github.com/muesli/elvish-libs/theme/powerline }
 
 #==================================================== - SHIM FOLDERS
-put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims} | each {|p| cmds:prepend-to-path $p} # needs to go after brew init
+put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /.pixi/bin} | each {|p| cmds:prepend-to-path $p} # needs to go after brew init
 
 #==================================================== - THIS IS THE END, MY FRIEND
 aliases:helpme

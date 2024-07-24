@@ -1,10 +1,10 @@
 export DF="$HOME/.dotfiles"
-export PLATFORM=$(uname -s)
+export PLATFORM="$(uname -s)"
 export HOMEBREW_INSTALL_CLEANUP=true
 
 #-------------------------------Bootstrap homebrew[s]
-[[ $PLATFORM == 'Darwin' ]] && [[ -f /usr/local/bin/brew ]] && [[ "$(arch)" == "i386" ]] && eval "$(/usr/local/bin/brew shellenv)"
-[[ $PLATFORM == 'Darwin' ]] && [[ -d /opt/homebrew ]] && [[ "$(arch)" == "arm64" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ $PLATFORM == 'Darwin' ]] && [[ "$(arch)" == "i386" ]] && [[ -f /usr/local/bin/brew ]] && eval "$(/usr/local/bin/brew shellenv)"
+[[ $PLATFORM == 'Darwin' ]] && [[ "$(arch)" == "arm64" ]] && [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 [[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #------------------------------------X-CMD SETUP
@@ -55,10 +55,6 @@ if [[ $PLATFORM == 'Darwin' ]]; then
 			ln -sf "/Applications/MATLAB_${x}.app/bin/maci64/mlint" ~/bin/mlint # matlab
 		fi
 	done
-	#[[ -d `/usr/libexec/java_home` ]] && export JAVA_HOME=`/usr/libexec/java_home`
-	#[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
-	[[ -d "/Library/TeX/texbin" ]] && path+="/Library/TeX/texbin" # MacTeX
-	[[ -d "/Library/Frameworks/GStreamer.framework/Commands" ]] && path+="/Library/Frameworks/GStreamer.framework/Commands" # GStreamer
 else
 	for x in $ul; do
 		if ( [[ $match == 0 ]] && [[ -d "/usr/local/MATLAB/${x}/bin" ]]); then
@@ -72,39 +68,21 @@ else
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
 fi
 
-# LUA
+#------------------------------------LUA
 [[ -d "$HOME/.local/share/pandoc/filters" ]] && export LUA_PATH="$HOME/.local/share/pandoc/filters/?.lua;;"
 [[ -d /opt/homebrew/share/lua/5.4 ]] && export LUA_PATH="/opt/homebrew/share/lua/5.4/?.lua;$LUA_PATH"
 [[ -d /opt/homebrew/lib/lua/5.4 ]] && export LUA_CPATH="/opt/homebrew/lib/lua/5.4/?.so;/opt/homebrew/lib/lua/5.4/?/?.so;;"
 
-# MicroMamba (Conda)
-[[ -f "$HOME/.local/bin/micromamba" ]] && export MAMBA_EXE="$HOME/.local/bin/micromamba"
-[[ -f "/opt/homebrew/bin/micromamba" ]] && export MAMBA_EXE="/opt/homebrew/bin/micromamba"
-[[ -d "$HOME/micromamba" ]] && export MAMBA_ROOT_PREFIX="$HOME/micromamba"
-[[ -d /media/cog/data/micromamba ]] && export MAMBA_ROOT_PREFIX="/media/cog/data/micromamba"
-[[ -d /media/cogp/micromamba ]] && export MAMBA_ROOT_PREFIX="/media/cogp/micromamba"
-
-if [[ -d $MAMBA_ROOT_PREFIX ]]; then
-# >>> mamba initialize >>>
-# !! Contents within this block are managed by 'mamba init' !!
-__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
-if [ $? -eq 0 ]; then
-	eval "$__mamba_setup"
-else
-	alias micromamba="$MAMBA_EXE"  # Fallback on help from mamba activate
-fi
-unset __mamba_setup
-# <<< mamba initialize <<<
-fi
-
 #------------------------------------FINALISE PATH
 [[ -d "/Library/TeX/texbin" ]] && path=("/Library/TeX/texbin" $path)
 [[ -d "$HOME/Library/TinyTeX/bin/universal-darwin" ]] && path+="$HOME/Library/TinyTeX/bin/universal-darwin"
-[[ -d "/usr/local/sbin" ]] && path+="/usr/local/sbin"
+[[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
+[[ -d "/usr/local/bin" ]] && path=("/usr/local/bin" $path)
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
 [[ -d "/snap/bin" ]] && path=("/snap/bin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
-[[ -d "$HOME/.cache/lm-studio/bin" ]] && path=("$PATH:$HOME/.cache/lm-studio/bin" $path)
+[[ -d "$HOME/.cache/lm-studio/bin" ]] && path=("$HOME/.cache/lm-studio/bin" $path)
+[[ -d "$HOME/.pixi/bin" ]] && path=("$HOME/.pixi/bin" $path)
 export PATH
 
 #------------------------------------FINALISE OTHERS
@@ -112,8 +90,8 @@ export PATH
 [[ -x $(which rbenv) ]] && eval "$(rbenv init - zsh)"
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which fzf) ]] && source <(fzf --zsh)
-[[ -x $(which pixi) ]] && eval "$(pixi completion --shell zsh)"
 [[ -x $(which pkgx) ]] && source <(pkgx --shellcode)  #docs.pkgx.sh/shellcode
+[[ -x $(which pixi) ]] && eval "$(pixi completion --shell zsh)"
 
 #-------------------------------------ZINIT SETUP
 if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
