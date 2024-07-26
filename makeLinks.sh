@@ -85,6 +85,10 @@ chown "$USER" "$XDG_CONFIG_HOME/alacritty.yml"
 ln -fsv "$CONFIGS/.tmux.conf" ~
 chown "$USER" ~/.tmux.conf
 
+# yazi
+mkdir -p "$XDG_CONFIG_HOME/yazi"
+ln -fsv "$CONFIGS/yazi.toml" "$XDG_CONFIG_HOME/yazi"
+
 # carapace setup
 mkdir -p "$XDG_CONFIG_HOME/carapace/specs"
 ln -fsv "$DF/completions/"* "$XDG_CONFIG_HOME/carapace/specs"

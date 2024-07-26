@@ -97,7 +97,8 @@ cmds:if-external brew {
 #==================================================== - X-CMD 文
 if (os:is-regular $E:HOME/.config/elvish/lib/x.elv) {
 	set-env ___X_CMD_HELP_LANGUAGE en
-	use x; x:init; 
+	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 1
+	use x; x:init
 	edit:add-var •~ { |@in| use x; x:x chat --sendalias lms $@in; }
 	echo (styled "…x-cmd 文 integration…" bold italic yellow)
 }
