@@ -51,6 +51,7 @@ set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:a
 set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:activate]
 
 #==================================================== - PATHS + VENVS
+cmds:path_helper # /usr/libexec/path_helper for elvish
 var prefix; var suffix
 if (cmds:is-macos) { set prefix = "/Applications/MATLAB_"; set suffix = ".app/bin"
 } else { set prefix = "/usr/local/MATLAB/"; set suffix = "/bin" }
