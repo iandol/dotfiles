@@ -324,7 +324,7 @@ fn update {
 		cmds:if-external fwupdmgr { try { fwupdmgr get-upgrades } catch { } }
 	}
 	cmds:if-external x { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x upgrade; x elv --setup mod }
-	cmds:if-external pixi { echo (styled "\n---> Update pixi\n" bold bg-color5); pixi self-update; pixi global update-all }
+	cmds:if-external pixi { echo (styled "\n---> Update pixi\n" bold bg-color5); pixi self-update; pixi global upgrade-all }
 	cmds:if-external pkgx { echo (styled "\n---> Update pkgx\n" bold bg-color5); pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { echo (styled "\n---> Update Micromamba…\n" bold bg-color5); micromamba self-update }
 	cmds:if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
