@@ -124,11 +124,12 @@ if (cmds:is-macos) {
 }
 
 if (not (has-env LUA_PATH)) { set-env LUA_PATH ';'; set-env LUA_CPATH ';' }
-cmds:do-if-path $E:HOME/.local/share/pandoc/filters {|p| set-env LUA_PATH $p'/?.lua;'$E:LUA_PATH }
+cmds:do-if-path ~/.local/share/pandoc/filters {|p| set-env LUA_PATH $p'/?.lua;'$E:LUA_PATH }
 cmds:do-if-path /opt/homebrew/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
 cmds:do-if-path /opt/homebrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
-
-cmds:do-if-path $E:HOME/.local/share/pandoc/ {|p| set-env PD $p }
+cmds:do-if-path ~/.pixi/envs/luarocks/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
+cmds:do-if-path ~/.pixi/envs/luarocks/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
+cmds:do-if-path ~/.local/share/pandoc/ {|p| set-env PD $p }
 
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 cmds:if-external nnn { set-env NNN_FIFO /tmp/nnn.fifo; set-env NNN_TERMINAL (which kitty); set-env NNN_PLUG 'f:finder;o:fzopen;p:preview-tui' }
@@ -141,9 +142,9 @@ cmds:if-external pixi { eval (pixi completion --shell elvish | slurp) }
 python:deactivate
 
 #==================================================== - MAIN ALIASES
-if (cmds:not-file $E:HOME/.config/elvish/lib/aliases.elv) {
-	mkdir -p $E:HOME/.config/elvish/lib/
-	ln -s $E:HOME/.dotfiles/aliases.elv $E:HOME/.config/elvish/lib/aliases.elv
+if (cmds:not-file ~/.config/elvish/lib/aliases.elv) {
+	mkdir -p ~/.config/elvish/lib/
+	ln -sf ~/.dotfiles/aliases.elv ~/.config/elvish/lib/aliases.elv
 }
 use aliases
 
