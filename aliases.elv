@@ -145,8 +145,8 @@ edit:add-var sizes~ { |@in| if (cmds:is-empty $in) { set @in = * }; e:du -sh $@i
 edit:add-var fs~ { |@in| e:du -sh $@in | e:sort -rh } 
 edit:add-var gst~ { |@in| e:git status $@in }
 edit:add-var gca~ { |@in| e:git commit --all $@in }
-edit:add-var resetorigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
-edit:add-var resetupstream~ { e:git fetch upstream; e:git reset --hard upstream/master; e:git clean -f -d }
+edit:add-var gresetorigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
+edit:add-var gresetupstream~ { e:git fetch upstream; e:git reset --hard upstream/master; e:git clean -f -d }
 edit:add-var untar~ { |@in| e:tar xvf $@in }
 edit:add-var wget~ { |@in| e:wget -c $@in }
 edit:add-var makepwd~ { e:openssl rand -base64 15 }
@@ -313,15 +313,15 @@ fn update {
 	}
 	if (cmds:is-macos) { try { echo (styled "\n\n---> Check macOS updates…\n" bold bg-color5); softwareupdate --list } catch { } }
 	if (cmds:is-linux) {
-		try { echo (styled "\n\n---> Updating APT/SNAP/FLATPAK etc…\n" bold bg-color5)
+		try { echo (styled "\n\n---> Updating APT…\n" bold bg-color5)
 			sudo apt update
 			sudo apt autoremove
 			apt list --upgradable
 		} catch { echo "\t…couldn't update APT!" }
 		echo (styled "\n\n---> Updating snap/flatpak/firmware…\n" bold bg-color5)
-		cmds:if-external snap { try { sudo snap refresh } catch { } }
-		cmds:if-external flatpak { try { flatpak update -y } catch { } }
-		cmds:if-external fwupdmgr { try { fwupdmgr get-upgrades } catch { } }
+		cmds:if-external snap { try { echo "\tsnap…"; sudo snap refresh } catch { } }
+		cmds:if-external flatpak { try { echo "\tflatpak…"; flatpak update -y } catch { } }
+		cmds:if-external fwupdmgr { try { echo "\tfirmware…"; fwupdmgr get-upgrades } catch { } }
 	}
 	cmds:if-external x { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x upgrade; x elv --setup mod }
 	cmds:if-external pixi { echo (styled "\n---> Update pixi\n" bold bg-color5); pixi self-update; pixi global upgrade-all }
