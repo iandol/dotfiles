@@ -366,7 +366,7 @@ lips() {
 
 # Get Software Updates, update Homebrew itself, and upgrade installed Homebrew packages
 function update() {
-	printf "\n=====>>> Start Update @ \e[93m$(date)\e[m <<<=====\n"
+	sudo printf "\n=====>>> Start Update @ \e[93m$(date)\e[m <<<=====\n"
 	myolddir=$(pwd)
 	ul=(~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/AfterImage 
 	~/Code/equiluminance ~/Code/Pinna ~/Code/spikes 
@@ -421,9 +421,7 @@ function update() {
 
 	if [[ $PLATFORM = "Linux" ]]; then
 		printf '\n\n---> Updating \e[92mApt/snap/flatpak/firmware\e[m...\n'
-		sudo apt update
-		sudo apt autoremove
-		apt list --upgradable
+		sudo apt update; sudo apt autoremove; apt list --upgradable
 		[[ -x $(which snap) ]] && sudo snap refresh
 		[[ -x $(which flatpak) ]] && flatpak update
 		[[ -x $(which fwupdmgr) ]] && fwupdmgr get-upgrades

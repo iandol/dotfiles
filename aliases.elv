@@ -274,6 +274,7 @@ edit:add-var updateTeX~ $updateTeX~
 
 # --- Update code and OS
 fn update {
+	sudo echo "Sudo priviledge obtained..."
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 	var olddir = (pwd)
 	var oldbranch = ''
@@ -314,9 +315,7 @@ fn update {
 	if (cmds:is-macos) { try { echo (styled "\n\n---> Check macOS updates…\n" bold bg-color5); softwareupdate --list } catch { } }
 	if (cmds:is-linux) {
 		try { echo (styled "\n\n---> Updating APT…\n" bold bg-color5)
-			sudo apt update
-			sudo apt autoremove
-			apt list --upgradable
+			sudo apt update; sudo apt autoremove; apt list --upgradable
 		} catch { echo "\t…couldn't update APT!" }
 		echo (styled "\n\n---> Updating snap/flatpak/firmware…\n" bold bg-color5)
 		cmds:if-external snap { try { echo "\tsnap…"; sudo snap refresh } catch { } }
