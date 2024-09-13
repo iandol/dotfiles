@@ -67,7 +67,7 @@ else
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/" # Linux Java
 	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
 fi
-
+[[ -d "/usr/local/MATLAB/MATLAB_Runtime/R2024a/" ]] && export LD_LIBRARY_PATH="/usr/local/MATLAB/MATLAB_Runtime/R2024a/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/R2024a/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/R2024a/sys/os/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/R2024a/extern/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/R2024a/sys/opengl/lib/glnxa64:$LD_LIBRARY_PATH"
 #------------------------------------LUA
 [[ -d "$HOME/.local/share/pandoc/filters" ]] && export LUA_PATH="$HOME/.local/share/pandoc/filters/?.lua;;"
 [[ -d /opt/homebrew/share/lua/5.4 ]] && export LUA_PATH="/opt/homebrew/share/lua/5.4/?.lua;$LUA_PATH"

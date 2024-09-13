@@ -61,6 +61,8 @@ cmds:do-if-path $releases { |p|
 	set-env MATLAB_EXECUTABLE $p"/matlab" # matlab
 	if (cmds:is-macos) { ln -sf $p"/maci64/mlint" $E:HOME/bin/mlint }
 }
+cmds:do-if-path "/usr/local/MATLAB/MATLAB_Runtime/R2024a/" { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
+
 each {|p| cmds:prepend-to-path $p } [
 	/Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
 	~/scoop/apps/msys2/current/usr/bin
