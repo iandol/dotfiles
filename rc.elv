@@ -54,19 +54,19 @@ set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:a
 try { cmds:path_helper } catch { } # /usr/libexec/path_helper for elvish
 var prefix; var suffix
 if (cmds:is-macos) { set prefix = "/Applications/MATLAB_"; set suffix = ".app/bin"
-} else { set prefix = "/usr/local/MATLAB/"; set suffix = "/bin" }
-var releases = [$prefix{R2024b R2024a R2023b R2023a R2022b R2022a R2021b R2021a R2020b R2020a}$suffix]
+} else { set prefix = "/usr/local/MATLAB/R202"; set suffix = "/bin" }
+var releases = [$prefix{5b 5a 4b 3b 3a 2b 2a 1b 1a 0b 0a}$suffix]
 cmds:do-if-path $releases { |p|
 	cmds:prepend-to-path $p
 	set-env MATLAB_EXECUTABLE $p"/matlab" # matlab
 	if (cmds:is-macos) { ln -sf $p"/maci64/mlint" $E:HOME/bin/mlint }
 }
-cmds:do-if-path "/usr/local/MATLAB/MATLAB_Runtime/R2024a/" { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
+cmds:do-if-path "/usr/local/MATLAB/MATLAB_Runtime/R2024b/" { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
 
 each {|p| cmds:prepend-to-path $p } [
 	/Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
 	~/scoop/apps/msys2/current/usr/bin
-	~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims  
+	~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims
 	~/.cache/lm-studio/bin
 	/usr/local/bin  /usr/local/sbin
 	~/.local/bin  ~/bin
@@ -75,7 +75,7 @@ each {|p| cmds:prepend-to-path $p } [
 	~/.pixi/bin
 ]
 each {|p| cmds:append-to-path $p } [
-	/usr/local/opt/python@{3.14 3.13 3.12 3.11 3.10 3.9}/libexec/bin
+	/opt/homebrew/opt/python@3.{15 14 13 12 11 10 9 8}/libexec/bin
 	/Library/Frameworks/GStreamer.framework/Commands
 ]
 

@@ -145,8 +145,8 @@ edit:add-var sizes~ { |@in| if (cmds:is-empty $in) { set @in = * }; e:du -sh $@i
 edit:add-var fs~ { |@in| e:du -sh $@in | e:sort -rh } 
 edit:add-var gst~ { |@in| e:git status $@in }
 edit:add-var gca~ { |@in| e:git commit --all $@in }
-edit:add-var gresetorigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
-edit:add-var gresetupstream~ { e:git fetch upstream; e:git reset --hard upstream/master; e:git clean -f -d }
+edit:add-var gitResetOrigin~ { e:git fetch origin; e:git reset --hard origin/master; e:git clean -f -d }
+edit:add-var gitResetUpstream~ { e:git fetch upstream; e:git reset --hard upstream/master; e:git clean -f -d }
 edit:add-var untar~ { |@in| e:tar xvf $@in }
 edit:add-var wget~ { |@in| e:wget -c $@in }
 edit:add-var makepwd~ { e:openssl rand -base64 15 }

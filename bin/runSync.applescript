@@ -1,3 +1,6 @@
+use AppleScript version "2.4" -- Yosemite (10.10) or later
+use scripting additions
+
 if application "Bookends" is running then
 	tell application "System Events" to set previousApp to name of 1st process whose frontmost is true
 	tell application "Bookends" to activate
