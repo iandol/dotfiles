@@ -39,7 +39,7 @@ fn helpme { echo (styled "
   commands=§: help=§? navigate=§w" bold italic fg-yellow ) }
 edit:add-var helpme~ $helpme~
 
-#==================================================== - LS, prefer lsd if available
+#==================================================== - LS, prefer EZA if available
 cmds:if-external eza {
 	edit:add-var llt~ {|@in| e:eza --icons=auto -al -r -s time --group-directories-first $@in }
 	edit:add-var lls~ {|@in| e:eza --icons=auto -al -r -s size --group-directories-first $@in }
@@ -141,6 +141,7 @@ edit:add-var listTCP~ { |@in|
 	sudo lsof -i TCP -P | grep -E $@in
 }
 
+edit:add-var myip~ { e:curl -s ipinfo.io/ip }
 edit:add-var sizes~ { |@in| if (cmds:is-empty $in) { set @in = * }; e:du -sh $@in | e:sort -rh | cat }
 edit:add-var fs~ { |@in| e:du -sh $@in | e:sort -rh } 
 edit:add-var gst~ { |@in| e:git status $@in }

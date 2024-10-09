@@ -53,9 +53,9 @@ set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:a
 #==================================================== - PATHS + VENVS
 try { cmds:path_helper } catch { } # /usr/libexec/path_helper for elvish
 var prefix; var suffix
-if (cmds:is-macos) { set prefix = "/Applications/MATLAB_"; set suffix = ".app/bin"
+if (cmds:is-macos) { set prefix = "/Applications/MATLAB_R202"; set suffix = ".app/bin"
 } else { set prefix = "/usr/local/MATLAB/R202"; set suffix = "/bin" }
-var releases = [$prefix{5b 5a 4b 3b 3a 2b 2a 1b 1a 0b 0a}$suffix]
+var releases = [$prefix{5b 5a 4b 4a 3b 3a 2b 2a 1b 1a 0b 0a}$suffix]
 cmds:do-if-path $releases { |p|
 	cmds:prepend-to-path $p
 	set-env MATLAB_EXECUTABLE $p"/matlab" # matlab
