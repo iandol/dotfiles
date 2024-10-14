@@ -289,10 +289,10 @@ fn update {
 			tmp pwd = $x
 			set oldbranch = (git branch --show-current)
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
-			git fetch -t -q --all 2>$path:dev-null; 
+			try { git fetch -t -q --all 2>$path:dev-null; } catch { }
 			for y $branches {
-				echo (styled "\n--->>> Updating "(styled $x bold)":"$y"…\n" bg-blue)
 				if (re:match '^(dev|main|master|umaster)' $y) { 
+					echo (styled "\n--->>> Updating "(styled $x bold)":"$y"…\n" bg-blue)
 					try { git checkout -q $y 2>$path:dev-null } catch { } 
 					try { git pull --ff-only -v } catch { echo "\t…couldn't pull!" }
 				}
