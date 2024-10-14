@@ -10,8 +10,22 @@ PLATFORM=$(uname -s)$MOD
 printf "Using %s...\n" "$PLATFORM"
 printf '\e[0m'
 
-eval "$(curl https://get.x-cmd.com)"
-x env use eza fzf jq yq
+[[ ! -d $HOME/.x-cmd.root ]] && eval "$(curl https://get.x-cmd.com/x7)"
+x env try elvish bat eza
+
+[[ ! -d $HOME/.dotfiles ]] && git clone https://github.com/iandol/dotfiles.git ~/.dotfiles
+
+elvcmds=$(cat <<EOF
+use os
+use path
+
+put "Welcome to Elvish"
+x env try bat eza
+eza
+EOF
+)
+
+elvish -c "$elvcmds"
 
 printf '\n\n--->>> All Done...\n'
 printf '\e[m'

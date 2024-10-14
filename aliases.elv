@@ -132,14 +132,12 @@ cmds:if-external kitty {
 }
 cmds:if-external nvim { edit:add-var vi~ $e:nvim~ }
 
-edit:add-var listUDP~ { |@in| 
+edit:add-var listUDP~ { |@in|
 	echo "Searching for: "$@in
-	sudo lsof -i UDP -P | grep -E $@in
-}
-edit:add-var listTCP~ { |@in| 
+	sudo lsof -i UDP -P | grep -E $@in }
+edit:add-var listTCP~ { |@in|
 	echo "Searching for: "$@in
-	sudo lsof -i TCP -P | grep -E $@in
-}
+	sudo lsof -i TCP -P | grep -E $@in }
 
 edit:add-var myip~ { e:curl -s ipinfo.io/ip }
 edit:add-var sizes~ { |@in| if (cmds:is-empty $in) { set @in = * }; e:du -sh $@in | e:sort -rh | cat }
@@ -275,11 +273,11 @@ edit:add-var updateTeX~ $updateTeX~
 
 # --- Update code and OS
 fn update {
-	sudo echo "Sudo priviledge obtained..."
+	sudo -Bv; echo "…Sudo priviledge obtained…"
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 	var olddir = (pwd)
 	var oldbranch = ''
-	var ul = [~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ^
+	var ul = [~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/Pingpong^
 	~/Code/AfterImage ~/Code/equiluminance ~/Code/Pinna ~/Code/spikes ^
 	~/Code/Psychtoolbox-3 ~/Code/fieldtrip ~/Code/Training ~/Code/Palamedes ^
 	~/Code/Mymou ~/Documents/MATLAB/gramm ~/Code/scrivomatic ^
@@ -291,11 +289,14 @@ fn update {
 			tmp pwd = $x
 			set oldbranch = (git branch --show-current)
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
-			echo (styled "\n--->>> Updating "(styled $x bold)":"$oldbranch"…\n" bg-blue)
-			for x $branches {
-				if (re:match '^(main|master|umaster)' $x) { try { git checkout -q $x 2>$path:dev-null } catch { } }
+			git fetch -t -q --all 2>$path:dev-null; 
+			for y $branches {
+				echo (styled "\n--->>> Updating "(styled $x bold)":"$y"…\n" bg-blue)
+				if (re:match '^(dev|main|master|umaster)' $y) { 
+					try { git checkout -q $y 2>$path:dev-null } catch { } 
+					try { git pull --ff-only -v } catch { echo "\t…couldn't pull!" }
+				}
 			}
-			try { git fetch -q --all 2>$path:dev-null; git pull } catch { echo "\t…couldn't pull!" }
 			if (re:match 'upstream' (git remote | slurp)) {
 				print "------> Fetching upstream…  "
 				try { git fetch -v upstream } catch { echo "  …couldn't fetch upstream!" }
@@ -324,7 +325,7 @@ fn update {
 		cmds:if-external fwupdmgr { try { echo "\tfirmware…"; fwupdmgr get-upgrades } catch { } }
 	}
 	cmds:if-external x { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x upgrade; x elv --setup mod }
-	cmds:if-external pixi { echo (styled "\n---> Update pixi\n" bold bg-color5); pixi self-update; pixi global upgrade-all }
+	cmds:if-external pixi { echo (styled "\n---> Update pixi\n" bold bg-color5); pixi self-update; pixi global -v update }
 	cmds:if-external pkgx { echo (styled "\n---> Update pkgx\n" bold bg-color5); pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { echo (styled "\n---> Update Micromamba…\n" bold bg-color5); micromamba self-update }
 	cmds:if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }

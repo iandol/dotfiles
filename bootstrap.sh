@@ -7,8 +7,8 @@ uname -a | grep -iq "aarch64|armv7" && MOD="RPi"
 PLATFORM=$(uname -s)$MOD
 printf "Using %s...\n" "$PLATFORM"
 
-[[ -x $(which curl) ]] && eval "$(curl https://get.x-cmd.com)"
-[[ -x $(which wget) ]] && eval "$(wget -O- https://get.x-cmd.com)"
+[[ -x $(which curl) ]] && eval "$(curl https://get.x-cmd.com/x7)"
+[[ -x $(which wget) ]] && eval "$(wget -O- https://get.x-cmd.com/x7)"
 
 #try to install homebrew on macOS
 if [ "$PLATFORM" = "Darwin" ]; then
@@ -30,9 +30,9 @@ if [ "$PLATFORM" = "Darwin" ]; then
 	#make sure our minimum packages are installed
 	if [ -e "$(which brew)" ]; then
 		printf 'Adding Homebrew packages...\n'
-		brew install git zsh bat p7zip ruby-build rbenv pyenv
+		brew install git bat p7zip pixi fzf ruby-build
 		brew install starship procs ripgrep neovim jq figlet
-		brew install fzf prettyping ansiweather media-info tmux 
+		brew install prettyping ansiweather media-info tmux 
 		brew install less git-delta diff-so-fancy mosh pandoc pandoc-crossref
 		brew install multimarkdown libusb exodriver yt-dlp
 		brew tap rsteube/tap
