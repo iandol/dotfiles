@@ -139,12 +139,17 @@ cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
 cmds:if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbenv' }
 cmds:if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pyenv' }
 cmds:if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
-cmds:if-external carapace { set-env CARAPACE_BRIDGES 'zsh,bash'; eval (carapace _carapace | slurp); echo (styled "…carapace init…" bold italic yellow) }
-cmds:if-external pixi { eval (pixi completion --shell elvish | slurp) }
+cmds:if-external carapace { set-env CARAPACE_BRIDGES 'zsh,bash'; eval (carapace _carapace | slurp); echo (styled "…carapace init—" bold italic yellow) }
+cmds:if-external pixi { 
+	var pixienv = (pixi info --json | from-json | put (one)[global_info][env_dir])
+	var pixibin = (pixi info --json | from-json | put (one)[global_info][bin_dir])
+	eval (pixi completion --shell elvish | slurp)
+	if (os:exists $pixienv/ruby/share/rubygems/bin/pandocomatic) { ln -sf $pixienv/ruby/share/rubygems/bin/pandocomatic $pixibin }
+}
 python:deactivate
 
 #==================================================== - MAIN ALIASES
-if (cmds:not-file ~/.config/elvish/lib/aliases.elv) {
+if (not-file ~/.config/elvish/lib/aliases.elv) {
 	mkdir -p ~/.config/elvish/lib/
 	ln -sf ~/.dotfiles/aliases.elv ~/.config/elvish/lib/aliases.elv
 }
