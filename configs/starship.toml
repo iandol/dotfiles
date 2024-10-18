@@ -1,3 +1,6 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
 # Inserts a blank line between shell prompts
 add_newline = true
 scan_timeout = 10
@@ -7,30 +10,55 @@ command_timeout = 750
 success_symbol = "[➪](bold green)"
 error_symbol = "[◎](bold red)"
 
-#[env_var]
-#variable = "PLATFORM"
-#default = ""
+[username]
+detect_env_vars = []
+format = "[$user]($style) in "
+style_root = "red bold"
+style_user = "yellow bold"
+show_always = false
+disabled = false
+
+[sudo]
+disabled = false
 
 [shlvl]
-symbol = "↯"
+threshold = 2
+symbol = "↕️ "
+format = "[$symbol$shlvl]($style) "
+repeat = false
+repeat_offset = 0
 style = "dimmed yellow"
-disabled = true
+disabled = false
 
 [shell]
 bash_indicator = "β"
 zsh_indicator = "ζ"
 elvish_indicator = "ε"
-style = "dimmed gray"
+style = "dimmed yellow"
 disabled = false
 
+[ruby]
+format = "via [$symbol($version )]($style)"
+version_format = "v${raw}"
+symbol = "🏮 "
+
 [hostname]
-format = "[$hostname]($style) » "
+ssh_symbol = "🌐 "
+trim_at = "."
+format = "[$ssh_symbol$hostname]($style) in "
+style = "green dimmed bold"
 ssh_only = false
 
 [memory_usage]
-disabled = false
+threshold = 75
+format = "via $symbol[$ram( | $swap)]($style) "
+style = "white bold dimmed"
+symbol = "🐏 "
+disabled = true
 
 [directory]
+read_only = "🔒"
+read_only_style = "red"
 truncation_symbol = "…/"
 
 [battery]
