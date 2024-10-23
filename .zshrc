@@ -44,7 +44,7 @@ alias help=run-help
 #------------------------------------PATHS/ENVS ETC.
 ([[ -x $(which brew) ]] && [[ -d "$(brew --prefix)/share/zsh/site-functions/" ]]) && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
 
-ul=("R2024a" "R2023b" "R2023a" "R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
+ul=("R2025b" "R2025a" "R2024b" "R2024a" "R2023b" "R2023a" "R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
 match=0
 if [[ $PLATFORM == 'Darwin' ]]; then
 	for x in $ul; do
