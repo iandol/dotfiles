@@ -60,3 +60,6 @@ fi
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 [[ -x $(which figlet > /dev/null 2>&1) ]] && figlet "Totoro Hai!"
 [[ -x $(which pkgx > /dev/null 2>&1) ]] && eval "$(pkgx --shellcode)"  #docs.pkgx.sh/shellcode
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/ian/.cache/lm-studio/bin"
