@@ -69,16 +69,15 @@ each {|p| cmds:prepend-to-path $p } [
 	~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims
 	~/.cache/lm-studio/bin
 	/usr/local/bin  /usr/local/sbin  ~/.local/bin
-	~/.pixi/envs/ruby/share/rubygems/bin
 	/home/linuxbrew/.linuxbrew/bin
 	/opt/local/bin  /opt/homebrew/bin
+	~/.pixi/envs/ruby/share/rubygems
 	~/.pixi/bin ~/bin
 ]
 each {|p| cmds:append-to-path $p } [
 	/opt/homebrew/opt/python@3.{15 14 13 12 11 10 9 8}/libexec/bin
 	/Library/Frameworks/GStreamer.framework/Commands
 ]
-
 
 cmds:do-if-path $E:HOME/.pixi/envs/ruby/share/rubygems {|p| set-env GEM_HOME $p }
 cmds:do-if-path $E:HOME/.venv {|p| set python:venv-directory = $p }

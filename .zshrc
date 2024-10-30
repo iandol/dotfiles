@@ -82,6 +82,7 @@ fi
 [[ -d "/snap/bin" ]] && path=("/snap/bin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
 [[ -d "$HOME/.cache/lm-studio/bin" ]] && path=("$HOME/.cache/lm-studio/bin" $path)
+[[ -d "$HOME/.pixi/envs/ruby/share/rubygems/bin" ]] && path=("$HOME/.pixi/envs/ruby/share/rubygems/bin" $path)
 [[ -d "$HOME/.pixi/bin" ]] && path=("$HOME/.pixi/bin" $path)
 export PATH
 
