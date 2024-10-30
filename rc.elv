@@ -71,7 +71,7 @@ each {|p| cmds:prepend-to-path $p } [
 	/usr/local/bin  /usr/local/sbin  ~/.local/bin
 	/home/linuxbrew/.linuxbrew/bin
 	/opt/local/bin  /opt/homebrew/bin
-	~/.pixi/envs/ruby/share/rubygems
+	~/.pixi/envs/ruby/share/rubygems/bin
 	~/.pixi/bin ~/bin
 ]
 each {|p| cmds:append-to-path $p } [
