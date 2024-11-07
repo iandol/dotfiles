@@ -7,9 +7,10 @@ $ENV:HOME=$ENV:USERPROFILE
 $ENV:USER=$ENV:USERNAME
 $ENV:XDG_CONFIG_HOME=$ENV:USERPROFILE+"\.config"
 
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
-irm get.scoop.sh | iex  
-scoop install sudo git 7zip ln
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+scoop bucket add main
+scoop install sudo git 7zip ln starship
 
 git config --global http.proxy $proxy
 git config --global https.proxy $proxy
@@ -20,7 +21,7 @@ scoop bucket add nerd-fonts
 scoop bucket add nonportable
 scoop install sysinternals
 
-scoop install starship less delta curl gzip tar lsd bat coreutils msys2 vim neovim
+scoop install less delta curl gzip tar eza bat coreutils msys2 vim neovim
 scoop install libreoffice sumatrapdf vcredist2022 vivaldi wechat 
 
 scoop install vscode
