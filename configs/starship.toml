@@ -10,6 +10,13 @@ command_timeout = 750
 success_symbol = "[➪](bold green)"
 error_symbol = "[◎](bold red)"
 
+[directory.substitutions]
+"Documents" = "󰈙 "
+"Downloads" = " "
+"Music" = " "
+"Pictures" = " "
+"Code" = " "
+
 [username]
 detect_env_vars = []
 format = "[$user]($style) in "
@@ -37,13 +44,19 @@ elvish_indicator = "ε"
 style = "dimmed yellow"
 disabled = false
 
+[git_branch]
+symbol = " "
+
+[git_commit]
+tag_symbol = '  ' 
+
 [ruby]
 format = "via [$symbol($version )]($style)"
 version_format = "v${raw}"
-symbol = "🏮 "
+symbol = " "
 
 [hostname]
-ssh_symbol = "🌐 "
+ssh_symbol = " "
 trim_at = "."
 format = "[$ssh_symbol$hostname]($style) in "
 style = "green dimmed bold"
@@ -53,7 +66,7 @@ ssh_only = false
 threshold = 75
 format = "via $symbol[$ram( | $swap)]($style) "
 style = "white bold dimmed"
-symbol = "🐏 "
+symbol = "󰍛 "
 disabled = true
 
 [directory]
@@ -69,3 +82,72 @@ style = "bold red"
 threshold = 30
 style = "bold yellow"
 discharging_symbol = "⌁"
+
+[lua]
+symbol = " "
+
+[python]
+symbol = " "
+
+[rlang]
+symbol = "󰟔 "
+
+[rust]
+symbol = "󱘗 "
+
+[scala]
+symbol = " "
+
+[swift]
+symbol = " "
+
+[zig]
+symbol = " "
+
+[gradle]
+symbol = " "
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+AlmaLinux = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Kali = " "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+RockyLinux = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Void = " "
+Windows = "󰍲 "

@@ -12,6 +12,7 @@ use platform
 use doc
 use md
 use os
+use runtime
 if $platform:is-unix { use unix; edit:add-var unix: $unix: }
 
 #==================================================== - EXTERNAL MODULES
@@ -98,7 +99,7 @@ cmds:if-external brew {
 }
 
 #==================================================== - X-CMD 文
-if (os:is-regular $E:HOME/.config/elvish/lib/x.elv) {
+if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
 	set-env ___X_CMD_HELP_LANGUAGE en
 	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 1
 	use x; x:init
