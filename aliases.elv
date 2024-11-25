@@ -340,23 +340,24 @@ edit:add-var update~ $update~
 #====================================================UPDATE XRAY
 fn updateXRay {
 	echo (styled "\n=== UPDATE XRAY & V2RAYA ===\n" bold yellow)
-	var xLabel = "Xray-linux-64.zip"
+	var xLabel = "Xray-linux-64.zip$"
 	var vLabel = "debian_x64.+deb$"
+	var xSrc = ''
+	var vSrc = ''
+	var xurl = ''
+	var vurl = ''
 	try {
-		var xSrc = (curl -s https://api.github.com/repos/XTLS/Xray-core/releases/latest | from-json)
-		var vSrc = (curl -s https://api.github.com/repos/v2raya/v2raya/releases/latest | from-json)
+		set xSrc = (curl -s https://api.github.com/repos/XTLS/Xray-core/releases/latest | from-json)
+		set vSrc = (curl -s https://api.github.com/repos/v2raya/v2raya/releases/latest | from-json)
 	} catch {
 		echo (styled "Failed to get Repo info!\n" bold red)
 		break
 	}
-	echo "XRay remote: "$xSrc[name]" | local: "(xray --version)
+	echo "XRay remote: "$xSrc[name]" | local: "(xray --version | sd -f s '(Xray )([\d\.]+) (.+)' '$2')
 	echo "V2RayA remote: "$vSrc[name]" | local: "(v2raya --version)
-	
-	var xurl = ''
-	var vurl = ''
 
 	each {|a| 
-		if (re:match $a[browser_download_url] $xLabel) { set xurl = $a[browser_download_url]; return }
+		if (re:match $xLabel $a[browser_download_url]) { set xurl = $a[browser_download_url] }
 	} $xSrc[assets]
 	if (!=s $xurl '') {
 		echo (styled "\n=== GET XRAY ===\nURL: "$xurl bold yellow)
@@ -366,7 +367,7 @@ fn updateXRay {
 	}
 
 	each {|a| 
-		if (re:match $a[browser_download_url] $vLabel) { set vurl = $a[browser_download_url]; return }
+		if (re:match $vLabel $a[browser_download_url]) { set vurl = $a[browser_download_url] }
 	} $vSrc[assets]
 	if (!=s $vurl '') {
 		echo (styled "\n=== GET V2RAYA ===\nURL: "$vurl bold yellow)
@@ -375,7 +376,7 @@ fn updateXRay {
 		} catch { echo "Can't download V2raya!" }
 	}
 }
-edit:add-var updateXRay~ $updatexRay~
+edit:add-var updateXRay~ $updateXRay~
 
 #===================================================Update Elvish
 fn updateElvish {|&source=tuna|
