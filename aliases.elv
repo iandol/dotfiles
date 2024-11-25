@@ -200,7 +200,7 @@ fn history {
 	set edit:current-command = $new-cmd
 }
 
-# --- Transfer a file (using either transfer.sh or 0x0.st)
+#===================================================Transfer a file (using either transfer.sh or 0x0.st)
 fn transfer {|@in &use=transfer| 
 	var url = ''
 	if (==s $use "transfer") { set url = (e:curl --upload-file $@in 'https://transfer.sh/'$@in) 
@@ -210,7 +210,7 @@ fn transfer {|@in &use=transfer|
 }
 edit:add-var transfer~ $transfer~
 
-# --- Cl1p service
+#===================================================Cl1p service
 fn cl1p {|in name|
 	var key = (e:cat ~/.cl1papitoken)
 	e:curl -H "Content-Type: text/html; charset=UTF-8" -H "cl1papitoken: "$key -X POST --data $in https://api.cl1p.net/$name
@@ -218,7 +218,7 @@ fn cl1p {|in name|
 }
 edit:add-var cl1p~ $cl1p~
 
-# --- Setproxy [-l] [address]
+#===================================================Setproxy [-l] [address]
 fn sp {|@argin|
 	var @plist = {http,https,ftp,all}_proxy
 	if (eq (count $argin) (num 1)) {
@@ -250,7 +250,7 @@ fn sp {|@argin|
 edit:add-var sp~ $sp~
 set edit:command-abbr['setproxy'] = 'sp'
 
-# --- Install required TeX packages for BasicTex
+#========================================Install required TeX packages for BasicTex
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
 fn updateTeX {|&repo=tuna|
 	if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
@@ -271,7 +271,7 @@ fn updateTeX {|&repo=tuna|
 }
 edit:add-var updateTeX~ $updateTeX~
 
-# --- Update code and OS
+#====================================================Update code and OS
 fn update {
 	sudo -Bv; echo "…Sudo priviledge obtained…"
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
@@ -337,7 +337,47 @@ fn update {
 }
 edit:add-var update~ $update~
 
-# --- Update Elvish
+#====================================================UPDATE XRAY
+fn updateXRay {
+	echo (styled "\n=== UPDATE XRAY & V2RAYA ===\n" bold yellow)
+	var xLabel = "Xray-linux-64.zip"
+	var vLabel = "debian_x64.+deb$"
+	try {
+		var xSrc = (curl -s https://api.github.com/repos/XTLS/Xray-core/releases/latest | from-json)
+		var vSrc = (curl -s https://api.github.com/repos/v2raya/v2raya/releases/latest | from-json)
+	} catch {
+		echo (styled "Failed to get Repo info!\n" bold red)
+		break
+	}
+	echo "XRay remote: "$xSrc[name]" | local: "(xray --version)
+	echo "V2RayA remote: "$vSrc[name]" | local: "(v2raya --version)
+	
+	var xurl = ''
+	var vurl = ''
+
+	each {|a| 
+		if (re:match $a[browser_download_url] $xLabel) { set xurl = $a[browser_download_url]; return }
+	} $xSrc[assets]
+	if (!=s $xurl '') {
+		echo (styled "\n=== GET XRAY ===\nURL: "$xurl bold yellow)
+		try { wget --no-check-certificate -O xray.zip $xurl
+			sudo unzip -o xray.zip -d /usr/local/bin
+		} catch { echo "Can't download Xray!" }
+	}
+
+	each {|a| 
+		if (re:match $a[browser_download_url] $vLabel) { set vurl = $a[browser_download_url]; return }
+	} $vSrc[assets]
+	if (!=s $vurl '') {
+		echo (styled "\n=== GET V2RAYA ===\nURL: "$vurl bold yellow)
+		try { wget --no-check-certificate -O v2raya.deb $vurl
+			sudo dpkg -i v2raya.deb
+		} catch { echo "Can't download V2raya!" }
+	}
+}
+edit:add-var updateXRay~ $updatexRay~
+
+#===================================================Update Elvish
 fn updateElvish {|&source=tuna|
 	var url = 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz'
 	if (!=s $source 'tuna') { set url = 'https://dl.elv.sh/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz' }
@@ -361,7 +401,7 @@ fn updateElvish {|&source=tuna|
 }
 edit:add-var updateElvish~ $updateElvish~
 
-# --- Update FFMPEG
+#===================================================Update FFMPEG
 fn updateFFmpeg {
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
@@ -385,7 +425,7 @@ fn updateFFmpeg {
 }
 edit:add-var updateFFmpeg~ $updateFFmpeg~
 
-# --- Update Opticka
+#===================================================Update Opticka
 fn updateOptickaPages {
 	var opath = $E:HOME'/Code/opticka'
 	if (cmds:is-path $opath) {
