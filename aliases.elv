@@ -324,15 +324,14 @@ fn update {
 		cmds:if-external flatpak { try { echo "\tflatpak…"; flatpak update -y } catch { } }
 		cmds:if-external fwupdmgr { try { echo "\tfirmware…"; fwupdmgr get-upgrades } catch { } }
 	}
-	cmds:if-external x { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x upgrade; x elv --setup mod }
 	cmds:if-external pixi { echo (styled "\n---> Update pixi\n" bold bg-color5); pixi self-update; pixi global -v update }
 	cmds:if-external pkgx { echo (styled "\n---> Update pkgx\n" bold bg-color5); pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { echo (styled "\n---> Update Micromamba…\n" bold bg-color5); micromamba self-update }
 	cmds:if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
 	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
 	try { cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --list } } catch { }
-	echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5)
-	try { epm:upgrade } catch { echo "Couldn't update EPM packages…" }
+	try { echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5);epm:upgrade } catch { echo "Couldn't update EPM packages…" }
+	cmds:if-external x { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x upgrade; x elv --setup mod }
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
 edit:add-var update~ $update~
