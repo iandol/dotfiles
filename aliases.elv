@@ -287,7 +287,7 @@ fn update {
 	for x $ul {
 		if (cmds:is-path $x/.git) {
 			tmp pwd = $x
-			set oldbranch = (git branch --show-current)
+			try {set oldbranch = (git branch --show-current) } catch { }
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
 			try { git fetch -t -q --all 2>$path:dev-null; } catch { }
 			for y $branches {
@@ -301,7 +301,7 @@ fn update {
 				print "------> Fetching upstream…  "
 				try { git fetch -v upstream } catch { echo "  …couldn't fetch upstream!" }
 			}
-			git checkout -q $oldbranch 2>$path:dev-null
+			try { git checkout -q $oldbranch 2>$path:dev-null } catch { }
 		}
 	}
 	cd $olddir

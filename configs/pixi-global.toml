@@ -99,3 +99,8 @@ exposed = { 7z = "7z", 7za = "7za", 7zr = "7zr" }
 channels = ["conda-forge"]
 dependencies = { yq = "*" }
 exposed = { tomlq = "tomlq", yq = "yq", xq = "xq" }
+
+[envs.dua-cli]
+channels = ["conda-forge"]
+dependencies = { dua-cli = "*" }
+exposed = { dua = "dua" }
