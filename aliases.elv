@@ -274,6 +274,7 @@ edit:add-var updateTeX~ $updateTeX~
 #====================================================Update code and OS
 fn update {
 	sudo -Bv; echo "…Sudo priviledge obtained…"
+	sp -l
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 	var olddir = (pwd)
 	var oldbranch = ''
