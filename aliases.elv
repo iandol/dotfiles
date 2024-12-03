@@ -330,9 +330,9 @@ fn update {
 	cmds:if-external micromamba { echo (styled "\n---> Update Micromamba…\n" bold bg-color5); micromamba self-update }
 	cmds:if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
 	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
-	try { cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --list } } catch { }
+	cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --self; tlmgr update --all }
 	try { echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5);epm:upgrade } catch { echo "Couldn't update EPM packages…" }
-	cmds:if-external x { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x upgrade; x elv --setup mod }
+	cmds:if-external x { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); ___x_cmdexe upgrade; ___x_cmdexe elv --setup mod }
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
 edit:add-var update~ $update~
@@ -340,6 +340,7 @@ edit:add-var update~ $update~
 #====================================================UPDATE XRAY
 fn updateXRay {
 	echo (styled "\n=== UPDATE XRAY & V2RAYA ===\n" bold yellow)
+	
 	var xLabel = "Xray-linux-64.zip$"
 	var vLabel = "debian_x64.+deb$"
 	var xSrc = ''
