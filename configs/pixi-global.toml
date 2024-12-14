@@ -88,7 +88,7 @@ exposed = { asciinema = "asciinema" }
 [envs.pandoc]
 channels = ["conda-forge"]
 dependencies = { pandoc = "*" }
-exposed = { pandoc = "pandoc", pandoc-lua = "pandoc-lua", pandoc-server = "pandoc-server" }
+exposed = { pandoc-lua = "pandoc-lua", pandoc-server = "pandoc-server", pandoc = "pandoc" }
 
 [envs.p7zip]
 channels = ["conda-forge"]

@@ -62,7 +62,14 @@ cmds:do-if-path $releases { |p|
 	set-env MATLAB_EXECUTABLE $p"/matlab" # matlab
 	if (cmds:is-macos) { ln -sf $p"/maci64/mlint" $E:HOME/bin/mlint }
 }
-cmds:do-if-path "/usr/local/MATLAB/MATLAB_Runtime/R2024b/" { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
+if (cmds:is-macos) {
+	cmds:do-if-path [/Applications/MATLAB/MATLAB_Runtime/v{241 234 912}] {|p| set-env MRT $p }
+	cmds:do-if-path [(/usr/libexec/java_home)] {|p| set-env JAVA_HOME (/usr/libexec/java_home) }
+	cmds:do-if-path	[(get-env JAVA_HOME)] {|p| set-env MATLAB_JAVA $p }
+} elif (cmds:is-linux) {
+	cmds:do-if-path ["/usr/lib/jvm/java-17-openjdk-amd64"] { |p| set-env JAVA_HOME $p }
+	cmds:do-if-path ["/usr/local/MATLAB/MATLAB_Runtime/R2024b/"] { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
+}
 
 each {|p| cmds:prepend-to-path $p } [
 	/Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
@@ -122,10 +129,6 @@ if (has-env KITTY_INSTALLATION_DIR) {
 set-env PAPERSIZE A4
 set-env PROCESSOR (str:to-lower (uname -m))
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
-if (cmds:is-macos) {
-	cmds:do-if-path [/Applications/MATLAB/MATLAB_Runtime/v{241 234 912}] {|p| set-env MRT $p }
-	cmds:do-if-path [/opt/homebrew/Caskroom/corretto/] {|p| set-env JAVA_HOME (/usr/libexec/java_home -v 22) }
-}
 
 if (not (has-env LUA_PATH)) { set-env LUA_PATH ';'; set-env LUA_CPATH ';' }
 cmds:do-if-path ~/.local/share/pandoc/filters {|p| set-env LUA_PATH $p'/?.lua;'$E:LUA_PATH }

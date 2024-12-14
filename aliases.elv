@@ -337,12 +337,34 @@ fn update {
 }
 edit:add-var update~ $update~
 
+#====================================================UPDATE UBLOCK
+fn updateuBlock {
+	var @uSrc = (curl -s https://api.github.com/repos/gorhill/uBlock/releases | jq -r 'map(select(.prerelease)) | sort_by(.published_at) | last | .assets[]' | from-json)
+	each { |rel| 
+		if (cmds:is-match $rel[name] "chromium.zip$") {
+			var url = $rel[browser_download_url]
+			echo (styled "\n=== GET uBLOCK "$rel[name]" ===\nURL: "$url bold yellow)
+			try {
+				curl -k -L -o ublock.zip $url
+				rm -rf $E:HOME/Downloads/uBlock0.chromium
+				unzip -oq ublock.zip -d $E:HOME/Downloads/
+				rm ublock.zip
+			} catch { echo "Can't download uBlock!" }
+		}
+	} $uSrc
+}
+edit:add-var updateuBlock~ $updateuBlock~
+
 #====================================================UPDATE XRAY
 fn updateXRay {
+	if (!=s $platform:os 'linux') { return }
 	echo (styled "\n=== UPDATE XRAY & V2RAYA ===\n" bold yellow)
-	
 	var xLabel = "Xray-linux-64.zip$"
 	var vLabel = "debian_x64.+deb$"
+	if (cmds:is-arm64) { 
+		set xLabel = "Xray-linux-arm64-v8a.zip$"
+		set vLabel = "debian_arm64.+deb$"
+	}
 	var xSrc = ''
 	var vSrc = ''
 	var xurl = ''
