@@ -229,6 +229,7 @@ fn resetPIP {
 	echo (styled "\tNew Value:\n" bold yellow)
 	jq '.vivaldi.pip_placement' $vp
 }
+edit:add-var resetPIP~ $resetPIP~
 
 #===================================================Setproxy [-l] [address]
 fn sp {|@argin|
