@@ -218,6 +218,18 @@ fn cl1p {|in name|
 }
 edit:add-var cl1p~ $cl1p~
 
+fn resetPIP { 
+	if ?(pgrep "Vivaldi" >/dev/null ) { echo (styled "\n!!!Warning: Vivaldi is running\n" bold red) }
+	var vp = $E:HOME"/Library/Application Support/Vivaldi/Default/Preferences"
+	echo (styled "\n=== Reset Vivaldi's PIP ===\n" bold yellow)
+	echo (styled "\tCurrent Value:\n" bold yellow)
+	jq '.vivaldi.pip_placement' $vp
+	cp $vp $vp'.bak'
+	jq '.vivaldi.pip_placement.top = 45 | .vivaldi.pip_placement.left = 20' $vp | sponge $vp
+	echo (styled "\tNew Value:\n" bold yellow)
+	jq '.vivaldi.pip_placement' $vp
+}
+
 #===================================================Setproxy [-l] [address]
 fn sp {|@argin|
 	var @plist = {http,https,ftp,all}_proxy

@@ -109,3 +109,8 @@ exposed = { dua = "dua" }
 channels = ["conda-forge"]
 dependencies = { bash = "*" }
 exposed = { bash = "bash", bashbug = "bashbug" }
+
+[envs.moreutils]
+channels = ["conda-forge"]
+dependencies = { moreutils = "*" }
+exposed = { chronic = "chronic", combine = "combine", errno = "errno", ifdata = "ifdata", ifne = "ifne", isutf8 = "isutf8", lckdo = "lckdo", mispipe = "mispipe", parallel = "parallel", pee = "pee", sponge = "sponge", ts = "ts", vidir = "vidir", vipe = "vipe", zrun = "zrun" }
