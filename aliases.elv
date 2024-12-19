@@ -1,11 +1,4 @@
-use re
-use str
-use path
-use math
-use epm
-use platform
-use md
-use os
+use re; use str; use path; use math; use epm; use platform; use md; use os; use flag
 use github.com/iandol/elvish-modules/cmds # my utility module
 echo (styled "…loading command aliases…" bold italic yellow)
 
@@ -231,34 +224,54 @@ fn resetPIP {
 }
 edit:add-var resetPIP~ $resetPIP~
 
-#===================================================Setproxy [-l] [address]
-fn sp {|@argin|
+#===================================================Setproxy [-x] [-l] [address]
+fn sp {|@ina|
+	use flag
+	var @in = (flag:parse $ina [ [l $false "List proxies"] [x $false "Use XTLS"] [h $false "Get Help"]])
 	var @plist = {http,https,ftp,all}_proxy
-	if (eq (count $argin) (num 1)) {
-		if (eq $argin[0] "-l") {
-			echo "Proxy settings:\n==============="
-		} else {
-			echo "Set proxy:\n==============="
-			set-env no_proxy "localhost, 127.0.0.1, ::1"
-			if (str:contains $argin[0] "socks5") {
-				put $plist | cmds:flatten | each {|t| set-env $t $argin[0]; set-env (str:to-upper $t) $argin[0] }
-			} elif (str:contains $argin[0] "http") {
-				put $plist | cmds:flatten | each {|t| set-env $t "http://"$argin[0]; set-env (str:to-upper $t) $argin[0] }
-			} else {
-				put $plist | cmds:flatten | each {|t| set-env $t "http://"$argin[0]; set-env (str:to-upper $t) "http://"$argin[0] }
-			}
-			git config --global http.proxy $E:http_proxy
-			git config --global https.proxy $E:https_proxy
-		}
-	} else {
-		echo "Unset proxy:\n==============="
+	fn unsetProxies {
 		unset-env no_proxy
-		put $plist | cmds:flatten | each {|t| unset-env $t; unset-env (str:to-upper $t) }
-		try { git config --global --unset http.proxy } catch { }
-		try { git config --global --unset https.proxy } catch { }
+		each {|t| unset-env $t; unset-env (str:to-upper $t) } $plist
+		try { git config --global --unset http.proxy } catch { }; try { git config --global --unset https.proxy } catch { }
 	}
-	echo "PROXY: HTTP = "$E:http_proxy" | HTTPS = "$E:https_proxy" | ALL = "$E:all_proxy "\nBYPASS: "$E:no_proxy
-	try { echo "GIT: "(git config --global --get-regexp http | slurp | str:replace "\n" " " (one)) } catch { }
+	fn listProxies {
+		echo "PROXY: HTTP = "$E:http_proxy" | HTTPS = "$E:https_proxy" | ALL = "$E:all_proxy "\nBYPASS: "$E:no_proxy
+		try { echo "GIT: "(git config --global --get-regexp http | slurp | str:replace "\n" " " (one)) } catch { }
+	}
+	fn parseAddress { |in|
+		set in = (to-string $in)
+		var protocol = 'http'; var addr = '127.0.0.1'; var port = '16005'
+		var @tmp = (str:split "://" $in)
+		if (== (count $tmp) 1) { set addr = $tmp[0] } elif (== (count $tmp) 2) { set protocol = $tmp[0]; set addr = $tmp[1] }
+		var @tmp = (str:split ":" $addr)
+		if (== (count $tmp) 2) { set addr = $tmp[0]; set port = $tmp[1] }
+		put $protocol $addr $port
+	}
+	fn setenv { |&addr='127.0.0.1:16005'|
+		set-env no_proxy "localhost, 127.0.0.1, ::1"
+		each {|t| set-env $t $addr; set-env (str:to-upper $t) $addr } $plist
+	}
+	fn setgit { |&addr='127.0.0.1:16005' &xtls=$false| git config --global http.proxy $addr; git config --global https.proxy $addr }
+	#===
+	if $in[0][h] { 
+		echo (styled "sp Command Help:\n===============\n > sp 127.0.0.1:16005 to set proxy\n > sp without input to unset proxy\n … -l to list settings\n … -x uses XTLS mode" bold yellow)
+	} elif $in[0][l] { 
+		echo (styled "List proxy:\n===============" bold yellow)
+	} elif (eq $in[1] []) {
+		echo (styled "Unset proxy:\n===============" bold yellow)
+		unsetProxies
+	} else {
+		echo (styled "Set proxy:\n===============" bold yellow)
+		var @r = (parseAddress $in[1][0])
+		if (eq $r[0] $nil) { set r[0] = 'http' }; if (eq $r[2] $nil) { set r[2] = '16005' }
+		var p = (num $r[2]); set p = (+ $p 1); set p = (to-string $p)
+		if $in[0][x] {
+			setenv &addr="http://"$r[1]":"$p; setgit &addr="socks5://"$r[1]":"$r[2] &xtls=$in[0][x]
+		} else {
+			setenv &addr=$r[0]"://"$r[1]":"$r[2]; setgit &addr=$r[0]"://"$r[1]":"$r[2] &xtls=$in[0][x]
+		}
+	}
+	listProxies
 }
 edit:add-var sp~ $sp~
 set edit:command-abbr['setproxy'] = 'sp'
@@ -289,6 +302,7 @@ fn update {
 	sudo -Bv; echo "…Sudo priviledge obtained…"
 	sp -l
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
+	cmds:not-path $HOME/.x-cmd.root { curl https://get.x-cmd.com | sh -i }
 	var olddir = (pwd)
 	var oldbranch = ''
 	var ul = [~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/Pingpong^
