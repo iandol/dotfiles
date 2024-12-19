@@ -11,11 +11,11 @@ printf "Using %s...\n" "$PLATFORM"
 printf '\e[0m'
 
 [[ ! -d $HOME/.x-cmd.root ]] && eval "$(curl https://get.x-cmd.com/x7)"
+[[ ! -d $HOME/.pixi ]] && eval curl -fsSL https://pixi.sh/install.sh | bash
 x env try elvish
-x pixi --install
-pixi global install ruby jq fzf
+pixi global install sd ruby jq fzf
 
-[[ ! -d $HOME/.dotfiles ]] && git clone https://github.com/iandol/dotfiles.git ~/.dotfiles
+[[ ! -d $HOME/.dotfiles ]] && git clone https://codeberg.org/iandol/dotfiles.git ~/.dotfiles
 
 elvcmds=$(cat <<EOF
 use os
@@ -23,7 +23,7 @@ use path
 
 echo "\n\n\n\n"
 put "Welcome to Elvish"
-x env try bat eza
+x env use bat eza
 bat "This is a test"
 eza -l
 EOF

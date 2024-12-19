@@ -60,9 +60,9 @@ chown -R "$USER" "$XDG_CONFIG_HOME/nvim"
 # Ruby setup
 ln -sfv "$CONFIGS/.rubocop.yml" ~
 chown "$USER" ~/.rubocop.yml
-mkdir -p .rbenv
-ln -sfv "$CONFIGS/default-gems" ~/.rbenv
-chown "$USER" ~/.rbenv/default-gems
+#mkdir -p .rbenv
+#ln -sfv "$CONFIGS/default-gems" ~/.rbenv
+#chown "$USER" ~/.rbenv/default-gems
 
 # Great command prompt
 if [[ $PLATFORM == 'LinuxRPi' ]]; then

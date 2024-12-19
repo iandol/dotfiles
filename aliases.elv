@@ -302,7 +302,8 @@ fn update {
 	sudo -Bv; echo "…Sudo priviledge obtained…"
 	sp -l
 	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
-	cmds:not-path $HOME/.x-cmd.root { curl https://get.x-cmd.com | sh -i }
+	if (cmds:not-path $E:HOME"/.x-cmd.root") { curl https://get.x-cmd.com | sh -i }
+	if (cmds:not-path $E:HOME"/.pixi") { curl -fsSL https://pixi.sh/install.sh | bash }
 	var olddir = (pwd)
 	var oldbranch = ''
 	var ul = [~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/Pingpong^
