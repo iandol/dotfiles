@@ -105,11 +105,6 @@ channels = ["conda-forge"]
 dependencies = { dua-cli = "*" }
 exposed = { dua = "dua" }
 
-[envs.bash]
-channels = ["conda-forge"]
-dependencies = { bash = "*" }
-exposed = { bash = "bash", bashbug = "bashbug" }
-
 [envs.moreutils]
 channels = ["conda-forge"]
 dependencies = { moreutils = "*" }
