@@ -144,7 +144,7 @@ edit:add-var wget~ { |@in| e:wget -c $@in }
 edit:add-var makepwd~ { e:openssl rand -base64 15 }
 edit:add-var dl~ { |@in| e:curl -C - -O '{}' $@in }
 edit:add-var ping~ { |@in| e:ping -c 5 $@in }
-edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| str:split "==" $c | cmds:first [(all)] }) }
+edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| re:split "==| @" $c | cmds:first [(all)] }) }
 
 #==================================================== - FUNCTIONS
 # from @krader https://skepticism.us/elvish/learn/useful-customizations.html#add-a-help-command
