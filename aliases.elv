@@ -114,7 +114,7 @@ cmds:if-external python3 {
 	edit:add-var urldecode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
 }
 cmds:if-external kitty {
-	edit:add-var kssh~ { |@in| kitty +kitten ssh $@in }
+	edit:add-var kssh~ { |@in| kitten ssh --kitten login_shell=elvish $@in }
 	if (cmds:is-macos) {
 		edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.95/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
 		edit:add-var kittydark~ { sed -Ei '' 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
@@ -278,7 +278,7 @@ set edit:command-abbr['setproxy'] = 'sp'
 
 #========================================Install required TeX packages for BasicTex
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
-fn updateTeX {|&repo=tuna|
+fn updateTeX {|&repo=tuna &ctex=$false|
 	if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
 	tlmgr update --self
 	tlmgr update --all
@@ -294,6 +294,7 @@ fn updateTeX {|&repo=tuna|
 	changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol ^
 	tikzfill luacolor lua-ul xpatch selnolig ^
 	lua-visual-debug lipsum svg newfile
+	if $ctex { tlmgr install ctex }
 }
 edit:add-var updateTeX~ $updateTeX~
 
