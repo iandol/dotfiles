@@ -72,7 +72,7 @@ else
 fi
 chown "$USER" "$XDG_CONFIG_HOME/starship.toml"
 
-# Used on macOS and Linux
+# KITTY terminal used on macOS and Linux
 mkdir -p "$XDG_CONFIG_HOME/kitty"
 ln -sfv "$CONFIGS/kitty"* "$XDG_CONFIG_HOME/kitty"
 chown -R "$USER" "$XDG_CONFIG_HOME/kitty"

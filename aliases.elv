@@ -34,10 +34,10 @@ edit:add-var helpme~ $helpme~
 
 #==================================================== - LS, prefer EZA if available
 cmds:if-external eza {
-	edit:add-var llt~ {|@in| e:eza --icons=auto -al -r -s time --group-directories-first $@in }
-	edit:add-var lls~ {|@in| e:eza --icons=auto -al -r -s size --group-directories-first $@in }
+	edit:add-var llt~ {|@in| e:eza --icons=auto --git -al -r -s time --group-directories-first $@in }
+	edit:add-var lls~ {|@in| e:eza --icons=auto --git -al -r -s size --group-directories-first $@in }
 	edit:add-var lll~ {|@in| e:eza --icons=auto --git -alO@ --group-directories-first $@in }
-	edit:add-var ll~ {|@in| e:eza --icons=auto -al --group-directories-first $@in }
+	edit:add-var ll~ {|@in| e:eza --icons=auto --git -al --group-directories-first $@in }
 	edit:add-var ls~ {|@in| e:eza --icons=auto --group-directories-first $@in }
 } {
 	if ( cmds:is-macos ) { 
