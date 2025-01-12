@@ -5,65 +5,9 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"type": "zshdb",
-			"request": "launch",
-			"name": "Zsh-Debug (select script from list of sh files)",
-			"cwd": "${workspaceFolder}",
-			"program": "${command:SelectScriptName}",
-			"args": []
-		},
-		{
-			"type": "zshdb",
-			"request": "launch",
-			"name": "Zsh-Debug (type in script name)",
-			"cwd": "${workspaceFolder}",
-			"program": "${command:AskForScriptName}",
-			"args": []
-		},
-		{
-			"name": "Debug Local File",
-			"type": "Ruby",
-			"request": "launch",
-			"program": "${file}",
-			"args": [""]
-		},
-		{
-			"name": "Debug fixCase",
-			"type": "Ruby",
-			"request": "launch",
-			"cwd": "${workspaceRoot}",
-			"program": "${file}",
-			"args": ["~/Desktop/Core.bib"]
-		},
-		{
-			"name": "Debug convertRefs",
-			"type": "Ruby",
-			"request": "launch",
-			"cwd": "${workspaceRoot}",
-			"program": "${file}",
-			"args": ["/Users/ian/Desktop/Compile-mmd/Test.md"]
-		},
-		{
-			"name": "Debug < MD",
-			"type": "Ruby",
-			"request": "launch",
-			"program": "${file}",
-			"args": [" < ${workspaceROOT}/test.md"]
-		},
-		{ // Name: VSCode rdbg Ruby Debugger https://marketplace.visualstudio.com/items?itemName=KoichiSasada.vscode-rdbg
 			"type": "rdbg",
-			"name": "Debug current file with rdbg",
-			"request": "launch",
-			"script": "${file}",
-			"args": [],
-			"askParameters": true,
-			"rdbgPath": "~/.pixi/bin/rdbg"
-		},
-		{ // Name: VSCode rdbg Ruby Debugger https://marketplace.visualstudio.com/items?itemName=KoichiSasada.vscode-rdbg
-			"type": "rdbg",
-			"name": "Attach with Ruby Debug rdbg",
-			"request": "attach",
-			"rdbgPath": "~/.pixi/bin/rdbg"
+			"name": "Attach rdbg",
+			"request": "attach"
 		}
 	]
 }
