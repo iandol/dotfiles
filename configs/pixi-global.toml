@@ -109,3 +109,9 @@ exposed = { chronic = "chronic", combine = "combine", errno = "errno", ifdata = 
 channels = ["conda-forge"]
 dependencies = { python = "3.12.*", setuptools = "*" , pip = "*" , pipx = "*" }
 exposed = { 2to3 = "2to3", "2to3-3.12" = "2to3-3.12", idle3 = "idle3", "idle3.12" = "idle3.12", pydoc = "pydoc", pydoc3 = "pydoc3", "pydoc3.12" = "pydoc3.12", python = "python", python3 = "python3", python3-config = "python3-config", "python3.1" = "python3.1", "python3.12" = "python3.12", "python3.12-config" = "python3.12-config", pip = "pip", pip3 = "pip3", pipx = "pipx" }
+
+[envs.awscli]
+channels = ["conda-forge"]
+dependencies = { awscli = "*" }
+exposed = { aws = "aws", "aws.cmd" = "aws.cmd", aws_bash_completer = "aws_bash_completer", aws_completer = "aws_completer", aws_zsh_completer = "aws_zsh_completer" }
+
