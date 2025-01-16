@@ -26,6 +26,7 @@ use github.com/iandol/elvish-modules/ai # my ai module
 use github.com/iandol/elvish-modules/python # for python venv support
 use github.com/iandol/elvish-modules/mamba # for conda/mamba support
 use github.com/zzamboni/elvish-modules/bang-bang
+bang-bang:init &plain-bang="Alt-1" # remember for kitty this is right alt key only
 use github.com/zzamboni/elvish-modules/spinners
 
 #==================================================== - BASIC ENVIRONMENT
