@@ -171,6 +171,15 @@ fn external-edit-command {
 	}
 }
 
+# Print bound keys: `bound-keys $edit:insert:binding`
+fn bound-keys {|binding| pprint $binding |
+	each { |line|
+		var @m = (re:find '^ &(.*?)=' $line)
+		if (not (eq $m [])) {
+			put $m[0][groups][1][text]
+}	}	}
+edit:add-var bound-keys~ $bound-keys~
+
 # Filter the command history through the fzf program. This is normally bound
 # to Ctrl-R. set edit:insert:binding[Ctrl-R] = { aliases:history >/dev/tty 2>&1 }
 fn history { 
