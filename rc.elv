@@ -31,6 +31,7 @@ use github.com/zzamboni/elvish-modules/spinners
 
 #==================================================== - BASIC ENVIRONMENT
 if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
+set-env DF $E:HOME/.dotfiles
 set-env XDG_CONFIG_HOME $E:HOME/.config
 set-env XDG_DATA_HOME $E:HOME/.local/share
 if (==s $platform:os "linux") { set-env TMPDIR '/tmp' }
@@ -69,6 +70,7 @@ if (cmds:is-macos) {
 	cmds:do-if-path	[(get-env JAVA_HOME)] {|p| set-env MATLAB_JAVA $p }
 } elif (cmds:is-linux) {
 	cmds:do-if-path ["/usr/lib/jvm/java-17-openjdk-amd64"] { |p| set-env JAVA_HOME $p }
+	cmds:do-if-path	[(get-env JAVA_HOME)] {|p| set-env MATLAB_JAVA $p }
 	cmds:do-if-path ["/usr/local/MATLAB/MATLAB_Runtime/R2024b/"] { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
 }
 
@@ -140,7 +142,12 @@ cmds:do-if-path ~/.pixi/envs/luarocks/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.s
 cmds:do-if-path ~/.local/share/pandoc/ {|p| set-env PD $p }
 
 # brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
-cmds:if-external carapace { set-env CARAPACE_BRIDGES 'zsh,bash'; eval (carapace _carapace | slurp); echo (styled "…carapace init—" bold italic yellow) }
+cmds:if-external carapace {
+	try { ln -s $E:DF/completions/*.yaml $E:XDG_CONFIG_HOME/carapace/specs > /dev/null 2>&1 } catch { }
+	set-env CARAPACE_BRIDGES 'zsh,bash'
+	eval (carapace _carapace | slurp)
+	echo (styled "…carapace init—" bold italic yellow)
+}
 cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
 cmds:if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbenv' }
 cmds:if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pyenv' }

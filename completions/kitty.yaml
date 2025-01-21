@@ -1,0 +1,34 @@
+name: kitty
+description: cross-platform terminal
+flags:
+  --class=: set the kitty window class
+  --name=: set the kitty window name
+  -T, --title=: set the kitty window title
+  -c, --config=: specify which kitty config file to use
+  -o, --override=: Override individual configuration options, can be specified multiple times. Syntax name=value. For example -o font_size=20
+  -d, --directory=: specify which kitty working directory to use
+  --working-directory=: specify which kitty working directory to use
+  --detach: Detach from the controlling terminal, if any. Not available on macOS. On macOS use open -a kitty.app -n instead.
+  --session: Path to a file containing the startup session (tabs, windows, layout, programs). Use - to read from STDIN.
+  --hold: Remain open, at a shell prompt, after child process exits.
+  -1, --single-instance: If specified only a single instance of kitty will run. 
+  --instance-group: Used in combination with the --single-instance option.
+  --wait-for-single-instance-window-close: Normally, when using --single-instance, kitty will open a new window in an existing instance and quit immediately. With this option, it will not quit till the newly opened window is closed.
+  --listen-on: Listen on the specified socket address for control messages.
+  --start-as=: Control how the initial kitty window is created. Choices are fullscreen, maximized, normal, minimized
+  -v, --version: The current kitty version.
+  --dump-commands: Output commands received from child process to STDOUT.
+  --replay-commands: Replay previously dumped commands. Specify the path to a dump file previously created by --dump-commands. 
+  --dump-bytes: Path to file in which to store the raw bytes received from the child process.
+  --debug-rendering: Debug rendering commands.
+  --debug-gl: Debug rendering commands.
+  --debug-keyboard: Print out key and mouse events as they are received.
+  --debug-input: Print out key and mouse events as they are received.
+  --debug-font-fallback: Print out information about the selection of fallback fonts for characters not present in the main font.
+  --watcher: This option is deprecated in favor of the watcher option in kitty.conf
+completion:
+  positionalany: ["$files"]
+  flag:
+    config: ["$files"]
+    directory: ["$directories"]
+    session: ["$files"]
