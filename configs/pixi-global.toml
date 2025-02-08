@@ -115,3 +115,8 @@ channels = ["conda-forge"]
 dependencies = { awscli = "*" }
 exposed = { aws = "aws", "aws.cmd" = "aws.cmd", aws_bash_completer = "aws_bash_completer", aws_completer = "aws_completer", aws_zsh_completer = "aws_zsh_completer" }
 
+[envs.fd-find]
+channels = ["conda-forge"]
+dependencies = { fd-find = "*" }
+exposed = { fd = "fd" }
+

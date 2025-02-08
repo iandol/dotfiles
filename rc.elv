@@ -69,7 +69,7 @@ if (cmds:is-macos) {
 	cmds:do-if-path [(/usr/libexec/java_home)] {|p| set-env JAVA_HOME (/usr/libexec/java_home) }
 	cmds:do-if-path	[(get-env JAVA_HOME)] {|p| set-env MATLAB_JAVA $p }
 } elif (cmds:is-linux) {
-	cmds:do-if-path ["/usr/lib/jvm/java-17-openjdk-amd64"] { |p| set-env JAVA_HOME $p }
+	cmds:do-if-path [/usr/lib/jvm/java-{17 21}-openjdk-amd64] { |p| set-env JAVA_HOME $p }
 	cmds:do-if-path	[(get-env JAVA_HOME)] {|p| set-env MATLAB_JAVA $p }
 	cmds:do-if-path ["/usr/local/MATLAB/MATLAB_Runtime/R2024b/"] { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
 }
