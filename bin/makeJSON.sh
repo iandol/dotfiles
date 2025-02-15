@@ -16,23 +16,23 @@ mydir=$(pwd)
 printf "\n\n======================================@$(date)\n"
 printf "---> Processing Bibliography file $filename in $mydir\n"
 if [[ ! -s $filename ]]; then # make sure file exists
-	printf "\nCannot find $filename\n"
-	return -1
-fi
-printf '---> Citeproc generating JSON from BIB file...\n' 
-pandoc --verbose -f bibtex -t csljson $filename > Temp.json
-if [[ ! -s Temp.json ]]; then
-	printf "\tPandoc failed with $filename\n"
-	return -1
-fi
-printf '---> Processing title case...\n'
-/Users/ian/bin/fixCase.rb Temp.json
-printf "---> Finshed processing title case...\n"
-if [[ -s Temp.json ]]; then
-	printf '---> Minifying JSON...\n'
-	jq -Sc '. | del(.[]."abstract",.[]."keyword",.[]."publisher-place")' < Temp.json > Core.json
+	printf "\n There was no file $filename\n"
 else
-	printf '---> ERROR: Temp.json does not exist or is empty\n'
+	printf '---> Citeproc generating JSON from BIB file...\n' 
+	pandoc --verbose -f bibtex -t csljson $filename > Core.json
+	if [[ ! -s Temp.json ]]; then
+		printf "\tPandoc failed with $filename\n"
+		return -1
+	fi
 fi
-[[ -s Temp.json ]] && rm Temp.json
+if [[ -s Core.json ]]; then
+	printf '---> Minifying JSON...\n'
+	jq -Sc '. | del(.[]."abstract",.[]."keyword",.[]."publisher-place")' < Core.json > Temp.json
+else
+	printf '---> ERROR: Core.json does not exist or is empty\n'
+fi
+[[ -s Temp.json ]] && mv Temp.json Core.json
+printf '---> Processing title case...\n'
+/Users/ian/bin/fixCase.rb Core.json
+printf "---> Finshed processing title case...\n"
 printf '===>>> ...Finished!\n'

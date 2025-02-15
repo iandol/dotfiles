@@ -65,11 +65,6 @@ channels = ["conda-forge"]
 dependencies = { img2pdf = "*" }
 exposed = { img2pdf = "img2pdf", img2pdf-gui = "img2pdf-gui" }
 
-[envs.ruby]
-channels = ["conda-forge"]
-dependencies = { ruby = "*" , compilers = "*" }
-exposed = { bundle = "bundle", bundler = "bundler", erb = "erb", gem = "gem", irb = "irb", racc = "racc", rake = "rake", rbs = "rbs", rdbg = "rdbg", rdoc = "rdoc", ri = "ri", ruby = "ruby", syntax_suggest = "syntax_suggest", typeprof = "typeprof" }
-
 [envs.ripgrep]
 channels = ["conda-forge"]
 dependencies = { ripgrep = "*" }
@@ -79,11 +74,6 @@ exposed = { rg = "rg" }
 channels = ["conda-forge"]
 dependencies = { asciinema = "*" }
 exposed = { asciinema = "asciinema" }
-
-[envs.pandoc]
-channels = ["conda-forge"]
-dependencies = { pandoc = "*" }
-exposed = { pandoc-lua = "pandoc-lua", pandoc-server = "pandoc-server", pandoc = "pandoc" }
 
 [envs.p7zip]
 channels = ["conda-forge"]
@@ -119,4 +109,14 @@ exposed = { aws = "aws", "aws.cmd" = "aws.cmd", aws_bash_completer = "aws_bash_c
 channels = ["conda-forge"]
 dependencies = { fd-find = "*" }
 exposed = { fd = "fd" }
+
+[envs.ruby]
+channels = ["conda-forge"]
+dependencies = { ruby = "*", compilers = "*" }
+exposed = { bundle = "bundle", bundler = "bundler", erb = "erb", gem = "gem", irb = "irb", racc = "racc", rake = "rake", rbs = "rbs", rdbg = "rdbg", rdoc = "rdoc", ri = "ri", ruby = "ruby", syntax_suggest = "syntax_suggest", typeprof = "typeprof" }
+
+[envs.pandoc]
+channels = ["conda-forge"]
+dependencies = { pandoc = "*" }
+exposed = { pandoc = "pandoc", pandoc-lua = "pandoc-lua", pandoc-server = "pandoc-server" }
 
