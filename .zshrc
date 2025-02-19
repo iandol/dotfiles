@@ -84,7 +84,7 @@ fi
 [[ -d "$HOME/.cache/lm-studio/bin" ]] && path=("$HOME/.cache/lm-studio/bin" $path)
 [[ -d "$HOME/.pixi/envs/ruby/share/rubygems/bin" ]] && path=("$HOME/.pixi/envs/ruby/share/rubygems/bin" $path)
 [[ -d "$HOME/.pixi/bin" ]] && path=("$HOME/.pixi/bin" $path)
-export PATH
+export path
 
 #------------------------------------FINALISE OTHERS
 [[ -x $(which pyenv) ]] && eval "$(pyenv init - zsh)"

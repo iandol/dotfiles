@@ -31,12 +31,16 @@ if [ "$PLATFORM" = "Darwin" ]; then
 	if [ -e "$(which brew)" ]; then
 		printf 'Adding Homebrew packages...\n'
 		brew install git bat p7zip pixi fzf ruby-build
-		brew install starship procs ripgrep neovim jq figlet
-		brew install prettyping ansiweather media-info tmux 
-		brew install less git-delta diff-so-fancy mosh pandoc pandoc-crossref
+		brew install neovim figlet
+		brew install prettyping ansiweather media-info 
+		brew install git-delta diff-so-fancy pandoc pandoc-crossref
 		brew install multimarkdown libusb exodriver yt-dlp
 		brew tap rsteube/tap
 		brew install carapace
+		# VPN options
+		brew tap v2raya/v2raya
+		brew install v2raya
+		brew install clash-verge-rev
 		#cask fonts
 		brew install font-symbols-only-nerd-font font-recursive-code \
 		font-fantasque-sans-mono font-fira-code font-jetbrains-mono \
@@ -48,12 +52,12 @@ if [ "$PLATFORM" = "Darwin" ]; then
 		read -r ans
 		if [ "$ans" == 'y' ]; then
 			#cask apps
-			brew install alfred basictex bettertouchtool betterzip bitwarden
-			brew install bookends calibre deckset visual-studio-code
-			brew install ff-works forklift fsnotes hex-fiend daisydisk
-			brew install iina imageoptim kitty knockknock launchcontrol mpv
-			brew install prince proxyman r scrivener suspicious-package tex-live-utility textmate
-			brew install zerotier-one
+			brew install alfred blackhole-2ch bettertouchtool betterzip bitwarden
+			brew install bookends calibre daisydisk deckset draw-things
+			brew install ff-works forklift fsnotes hex-fiend 
+			brew install iina imageoptim inkscape kitty knockknock launchcontrol mpv
+			brew install nomachine prince proxyman r scrivener suspicious-package 
+			brew install syntax-highlight xld wechat visual-studio-code zerotier-one 
 			# other software
 			#brew install libreoffice microsoft-word microsoft-powerpoint microsoft-excel
 			#brew install dropbox #fails unless on VPN

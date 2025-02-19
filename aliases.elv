@@ -7,6 +7,7 @@ echo (styled "…loading command aliases…" bold italic yellow)
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>so'] = '2>&1'
+set edit:command-abbr['curl'] = 'curl --retry 5 -L -C - '
 set edit:command-abbr['xp'] = 'x proxy set 127.0.0.1:'
 set edit:command-abbr['xpu'] = 'x proxy unset'
 set edit:command-abbr['mm'] = 'micromamba'
