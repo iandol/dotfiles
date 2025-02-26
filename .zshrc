@@ -78,6 +78,8 @@ fi
 [[ -d "$HOME/Library/TinyTeX/bin/universal-darwin" ]] && path+="$HOME/Library/TinyTeX/bin/universal-darwin"
 [[ -d "/usr/local/sbin" ]] && path=("/usr/local/sbin" $path)
 [[ -d "/usr/local/bin" ]] && path=("/usr/local/bin" $path)
+[[ -d "/opt/homebrew/opt/ruby/bin" ]] && path=("/opt/homebrew/opt/ruby/bin" $path)
+[[ -d "/opt/homebrew/lib/ruby/gems/3.4.0/bin" ]] && path=("/opt/homebrew/lib/ruby/gems/3.4.0/bin" $path)
 [[ -d "$HOME/.local/bin" ]] && path=("$HOME/.local/bin" $path)
 [[ -d "/snap/bin" ]] && path=("/snap/bin" $path)
 [[ -d "$HOME/bin" ]] && path=("$HOME/bin" $path)
@@ -121,3 +123,4 @@ fi
 
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
+

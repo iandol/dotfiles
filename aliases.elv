@@ -400,43 +400,54 @@ edit:add-var updateuBlock~ $updateuBlock~
 fn updateXRay {
 	if (!=s $platform:os 'linux') { return }
 	echo (styled "\n=== UPDATE XRAY & V2RAYA ===\n" bold yellow)
-	var xLabel = "Xray-linux-64.zip$"
-	var vLabel = "debian_x64.+deb$"
-	if (cmds:is-arm64) { 
+	var xLabel = ''; var vLabel = ''
+	if (and (cmds:is-mac) (cmds:is-arm64)) {
+		var xLabel = "Xray-macos-arm64-v8a.zip$"
+		var vLabel = "v2raya_darwin_arm"
+	} elif (and (cmds:is-linux) (cmds:is-arm64)) {
+		var xLabel = "Xray-linux-64.zip$"
+		var vLabel = "debian_x64.+deb$"
+	} elif (cmds:is-linux) {
 		set xLabel = "Xray-linux-arm64-v8a.zip$"
 		set vLabel = "debian_arm64.+deb$"
-	}
-	var xSrc = ''
-	var vSrc = ''
-	var xurl = ''
-	var vurl = ''
+	} else { return }
+	var xSrc = ''; var vSrc = ''; var cSrc = ''
+	var xURL = ''; var vURL = ''; var clURL = ''
 	try {
 		set xSrc = (curl -s https://api.github.com/repos/XTLS/Xray-core/releases/latest | from-json)
 		set vSrc = (curl -s https://api.github.com/repos/v2raya/v2raya/releases/latest | from-json)
+		set cSrc = (curl -s https://api.github.com/repos/clash-verge-rev/clash-verge-rev/releases/latest | from-json)
 	} catch {
 		echo (styled "Failed to get Repo info!\n" bold red)
 		break
 	}
-	echo "XRay remote: "$xSrc[name]" | local: "(xray --version | sd -f s '(Xray )([\d\.]+) (.+)' '$2')
-	echo "V2RayA remote: "$vSrc[name]" | local: "(v2raya --version)
+	cmds:if-external xray {
+		echo "XRay remote: "$xSrc[name]" | local: "(xray --version | sd -f s '(Xray )([\d\.]+) (.+)' '$2')
+		} { echo "XRay remote: "$xSrc[name] }
+	cmds:if-external v2raya {
+		echo "V2RayA remote: "$vSrc[name]" | local: "(v2raya --version)
+	} { echo "V2RayA remote: "$vSrc[name] }
+	if (cmds:is-path '/Applications/clash Verge.app/') {
+		echo "Clash remote: "$cSrc[name]" | local: "(defaults read '/Applications/clash Verge.app/Contents/Info.plist' CFBundleShortVersionString)
+	} else { echo "Clash remote: "$cSrc[name] }
 
 	each {|a| 
-		if (re:match $xLabel $a[browser_download_url]) { set xurl = $a[browser_download_url] }
+		if (re:match $xLabel $a[browser_download_url]) { set xURL = $a[browser_download_url] }
 	} $xSrc[assets]
-	if (!=s $xurl '') {
-		echo (styled "\n=== GET XRAY ===\nURL: "$xurl bold yellow)
-		try { wget --no-check-certificate -O xray.zip $xurl
+	if (!=s $xURL '') {
+		echo (styled "\n=== GET XRAY ===\nURL: "$xURL bold yellow)
+		try { wget --no-check-certificate -O xray.zip $xURL
 			sudo unzip -o xray.zip -d /usr/local/bin
 		} catch { echo "Can't download Xray!" }
 	}
 
 	each {|a| 
-		if (re:match $vLabel $a[browser_download_url]) { set vurl = $a[browser_download_url] }
+		if (re:match $vLabel $a[browser_download_url]) { set vURL = $a[browser_download_url] }
 	} $vSrc[assets]
-	if (!=s $vurl '') {
-		echo (styled "\n=== GET V2RAYA ===\nURL: "$vurl bold yellow)
-		try { wget --no-check-certificate -O v2raya.deb $vurl
-			sudo dpkg -i v2raya.deb
+	if (!=s $vURL '') {
+		echo (styled "\n=== GET V2RAYA ===\nURL: "$vURL bold yellow)
+		try { wget --no-check-certificate -O v2raya.deb $vURL
+			if cmds:is-linux { sudo dpkg -i v2raya.deb }
 		} catch { echo "Can't download V2raya!" }
 	}
 }

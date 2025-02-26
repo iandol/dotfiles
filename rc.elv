@@ -82,6 +82,8 @@ each {|p| cmds:prepend-to-path $p } [
 	/usr/local/bin  /usr/local/sbin  ~/.local/bin
 	/home/linuxbrew/.linuxbrew/bin
 	/opt/local/bin  /opt/homebrew/bin
+	/usr/local/opt/ruby/bin  /usr/local/lib/ruby/gems/3.{7 6 5 4 3}.0/bin
+	/opt/homebrew/opt/ruby/bin /opt/homebrew/lib/ruby/gems/3.{7 6 5 4 3}.0/bin
 	~/.pixi/envs/ruby/share/rubygems/bin
 	~/.pixi/bin ~/bin
 ]

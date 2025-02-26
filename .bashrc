@@ -48,7 +48,7 @@ else
 fi
 
 if [[ -x $(which brew > /dev/null 2>&1) ]]; then
-	[[ -d `brew --prefix`/etc/bash_completion.d ]] &&	source $(brew --prefix)/etc/bash_completion.d/*
+	[[ -d $(brew --prefix)/etc/bash_completion.d ]] &&	source $(brew --prefix)/etc/bash_completion.d/*
 fi
 
 [[ -x $(which rbenv > /dev/null 2>&1) ]] && eval "$(rbenv init -)"
