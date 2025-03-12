@@ -331,12 +331,16 @@ fn update {
 			tmp pwd = $x
 			try { set oldbranch = (git branch --show-current) } catch { }
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
-			try { git fetch -t -q --all 2>$path:dev-null; } catch { }
+			try { git fetch -t -q --all 2>$path:dev-null } catch { }
 			for y $branches {
-				if (re:match '^(dev|main|master|umaster)' $y) { 
+				if (re:match '^(dev|main|master|umaster)' $y) {
 					echo (styled "\n--->>> Updating "(styled $x bold)":"$y"…\n" bg-blue)
-					try { git checkout -q $y 2>$path:dev-null } catch { } 
-					try { git pull --ff-only -v } catch { echo "\t…couldn't pull!" }
+					try {
+						git checkout -q $y 2>$path:dev-null
+						git pull --ff-only -v
+					} catch {
+						echo "\t…couldn't pull!"
+					}
 				}
 			}
 			if (re:match 'upstream' (git remote | slurp)) {
@@ -373,7 +377,7 @@ fn update {
 	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
 	cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --self; tlmgr update --all }
 	try { echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5);epm:upgrade } catch { echo "Couldn't update EPM packages…" }
-	cmds:if-external x { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); ___x_cmdexe upgrade; ___x_cmdexe elv --setup mod }
+	cmds:if-external x { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); ___x_cmdexe upgrade; ___x_cmdexe env upgrade --all; ___x_cmdexe elv --setup mod }
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
 edit:add-var update~ $update~

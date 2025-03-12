@@ -113,10 +113,15 @@ exposed = { fd = "fd" }
 [envs.pandoc]
 channels = ["conda-forge"]
 dependencies = { pandoc = "*" }
-exposed = { pandoc = "pandoc", pandoc-lua = "pandoc-lua", pandoc-server = "pandoc-server" }
+exposed = { pandoc-lua = "pandoc-lua", pandoc-server = "pandoc-server" }
 
 [envs.ruby]
 channels = ["conda-forge"]
 dependencies = { ruby = "*", compilers = "*" }
 exposed = { bundle = "bundle", bundler = "bundler", erb = "erb", gem = "gem", irb = "irb", racc = "racc", rake = "rake", rbs = "rbs", rdbg = "rdbg", rdoc = "rdoc", ri = "ri", ruby = "ruby", syntax_suggest = "syntax_suggest", typeprof = "typeprof" }
+
+[envs.nodejs]
+channels = ["conda-forge"]
+dependencies = { nodejs = "*" }
+exposed = { corepack = "corepack", node = "node", npm = "npm", npx = "npx" }
 

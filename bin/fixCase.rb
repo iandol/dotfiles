@@ -121,7 +121,11 @@ b2 = Regexp.escape("'\"/,.]):-–—")
 begin
 	File.open(infilename, 'r', universal_newline: true) do |file|
 		file.each_line do |line|
-			# line.gsub!(/\r+$/, "\n")
+			# remove trailing \r, if any
+			line.gsub!(/\r+$/, "\n")
+			# fix dates if json
+			line.gsub!(/(?<=\{"raw":")([0-9]{4})([^"]*)(?="\})/, '\1') if format == 'json'
+			# fix case in titles and abstracts
 			if line.match(titleRegex)
 
 				keepCase.each do |k|
