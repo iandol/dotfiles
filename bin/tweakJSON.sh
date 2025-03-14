@@ -30,10 +30,11 @@ if [[ -s $infile ]]; then
 		printf '---> ERROR: JSON minification failed\n'
 		cp $infile temp.json
 	fi
-	printf '---> Fixing Dates...\n'
-	#ruby is faster: sed 's/"raw": *".*\([0-9]\{4\}\)[^"]*"/"raw": "\1"/g' temp.json > $outfile
-	ruby -e 'puts File.read(ARGV[0]).gsub(/"raw":\s*".*?(\d{4})[^"]*"/, "\"raw\": \"\\1\"")' temp.json > $outfile
-	[[ -s temp.json ]] && rm temp.json
+	printf '---> Fixing Dates...\n' # speed is sd > ruby > sed, use the one you have installed
+	# sed version: sed 's/"raw": *".*\([0-9]\{4\}\)[^"]*"/"raw": "\1"/g' temp.json > $outfile
+	# ruby -pi -e 'gsub /(?:"raw":\s*")(?:.*?)(\d{4})(?:[^"]*")/, "\"raw\": \"\\1\""' temp.json
+	sd "(?:\"raw\":\s*\")(?:.*?)([0-9]{4})(?:[^\"]*\")" "\"raw\": \"\$1\"" temp.json
+	mv temp.json $outfile
 else
 	printf '---> ERROR: infile does not exist or is empty\n'
 fi
