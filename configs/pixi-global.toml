@@ -113,7 +113,7 @@ exposed = { fd = "fd" }
 [envs.pandoc]
 channels = ["conda-forge"]
 dependencies = { pandoc = "*" }
-exposed = { pandoc-lua = "pandoc-lua", pandoc-server = "pandoc-server" }
+exposed = { pandoc-lua = "pandoc-lua", pandoc-server = "pandoc-server", pandoc = "pandoc" }
 
 [envs.ruby]
 channels = ["conda-forge"]

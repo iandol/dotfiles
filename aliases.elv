@@ -288,6 +288,28 @@ fn sp {|@ina|
 edit:add-var sp~ $sp~
 set edit:command-abbr['setproxy'] = 'sp'
 
+#===================================================Install MATLAB
+fn installMATLAB {|&version='R2024b' &action='install' &products=''|
+	cmds:if-external mpm {
+			echo (styled "mpm is already installed:\n" bold yellow)
+	} { 
+		echo (styled "Install mpm:\n" bold yellow)
+		if ( cmds:is-macos ) { curl -L -o ~/bin/mpm https://www.mathworks.com/mpm/maca64/mpm } elif ( cmds:is-linux ) { curl -L -o ~/bin/mpm https://www.mathworks.com/mpm/glnxa64/mpm }
+		chmod +x ~/bin/mpm
+	}
+	if (==s $products '') {
+		set products = 'MATLAB Curve_Fitting_Toolbox Instrument_Control_Toolbox MATLAB_Report_Generator Optimization_Toolbox Parallel_Computing_Toolbox Signal_Processing_Toolbox Statistics_and_Machine_Learning_Toolbox'
+	}
+	if (==s $action 'install') { 
+		echo (styled "Install "$version" of MATLAB:\n" bold yellow) 
+		$E:HOME/bin/mpm install --no-gpu --no-jre --release=$version --destination=$E:HOME/matlab$version --products=$products
+	} elif (==s $action 'download') { 
+		echo (styled "Download "$version" of MATLAB:\n" bold yellow)
+		$E:HOME/bin/mpm download --release=$version --destination=$E:HOME/matlab$version --products=$products
+	}
+	echo (styled "...Finished..." bold yellow)
+}
+
 #========================================Install required TeX packages for BasicTex
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
 fn updateTeX {|&repo=tuna &ctex=$false|
