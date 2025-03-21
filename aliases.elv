@@ -342,6 +342,7 @@ fn update {
 	var olddir = (pwd)
 	var oldbranch = ''
 	var ul = [~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/Pingpong^
+	~/Code/CageLab ~/Code/Notes
 	~/Code/AfterImage ~/Code/equiluminance ~/Code/Pinna ~/Code/spikes ^
 	~/Code/Psychtoolbox-3 ~/Code/fieldtrip ~/Code/Training ~/Code/Palamedes ^
 	~/Code/Mymou ~/Documents/MATLAB/gramm ~/Code/scrivomatic ^
