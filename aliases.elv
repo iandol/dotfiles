@@ -118,13 +118,9 @@ cmds:if-external kitty {
 	edit:add-var kittydef~ {  kitty +runpy 'from kitty.config import *; print(commented_out_default_config())' > $E:HOME/.dotfiles/configs/kitty-d
 efault.conf }
 	edit:add-var kssh~ { |@in| kitten ssh $@in --kitten login_shell=elvish }
-	if (cmds:is-macos) {
-		edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.95/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
-		edit:add-var kittydark~ { sed -Ei '' 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
-	} else {
-		edit:add-var kittylight~ { sed -Ei 's/background_tint .+/background_tint 0.95/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
-		edit:add-var kittydark~ { sed -Ei 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
-	}
+	edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.55/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
+	edit:add-var kittydark~ { sed -Ei '' 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
+	
 }
 cmds:if-external nvim { edit:add-var vi~ $e:nvim~ }
 
@@ -400,7 +396,7 @@ fn update {
 	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
 	cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --self; tlmgr update --all }
 	try { echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5);epm:upgrade } catch { echo "Couldn't update EPM packages…" }
-	cmds:if-external x { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); ___x_cmdexe upgrade; ___x_cmdexe env upgrade --all; ___x_cmdexe elv --setup mod }
+	cmds:if-external x-cmd { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x-cmd upgrade; x-cmd env upgrade --all --force; x-cmd elv --setup mod }
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
 edit:add-var update~ $update~
