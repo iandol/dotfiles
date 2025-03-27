@@ -338,7 +338,7 @@ fn update {
 	var olddir = (pwd)
 	var oldbranch = ''
 	var ul = [~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/Pingpong^
-	~/Code/CageLab ~/Code/Notes
+	~/Code/CageLab ~/Code/Notes ~/Code/matlab-zmq
 	~/Code/AfterImage ~/Code/equiluminance ~/Code/Pinna ~/Code/spikes ^
 	~/Code/Psychtoolbox-3 ~/Code/fieldtrip ~/Code/Training ~/Code/Palamedes ^
 	~/Code/Mymou ~/Documents/MATLAB/gramm ~/Code/scrivomatic ^
@@ -351,6 +351,7 @@ fn update {
 			try { set oldbranch = (git branch --show-current) } catch { }
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
 			try { git fetch -t -q --all 2>$path:dev-null } catch { }
+			git remote -v
 			for y $branches {
 				if (re:match '^(dev|main|master|umaster)' $y) {
 					echo (styled "\n--->>> Updating "(styled $x bold)":"$y"…\n" bg-blue)
@@ -362,6 +363,7 @@ fn update {
 					}
 				}
 			}
+			git remote -v
 			if (re:match 'upstream' (git remote | slurp)) {
 				print "------> Fetching upstream…  "
 				try { git fetch -v upstream } catch { echo "  …couldn't fetch upstream!" }
