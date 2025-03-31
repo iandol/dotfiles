@@ -423,15 +423,16 @@ function update() {
 		printf '\n\n---> Updating \e[92mApt/snap/flatpak/firmware\e[m...\n'
 		sudo apt update; sudo apt autoremove; apt list --upgradable
 		[[ -x $(which snap) ]] && sudo snap refresh
-		[[ -x $(which flatpak) ]] && flatpak update
+		[[ -x $(which flatpak) ]] && flatpak update -y
 		[[ -x $(which fwupdmgr) ]] && fwupdmgr get-upgrades
 	fi
 
-	[[ -f $(which pixi) ]] && (printf '\n\n---> Updating \e[92mPIXI\e[m...\n'; pixi self-update)
+	[[ -f $(which pixi) ]] && (printf '\n\n---> Updating \e[92mPIXI\e[m...\n'; pixi self-update; pixi global -v update)
 	[[ -f $(which pkgx) ]] && (printf '\n\n---> Updating \e[92mPKGX\e[m...\n'; pkgx --sync; pkgx --update)
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
 	[[ -f $(which pyenv) ]] && (printf '\n\n---> Rehash \e[92mPYENV\e[m...\n'; pyenv rehash)
 	[[ -e "$HOME/.zi" ]] && (printf '\n\n---> Updating \e[92mZINIT\e[m...\n';zi self-update; zi update -p --all)
+	[[ -e "$HOME/.x-cmd.root/bin/x-cmd" ]] &&  (printf '\n\n---> Updating \e[92mX-CMD\e[m...\n'; x-cmd upgrade; x-cmd env upgrade --all --force)
 	printf "\n=====>>> Finish Update @ \e[93m$(date)\e[m <<<=====\n"
 }
 
