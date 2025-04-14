@@ -20,7 +20,6 @@ set shiftwidth=4				" use indents of 4 spaces
 set noexpandtab					" tabs are tabs, not spaces
 set tabstop=4					" an indentation every 4 columns
 set softtabstop=4				" let backspace delete indent
-set pastetoggle=<F12>			" pastetoggle (sane indentation on pastes)
 set nocompatible				" not vi compatible, more features
 set ruler						" show ruler
 set incsearch					" incremental search
