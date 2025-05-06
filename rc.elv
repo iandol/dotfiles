@@ -66,7 +66,7 @@ cmds:do-if-path $releases { |p|
 }
 if (cmds:is-macos) {
 	cmds:do-if-path [/Applications/MATLAB/MATLAB_Runtime/v{241 234 912}] {|p| set-env MRT $p }
-	cmds:do-if-path [(/usr/libexec/java_home -v {24 23 21 18 17 11 8})] {|p| set-env JAVA_HOME (/usr/libexec/java_home) }
+	cmds:do-if-path [(/usr/libexec/java_home -v {24 23 21 18 17 11 8})] {|p| set-env JAVA_HOME $p }
 	cmds:do-if-path	[(/usr/libexec/java_home -v {21 17 11})] {|p| set-env MATLAB_JAVA $p }
 } elif (cmds:is-linux) {
 	cmds:do-if-path [/usr/lib/jvm/java-{17 21 11 8}-openjdk-amd64] { |p| set-env JAVA_HOME $p }
