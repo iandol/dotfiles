@@ -351,7 +351,6 @@ fn update {
 			try { set oldbranch = (git branch --show-current) } catch { }
 			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
 			try { git fetch -t -q --all 2>$path:dev-null } catch { }
-			git remote -v
 			for y $branches {
 				if (re:match '^(dev|main|master|umaster)' $y) {
 					echo (styled "\n--->>> Updating "(styled $x bold)":"$y"…\n" bg-blue)
