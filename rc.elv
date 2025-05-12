@@ -70,8 +70,8 @@ if (cmds:is-macos) {
 	cmds:do-if-path	[(/usr/libexec/java_home -v {21 17 11})] {|p| set-env MATLAB_JAVA $p }
 } elif (cmds:is-linux) {
 	cmds:do-if-path [/usr/lib/jvm/java-{17 21 11 8}-openjdk-amd64] { |p| set-env JAVA_HOME $p }
-	if (has-env JAVA_HOME) { cmds:do-if-path [(get-env JAVA_HOME)] {|p| set-env MATLAB_JAVA $p } }
-	cmds:do-if-path [/usr/local/MATLAB/MATLAB_Runtime/{R2025a R2024b R2024a}/] { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
+	cmds:do-if-path [/usr/lib/jvm/java-{17 21 11 8}-openjdk-amd64] {|p| set-env MATLAB_JAVA $p }
+	cmds:do-if-path [/usr/local/MATLAB/MATLAB_Runtime/R202{5b 5a 4b 4a 3b 3a}/] { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
 }
 
 each {|p| cmds:prepend-to-path $p } [
