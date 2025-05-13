@@ -305,6 +305,7 @@ fn installMATLAB {|&version='R2024b' &action='install' &products=''|
 	}
 	echo (styled "...Finished..." bold yellow)
 }
+edit:add-var installMATLAB~ $installMATLAB~
 
 #========================================Install required TeX packages for BasicTex
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
