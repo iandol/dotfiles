@@ -298,10 +298,10 @@ fn installMATLAB {|&version='R2024b' &action='install' &products=''|
 	}
 	if (==s $action 'install') { 
 		echo (styled "Install "$version" of MATLAB:\n" bold yellow) 
-		$E:HOME/bin/mpm install --no-gpu --no-jre --release=$version --destination=$E:HOME/matlab$version --products=$products
+		$E:HOME/bin/mpm install --no-gpu --no-jre --release=$version --destination=matlab$version --products='"'$products'"'
 	} elif (==s $action 'download') { 
 		echo (styled "Download "$version" of MATLAB:\n" bold yellow)
-		$E:HOME/bin/mpm download --release=$version --destination=$E:HOME/matlab$version --products=$products
+		$E:HOME/bin/mpm download --release=$version --destination=matlab$version --products='"'$products'"'
 	}
 	echo (styled "...Finished..." bold yellow)
 }
