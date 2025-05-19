@@ -285,7 +285,8 @@ edit:add-var sp~ $sp~
 set edit:command-abbr['setproxy'] = 'sp'
 
 #===================================================Install MATLAB
-fn installMATLAB {|&version='R2024b' &action='install' &products=''|
+fn installMATLAB {|&version='R2025a' &action='install' &products=''|
+	var dest = ''
 	cmds:if-external mpm {
 			echo (styled "mpm is already installed:\n" bold yellow)
 	} { 
@@ -294,14 +295,16 @@ fn installMATLAB {|&version='R2024b' &action='install' &products=''|
 		chmod +x ~/bin/mpm
 	}
 	if (==s $products '') {
-		set products = 'MATLAB Curve_Fitting_Toolbox Instrument_Control_Toolbox MATLAB_Report_Generator Optimization_Toolbox Parallel_Computing_Toolbox Signal_Processing_Toolbox Statistics_and_Machine_Learning_Toolbox'
+		set products = 'MATLAB Curve_Fitting_Toolbox Instrument_Control_Toolbox MATLAB_Report_Generator MATLAB_Compiler Optimization_Toolbox Parallel_Computing_Toolbox Signal_Processing_Toolbox Statistics_and_Machine_Learning_Toolbox'
 	}
+	if ( cmds:is-macos ) { set dest = '/Applications/MATLAB/'$version }
+	if ( cmds:is-linux ) { set dest = '/usr/local/MATLAB/'$version }
 	if (==s $action 'install') { 
 		echo (styled "Install "$version" of MATLAB:\n" bold yellow) 
-		$E:HOME/bin/mpm install --no-gpu --no-jre --release=$version --destination=matlab$version --products='"'$products'"'
+		$E:HOME/bin/mpm install --no-gpu --no-jre --release=$version --destination=$dest --products=$products
 	} elif (==s $action 'download') { 
 		echo (styled "Download "$version" of MATLAB:\n" bold yellow)
-		$E:HOME/bin/mpm download --release=$version --destination=matlab$version --products='"'$products'"'
+		$E:HOME/bin/mpm download --release=$version --destination=$E:HOME/Downloads/matlab$version --products=$products
 	}
 	echo (styled "...Finished..." bold yellow)
 }
