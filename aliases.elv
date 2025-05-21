@@ -382,7 +382,7 @@ fn update {
 					echo (styled "\n--->>> Updating "(styled $x bold)":"$y"…\n" bg-blue)
 					try {
 						git checkout -q $y 2>$path:dev-null
-						git pull --ff-only -v
+						timeout 60s git pull --ff-only -v
 					} catch {
 						echo "\t…couldn't pull!"
 					}
