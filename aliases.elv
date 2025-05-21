@@ -219,6 +219,7 @@ fn cl1p {|in name|
 }
 edit:add-var cl1p~ $cl1p~
 
+#===================================================Reset Vivaldi's PIP
 fn resetPIP { 
 	if ?(pgrep "Vivaldi" >/dev/null ) { echo (styled "\n!!!Warning: Vivaldi is running\n" bold red) }
 	var vp = $E:HOME"/Library/Application Support/Vivaldi/Default/Preferences"
@@ -231,6 +232,27 @@ fn resetPIP {
 	jq '.vivaldi.pip_placement' $vp
 }
 edit:add-var resetPIP~ $resetPIP~
+
+#===================================================Kill process listening on a port
+fn killPort {|port &dry-run=$false|
+	# Usage: killPort <port> [&dry-run=$true]
+	if (not $port) { echo "Usage: killPort <port> [&dry-run=$true]" > /dev/stderr; return }
+	# Get PID of process listening on the given port
+	try {
+		var pid = (lsof -i :$port -sTCP:LISTEN -t | head -n 1)
+	} catch {
+		echo "No process listening @ port:"$port; return
+	}
+	var pname = (ps -p $pid -o comm=) # Get process name
+	# Dry-run behavior
+	if (eq $dry-run $true) {
+		echo "[DRY-RUN] Would kill process "$pname" (PID "$pid") listening on port "$port
+	} else {
+		echo "Killing process "$pname" (PID "$pid") listening on port "$port"..."
+		e:kill $pid
+	}
+}
+edit:add-var killPort~ $killPort~
 
 #===================================================Setproxy [-x] [-l] [address]
 fn sp {|@ina|
@@ -341,13 +363,13 @@ fn update {
 	if (cmds:not-path $E:HOME"/.pixi") { curl -fsSL https://pixi.sh/install.sh | bash }
 	var olddir = (pwd)
 	var oldbranch = ''
-	var ul = [~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/Pingpong^
-	~/Code/CageLab ~/Code/matmoteGO ~/Code/Notes ~/Code/matlab-jzmq ~/Code/matlab-zmq
+	var ul = [~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/Pingpong ^
+	~/Code/CageLab ~/Code/matmoteGO ~/Code/Notes ~/Code/matlab-jzmq ~/Code/matlab-zmq ^
 	~/Code/AfterImage ~/Code/equiluminance ~/Code/Pinna ~/Code/spikes ^
 	~/Code/Psychtoolbox-3 ~/Code/fieldtrip ~/Code/Training ~/Code/Palamedes ^
-	~/Code/Mymou ~/Documents/MATLAB/gramm ~/Code/scrivomatic ^
-	~/Code/dotpandoc ~/Code/bookends-tools ^
-	~/Code/gears ~/Code/pandocomatic ~/Code/paru ^
+	~/Code/Mymou ~/Documents/MATLAB/gramm ^
+	~/Code/scrivomatic ~/Code/dotpandoc ~/Code/bookends-tools ~/Code/pandocomatic ^
+	~/Code/gears ~/Code/paru ^
 	/media/$E:USER/data/Code/octicka /media/$E:USER/data/Code/Psychtoolbox-3]
 	for x $ul {
 		if (cmds:is-path $x/.git) {
