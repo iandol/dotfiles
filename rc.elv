@@ -85,6 +85,7 @@ each {|p| cmds:prepend-to-path $p } [
 	/usr/local/opt/ruby/bin  /usr/local/lib/ruby/gems/3.{7 6 5 4 3}.0/bin
 	/opt/homebrew/opt/ruby/bin /opt/homebrew/lib/ruby/gems/3.{7 6 5 4 3}.0/bin
 	~/.pixi/envs/ruby/share/rubygems/bin
+	~/.x-cmd.root/bin
 	~/.pixi/bin ~/bin
 ]
 each {|p| cmds:append-to-path $p } [
@@ -111,9 +112,10 @@ cmds:if-external brew {
 }
 
 #==================================================== - X-CMD 文
-if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
+if (os:is-regular $E:HOME/.x-cmd.root/bin/x-cmd) {
 	set-env ___X_CMD_LANG en
 	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 1
+	if (not (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv)) { x-cmd elv --setup mod }
 	use x; x:init
 	edit:add-var •~ { |@in| use x; x:x chat --sendalias lms $@in; }
 	echo (styled "…x-cmd 文 integration…" bold italic yellow)
