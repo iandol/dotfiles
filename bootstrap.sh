@@ -72,6 +72,7 @@ elif [ "$PLATFORM" = "Linux" ]; then
 	sudo apt -my install freeglut3 gawk mesa-utils exfatprogs
 	sudo apt -my install p7zip-full p7zip-rar figlet jq ansiweather htop 
 	sudo apt -my install libunrar5 libdc1394-25 libraw1394-11
+	sudo apt -my install gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly
 	sudo apt -my install synaptic zathura
 	
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then

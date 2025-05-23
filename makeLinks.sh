@@ -34,13 +34,16 @@ fi
 mkdir -pv "$XDG_CONFIG_HOME/elvish"
 mkdir -pv "$XDG_CONFIG_HOME/elvish/lib"
 ln -siv "$DF/rc.elv" "$XDG_CONFIG_HOME/elvish"
-ln -siv "$DF/cmds.elv" "$XDG_CONFIG_HOME/elvish/lib"
 ln -siv "$DF/aliases.elv" "$XDG_CONFIG_HOME/elvish/lib"
 chown -R "$USER" "$XDG_CONFIG_HOME/elvish"
 
 # Default shell on macOS
-ln -siv "$DF/.zshrc" ~
-chown "$USER" ~/.zshrc
+printf "Do you want to overwrite .zshrc? [y / n]:  "
+read -r ans
+if [[ $ans == 'y' ]]; then
+	ln -siv "$DF/.zshrc" ~
+	chown "$USER" ~/.zshrc
+fi
 
 # Default on Ubuntu
 ln -siv "$DF/.bashrc" ~
