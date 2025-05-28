@@ -368,11 +368,14 @@ lips() {
 function update() {
 	sudo printf "\n=====>>> Start Update @ \e[93m$(date)\e[m <<<=====\n"
 	myolddir=$(pwd)
-	ul=(~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/AfterImage 
-	~/Code/equiluminance ~/Code/Pinna ~/Code/spikes 
-	~/Code/Psychtoolbox-3 ~/Code/fieldtrip ~/Code/Training ~/Code/Palamedes ~/Code/Mymou 
-	~/Documents/MATLAB/gramm ~/Code/scrivomatic ~/Code/dotpandoc ~/Code/bookends-tools 
-	~/Code/gears ~/Code/pandocomatic ~/Code/paru 
+	ul=(~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/Pingpong
+	~/Code/CageLab ~/Code/matmoteGO ~/Code/PTBSimia ~/Code/Notes 
+	~/Code/matlab-jzmq ~/Code/matlab-zmq 
+	~/Code/AfterImage ~/Code/equiluminance ~/Code/Pinna ~/Code/spikes 
+	~/Code/Psychtoolbox-3 ~/Code/fieldtrip ~/Code/Training ~/Code/Palamedes 
+	~/Code/Mymou ~/Documents/MATLAB/gramm 
+	~/Code/scrivomatic ~/Code/dotpandoc ~/Code/bookends-tools ~/Code/pandocomatic 
+	~/Code/gears ~/Code/paru 
 	/media/$USER/data/Code/octicka /media/$USER/data/Code/Psychtoolbox-3)
 	for x in $ul; do
 		if [[ -d ${x}/.git ]]; then
