@@ -424,7 +424,7 @@ fn update {
 	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
 	cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --self; tlmgr update --all }
 	try { echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5);epm:upgrade } catch { echo "Couldn't update EPM packages…" }
-	cmds:if-external x-cmd { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x-cmd upgrade; x-cmd env upgrade --all --force; x-cmd elv --setup mod }
+	cmds:if-external x-cmd { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod }
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
 }
 edit:add-var update~ $update~
