@@ -65,13 +65,12 @@ cmds:do-if-path $releases { |p|
 	if (cmds:is-macos) { ln -sf $p"/maci64/mlint" $E:HOME/bin/mlint }
 }
 if (cmds:is-macos) {
-	cmds:do-if-path [/Applications/MATLAB/MATLAB_Runtime/v{241 234 912}] {|p| set-env MRT $p }
 	cmds:do-if-path [(/usr/libexec/java_home -v {24 23 21 18 17 11 8})] {|p| set-env JAVA_HOME $p }
 	cmds:do-if-path	[(/usr/libexec/java_home -v {21 17 11})] {|p| set-env MATLAB_JAVA $p }
 } elif (cmds:is-linux) {
 	cmds:do-if-path [/usr/lib/jvm/java-{17 21 11 8}-openjdk-amd64] { |p| set-env JAVA_HOME $p }
 	cmds:do-if-path [/usr/lib/jvm/java-{17 21 11 8}-openjdk-amd64] {|p| set-env MATLAB_JAVA $p }
-	cmds:do-if-path [/usr/local/MATLAB/MATLAB_Runtime/R202{5b 5a 4b 4a 3b 3a}/] { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
+	#cmds:do-if-path [/usr/local/MATLAB/MATLAB_Runtime/R202{5b 5a 4b 4a 3b 3a}/] { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
 }
 
 each {|p| cmds:prepend-to-path $p } [
@@ -153,8 +152,6 @@ cmds:if-external carapace {
 	echo (styled "…carapace init—" bold italic yellow)
 }
 cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
-cmds:if-external rbenv { set-env RBENV_SHELL elvish; set-env RBENV_ROOT $E:HOME'/.rbenv' }
-cmds:if-external pyenv { set-env PYENV_SHELL elvish; set-env PYENV_ROOT $E:HOME'/.pyenv' }
 cmds:if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 cmds:if-external pixi {
 	eval (pixi completion --shell elvish | slurp)
