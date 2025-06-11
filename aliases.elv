@@ -447,6 +447,25 @@ fn updateuBlock {
 }
 edit:add-var updateuBlock~ $updateuBlock~
 
+#====================================================UPDATE MPV
+fn updateMPV {
+	if (!=s $platform:os 'darwin') { return }
+	var olddir = $pwd
+	var tmpdir = (path:temp-dir)
+	cd $tmpdir
+	echo (styled "\n=== UPDATE MPV ===\n" bold yellow)
+	var mpvURL = 'https://nightly.link/mpv-player/mpv/workflows/build/master/mpv-macos-15-arm.zip'
+	echo (styled "\n=== GET MPV ===\nURL: "$mpvURL bold yellow)
+	try { wget --no-check-certificate -O mpv.zip $mpvURL
+		unzip -p mpv.zip | tar -xf -
+		sudo rm -rf /Applications/mpv.app
+		sudo mv -vf mpv.app /Applications/mpv.app
+	} catch { echo "Can't download MPV!" }
+	cd $olddir
+	rm -rf $tmpdir
+}
+edit:add-var updateMPV~ $updateMPV~
+
 #====================================================UPDATE XRAY
 fn updateXRay {
 	if (!=s $platform:os 'linux') { return }

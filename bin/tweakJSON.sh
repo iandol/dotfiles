@@ -46,6 +46,14 @@ printf "---> Finshed processing title case...\n"
 
 # link the optimised JSON to my pandoc data dir
 printf '---> Link to pandoc data dir...\n'
+ln -vfs $mydir/$infile $HOME/.local/share/pandoc/$inflie
 ln -vfs $mydir/$outfile $HOME/.local/share/pandoc/$outfile
+
+# make a bibtex copy for alfred and other tools
+printf '---> Creating BibTeX copy...\n'
+pandoc -f csljson -t biblatex -o "Core.bib" $outfile
+printf '---> Link BIB to pandoc data dir...\n'
+ln -vfs $mydir/Core.bib $HOME/.local/share/pandoc/Core.bib
+printf '---> Finished processing BibTeX copy...\n'
 
 printf "======================================…written to $outfile!\n"
