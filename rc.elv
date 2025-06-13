@@ -144,13 +144,18 @@ cmds:do-if-path ~/.pixi/envs/luarocks/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.
 cmds:do-if-path ~/.pixi/envs/luarocks/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
 cmds:do-if-path ~/.local/share/pandoc/ {|p| set-env PD $p }
 
-# brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
+#==================================================== - CARAPACE
+#brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 cmds:if-external carapace {
 	try { ln -s $E:DF/completions/*.yaml $E:XDG_CONFIG_HOME/carapace/specs > /dev/null 2>&1 } catch { }
 	set-env CARAPACE_BRIDGES 'zsh,bash'
+	set-env CARAPACE_EXCLUDES 'systemctl'
+	set-env CARAPACE_MERGEFLAGS 1
 	eval (carapace _carapace | slurp)
 	echo (styled "…carapace init—" bold italic yellow)
 }
+
+#==================================================== - OTHERS
 cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
 cmds:if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 cmds:if-external pixi {
