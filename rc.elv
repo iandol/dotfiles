@@ -131,6 +131,12 @@ if (has-env KITTY_INSTALLATION_DIR) {
 	echo (styled "…kitty integration…" bold italic yellow)
 }
 
+#==================================================== - GHOSTTY INTEGRATION
+if (eq $E:TERM "xterm-ghostty") {
+	use ghostty-integration
+	echo (styled "…ghostty integration…" bold italic yellow)
+}
+
 #==================================================== - GENERAL ENVIRONMENT
 set-env PAPERSIZE A4
 set-env PROCESSOR (str:to-lower (uname -m))

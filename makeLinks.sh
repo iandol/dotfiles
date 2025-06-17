@@ -80,7 +80,12 @@ mkdir -p "$XDG_CONFIG_HOME/kitty"
 ln -sfv "$CONFIGS/kitty"* "$XDG_CONFIG_HOME/kitty"
 chown -R "$USER" "$XDG_CONFIG_HOME/kitty"
 
-# Used on RPi
+# GHOSTTY terminal used on macOS and Linux
+mkdir -p "$XDG_CONFIG_HOME/ghostty"
+ln -sfv "$CONFIGS/ghostty-config" "$XDG_CONFIG_HOME/ghostty/config"
+chown -R "$USER" "$XDG_CONFIG_HOME/ghostty/config"
+
+# Alacritty Used on RPi
 ln -sfv "$CONFIGS/alacritty.yml" "$XDG_CONFIG_HOME"
 chown "$USER" "$XDG_CONFIG_HOME/alacritty.yml"
 

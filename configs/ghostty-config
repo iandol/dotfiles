@@ -1,0 +1,16 @@
+# This is the configuration file for Ghostty.
+#
+font-family = "Rec Mono Casual"
+font-family = "Fira Code"
+font-family = "Cascadia Code"
+window-title-font-family = "Dolly Pro Bold Italic"
+
+macos-titlebar-style = "tabs"
+macos-icon = paper
+
+theme = Espresso
+background-opacity = 0.8
+background-blur = true
+window-height = 90
+
+command = "/usr/local/bin/elvish"

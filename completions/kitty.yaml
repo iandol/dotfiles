@@ -31,4 +31,5 @@ completion:
   flag:
     config: ["$files"]
     directory: ["$directories"]
+    working-directory: ["$directories"]
     session: ["$files"]
