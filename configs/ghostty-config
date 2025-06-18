@@ -5,12 +5,16 @@ font-family = "Fira Code"
 font-family = "Cascadia Code"
 window-title-font-family = "Dolly Pro Bold Italic"
 
+window-decoration = auto
 macos-titlebar-style = "tabs"
 macos-icon = paper
 
+gtk-adwaita = true
+
 theme = Espresso
-background-opacity = 0.8
+background-opacity = 0.9
 background-blur = true
+window-width = 100
 window-height = 90
 
 command = "/usr/local/bin/elvish"
