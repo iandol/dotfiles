@@ -115,8 +115,7 @@ cmds:if-external python3 {
 	edit:add-var urldecode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
 }
 cmds:if-external kitty {
-	edit:add-var kittydef~ {  kitty +runpy 'from kitty.config import *; print(commented_out_default_config())' > $E:HOME/.dotfiles/configs/kitty-d
-efault.conf }
+	edit:add-var kittydef~ {  kitty +runpy 'from kitty.config import *; print(commented_out_default_config())' > $E:HOME/.dotfiles/configs/kitty-default.conf }
 	edit:add-var kssh~ { |@in| kitten ssh $@in --kitten login_shell=elvish }
 	edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.55/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
 	edit:add-var kittydark~ { sed -Ei '' 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
