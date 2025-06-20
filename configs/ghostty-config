@@ -3,6 +3,7 @@
 font-family = "Rec Mono Casual"
 font-family = "Fira Code"
 font-family = "Cascadia Code"
+font-family = "Symbols Nerd Font"
 window-title-font-family = "Dolly Pro Bold Italic"
 
 window-decoration = auto

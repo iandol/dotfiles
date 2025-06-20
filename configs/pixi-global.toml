@@ -145,3 +145,8 @@ channels = ["conda-forge"]
 dependencies = { git-delta = "*" }
 exposed = { delta = "delta" }
 
+[envs.carapace]
+channels = ["conda-forge"]
+dependencies = { carapace = "*" }
+exposed = { carapace = "carapace" }
+
