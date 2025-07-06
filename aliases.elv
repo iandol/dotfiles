@@ -596,3 +596,14 @@ fn updateOptickaPages {
 	}
 }
 edit:add-var updateOptickaPages~ $updateOptickaPages~
+
+#===================================================Update everything
+fn updateAll {
+	aliases:update
+	aliases:updateuBlock
+	aliases:updateMPV
+	aliases:updateElvish
+	aliases:updateFFmpeg
+	aliases:updateTeX
+}
+edit:add-var updateAll~ $updateAll~
