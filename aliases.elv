@@ -7,11 +7,13 @@ echo (styled "…loading command aliases…" bold italic yellow)
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>so'] = '2>&1'
-set edit:command-abbr['curl'] = 'curl --retry 5 -L -C - '
+set edit:command-abbr['curld'] = 'curl --retry 5 -L -C - '
 set edit:command-abbr['xp'] = 'x proxy set 127.0.0.1:'
 set edit:command-abbr['xpu'] = 'x proxy unset'
 set edit:command-abbr['sds'] = 'sudo systemd status'
 set edit:command-abbr['sdu'] = 'systemd --user status'
+set edit:command-abbr['jcu'] = 'journalctl --user -f -e '
+set edit:command-abbr['jcs'] = 'journalctl -f -e '
 set edit:command-abbr['edit'] = 'nvim'
 set edit:command-abbr['arch'] = 'arch -x86_64'
 # set edit:abbr['sudo '] = 'sudo -- '
@@ -417,12 +419,16 @@ fn update {
 		cmds:if-external flatpak { try { echo "\tflatpak…"; flatpak update -y } catch { } }
 		cmds:if-external fwupdmgr { try { echo "\tfirmware…"; fwupdmgr get-upgrades } catch { } }
 	}
+
 	cmds:if-external pixi { echo (styled "\n---> Update pixi\n" bold bg-color5); pixi self-update; pixi global sync; pixi global -v update }
 	cmds:if-external pkgx { echo (styled "\n---> Update pkgx\n" bold bg-color5); pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { echo (styled "\n---> Update Micromamba…\n" bold bg-color5); micromamba self-update }
+	cmds:if-external gem { echo (styled "\n---> Update Ruby Gems\n" bold bg-color5); gem update; gem cleanup }
 	cmds:if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
 	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
 	cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --self; tlmgr update --all }
+	cmds:if-external npm { echo (styled "\n---> Update npm global\n" bold bg-color5); npm list -g; npm update -g }
+	
 	try { echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5);epm:upgrade } catch { echo "Couldn't update EPM packages…" }
 	cmds:if-external x-cmd { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod }
 	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
@@ -599,11 +605,11 @@ edit:add-var updateOptickaPages~ $updateOptickaPages~
 
 #===================================================Update everything
 fn updateAll {
-	aliases:update
-	aliases:updateuBlock
-	aliases:updateMPV
-	aliases:updateElvish
-	aliases:updateFFmpeg
-	aliases:updateTeX
+	update
+	updateuBlock
+	updateMPV
+	updateElvish
+	updateFFmpeg
+	updateTeX
 }
 edit:add-var updateAll~ $updateAll~
