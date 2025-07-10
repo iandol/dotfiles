@@ -456,6 +456,9 @@ edit:add-var updateuBlock~ $updateuBlock~
 #====================================================UPDATE MPV
 fn updateMPV {
 	if (!=s $platform:os 'darwin') { return }
+	var mpvPath = '/Applications/mpv.app/Contents/MacOS/mpv'
+	var oldver newver = '' ''
+	cmds:if-external $mpvPath { set oldver = ($mpvPath --version | slurp) }
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
@@ -466,6 +469,10 @@ fn updateMPV {
 		unzip -p mpv.zip | tar -xf -
 		sudo rm -rf /Applications/mpv.app
 		sudo mv -vf mpv.app /Applications/mpv.app
+		cmds:if-external $mpvPath { 
+			set newver = ($mpvPath --version | slurp) 
+			echo "===UPDATED:===\nOld: "$oldver"\nNew: "$newver
+		}
 	} catch { echo "Can't download MPV!" }
 	cd $olddir
 	rm -rf $tmpdir
@@ -533,7 +540,8 @@ edit:add-var updateXRay~ $updateXRay~
 fn updateElvish {|&source=tuna|
 	var url = 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz'
 	if (!=s $source 'tuna') { set url = 'https://dl.elv.sh/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz' }
-	cmds:if-external elvish { elvish -version }
+	var oldver newver = '' ''
+	cmds:if-external elvish { set oldver = (elvish -version) }
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
@@ -545,7 +553,10 @@ fn updateElvish {|&source=tuna|
 		if (cmds:is-file ./elvish-HEAD) { mv ./elvish-HEAD ./elvish }
 		chmod +x ./elvish
 		sudo mv -vf ./elvish /usr/local/bin/elvish
-		cmds:if-external elvish { elvish -version }
+		cmds:if-external elvish { 
+			set newver = (elvish -version)
+			echo "===UPDATED:===\nOld: "$oldver"\nNew: "$newver
+		}
 	} finally {
 		cd $olddir
 		rm -rf $tmpdir
