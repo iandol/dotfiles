@@ -427,7 +427,7 @@ fn update {
 	cmds:if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
 	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
 	cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --self; tlmgr update --all }
-	cmds:if-external npm { echo (styled "\n---> Update npm global\n" bold bg-color5); npm list -g; npm update -g }
+	cmds:if-external npm { echo (styled "\n---> Update npm global\n" bold bg-color5); npm list -g; npm update -g; npm list -g }
 	
 	try { echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5);epm:upgrade } catch { echo "Couldn't update EPM packages…" }
 	cmds:if-external x-cmd { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod }
