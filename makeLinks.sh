@@ -78,6 +78,7 @@ chown "$USER" "$XDG_CONFIG_HOME/starship.toml"
 # KITTY terminal used on macOS and Linux
 mkdir -p "$XDG_CONFIG_HOME/kitty"
 ln -sfv "$CONFIGS/kitty"* "$XDG_CONFIG_HOME/kitty"
+ln -sfv "$CONFIGS/quick-access-terminal.conf" "$XDG_CONFIG_HOME/kitty"
 chown -R "$USER" "$XDG_CONFIG_HOME/kitty"
 
 # GHOSTTY terminal used on macOS and Linux

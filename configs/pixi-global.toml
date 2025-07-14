@@ -150,3 +150,8 @@ channels = ["conda-forge"]
 dependencies = { carapace = "*" }
 exposed = { carapace = "carapace" }
 
+[envs.lazygit]
+channels = ["conda-forge"]
+dependencies = { lazygit = "*" }
+exposed = { lazygit = "lazygit" }
+
