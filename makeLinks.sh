@@ -26,6 +26,7 @@ if [[ $ans == 'y' ]]; then
 	[[ -e ~/.bashrc ]] && cp ~/.bashrc ~/.bashrc"$(date -Iseconds)".bak
 	[[ -e ~/.bash_profile ]] && cp ~/.bash_profile ~/.bash_profile"$(date -Iseconds)".bak
 	[[ -e ~/.zshrc ]] && cp ~/.zshrc ~/.zshrc"$(date -Iseconds)".bak
+	[[ -e ~/.zprofile ]] && cp ~/.zprofile ~/.zprofile"$(date -Iseconds)".bak
 	[[ -e ~/.vimrc ]] && cp ~/.vimrc ~/.vimrc"$(date -Iseconds)".bak
 	[[ -e ~/.tmux.conf ]] && cp ~/.tmux.conf ~/.tmux.conf"$(date -Iseconds)".bak
 fi
@@ -33,71 +34,76 @@ fi
 # My current preferred shell is elvish - https://elv.sh
 mkdir -pv "$XDG_CONFIG_HOME/elvish"
 mkdir -pv "$XDG_CONFIG_HOME/elvish/lib"
-ln -siv "$DF/rc.elv" "$XDG_CONFIG_HOME/elvish"
-ln -siv "$DF/aliases.elv" "$XDG_CONFIG_HOME/elvish/lib"
+ln -sfiv "$DF/rc.elv" "$XDG_CONFIG_HOME/elvish"
+ln -sfiv "$DF/aliases.elv" "$XDG_CONFIG_HOME/elvish/lib"
 chown -R "$USER" "$XDG_CONFIG_HOME/elvish"
 
 # Default shell on macOS
 printf "Do you want to overwrite .zshrc? [y / n]:  "
 read -r ans
 if [[ $ans == 'y' ]]; then
-	ln -siv "$DF/.zshrc" ~
+	ln -sfiv "$DF/.zshrc" ~
 	chown "$USER" ~/.zshrc
 fi
 
 # Default on Ubuntu
-ln -siv "$DF/.bashrc" ~
+ln -sfiv "$DF/.bashrc" ~
 chown "$USER" ~/.bashrc
-ln -siv "$DF/.bash_profile" ~
+ln -sfiv "$DF/.bash_profile" ~
 chown "$USER" ~/.bash_profile
 
-# Basic Vim setup, use nvim
-mkdir -p "$XDG_CONFIG_HOME/nvim"
-ln -siv "$CONFIGS/.vimrc" ~
-ln -siv "$CONFIGS/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
-chown "$USER" ~/.vimrc
-ln -siv "$DF/.vim" ~
-chown -R "$USER" ~/.vim
-chown -R "$USER" "$XDG_CONFIG_HOME/nvim"
+if [[ -f $(which nvim) ]]; then
+	# Neovim setup
+	mkdir -pv "$XDG_CONFIG_HOME/nvim"
+	ln -sfiv "$CONFIGS/init.lua" "$XDG_CONFIG_HOME/nvim/init.lua"
+	chown -R "$USER" "$XDG_CONFIG_HOME/nvim"
+fi
+if [[ -f $(which vim) ]]; then
+	# Basic Vim setup
+	ln -sfiv "$CONFIGS/.vimrc" ~
+	chown "$USER" ~/.vimrc
+	ln -sfiv "$DF/.vim" ~
+	chown -R "$USER" ~/.vim
+fi
 
 # Ruby setup
-ln -sfv "$CONFIGS/.rubocop.yml" ~
+ln -sfiv "$CONFIGS/.rubocop.yml" ~
 chown "$USER" ~/.rubocop.yml
 #mkdir -p .rbenv
-#ln -sfv "$CONFIGS/default-gems" ~/.rbenv
+#ln -sfiv "$CONFIGS/default-gems" ~/.rbenv
 #chown "$USER" ~/.rbenv/default-gems
 
 # Great command prompt
 if [[ $PLATFORM == 'LinuxRPi' ]]; then
-	ln -siv "$CONFIGS/starshiprpi.toml" "$XDG_CONFIG_HOME/starship.toml"
+	ln -sfiv "$CONFIGS/starshiprpi.toml" "$XDG_CONFIG_HOME/starship.toml"
 else
-	ln -siv "$CONFIGS/starship.toml" "$XDG_CONFIG_HOME"
+	ln -sfiv "$CONFIGS/starship.toml" "$XDG_CONFIG_HOME"
 fi
 chown "$USER" "$XDG_CONFIG_HOME/starship.toml"
 
 # KITTY terminal used on macOS and Linux
-mkdir -p "$XDG_CONFIG_HOME/kitty"
-ln -sfv "$CONFIGS/kitty"* "$XDG_CONFIG_HOME/kitty"
-ln -sfv "$CONFIGS/quick-access-terminal.conf" "$XDG_CONFIG_HOME/kitty"
+mkdir -pv "$XDG_CONFIG_HOME/kitty"
+ln -sfiv "$CONFIGS/kitty"* "$XDG_CONFIG_HOME/kitty"
+ln -sfiv "$CONFIGS/quick-access-terminal.conf" "$XDG_CONFIG_HOME/kitty"
 chown -R "$USER" "$XDG_CONFIG_HOME/kitty"
 
 # GHOSTTY terminal used on macOS and Linux
-mkdir -p "$XDG_CONFIG_HOME/ghostty"
-ln -sfv "$CONFIGS/ghostty-config" "$XDG_CONFIG_HOME/ghostty/config"
+mkdir -pv "$XDG_CONFIG_HOME/ghostty"
+ln -sfiv "$CONFIGS/ghostty-config" "$XDG_CONFIG_HOME/ghostty/config"
 chown -R "$USER" "$XDG_CONFIG_HOME/ghostty/config"
 
 # Alacritty Used on RPi
-ln -sfv "$CONFIGS/alacritty.yml" "$XDG_CONFIG_HOME"
+ln -sfiv "$CONFIGS/alacritty.yml" "$XDG_CONFIG_HOME"
 chown "$USER" "$XDG_CONFIG_HOME/alacritty.yml"
 
 # tmux setup
-ln -fsv "$CONFIGS/.tmux.conf" ~
+ln -sfiv "$CONFIGS/.tmux.conf" ~
 chown "$USER" ~/.tmux.conf
 
 # yazi
-mkdir -p "$XDG_CONFIG_HOME/yazi"
-ln -fsv "$CONFIGS/yazi.toml" "$XDG_CONFIG_HOME/yazi"
+mkdir -pv "$XDG_CONFIG_HOME/yazi"
+ln -sfiv "$CONFIGS/yazi.toml" "$XDG_CONFIG_HOME/yazi"
 
 # carapace setup
-mkdir -p "$XDG_CONFIG_HOME/carapace/specs"
-ln -fsv "$DF/completions/"* "$XDG_CONFIG_HOME/carapace/specs"
+mkdir -pv "$XDG_CONFIG_HOME/carapace/specs"
+ln -sfiv "$DF/completions/"* "$XDG_CONFIG_HOME/carapace/specs"
