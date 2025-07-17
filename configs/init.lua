@@ -15,6 +15,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Set some basic options
 vim.cmd("set encoding=utf-8")
 vim.cmd("set fileencoding=utf-8")
 vim.cmd("set noexpandtab")
@@ -39,7 +40,7 @@ require("lazy").setup({
 			"catppuccin/nvim",
 			lazy = false,
 			name = "catppuccin",
-			priority = 1000,		
+			priority = 1000,
 			config = function() vim.cmd.colorscheme "catppuccin-mocha" end
 		},
 		{
@@ -51,15 +52,23 @@ require("lazy").setup({
 			dependencies = { 'nvim-lua/plenary.nvim' },
 		},
 		{
-			"nvim-tree/nvim-tree.lua",
-			version = "*",
-			lazy = false,
+			"nvim-neo-tree/neo-tree.nvim",
+			branch = "v3.x",
 			dependencies = {
-				"nvim-tree/nvim-web-devicons", lazy = true 
+				"nvim-lua/plenary.nvim",
+				"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+				"MunifTanjim/nui.nvim",
+				-- Optional image support for file preview: See `# Preview Mode` for more information.
+				-- {"3rd/image.nvim", opts = {}},
+				-- OR use snacks.nvim's image module:
+				-- "folke/snacks.nvim",
 			},
-			config = function()
-				require("nvim-tree").setup {}
-			end,
+			lazy = false, -- neo-tree will lazily load itself
+			---@module "neo-tree"
+			---@type neotree.Config?
+			opts = {
+				window = { position = "right", },
+			},
 		},
 		{
 			"folke/which-key.nvim",

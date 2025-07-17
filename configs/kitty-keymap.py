@@ -76,7 +76,7 @@ def handle_result(args: list[str], answer: str, target_window_id: int, boss: Bos
 
             if mode_name != "default":
                 mn = f"Mode {mode_name}"
-                categories[mn] = None  # register this mode as a valid "category"
+                categories[mn] = 'None'  # register this mode as a valid "category"
                 output_categorized[mn][action].append(key_repr)
                 continue
 
