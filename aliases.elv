@@ -23,6 +23,7 @@ set edit:command-abbr['arch'] = 'arch -x86_64'
 #==================================================== - ELVISH
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pprint $edit:insert:binding }
+edit:add-var kittymap~ { cat ~/.config/kitty/kitty.map | fzf --ansi --height 50 }
 fn helpme { echo (styled "
 ! – last cmd 🔘 ⌃N – 🚀navigate 🔘 ⌃R – 🔍history 🔘 ⌃L – 🔍dirs
 ⌃B – 🖊️cmd 🔘 ⌃a,e – ⇄ 🔘 ⌃u – ⌫line 🔘 💡 curl cheat.sh/?

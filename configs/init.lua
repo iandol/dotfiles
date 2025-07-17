@@ -98,7 +98,6 @@ configs.setup({
 	"lua", "vim", "vimdoc", "elvish", "bash", "ini",
 	"json", "yaml", "toml", "xml", "javascript", "html" },
 	auto_install = true,
-	sync_install = false,
 	highlight = { enable = true },
 	indent = { enable = true },  
 })

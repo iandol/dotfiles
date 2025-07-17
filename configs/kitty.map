@@ -1,0 +1,132 @@
+=======================
+Kitty keyboard mappings
+=======================
+
+My kitty_mod is ctrl+shift.
+
+[1mScrolling[22m
+=========
+
+kitty_mod+up       [38:2:255:0:0m→[39m scroll_line_up
+opt+cmd+page_up    [38:2:255:0:0m→[39m scroll_line_up
+cmd+up             [38:2:255:0:0m→[39m scroll_line_up
+kitty_mod+down     [38:2:255:0:0m→[39m scroll_line_down
+kitty_mod+j        [38:2:255:0:0m→[39m scroll_line_down
+opt+cmd+page_down  [38:2:255:0:0m→[39m scroll_line_down
+cmd+down           [38:2:255:0:0m→[39m scroll_line_down
+kitty_mod+page_up  [38:2:255:0:0m→[39m scroll_page_up
+cmd+page_up        [38:2:255:0:0m→[39m scroll_page_up
+kitty_mod+page_down [38:2:255:0:0m→[39m scroll_page_down
+cmd+page_down      [38:2:255:0:0m→[39m scroll_page_down
+kitty_mod+home     [38:2:255:0:0m→[39m scroll_home
+cmd+home           [38:2:255:0:0m→[39m scroll_home
+kitty_mod+end      [38:2:255:0:0m→[39m scroll_end
+cmd+end            [38:2:255:0:0m→[39m scroll_end
+kitty_mod+x        [38:2:255:0:0m→[39m scroll_to_prompt 1
+kitty_mod+h        [38:2:255:0:0m→[39m show_scrollback
+kitty_mod+g        [38:2:255:0:0m→[39m show_last_command_output
+
+[1mTab Management[22m
+==============
+
+kitty_mod+right    [38:2:255:0:0m→[39m next_tab
+ctrl+tab           [38:2:255:0:0m→[39m next_tab
+kitty_mod+left     [38:2:255:0:0m→[39m previous_tab
+ctrl+shift+tab     [38:2:255:0:0m→[39m previous_tab
+kitty_mod+t        [38:2:255:0:0m→[39m new_tab
+kitty_mod+q        [38:2:255:0:0m→[39m close_tab
+kitty_mod+.        [38:2:255:0:0m→[39m move_tab_forward
+kitty_mod+,        [38:2:255:0:0m→[39m move_tab_backward
+kitty_mod+opt+t    [38:2:255:0:0m→[39m set_tab_title
+shift+cmd+i        [38:2:255:0:0m→[39m set_tab_title
+
+[1mWindow Management[22m
+=================
+
+kitty_mod+enter    [38:2:255:0:0m→[39m new_window
+kitty_mod+n        [38:2:255:0:0m→[39m new_os_window
+kitty_mod+w        [38:2:255:0:0m→[39m close_window
+kitty_mod+]        [38:2:255:0:0m→[39m next_window
+kitty_mod+[        [38:2:255:0:0m→[39m previous_window
+kitty_mod+b        [38:2:255:0:0m→[39m move_window_backward
+kitty_mod+`        [38:2:255:0:0m→[39m move_window_to_top
+kitty_mod+r        [38:2:255:0:0m→[39m start_resizing_window
+cmd+r              [38:2:255:0:0m→[39m start_resizing_window
+kitty_mod+1        [38:2:255:0:0m→[39m first_window
+cmd+1              [38:2:255:0:0m→[39m first_window
+kitty_mod+2        [38:2:255:0:0m→[39m second_window
+cmd+2              [38:2:255:0:0m→[39m second_window
+kitty_mod+3        [38:2:255:0:0m→[39m third_window
+cmd+3              [38:2:255:0:0m→[39m third_window
+kitty_mod+4        [38:2:255:0:0m→[39m fourth_window
+cmd+4              [38:2:255:0:0m→[39m fourth_window
+kitty_mod+5        [38:2:255:0:0m→[39m fifth_window
+cmd+5              [38:2:255:0:0m→[39m fifth_window
+kitty_mod+6        [38:2:255:0:0m→[39m sixth_window
+cmd+6              [38:2:255:0:0m→[39m sixth_window
+kitty_mod+7        [38:2:255:0:0m→[39m seventh_window
+cmd+7              [38:2:255:0:0m→[39m seventh_window
+kitty_mod+8        [38:2:255:0:0m→[39m eighth_window
+cmd+8              [38:2:255:0:0m→[39m eighth_window
+kitty_mod+9        [38:2:255:0:0m→[39m ninth_window
+cmd+9              [38:2:255:0:0m→[39m ninth_window
+kitty_mod+0        [38:2:255:0:0m→[39m tenth_window
+kitty_mod+f7       [38:2:255:0:0m→[39m focus_visible_window
+kitty_mod+f8       [38:2:255:0:0m→[39m swap_with_window
+
+[1mLayout Management[22m
+=================
+
+kitty_mod+z        [38:2:255:0:0m→[39m toggle_layout stack
+kitty_mod+l        [38:2:255:0:0m→[39m next_layout
+
+[1mOther Shortcuts[22m
+===============
+
+kitty_mod+c        [38:2:255:0:0m→[39m copy_to_clipboard
+cmd+c              [38:2:255:0:0m→[39m copy_to_clipboard
+kitty_mod+v        [38:2:255:0:0m→[39m paste_from_clipboard
+cmd+v              [38:2:255:0:0m→[39m paste_from_clipboard
+kitty_mod+s        [38:2:255:0:0m→[39m paste_from_selection
+shift+insert       [38:2:255:0:0m→[39m paste_from_selection
+kitty_mod+o        [38:2:255:0:0m→[39m pass_selection_to_program
+kitty_mod+k        [38:2:255:0:0m→[39m kitten kitty-keymap.py
+kitty_mod+f        [38:2:255:0:0m→[39m toggle_fullscreen
+kitty_mod+f11      [38:2:255:0:0m→[39m toggle_fullscreen
+kitty_mod+=        [38:2:255:0:0m→[39m change_font_size all +2.0
+kitty_mod++        [38:2:255:0:0m→[39m change_font_size all +2.0
+kitty_mod+kp_add   [38:2:255:0:0m→[39m change_font_size all +2.0
+cmd++              [38:2:255:0:0m→[39m change_font_size all +2.0
+cmd+=              [38:2:255:0:0m→[39m change_font_size all +2.0
+shift+cmd+=        [38:2:255:0:0m→[39m change_font_size all +2.0
+kitty_mod+-        [38:2:255:0:0m→[39m change_font_size all -2.0
+kitty_mod+kp_subtract [38:2:255:0:0m→[39m change_font_size all -2.0
+cmd+-              [38:2:255:0:0m→[39m change_font_size all -2.0
+shift+cmd+-        [38:2:255:0:0m→[39m change_font_size all -2.0
+kitty_mod+backspace [38:2:255:0:0m→[39m change_font_size all 0
+cmd+0              [38:2:255:0:0m→[39m change_font_size all 0
+kitty_mod+e        [38:2:255:0:0m→[39m open_url_with_hints
+kitty_mod+p > f    [38:2:255:0:0m→[39m kitten hints --type path --program -
+kitty_mod+p > shift+f [38:2:255:0:0m→[39m kitten hints --type path
+kitty_mod+p > l    [38:2:255:0:0m→[39m kitten hints --type line --program -
+kitty_mod+p > w    [38:2:255:0:0m→[39m kitten hints --type word --program -
+kitty_mod+p > h    [38:2:255:0:0m→[39m kitten hints --type hash --program -
+kitty_mod+p > n    [38:2:255:0:0m→[39m kitten hints --type linenum
+kitty_mod+p > y    [38:2:255:0:0m→[39m kitten hints --type hyperlink
+kitty_mod+f1       [38:2:255:0:0m→[39m show_kitty_doc overview
+kitty_mod+f10      [38:2:255:0:0m→[39m toggle_maximized
+kitty_mod+u        [38:2:255:0:0m→[39m kitten unicode_input
+ctrl+cmd+space     [38:2:255:0:0m→[39m kitten unicode_input
+kitty_mod+f2       [38:2:255:0:0m→[39m edit_config_file
+kitty_mod+escape   [38:2:255:0:0m→[39m kitty_shell window
+kitty_mod+a > m    [38:2:255:0:0m→[39m set_background_opacity +0.1
+kitty_mod+a > l    [38:2:255:0:0m→[39m set_background_opacity -0.1
+kitty_mod+a > 1    [38:2:255:0:0m→[39m set_background_opacity 1
+kitty_mod+a > d    [38:2:255:0:0m→[39m set_background_opacity default
+kitty_mod+delete   [38:2:255:0:0m→[39m clear_terminal reset active
+kitty_mod+f5       [38:2:255:0:0m→[39m load_config_file
+kitty_mod+f6       [38:2:255:0:0m→[39m debug_config
+opt+cmd+,          [38:2:255:0:0m→[39m debug_config
+shift+f1           [38:2:255:0:0m→[39m launch_tab zsh
+shift+f2           [38:2:255:0:0m→[39m launch_tab --env PATH="/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin:/snap/bin:$PATH" nvim
+shift+f3           [38:2:255:0:0m→[39m launch_tab elvish -norc
