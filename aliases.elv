@@ -10,7 +10,7 @@ set edit:abbr['>eo'] = '2>&1'
 set edit:command-abbr['curld'] = 'curl --retry 5 -L -C -'
 set edit:command-abbr['xp'] = 'x proxy set 127.0.0.1:'
 set edit:command-abbr['xpu'] = 'x proxy unset'
-set edit:command-abbr['sds'] = 'sudo systemctl status'
+set edit:command-abbr['sds'] = 'sudo -E systemctl status'
 set edit:command-abbr['sdu'] = 'systemctl --user status'
 set edit:command-abbr['ju'] = 'journalctl --user --all -f -u'
 set edit:command-abbr['js'] = 'journalctl --all -f -u'
@@ -421,6 +421,10 @@ fn update {
 		cmds:if-external fwupdmgr { try { echo "\tfirmware…"; fwupdmgr get-upgrades } catch { } }
 	}
 
+	# update cogmoteGO
+	curl -sS https://raw.githubusercontent.com/Ccccraz/cogmoteGO/main/install.sh | sh
+
+	# update other tools
 	cmds:if-external pixi { echo (styled "\n---> Update pixi\n" bold bg-color5); pixi self-update; pixi global sync; pixi global -v update }
 	cmds:if-external pkgx { echo (styled "\n---> Update pkgx\n" bold bg-color5); pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { echo (styled "\n---> Update Micromamba…\n" bold bg-color5); micromamba self-update }
