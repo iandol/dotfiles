@@ -56,6 +56,7 @@ if [[ -f $(which nvim) ]]; then
 	# Neovim setup
 	mkdir -pv "$XDG_CONFIG_HOME/nvim"
 	ln -sfiv "$CONFIGS/init.lua" "$XDG_CONFIG_HOME/nvim/init.lua"
+	[[ -f "$XDG_CONFIG_HOME/nvim/init.vim" ]] && rm -f "$XDG_CONFIG_HOME/nvim/init.vim"
 	chown -R "$USER" "$XDG_CONFIG_HOME/nvim"
 fi
 if [[ -f $(which vim) ]]; then
