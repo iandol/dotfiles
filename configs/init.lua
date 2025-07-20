@@ -23,7 +23,7 @@ vim.opt.wrap = false							-- Don't wrap lines
 vim.opt.scrolloff = 10							-- Keep 10 lines above/below cursor 
 vim.opt.sidescrolloff = 8						-- Keep 8 columns left/right of cursor
 
-vim.o.fileencoding = 'utf-8' -- the encoding written to a file
+vim.o.fileencoding = 'utf-8'					-- the encoding written to a file
 
 vim.opt.smartindent = true						-- Smart auto-indenting
 vim.opt.autoindent = true						-- Copy indent from current line
@@ -38,7 +38,7 @@ vim.opt.incsearch = true						-- Show matches as you type
 vim.opt.termguicolors = true					-- Enable 24-bit colors
 vim.opt.signcolumn = "yes"						-- Always show sign column
 vim.opt.colorcolumn = "100"						-- Show column at 100 characters
-vim.opt.showmatch = true									-- Highlight matching brackets
+vim.opt.showmatch = true						-- Highlight matching brackets
 
 -- Split behavior
 vim.opt.splitbelow = true						-- Horizontal splits go below
@@ -65,6 +65,10 @@ vim.g.maplocalleader = "\\"
 -- Setup lazy.nvim
 require("lazy").setup({
 	spec = {
+		{
+			'nvim-lualine/lualine.nvim',
+			dependencies = { 'nvim-tree/nvim-web-devicons' }
+		},
 		{
 			"nvim-treesitter/nvim-treesitter", 
 			build = ":TSUpdate"
@@ -115,6 +119,15 @@ require("lazy").setup({
 	-- automatically check for plugin updates
 	checker = { enabled = true },
 })
+
+require('lualine').setup {
+	options = {
+		icons_enabled = true,
+		theme = 'moonfly',
+		section_separators = { left = '', right = '' },
+		component_separators = { left = '', right = '' }
+	},
+}
 
 require('telescope').setup {
 	defaults = { scroll_strategy = "cycle", },
