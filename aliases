@@ -1,5 +1,8 @@
-export PLATFORM=$(uname -s)
-export PROC=$(uname -m)
+# shellcheck disable=SC2148
+PLATFORM=$(uname -s)
+export PLATFORM
+PROC=$(uname -m)
+export PROC
 if [[ -f $(which eza) ]]; then
 	alias lls='eza --icons=auto -al -r -s size'
 	alias llt='eza --icons=auto -al -r -s time'
@@ -51,10 +54,12 @@ alias ping='ping -c 5' # ping 5 times ‘by default’
 [[ -x $(which prettyping) ]] && alias ping='prettyping -c 5 --nolegend'
 [[ -x $(which bat) ]] && alias cat='bat'
 [[ -x $(which kitty) ]] && alias kssh='kitty +kitten ssh'
+
 # Enable aliases to be sudo’ed
 #alias sudo='sudo '
+
 # howdoi is a python pip install
-alias h='function hdi(){ howdoi $* -c -n 5; }; hdi'
+h() { howdoi "$@" -c -n 5; }
 
 # fuzzy finder
 if [[ -x $(which fzf) ]]; then
@@ -246,24 +251,24 @@ alias sha='openssl sha'
 alias sha1='openssl sha1'
 alias sha256sum='shasum --algorithm 256'
 
-function ffmpeg-update() {
-	cd ~
+function ffmpegUpdate() {
+	cd ~ || exit
 	lver=$(ffmpeg -version | grep -owE 'N-\d+-[^-]+')
 	rver=$(curl -s https://evermeet.cx/ffmpeg/info/ffmpeg/snapshot | jq -r '.version')
 	echo "Local: $lver & Remote: $rver"
-	if [[ ! $(echo N-$lver) =~ $rver ]]; then
-		echo '\tDownloading new ffmpeg:'
+	if [[ ! "N-$lver" =~ $rver ]]; then
+		printf '\tDownloading new ffmpeg:\n'
 		curl -JL --output ff.7z https://evermeet.cx/ffmpeg/get
-		7z -y -o$HOME/bin/ e ff.7z
+		7z -y -o"$HOME/bin/" e ff.7z
 		cp ~/bin/ffmpeg "$HOME/Library/Application Support/FFmpegTools/"
 		rm ff.7z
 		ffmpeg -version
 	else
-		echo '\tNo need to update...'
+		printf "\tNo need to update…\n"
 	fi
 }
 
-function avahi-reset() {
+function avahiReset() {
 	if [[ $PLATFORM = "Linux" ]]; then
 		sudo systemctl stop avahi-daemon.socket
 		sudo systemctl stop avahi-daemon.service
@@ -273,7 +278,7 @@ function avahi-reset() {
 	fi
 }
 
-function avahi-stop() {
+function avahiStop() {
 	if [[ $PLATFORM = "Linux" ]]; then
 		sudo systemctl stop avahi-daemon.socket
 		sudo systemctl stop avahi-daemon.service
@@ -289,12 +294,12 @@ function transfer() {
 	tmpfile=$( mktemp -t transferXXX );
 	if tty -s; then
 		basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g');
-		curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> $tmpfile;
+		curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> "$tmpfile"
 	else 
-		curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> $tmpfile ;
+		curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> "$tmpfile"
 	fi;
-	cat $tmpfile;
-	rm -f $tmpfile;
+	cat "$tmpfile"
+	rm -f "$tmpfile"
 }
 
 function sp() {
@@ -308,7 +313,7 @@ function sp() {
 		if [[ $1 == "-l" ]]; then
 			echo -e "Proxy settings:\n==============="
 		else
-			echo "Proxy set:\n===============" 
+			echo -e "Proxy set:\n===============\n" 
 			if [[ $1 =~ ^socks5 ]]; then
 				export {http,https,ftp,all}_proxy="$1"
 				git config --global http.proxy "$1"
@@ -328,7 +333,7 @@ function sp() {
 		if [[ $1 == "-a" ]]; then # TODO add apt proxy setup
 			echo -e "TODO:\n==============="
 		else
-			echo "Proxy set:\n===============" 
+			echo -e "Proxy set:\n===============" 
 			export {http,ftp,all}_proxy="$1"
 			export https_proxy="$2"
 			if [[ $1 =~ ^socks5 ]]; then
@@ -358,7 +363,7 @@ lips() {
 
 	[ "$ip" != "" ] && locip=$ip || locip="inactive"
 
-	ip=`dig +short myip.opendns.com @resolver1.opendns.com`
+	ip=$(dig +short myip.opendns.com @resolver1.opendns.com)
 	[ "$ip" != "" ] && extip=$ip || extip="inactive"
 
 	printf '%11s: %s\n%11s: %s\n' "Local IP" $locip "External IP" $extip
@@ -376,13 +381,13 @@ function update() {
 	~/Code/Mymou ~/Documents/MATLAB/gramm 
 	~/Code/scrivomatic ~/Code/dotpandoc ~/Code/bookends-tools ~/Code/pandocomatic 
 	~/Code/gears ~/Code/paru 
-	/media/$USER/data/Code/octicka /media/$USER/data/Code/Psychtoolbox-3)
+	"/media/$USER/data/Code/octicka" "/media/$USER/data/Code/Psychtoolbox-3")
 	for x in $ul; do
 		if [[ -d ${x}/.git ]]; then
-			printf "\n\n---> Updating \e[92m${x}\e[m...\n"
-			cd ${x}
-			oldbranch=$(git branch | grep -e '*' | cut -b 3-)
-			if [[ ! ${oldbranch} =~ 'master|main' ]]; then
+			printf "\n\n---> Updating \e[92m%s\e[m...\n" "${x}"
+			cd "${x}" || exit
+			oldbranch=$(git branch | grep -e '\*' | cut -b 3-)
+			if [[ ! ${oldbranch} =~ master\|main ]]; then
 				if [[ ${x} =~ 'fieldtrip' ]]; then
 					git checkout umaster
 				elif [[ ${x} =~ 'Palamedes' ]]; then

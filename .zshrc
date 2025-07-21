@@ -8,7 +8,7 @@ export HOMEBREW_INSTALL_CLEANUP=true
 [[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #------------------------------------X-CMD SETUP
-export ___X_CMD_HELP_LANGUAGE="en"
+export ___X_CMD_LANG="en"
 [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
 
 #-------------------------------PREFER nvim

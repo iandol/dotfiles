@@ -42,8 +42,8 @@ chown -R "$USER" "$XDG_CONFIG_HOME/elvish"
 printf "Do you want to overwrite .zshrc? [y / n]:  "
 read -r ans
 if [[ $ans == 'y' ]]; then
-	ln -sfiv "$DF/.zshrc" ~
-	chown "$USER" ~/.zshrc
+	ln -sfiv "$DF/.z"* "$HOME"
+	chown "$USER" ~/.z*
 fi
 
 # Default on Ubuntu
