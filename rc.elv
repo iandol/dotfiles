@@ -14,6 +14,7 @@ use md
 use os
 use runtime
 if $platform:is-unix { use unix; edit:add-var unix: $unix: }
+echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic yellow)
 
 #==================================================== - EXTERNAL MODULES
 try { epm:install &silent-if-installed ^
@@ -31,6 +32,7 @@ use github.com/zzamboni/elvish-modules/spinners
 
 #==================================================== - BASIC ENVIRONMENT
 if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
+set-env HOSTNAME (platform:hostname &strip-domain=$true)
 set-env DF $E:HOME/.dotfiles
 set-env XDG_CONFIG_HOME $E:HOME/.config
 set-env XDG_DATA_HOME $E:HOME/.local/share
@@ -200,4 +202,3 @@ put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /.pixi/bin} | each {|p| cmd
 
 #==================================================== - THIS IS THE END, MY FRIEND
 aliases:helpme
-echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic yellow)

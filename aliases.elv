@@ -23,18 +23,20 @@ set edit:command-abbr['arch'] = 'arch -x86_64'
 #==================================================== - ELVISH
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pprint $edit:insert:binding }
-edit:add-var kittymap~ { cat ~/.config/kitty/kitty.map | fzf --ansi --height 85 }
+edit:add-var kittymap~ { cat ~/.config/kitty/kitty.map | fzf --ansi --style full }
 fn helpme { echo (styled "
-! – last cmd 🔘 ⌃N – 🚀navigate 🔘 ⌃R – 🔍history 🔘 ⌃L – 🔍dirs
-⌃B – 🖊️cmd 🔘 ⌃a,e – ⇄ 🔘 ⌃u – ⌫line 🔘 💡 curl cheat.sh/?
-[VIM] :e load-buf 🔘 :bn next-buf 🔘 :ls list-buf 🔘 :bd close-buf
-  :tab ba buf>tabs 🔘 gt next-tab 🔘 :vert ba vertical
-  ^w[s|v] split-viewport 🔘 ^ww switch-vp 🔘 ^wx exchange-vp
-  [N]yy=yank 🔘 [N]dd=cut 🔘 p=paste 🔘 *# jump to word
-  / pattern-search 🔘 n=next
-[TMUX] prefix §=^a 🔘 tmux-pane: split=§| §- close=§x focus=§o
-  sessions=§s detach=§d window-create=§c switch=§n close=§&
-  commands=§: help=§? navigate=§w" bold italic fg-yellow ) }
+! – last cmd │ ⌃N – 🚀navigate │ ⌃R – 🔍history │ ⌃L – 🔍dirs
+⌃B – 🖊️cmd │ ⌃a,e – ⇄ │ ⌃u – ⌫line │ 💡 curl cheat.sh/?
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+ᵛᴵᵐ :e load-buf │ :bn next-buf │ :ls list-buf │ :bd close-buf
+  :tab ba buf>tabs │ gt next-tab │ :vert ba vertical
+  ^w[s|v] split-viewport │ ^ww switch-vp │ ^wx exchange-vp
+  [N]yy=yank │ [N]dd=cut │ p=paste │ *# jump to word
+  / pattern-search │ n=next  │ :%s/a/b/g global a>b replace
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+ᵀᵪ ●=prefix ^a │ tmux-pane: split=●| ●- close=●x focus=●o
+  sessions=●s detach=●d window-create=●c switch=●n close=●&
+  commands=●: help=●? navigate=●w\n" bold '#AACCFF' ) }
 edit:add-var helpme~ $helpme~
 
 #==================================================== - LS, prefer EZA if available

@@ -22,7 +22,7 @@ export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
 
 if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -d $(/usr/libexec/java_home) ]] && export JAVA_HOME=$(/usr/libexec/java_home)
-	[[ -d $JAVA_HOME ]] && path=(${JAVA_HOME}/bin $path)
+	[[ -d $JAVA_HOME ]] && path=("${JAVA_HOME}/bin" "$path")
 	[[ -d "/Applications/MATLAB_R2025a.app/bin" ]] && export PATH="/Applications/MATLAB_R2025a.app/bin:$PATH" # matlab
 	[[ -x "/Applications/MATLAB_R2025a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2024a.app/bin/maci64/mlint" ~/bin/mlint # matlab
 	#-------------------------------Bootstrap homebrew[s]
@@ -45,5 +45,7 @@ fi
 [[ -f "$DF/aliases" ]] && source "$DF/aliases"
 
 #---------------------------------------SAY HELLO
-echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
+echo -e "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
 
+
+[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.

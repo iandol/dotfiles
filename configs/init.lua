@@ -139,9 +139,9 @@ km.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
 km.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
 km.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 km.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
-km.set('n', '<leader>n', ':Neotree<cr>', { desc = 'Open Neotree' })
-km.set("n", "<C-n>", ":Neotree filesystem reveal right<CR>", {})
-km.set("n", "<leader>bf", ":Neotree buffers reveal float<CR>", {})
+
+km.set('n', '<leader>e', ':Neotree filesystem toggle right<CR>', { desc = 'files in Neotree' })
+km.set('n', '<leader>nb', ':Neotree buffers toggle float<CR>', { desc = 'buffers in Neotree' })
 
 local configs = require("nvim-treesitter.configs")
 configs.setup({
