@@ -393,12 +393,27 @@ fn update {
 			try { timeout 10s git fetch -t -q --all 2>$path:dev-null } catch { echo "\t…couldn't fetch!" }
 			for y $branches {
 				if (re:match '^(dev|main|master|umaster)' $y) {
-					echo (styled "\n--->>> Updating "(styled $x bold)":"$y"…\n" bg-blue)
+					echo (styled "
+--->>> Updating "(styled $x bold)":"$y"…
+" bg-blue)
 					try {
 						git checkout -q $y 2>$path:dev-null
+						var changes = (git status --porcelain | slurp)
+						var stashed = $false
+						if (not (eq $changes '')) {
+							echo "	…local changes detected, stashing…"
+							git stash
+							set stashed = $true
+						}
 						timeout 60s git pull --ff-only -v
+						if $stashed {
+							echo "	…unstashing changes…"
+							try { git stash pop } catch {
+								echo "	…couldn't pop stash, please resolve manually."
+							}
+						}
 					} catch {
-						echo "\t…couldn't pull!"
+						echo "	…couldn't pull!"
 					}
 				}
 			}

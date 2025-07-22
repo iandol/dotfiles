@@ -95,7 +95,7 @@ require("lazy").setup({
 				"nvim-lua/plenary.nvim",
 				"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
 				"MunifTanjim/nui.nvim",
-				"folke/snacks.nvim",
+				--"folke/snacks.nvim",
 			},
 			opts = {
 				window = { position = "right", },
