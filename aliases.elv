@@ -62,7 +62,8 @@ cmds:if-external eza {
 #==================================================== - GENERAL
 edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/stdin }
 edit:add-var cagelab-monitor~ { tmuxp load cagelab-monitor }
-edit:add-var cagelab-reset~ = { systemctl --user restart cogmoteGO; systemctl --user restart theConductor }
+edit:add-var cagelab-reset~ { systemctl --user restart cogmoteGO; systemctl --user restart theConductor }
+
 if ( cmds:is-macos ) {
 	edit:add-var mano~ { |@cmds|
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
