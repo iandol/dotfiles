@@ -61,6 +61,8 @@ cmds:if-external eza {
 
 #==================================================== - GENERAL
 edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/stdin }
+edit:add-var cagelab-monitor~ { tmuxp load cagelab-monitor }
+edit:add-var cagelab-reset~ = { systemctl --user restart cogmoteGO; systemctl --user restart theConductor }
 if ( cmds:is-macos ) {
 	edit:add-var mano~ { |@cmds|
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
@@ -312,8 +314,9 @@ edit:add-var sp~ $sp~
 set edit:command-abbr['setproxy'] = 'sp'
 
 #===================================================Install MATLAB
-fn installMATLAB {|&version='R2025a' &action='install' &products=''|
+fn installMATLAB {|&version='R2025a' &action='install' &products='' &dest=''|
 	var dest = ''
+	var cmd = ''
 	cmds:if-external mpm {
 			echo (styled "mpm is already installed:\n" bold yellow)
 	} { 
@@ -324,14 +327,18 @@ fn installMATLAB {|&version='R2025a' &action='install' &products=''|
 	if (==s $products '') {
 		set products = 'MATLAB Curve_Fitting_Toolbox Instrument_Control_Toolbox MATLAB_Report_Generator MATLAB_Compiler Optimization_Toolbox Parallel_Computing_Toolbox Signal_Processing_Toolbox Statistics_and_Machine_Learning_Toolbox'
 	}
-	if ( cmds:is-macos ) { set dest = '/Applications/MATLAB/'$version }
-	if ( cmds:is-linux ) { set dest = '/usr/local/MATLAB/'$version }
+	if (==s $dest '') { 
+		if ( cmds:is-macos ) { set dest = '/Applications/MATLAB/'$version } elif ( cmds:is-linux ) { set dest = '/usr/local/MATLAB/'$version }
+	}
+	set dest = $E:HOME"/tmp"
 	if (==s $action 'install') { 
-		echo (styled "Install "$version" of MATLAB:\n" bold yellow) 
-		$E:HOME/bin/mpm install --no-gpu --no-jre --release=$version --destination=$dest --products=$products
+		set cmd = $E:HOME"/bin/mpm install --no-gpu --no-jre --release="$version" --destination="$dest" --products="$products
+		echo (styled "Install "$version" of MATLAB:\n\t"$cmd bold yellow) 
+		eval $cmd
 	} elif (==s $action 'download') { 
-		echo (styled "Download "$version" of MATLAB:\n" bold yellow)
-		$E:HOME/bin/mpm download --release=$version --destination=$E:HOME/Downloads/matlab$version --products=$products
+		set cmd = $E:HOME"/bin/mpm download --release="$version" --destination="$E:HOME"/Downloads/matlab"$version" --products="$products
+		echo (styled "Download "$version" of MATLAB:\n\t"$cmd bold yellow)
+		eval $cmd
 	}
 	echo (styled "...Finished..." bold yellow)
 }

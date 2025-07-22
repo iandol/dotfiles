@@ -3,6 +3,10 @@ PLATFORM=$(uname -s)
 export PLATFORM
 PROC=$(uname -m)
 export PROC
+
+alias cagelab-monitor="tmuxp load $HOME/.config/tmuxp/cagelab-monitor.yaml"
+alias cagelab-reset="systemctl --user restart cogmoteGO && systemctl --user restart theConductor"
+
 if [[ -f $(which eza) ]]; then
 	alias lls='eza --icons=auto -al -r -s size'
 	alias llt='eza --icons=auto -al -r -s time'
@@ -387,10 +391,18 @@ function update() {
 			printf "\n\n---> Updating \e[92m%s\e[m...\n" "${x}"
 			cd "${x}" || exit
 			oldbranch=$(git branch | grep -e '\*' | cut -b 3-)
+
+			# Check for local changes
+			if [[ -n $(git status --porcelain) ]]; then
+				printf "\t\t---> Found local changes in \e[93m%s\e[m, stashing...\n" "${x}"
+				git stash save "Auto-stashed by update function $(date)"
+				printf "\t\t---> Changes stashed. Use 'git stash list/pop' to recover\n"
+			fi
+
 			if [[ ! ${oldbranch} =~ master\|main ]]; then
-				if [[ ${x} =~ 'fieldtrip' ]]; then
+				if [[ ${x} =~ fieldtrip ]]; then
 					git checkout umaster
-				elif [[ ${x} =~ 'Palamedes' ]]; then
+				elif [[ ${x} =~ Palamedes ]]; then
 					git checkout main
 				else
 					git checkout master
@@ -401,30 +413,22 @@ function update() {
 			if [[ -n $(git remote 2>/dev/null | grep upstream) ]]; then
 				printf "\t\t---> Fetching \e[92m${x}\e[m upstream...\n"
 				git fetch -v upstream
-				if [[ ! ${x} =~ 'Psychtoolbox' ]]; then
+				if [[ ! ${x} =~ Psychtoolbox ]]; then
 					git merge --ff-only -v upstream/master
 				fi
 			fi
 			if [[ ! ${oldbranch} =~ 'master' ]]; then
-				git checkout ${oldbranch}
+				git checkout "${oldbranch}"
 			fi
 		fi
 	done
-	cd $myolddir
+	cd "$myolddir" 
 	unset myolddir
 
 	if [[ -x $(which brew) ]]; then
 		printf '\n\n---> Updating \e[92mHomeBrew\e[m...\n'
 		export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK='true'
-		if [[ $PLATFORM = "Linux" ]]; then
-			if [[ -n $(brew tap 2>/dev/null | grep cask) ]]; then
-				brew untap homebrew/cask
-			fi
-		fi
-		brew update
-		brew outdated
-		brew upgrade --force-bottle 
-		brew cleanup
+		brew update; brew outdated; brew upgrade --force-bottle; brew cleanup
 	fi
 
 	if [[ $PLATFORM = "Linux" ]]; then
@@ -436,7 +440,6 @@ function update() {
 	fi
 
 	[[ -f $(which pixi) ]] && (printf '\n\n---> Updating \e[92mPIXI\e[m...\n'; pixi self-update; pixi global -v update)
-	[[ -f $(which pkgx) ]] && (printf '\n\n---> Updating \e[92mPKGX\e[m...\n'; pkgx --sync; pkgx --update)
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
 	[[ -f $(which pyenv) ]] && (printf '\n\n---> Rehash \e[92mPYENV\e[m...\n'; pyenv rehash)
 	[[ -e "$HOME/.zi" ]] && (printf '\n\n---> Updating \e[92mZINIT\e[m...\n';zi self-update; zi update -p --all)
