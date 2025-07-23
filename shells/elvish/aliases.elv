@@ -348,22 +348,24 @@ edit:add-var installMATLAB~ $installMATLAB~
 #========================================Install required TeX packages for BasicTex
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
 fn updateTeX {|&repo=tuna &ctex=$false|
-	if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
-	tlmgr update --self
-	tlmgr update --all
-	tlmgr install lualatex-math luatexja abstract ^
-	latexmk csquotes pagecolor relsize mdframed needspace sectsty ^
-	titling titlesec preprint layouts glossaries tabulary soul xargs todonotes ^
-	mfirstuc xfor wallpaper datatool substr adjustbox collectbox ^
-	sttools wrapfig footnotebackref fvextra zref ^
-	libertinus libertinus-fonts libertinus-otf threeparttable ^
-	elsarticle algorithms algorithmicx siunitx bbding biblatex biber ^
-	stackengine xltabular booktabs orcidlink ^
-	ltablex cleveref makecell threeparttablex tabu multirow ^
-	changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol ^
-	tikzfill luacolor lua-ul xpatch selnolig ^
-	lua-visual-debug lipsum svg newfile
-	if $ctex { tlmgr install ctex }
+	cmds:if-external tlmgr {
+		if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
+		tlmgr update --self
+		tlmgr update --all
+		tlmgr install lualatex-math luatexja abstract ^
+		latexmk csquotes pagecolor relsize mdframed needspace sectsty ^
+		titling titlesec preprint layouts glossaries tabulary soul xargs todonotes ^
+		mfirstuc xfor wallpaper datatool substr adjustbox collectbox ^
+		sttools wrapfig footnotebackref fvextra zref ^
+		libertinus libertinus-fonts libertinus-otf threeparttable ^
+		elsarticle algorithms algorithmicx siunitx bbding biblatex biber ^
+		stackengine xltabular booktabs orcidlink ^
+		ltablex cleveref makecell threeparttablex tabu multirow ^
+		changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol ^
+		tikzfill luacolor lua-ul xpatch selnolig ^
+		lua-visual-debug lipsum svg newfile
+		if $ctex { tlmgr install ctex }
+	}
 }
 edit:add-var updateTeX~ $updateTeX~
 
@@ -609,7 +611,7 @@ fn updateFFmpeg {
 		} catch { echo "Can't download "$x }
 	}
 	cmds:if-external ffmpeg { set rv = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
-	echo "===UPDATED:===\nOld: "$lv" & New: "$rv
+	echo "===UPDATED:===\nOld: "$lv"\nNew: "$rv
 	cd $olddir
 	rm -rf $tmpdir
 }
@@ -644,6 +646,7 @@ edit:add-var updateOptickaPages~ $updateOptickaPages~
 #===================================================Update everything
 fn updateAll {
 	update
+	if (cmds:is-linux) { sudo apt full-upgrade -y }
 	updateuBlock
 	updateMPV
 	updateElvish

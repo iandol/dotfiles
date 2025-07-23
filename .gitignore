@@ -5,5 +5,8 @@
 .ruby-version
 .byebug_history
 *.bak
-.vim/plugged
-.vim/.netrwhist
+*.tmp
+*.swp
+editors/vim/.vim/plugged
+editors/vim/.vim/.netrwhist
+.dots

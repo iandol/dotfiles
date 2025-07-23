@@ -1,0 +1,3 @@
+global:
+  dotfiles: ~/.dotfiles
+  link_type: 'Symbolic'

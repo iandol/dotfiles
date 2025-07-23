@@ -1,0 +1,8 @@
+links:
+  ansiweatherrc: ~/.ansiweatherrc
+  default-gems: ~/.config/default-gems
+  pixi-global.toml: ~/.pixi/manifests
+  rubocop.yml: ~/.rubocop.yml
+  starship.toml: ~/.config/starship.toml
+  tmux.conf: ~/.tmux.conf
+  yazi.toml: ~/.config/yazi/yazi.toml
