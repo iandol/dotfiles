@@ -386,44 +386,41 @@ fn update {
 	~/Code/gears ~/Code/paru ^
 	/media/$E:USER/data/Code/octicka /media/$E:USER/data/Code/Psychtoolbox-3]
 	for x $ul {
-		if (cmds:is-path $x/.git) {
-			tmp pwd = $x
-			try { set oldbranch = (git branch --show-current) } catch { }
-			var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
-			try { timeout 10s git fetch -t -q --all 2>$path:dev-null } catch { echo "\t…couldn't fetch!" }
-			for y $branches {
-				if (re:match '^(dev|main|master|umaster)' $y) {
-					echo (styled "
---->>> Updating "(styled $x bold)":"$y"…
-" bg-blue)
-					try {
-						git checkout -q $y 2>$path:dev-null
-						var changes = (git status --porcelain | slurp)
-						var stashed = $false
-						if (not (eq $changes '')) {
-							echo "	…local changes detected, stashing…"
-							git stash
-							set stashed = $true
-						}
-						timeout 60s git pull --ff-only -v
-						if $stashed {
-							echo "	…unstashing changes…"
-							try { git stash pop } catch {
-								echo "	…couldn't pop stash, please resolve manually."
-							}
-						}
-					} catch {
-						echo "	…couldn't pull!"
+		if (not (cmds:is-path $x/.git)) { continue }
+		tmp pwd = $x
+		try { set oldbranch = (git branch --show-current) } catch { }
+		var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
+		try { timeout 10s git fetch -t -q --all 2>$path:dev-null } catch { echo "\t…couldn't fetch!" }
+		for y $branches {
+			if (re:match '^(dev|main|master|umaster)' $y) {
+				echo (styled "\n--->>> Updating "(styled $x bold)":"$y"…" bg-blue)
+				try {
+					git checkout -q $y 2>$path:dev-null
+					var changes = (git status --porcelain | slurp)
+					var stashed = $false
+					if (not (eq $changes '')) {
+						echo "	…local changes detected, stashing…"
+						git stash
+						set stashed = $true
 					}
+					timeout 60s git pull --ff-only -v
+					if $stashed {
+						echo "	…unstashing changes…"
+						try { git stash pop } catch {
+							echo "	…couldn't pop stash, please resolve manually."
+						}
+					}
+				} catch {
+					echo "	…couldn't pull!"
 				}
 			}
-			git remote -v
-			if (re:match 'upstream' (git remote | slurp)) {
-				print "------> Fetching upstream…  "
-				try { git fetch -v upstream } catch { echo "  …couldn't fetch upstream!" }
-			}
-			try { git checkout -q $oldbranch 2>$path:dev-null } catch { }
 		}
+		git remote -v
+		if (re:match 'upstream' (git remote | slurp)) {
+			print "------> Fetching upstream…  "
+			try { git fetch -v upstream } catch { echo "  …couldn't fetch upstream!" }
+		}
+		try { git checkout -q $oldbranch 2>$path:dev-null } catch { }
 	}
 	cd $olddir
 	cmds:if-external brew {
