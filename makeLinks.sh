@@ -74,10 +74,10 @@ ln -sfv "$CONFIGS/editors/zerobrane/user.lua" "$HOME/.zbstudio"
 chown -R "$USER" "$HOME/.zbstudio"
 
 # Ruby setup
-ln -sfv "$CONFIGS/tools/rubocop.yml" ~
+ln -sfv "$CONFIGS/tools/rubocop.yml" ~/.rubocop.yml
 chown "$USER" ~/.rubocop.yml
 #mkdir -p .rbenv
-#ln -sfiv "$CONFIGS/default-gems" ~/.rbenv
+#ln -sfiv "$CONFIGS/tools/default-gems" ~/.rbenv
 #chown "$USER" ~/.rbenv/default-gems
 
 # Great command prompt
