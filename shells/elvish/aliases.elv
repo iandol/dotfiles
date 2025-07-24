@@ -349,6 +349,7 @@ edit:add-var installMATLAB~ $installMATLAB~
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
 fn updateTeX {|&repo=tuna &ctex=$false|
 	cmds:if-external tlmgr {
+		echo (styled "\n=== UPDATE TeX ===\n" bold yellow)
 		if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
 		tlmgr update --self
 		tlmgr update --all
@@ -500,7 +501,7 @@ fn updateMPV {
 		sudo mv -vf mpv.app /Applications/mpv.app
 		cmds:if-external $mpvPath { 
 			set newver = ($mpvPath --version | slurp) 
-			echo "===UPDATED:===\nOld: "$oldver"\nNew: "$newver
+			echo "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n\n"
 		}
 	} catch { echo "Can't download MPV!" }
 	cd $olddir
@@ -584,7 +585,7 @@ fn updateElvish {|&source=tuna|
 		sudo mv -vf ./elvish /usr/local/bin/elvish
 		cmds:if-external elvish { 
 			set newver = (elvish -version)
-			echo "===UPDATED:===\nOld: "$oldver"\nNew: "$newver
+			echo "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n\n"
 		}
 	} finally {
 		cd $olddir
@@ -611,7 +612,7 @@ fn updateFFmpeg {
 		} catch { echo "Can't download "$x }
 	}
 	cmds:if-external ffmpeg { set rv = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
-	echo "===UPDATED:===\nOld: "$lv"\nNew: "$rv
+	echo "===UPDATED:===\nOld: "$lv"\nNew: "$rv"\n\n"
 	cd $olddir
 	rm -rf $tmpdir
 }
