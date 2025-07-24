@@ -59,7 +59,7 @@ chown "$USER" ~/.bash*
 
 # NVim setup
 mkdir -pv "$XDG_CONFIG_HOME/nvim"
-ln -sfv "$CONFIGS/editors/nvim/init.lua" "$XDG_CONFIG_HOME/nvim"
+ln -sfv "$CONFIGS/editors/nvim/"* "$XDG_CONFIG_HOME/nvim"
 [[ -f "$XDG_CONFIG_HOME/nvim/init.vim" ]] && rm -f "$XDG_CONFIG_HOME/nvim/init.vim"
 chown -R "$USER" "$XDG_CONFIG_HOME/nvim"
 
