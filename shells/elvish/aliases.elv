@@ -607,7 +607,7 @@ fn updateFFmpeg {
 	for x $tnames {
 		try {
 			wget --no-check-certificate -O $x.zip 'https://ffmpeg.martin-riedl.de/redirect/latest/'$os'/'$platform:arch'/snapshot/'$x'.zip'
-			unzip -o $x.zip -d $E:HOME/bin/
+			unzip -o $x.zip -d /usr/local/bin/
 		} catch { echo "Can't download "$x }
 	}
 	cmds:if-external ffmpeg { set rv = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }

@@ -143,7 +143,7 @@ if [ "$ans" == 'y' ]; then
 	pip3 install howdoi black pylint
 fi
 
-sleep 2
+sleep 1
 
 printf 'Let us bootstrap .dotfiles if not present ... '
 read -rp "Press any key to continue... " -n1 -s; printf '\n'
@@ -151,12 +151,12 @@ if [ -d ~/.dotfiles/.git ]; then
 	printf ' .dotfiles are present! \n'
 	cd "$HOME/.dotfiles" || return; git pull; cd "$HOME" || return
 else
-	git clone https://github.com/iandol/dotfiles.git ~/.dotfiles
+	git clone https://codeberg.org/iandol/dotfiles.git ~/.dotfiles
 	chown -R "$USER" ~/.dotfiles
 	printf 'We cloned a new .dotfiles...\n'
 fi
 
-sleep 2
+sleep 1
 
 printf 'Setting up the symbolic links at: '
 date

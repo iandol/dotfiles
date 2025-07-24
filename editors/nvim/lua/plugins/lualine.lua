@@ -4,7 +4,7 @@ return {
 	config = function()
 		require('lualine').setup {
 			options = {
-				theme = 'ayu_dark', 
+				theme = 'material', 
 				icons_enabled = true,
 				section_separators = { left = '', right = '' },
 				component_separators = { left = '', right = '' },
