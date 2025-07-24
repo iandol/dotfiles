@@ -60,7 +60,7 @@ try { cmds:path_helper } catch { } # /usr/libexec/path_helper for elvish
 var prefix; var suffix
 if (cmds:is-macos) { set prefix = "/Applications/MATLAB_R202"; set suffix = ".app/bin"
 } else { set prefix = "/usr/local/MATLAB/R202"; set suffix = "/bin" }
-var releases = [$prefix{5b 5a 4b 4a 3b 3a 2b 2a 1b 1a 0b 0a}$suffix]
+var releases = [$prefix{6b 6a 5b 5a 4b 4a 3b 3a 2b 2a 1b 1a 0b 0a}$suffix]
 cmds:do-if-path $releases { |p|
 	cmds:prepend-to-path $p
 	set-env MATLAB_EXECUTABLE $p"/matlab" # matlab
@@ -72,7 +72,7 @@ if (cmds:is-macos) {
 } elif (cmds:is-linux) {
 	cmds:do-if-path [/usr/lib/jvm/java-{17 21 11 8}-openjdk-amd64] { |p| set-env JAVA_HOME $p }
 	cmds:do-if-path [/usr/lib/jvm/java-{17 21 11 8}-openjdk-amd64] {|p| set-env MATLAB_JAVA $p }
-	#cmds:do-if-path [/usr/local/MATLAB/MATLAB_Runtime/R202{5b 5a 4b 4a 3b 3a}/] { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
+	cmds:do-if-path [/usr/local/MATLAB/MATLAB_Runtime/R202{5b 5a 4b 4a 3b 3a}/] { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
 }
 
 each {|p| cmds:prepend-to-path $p } [
@@ -157,7 +157,6 @@ cmds:do-if-path ~/.local/share/pandoc/ {|p| set-env PD $p }
 #==================================================== - CARAPACE
 #brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 cmds:if-external carapace {
-	try { ln -s $E:DF/completions/*.yaml $E:XDG_CONFIG_HOME/carapace/specs > /dev/null 2>&1 } catch { }
 	set-env CARAPACE_BRIDGES 'zsh,bash'
 	set-env CARAPACE_EXCLUDES 'systemctl'
 	set-env CARAPACE_MERGEFLAGS 1
@@ -166,6 +165,8 @@ cmds:if-external carapace {
 }
 
 #==================================================== - OTHERS
+cmds:if-external rotz { eval (rotz completions elvish | slurp) } 
+cmds:if-external bombadil { eval (bombadil generate-completions elvish | slurp) } 
 cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
 cmds:if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 cmds:if-external pixi {
@@ -179,7 +180,7 @@ python:deactivate
 #==================================================== - MAIN ALIASES
 if (cmds:not-file ~/.config/elvish/lib/aliases.elv) {
 	mkdir -p ~/.config/elvish/lib/
-	ln -sf ~/.dotfiles/aliases.elv ~/.config/elvish/lib/aliases.elv
+	ln -sf ~/.dotfiles/shells/elvish/aliases.elv ~/.config/elvish/lib/aliases.elv
 }
 use aliases
 
