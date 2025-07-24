@@ -2,7 +2,7 @@ global:
   links:
     ansiweatherrc: ~/.ansiweatherrc
     default-gems: ~/.config/default-gems
-    pixi-global.toml: ~/.pixi/manifests
+    pixi-global.toml: ~/.pixi/manifests/pixi-global.toml
     rubocop.yml: ~/.rubocop.yml
     starship.toml: ~/.config/starship.toml
     tmux.conf: ~/.tmux.conf

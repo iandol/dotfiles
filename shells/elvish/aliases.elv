@@ -492,7 +492,6 @@ fn updateMPV {
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
-	echo (styled "\n=== UPDATE MPV ===\n" bold yellow)
 	var mpvURL = 'https://nightly.link/mpv-player/mpv/workflows/build/master/mpv-macos-15-arm.zip'
 	echo (styled "\n=== GET MPV ===\nURL: "$mpvURL bold yellow)
 	try { wget --no-check-certificate -O mpv.zip $mpvURL
@@ -501,7 +500,7 @@ fn updateMPV {
 		sudo mv -vf mpv.app /Applications/mpv.app
 		cmds:if-external $mpvPath { 
 			set newver = ($mpvPath --version | slurp) 
-			echo "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n\n"
+			echo (styled "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n" bold yellow)
 		}
 	} catch { echo "Can't download MPV!" }
 	cd $olddir
@@ -585,7 +584,7 @@ fn updateElvish {|&source=tuna|
 		sudo mv -vf ./elvish /usr/local/bin/elvish
 		cmds:if-external elvish { 
 			set newver = (elvish -version)
-			echo "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n\n"
+			echo (styled "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n" bold yellow)
 		}
 	} finally {
 		cd $olddir
@@ -599,10 +598,10 @@ fn updateFFmpeg {
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
-	var lv rv  = '' ''
+	var oldver newver  = '' ''
 	var os = $platform:os
 	if (eq $os 'darwin') { set os = 'macos'}
-	cmds:if-external ffmpeg { set lv = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
+	cmds:if-external ffmpeg { set oldver = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
 	echo (styled "\n===FFMPEG UPDATE===\nOS: "$os" & Arch: "$platform:arch bold yellow)
 	var tnames = [ffmpeg ffplay ffprobe]
 	for x $tnames {
@@ -611,8 +610,8 @@ fn updateFFmpeg {
 			unzip -o $x.zip -d /usr/local/bin/
 		} catch { echo "Can't download "$x }
 	}
-	cmds:if-external ffmpeg { set rv = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
-	echo "===UPDATED:===\nOld: "$lv"\nNew: "$rv"\n\n"
+	cmds:if-external ffmpeg { set newver = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
+	echo (styled "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n" bold yellow)
 	cd $olddir
 	rm -rf $tmpdir
 }
