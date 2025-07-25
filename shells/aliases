@@ -236,13 +236,20 @@ if [[ $PLATFORM = 'Darwin' ]]; then
 	}
 	function mano() {
 		if [ $# -eq 0 ]; then
-			echo -e "No arguments specified. Usage:\n  manpdf command";
+			echo -e "No arguments specified. Usage:\n  mano command";
 			return 1;
 		fi
 		mandoc -T pdf $(man -w $1) | open -fa Preview.app
 	}
 else
 	alias flushdns='sudo systemd-resolve --flush-caches; sudo systemd-resolve --statistics'
+	function mano() {
+		if [ $# -eq 0 ]; then
+			echo -e "No arguments specified. Usage:\n  mano command";
+			return 1;
+		fi
+		man -Tps $1 | ps2pdf - | zathura - &
+	}
 fi
 
 # Checksums

@@ -42,7 +42,7 @@ fi
 #------------------------------------PATHS/ENVS ETC.
 [[ -f $(which starship) ]] && eval "$(starship init bash)"
 [[ -f $(which pixi) ]] && eval "$(pixi completion --shell bash)"
-[[ -f "$DF/aliases" ]] && source "$DF/aliases"
+[[ -f "$DF/shells/aliases" ]] && source "$DF/shells/aliases"
 
 #---------------------------------------SAY HELLO
 echo -e "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"

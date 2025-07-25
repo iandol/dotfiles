@@ -90,7 +90,7 @@ export path
 #------------------------------------FINALISE OTHERS
 [[ -x $(which pyenv) ]] && eval "$(pyenv init - zsh)"
 [[ -x $(which rbenv) ]] && eval "$(rbenv init - zsh)"
-[[ -f "$DF/aliases" ]] && source "$DF/aliases"
+[[ -f "$DF/shells/aliases" ]] && source "$DF/shells/aliases"
 [[ -x $(which fzf) ]] && source <(fzf --zsh)
 [[ -x $(which pkgx) ]] && source <(pkgx --shellcode)  #docs.pkgx.sh/shellcode
 [[ -x $(which pixi) ]] && eval "$(pixi completion --shell zsh)"
