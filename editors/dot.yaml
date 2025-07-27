@@ -1,6 +1,7 @@
 links:
   nvim/init.lua: ~/.config/nvim/init.lua
   nvim/lua: ~/.config/nvim/lua
+  nvim/lsp: ~/.config/nvim/lsp
   vim/vimrc: ~/.vimrc
   vim/.vim: ~/.vim
   zerobrane/user.lua: ~/.zbstudio/user.lua
