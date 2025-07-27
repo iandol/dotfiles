@@ -117,7 +117,7 @@ zi light zsh-users/zsh-autosuggestions
 if [[ -f $(which starship) ]]; then
 	eval "$(starship init zsh)"
 else
-	autoload -Uz promptinit; promptinit; prompt adam1
+	autoload -Uz promptinit; promptinit; prompt fire
 fi
 
 #---------------------------------------SAY HELLO

@@ -32,12 +32,12 @@ else
 fi
 
 alias installmicromamba='"${SHELL}" <(curl -L micro.mamba.pm/install.sh)'
-alias updateKitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin \
-ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ \
-cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ \
-cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ \
-sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop \
-sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop \
+alias updateKitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin &&
+ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ &&
+cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ &&
+cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ &&
+sed -i "s|Icon=kitty|Icon=$(readlink -f ~)/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop &&
+sed -i "s|Exec=kitty|Exec=$(readlink -f ~)/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop &&
 echo "kitty.desktop" > ~/.config/xdg-terminals.list'
 
 alias smbfix='kill `pidof gvfsd-smb-browse`'
@@ -262,7 +262,7 @@ alias sha='openssl sha'
 alias sha1='openssl sha1'
 alias sha256sum='shasum --algorithm 256'
 
-function ffmpegUpdate() {
+function updateFFMPEG() {
 	cd ~ || exit
 	lver=$(ffmpeg -version | grep -owE 'N-\d+-[^-]+')
 	rver=$(curl -s https://evermeet.cx/ffmpeg/info/ffmpeg/snapshot | jq -r '.version')
@@ -465,12 +465,12 @@ function updateElvish () {
 		tpr='arm64'
 	fi
 	printf "\nElvish download: OS = ${tos} | Processor = ${tpr}\n"
-	curl -C - -O "https://mirrors.tuna.tsinghua.edu.cn/elvish/$tos-$tpr/elvish-HEAD.tar.gz"
-	tar xvf elvish-HEAD.tar.gz 
-	sudo mkdir -p /usr/local/bin
-	sudo rm -rf /usr/local/bin/elvish
-	sudo cp elvish /usr/local/bin
-	sudo chown $USER /usr/local/bin/elvish
+	curl -C - -O "https://mirrors.tuna.tsinghua.edu.cn/elvish/$tos-$tpr/elvish-HEAD.tar.gz" &&
+	tar xvf elvish-HEAD.tar.gz &&
+	sudo mkdir -p /usr/local/bin &&
+	sudo rm -rf /usr/local/bin/elvish &&
+	sudo cp elvish /usr/local/bin &&
+	sudo chown $USER /usr/local/bin/elvish &&
 	sudo chmod +x /usr/local/bin/elvish
 	cd $old_dir
 	rm -rf $tmp_dir
