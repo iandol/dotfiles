@@ -16,13 +16,20 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- enable lua lsp
-vim.lsp.enable({'elvishls'})
-
 -- general options
 require('options')
 
 -- Setup lazy.nvim
 require("lazy").setup("plugins")
+
+-- enable lua lsp
+vim.lsp.enable({'elvishls'})
+
+-- keymaps
+--vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "LSP Hover" })
+vim.keymap.set("n", "<leader>lk", vim.lsp.buf.hover, { desc = "LSP Hover" })
+vim.keymap.set("n", "<leader>ld", vim.lsp.buf.definition, {desc = "LSP Definition"})
+vim.keymap.set("n", "<leader>lr", vim.lsp.buf.references, {desc = "LSP References"})
+vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, {desc = "LSP Code Action"})
 
 

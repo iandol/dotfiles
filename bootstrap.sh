@@ -42,7 +42,7 @@ if [ "$PLATFORM" = "Darwin" ]; then
 		brew install v2raya
 		brew install clash-verge-rev
 		#cask fonts
-		brew install font-symbols-only-nerd-font font-recursive-code \
+		brew install --cask font-symbols-only-nerd-font font-recursive-code \
 		font-fantasque-sans-mono font-fira-code font-jetbrains-mono \
 		font-cascadia-code font-libertinus font-stix font-alegreya font-alegreya-sans
 		brew tap iandol/adobe-fonts
@@ -89,8 +89,7 @@ elif [ "$PLATFORM" = "Linux" ]; then
 		brew install procs ripgrep prettyping starship httping
 		brew tap rsteube/tap
 		brew install carapace
-		brew tap linuxbrew/fonts
-		brew install font-symbols-only-nerd-font font-recursive-code \
+		brew install --cask font-symbols-only-nerd-font font-recursive-code \
 		font-fantasque-sans-mono font-fira-code \
 		font-jetbrains-mono font-cascadia-code font-libertinus \
 		font-alegreya font-alegreya-sans font-stix
