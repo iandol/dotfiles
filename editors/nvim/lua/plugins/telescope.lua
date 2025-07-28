@@ -8,10 +8,16 @@ return {
 		}
 		local tsbuiltin = require('telescope.builtin')
 		local km = vim.keymap
-		km.set('n', '<leader>ff', tsbuiltin.find_files, { desc = 'Telescope find files' })
-		km.set('n', '<leader>fg', tsbuiltin.live_grep, { desc = 'Telescope live grep' })
-		km.set('n', '<leader>fb', tsbuiltin.buffers, { desc = 'Telescope buffers' })
-		km.set('n', '<leader>fh', tsbuiltin.help_tags, { desc = 'Telescope help tags' })
+		km.set('n', '<leader>sh', tsbuiltin.help_tags, { desc = '[S]earch [H]elp' })
+		km.set('n', '<leader>sk', tsbuiltin.keymaps, { desc = '[S]earch [K]eymaps' })
+		km.set('n', '<leader>sf', tsbuiltin.find_files, { desc = '[S]earch [F]iles' })
+		km.set('n', '<leader>ss', tsbuiltin.builtin, { desc = '[S]earch [S]elect Telescope' })
+		km.set('n', '<leader>sw', tsbuiltin.grep_string, { desc = '[S]earch current [W]ord' })
+		km.set('n', '<leader>sg', tsbuiltin.live_grep, { desc = '[S]earch by [G]rep' })
+		km.set('n', '<leader>sd', tsbuiltin.diagnostics, { desc = '[S]earch [D]iagnostics' })
+		km.set('n', '<leader>sr', tsbuiltin.resume, { desc = '[S]earch [R]esume' })
+		km.set('n', '<leader>s.', tsbuiltin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+		km.set('n', '<leader><leader>', tsbuiltin.buffers, { desc = '[ ] Find existing buffers' })
 	end
 }
 
