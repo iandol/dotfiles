@@ -3,6 +3,7 @@ links:
   kitty/kittymacos.conf: ~/.config/kitty/kittymacos.conf
   kitty/kittylinux.conf: ~/.config/kitty/kittylinux.conf
   kitty/kitty-keymap.py: ~/.config/kitty/kitty-keymap.py
+  kitty/kitty.map: ~/.config/kitty/kitty.map
   kitty/quick-access-terminal.conf: ~/.config/kitty/quick-access-terminal.conf
   alacritty.yml: ~/.config/alacritty.yml
   ghostty-config: ~/.config/ghostty/config
