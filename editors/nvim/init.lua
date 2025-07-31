@@ -25,7 +25,6 @@ require("lazy").setup("plugins")
 -- enable lua lsp
 vim.lsp.enable({'elvishls'})
 
-
 -- keymaps
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "LSP Hover" })
 vim.keymap.set("n", "<leader>lk", vim.lsp.buf.hover, { desc = "LSP Hover" })
