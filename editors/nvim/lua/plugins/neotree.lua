@@ -7,8 +7,15 @@ return {
 		"MunifTanjim/nui.nvim",
 		--"folke/snacks.nvim",
 	},
+	lazy = false, -- neo-tree will lazily load itself
+	---@module 'neo-tree'
+	---@type neotree.Config
 	opts = {
-		window = { position = "right", },
+		popup_border_style = "", -- "" to use 'winborder' on Neovim v0.11+
+		window = {
+			position = "right",
+			width = 40,
+		},
 	},
 	config = function()
 		vim.keymap.set("n", "<leader>e", ":Neotree filesystem toggle right<CR>", { desc = 'files in Neotree' })

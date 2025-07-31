@@ -22,6 +22,14 @@ require('options')
 -- Setup lazy.nvim
 require("lazy").setup("plugins")
 
+-- do not know why but plugin opts {} do not seem to work
+require("neo-tree").setup({
+	popup_border_style = "", -- "" to use 'winborder' on Neovim v0.11+
+	window = {
+		position = "right",
+		width = 40,
+	},})
+
 -- enable lua lsp
 vim.lsp.enable({'elvishls'})
 
