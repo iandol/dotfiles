@@ -23,7 +23,6 @@ set edit:command-abbr['arch'] = 'arch -x86_64'
 #==================================================== - ELVISH
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pprint $edit:insert:binding }
-edit:add-var kittymap~ { cat ~/.config/kitty/kitty.map | fzf --ansi --style full }
 fn helpme { echo (styled "
 ! – last cmd │ ⌃N – 🚀navigate │ ⌃R – 🔍history │ ⌃L – 🔍dirs
 ⌃B – 🖊️cmd │ ⌃a,e – ⇄ │ ⌃u – ⌫line │ 💡 curl cheat.sh/?
@@ -38,6 +37,15 @@ fn helpme { echo (styled "
   sessions=●s detach=●d window-create=●c switch=●n close=●&
   commands=●: help=●? navigate=●w\n" bold '#AACCFF' ) }
 edit:add-var helpme~ $helpme~
+
+#==================================================== - KITTY
+edit:add-var kittymap~ { cat ~/.config/kitty/kitty.map | fzf --ansi --style full }
+cmds:if-external kitty {
+	edit:add-var kittydef~ {  kitty +runpy 'from kitty.config import *; print(commented_out_default_config())' > $E:HOME/.dotfiles/terminals/kitty/kitty-default.conf }
+	edit:add-var kssh~ { |@in| kitten ssh $@in --kitten login_shell=elvish }
+	edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.55/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
+	edit:add-var kittydark~ { sed -Ei '' 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }	
+}
 
 #==================================================== - LS, prefer EZA if available
 cmds:if-external eza {
@@ -122,13 +130,6 @@ cmds:if-external bat { edit:add-var cat~ {|@in| e:bat -n $@in } }
 cmds:if-external python3 { 
 	edit:add-var urlencode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } 
 	edit:add-var urldecode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
-}
-cmds:if-external kitty {
-	edit:add-var kittydef~ {  kitty +runpy 'from kitty.config import *; print(commented_out_default_config())' > $E:HOME/.dotfiles/configs/kitty-default.conf }
-	edit:add-var kssh~ { |@in| kitten ssh $@in --kitten login_shell=elvish }
-	edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.55/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
-	edit:add-var kittydark~ { sed -Ei '' 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
-	
 }
 cmds:if-external nvim { edit:add-var vi~ $e:nvim~ }
 

@@ -28,7 +28,8 @@ require("neo-tree").setup({
 	window = {
 		position = "right",
 		width = 40,
-	},})
+	},
+})
 
 -- enable lua lsp
 vim.lsp.enable({'elvishls'})
