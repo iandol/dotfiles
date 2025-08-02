@@ -67,6 +67,17 @@ cmds:if-external eza {
 	}
 }
 
+#==================================================== - How to resset a Linux clone
+fn cloneReset { |hostname|
+	hostnamectl
+	echo (styled "Machine ID: "(e:cat /etc/machine-id)" Hostname: "(e:cat /etc/hostname) bold cyan)
+	sudo rm -f /etc/machine-id /var/lib/dbus/machine-id
+	sudo dbus-uuidgen --ensure=/etc/machine-id
+	hostnamectl set-hostname $hostname
+	sudo sed -i.bak -E 's/^[[:space:]]*127\.0\.1\.1.*/127.0.1.1 '$hostname'/' /etc/hosts
+}
+edit:add-var cloneReset~ $cloneReset~
+
 #==================================================== - GENERAL
 edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/stdin }
 edit:add-var cagelab-monitor~ { tmuxp load cagelab-monitor }

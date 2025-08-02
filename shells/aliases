@@ -262,6 +262,19 @@ alias sha='openssl sha'
 alias sha1='openssl sha1'
 alias sha256sum='shasum --algorithm 256'
 
+
+#==================================================== - How to resset a Linux clone
+function cloneReset () {
+	[[ -z $1 ]] && return 1
+	hostname=$1
+	hostnamectl
+	echo "Machine ID: $(cat /etc/machine-id) Hostname: $(cat /etc/hostname)"
+	sudo rm -f /etc/machine-id /var/lib/dbus/machine-id
+	sudo dbus-uuidgen --ensure=/etc/machine-id
+	hostnamectl set-hostname $hostname
+	sudo sed -i.bak -E 's/^[[:space:]]*127\.0\.1\.1.*/127.0.1.1 '"$hostname"'/' /etc/hosts
+}
+
 function updateFFMPEG() {
 	cd ~ || exit
 	lver=$(ffmpeg -version | grep -owE 'N-\d+-[^-]+')
