@@ -69,13 +69,28 @@ cmds:if-external eza {
 
 #==================================================== - How to reset a Linux clone
 fn cloneReset { |hostname|
+	# This function resets the machine ID and hostname for a Linux clone. It
+	# is useful when you clone a VM or a machine and want to avoid conflicts
+	# with the original machine. It will also reset the SSH host keys and
+	# prompt how to add a new profile in netbird. 
+	#
+	# Usage: cloneReset <new-hostname> 
+	# Example: cloneReset my-new-hostname 
+	#
+	# https://gist.github.com/iandol/85f663cf670cb3b94ea1b661757bb356
+	if (not $hostname) { echo "Usage: cloneReset <new-hostname>"; return }	
 	if (not (cmds:is-linux)) { return }
 	hostnamectl
-	echo (styled "Machine ID: "(e:cat /etc/machine-id)" Hostname: "(e:cat /etc/hostname) bold cyan)
+	echo (styled "Old Machine ID: "(e:cat /etc/machine-id)" Old Hostname: "(e:cat /etc/hostname) bold cyan)
 	sudo rm -f /etc/machine-id /var/lib/dbus/machine-id
 	sudo dbus-uuidgen --ensure=/etc/machine-id
 	hostnamectl set-hostname $hostname
 	sudo sed -i.bak -E 's/^[[:space:]]*127\.0\.1\.1.*/127.0.1.1 '$hostname'/' /etc/hosts
+	echo (styled "New Machine ID: "(e:cat /etc/machine-id)" New Hostname: "(e:cat /etc/hostname) bold cyan)
+	sudo rm -f /etc/ssh/ssh_host_*
+	sudo dpkg-reconfigure openssh-server
+	sudo systemctl restart sshd
+	echo "For netbird, you must [netbird profile add newprofile] and then [netbird profile select] it"
 }
 edit:add-var cloneReset~ $cloneReset~
 

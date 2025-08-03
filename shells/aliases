@@ -263,16 +263,30 @@ alias sha1='openssl sha1'
 alias sha256sum='shasum --algorithm 256'
 
 
-#==================================================== - How to resset a Linux clone
-function cloneReset () {
+#==================================================== - How to reset a Linux clone
+function cloneReset () { 
+	# This function resets the machine ID and hostname for a Linux clone. It
+	# is useful when you clone a VM or a machine and want to avoid conflicts
+	# with the original machine. It will also reset the SSH host keys and
+	# prompt how to add a new profile in netbird. 
+	#
+	# Usage: cloneReset <new-hostname> 
+	# Example: cloneReset my-new-hostname 
+	#
+	# https://gist.github.com/iandol/85f663cf670cb3b94ea1b661757bb356
 	[[ -z $1 ]] && return 1
 	hostname=$1
 	hostnamectl
-	echo "Machine ID: $(cat /etc/machine-id) Hostname: $(cat /etc/hostname)"
+	echo "Old Machine ID: $(cat /etc/machine-id) Old Hostname: $(cat /etc/hostname)"
 	sudo rm -f /etc/machine-id /var/lib/dbus/machine-id
 	sudo dbus-uuidgen --ensure=/etc/machine-id
 	hostnamectl set-hostname $hostname
 	sudo sed -i.bak -E 's/^[[:space:]]*127\.0\.1\.1.*/127.0.1.1 '"$hostname"'/' /etc/hosts
+	echo "New Machine ID: $(cat /etc/machine-id) NewHostname: $(cat /etc/hostname)"
+	sudo rm -f /etc/ssh/ssh_host_*
+	dpkg-reconfigure openssh-server
+	systemctl restart ssh
+	echo "For netbird, you must [netbird profile add newprofile] and then [netbird profile select] it"
 }
 
 function updateFFMPEG() {
