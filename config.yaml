@@ -1,3 +1,5 @@
 global:
   dotfiles: ~/.dotfiles
   link_type: 'Symbolic'
+  variables:
+    mytheme: 'catppuccin-frappe'
