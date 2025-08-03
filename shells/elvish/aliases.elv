@@ -78,7 +78,7 @@ fn cloneReset { |hostname|
 	# Example: cloneReset my-new-hostname 
 	#
 	# https://gist.github.com/iandol/85f663cf670cb3b94ea1b661757bb356
-	if (not $hostname) { echo "Usage: cloneReset <new-hostname>"; return }	
+	if (not $hostname) { echo "Usage: cloneReset <new-hostname>"; return }
 	if (not (cmds:is-linux)) { return }
 	hostnamectl
 	echo (styled "Old Machine ID: "(e:cat /etc/machine-id)" Old Hostname: "(e:cat /etc/hostname) bold cyan)
@@ -87,9 +87,9 @@ fn cloneReset { |hostname|
 	hostnamectl set-hostname $hostname
 	sudo sed -i.bak -E 's/^[[:space:]]*127\.0\.1\.1.*/127.0.1.1 '$hostname'/' /etc/hosts
 	echo (styled "New Machine ID: "(e:cat /etc/machine-id)" New Hostname: "(e:cat /etc/hostname) bold cyan)
-	sudo rm -f /etc/ssh/ssh_host_*
+	try { sudo rm -f /etc/ssh/ssh_host_*
 	sudo dpkg-reconfigure openssh-server
-	sudo systemctl restart sshd
+	sudo systemctl restart ssh } catch { echo "SSH host keys reset failed" }
 	echo "For netbird, you must [netbird profile add newprofile] and then [netbird profile select] it"
 }
 edit:add-var cloneReset~ $cloneReset~

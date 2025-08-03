@@ -284,8 +284,8 @@ function cloneReset () {
 	sudo sed -i.bak -E 's/^[[:space:]]*127\.0\.1\.1.*/127.0.1.1 '"$hostname"'/' /etc/hosts
 	echo "New Machine ID: $(cat /etc/machine-id) NewHostname: $(cat /etc/hostname)"
 	sudo rm -f /etc/ssh/ssh_host_*
-	dpkg-reconfigure openssh-server
-	systemctl restart ssh
+	sudo dpkg-reconfigure openssh-server
+	sudo systemctl restart ssh
 	echo "For netbird, you must [netbird profile add newprofile] and then [netbird profile select] it"
 }
 

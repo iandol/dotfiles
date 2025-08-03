@@ -94,6 +94,8 @@ export path
 [[ -x $(which fzf) ]] && source <(fzf --zsh)
 [[ -x $(which pkgx) ]] && source <(pkgx --shellcode)  #docs.pkgx.sh/shellcode
 [[ -x $(which pixi) ]] && eval "$(pixi completion --shell zsh)"
+[[ -x $(which zoxide) ]] && eval "$(zoxide init zsh)"
+[[ -x $(which rotz) ]] && eval "$(rotz completions zsh)"
 [[ -f "$DF/shells/aliases" ]] && source "$DF/shells/aliases"
 
 #-------------------------------------ZINIT SETUP
