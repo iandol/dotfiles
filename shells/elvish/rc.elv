@@ -143,6 +143,37 @@ if (eq $E:TERM "xterm-ghostty") {
 	echo (styled "…ghostty integration…" bold italic yellow)
 }
 
+#==================================================== - CARAPACE INTEGRATION
+#brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
+cmds:if-external carapace {
+	set-env CARAPACE_BRIDGES "zsh,bash"
+	set-env CARAPACE_EXCLUDES "systemctl"
+	set-env CARAPACE_MERGEFLAGS 1
+	eval (carapace _carapace | slurp)
+	echo (styled "…carapace integration…" bold italic yellow)
+}
+
+#==================================================== - OTHER INTEGRATIONS
+cmds:if-external zoxide { eval (zoxide init elvish | slurp) }
+cmds:if-external fd {
+	cmds:if-external fzf {
+		set-env FZF_DEFAULT_COMMAND "fd --type file --color=always --follow --hidden --exclude .git"
+		set-env FZF_DEFAULT_OPTS "--ansi"
+	}
+}
+cmds:if-external rotz { eval (rotz completions elvish | slurp) } 
+cmds:if-external bombadil { eval (bombadil generate-completions elvish | slurp) } 
+cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
+cmds:if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
+cmds:if-external pixi {
+	eval (pixi completion --shell elvish | slurp)
+	var pixienv = (pixi info --json | from-json | put (one)[global_info][env_dir])
+	var pixibin = (pixi info --json | from-json | put (one)[global_info][bin_dir])
+	# pixi doesn't expose tools installed with gem etc. so manually expose them
+	if (os:exists $pixienv/ruby/share/rubygems/bin/pandocomatic) { ln -sf $pixienv/ruby/share/rubygems/bin/pandocomatic $pixibin }
+}
+python:deactivate
+
 #==================================================== - GENERAL ENVIRONMENT
 set-env PAPERSIZE A4
 set-env PROCESSOR (str:to-lower (uname -m))
@@ -157,29 +188,6 @@ cmds:do-if-path /home/linuxbrew/.linuxbrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p
 cmds:do-if-path ~/.pixi/envs/luarocks/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
 cmds:do-if-path ~/.pixi/envs/luarocks/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
 cmds:do-if-path ~/.local/share/pandoc/ {|p| set-env PD $p }
-
-#==================================================== - CARAPACE
-#brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
-cmds:if-external carapace {
-	set-env CARAPACE_BRIDGES 'zsh,bash'
-	set-env CARAPACE_EXCLUDES 'systemctl'
-	set-env CARAPACE_MERGEFLAGS 1
-	eval (carapace _carapace | slurp)
-	echo (styled "…carapace init—" bold italic yellow)
-}
-
-#==================================================== - OTHERS
-cmds:if-external rotz { eval (rotz completions elvish | slurp) } 
-cmds:if-external bombadil { eval (bombadil generate-completions elvish | slurp) } 
-cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
-cmds:if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
-cmds:if-external pixi {
-	eval (pixi completion --shell elvish | slurp)
-	var pixienv = (pixi info --json | from-json | put (one)[global_info][env_dir])
-	var pixibin = (pixi info --json | from-json | put (one)[global_info][bin_dir])
-	if (os:exists $pixienv/ruby/share/rubygems/bin/pandocomatic) { ln -sf $pixienv/ruby/share/rubygems/bin/pandocomatic $pixibin }
-}
-python:deactivate
 
 #==================================================== - MAIN ALIASES
 if (cmds:not-file ~/.config/elvish/lib/aliases.elv) {
@@ -202,7 +210,7 @@ cmds:if-external starship {
 	eval ((search-external starship) completions elvish | slurp)
 } { use github.com/muesli/elvish-libs/theme/powerline }
 
-#==================================================== - SHIM FOLDERS
+#==================================================== - ENSURE SHIM PREPENDED
 put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /.pixi/bin} | each {|p| cmds:prepend-to-path $p} # needs to go after brew init
 
 #==================================================== - THIS IS THE END, MY FRIEND

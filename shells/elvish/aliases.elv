@@ -29,7 +29,7 @@ fn helpme { echo (styled "
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ᵛᴵᵐ :e load-buf │ :bn next-buf │ :ls list-buf │ :bd close-buf
   :tab ba buf>tabs │ gt next-tab │ :vert ba vertical
-  ^w[s|v] split-viewport │ ^ww switch-vp │ ^wx exchange-vp
+  ^w [s|v] split-viewport │ ^ww switch-vp │ ^wx exchange-vp
   [N]yy=yank │ [N]dd=cut │ p=paste │ *# jump to word
   / pattern-search │ n=next  │ :%s/a/b/g global a>b replace
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
@@ -67,8 +67,9 @@ cmds:if-external eza {
 	}
 }
 
-#==================================================== - How to resset a Linux clone
+#==================================================== - How to reset a Linux clone
 fn cloneReset { |hostname|
+	if (not (cmds:is-linux)) { return }
 	hostnamectl
 	echo (styled "Machine ID: "(e:cat /etc/machine-id)" Hostname: "(e:cat /etc/hostname) bold cyan)
 	sudo rm -f /etc/machine-id /var/lib/dbus/machine-id

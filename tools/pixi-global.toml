@@ -165,3 +165,8 @@ channels = ["conda-forge"]
 dependencies = { nodejs = "*" }
 exposed = { corepack = "corepack", node = "node", npm = "npm", npx = "npx" }
 
+[envs.zoxide]
+channels = ["conda-forge"]
+dependencies = { zoxide = "*" }
+exposed = { zoxide = "zoxide" }
+
