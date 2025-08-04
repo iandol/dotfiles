@@ -2,7 +2,7 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", 
+	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable",
 		lazyrepo, lazypath })
 	if vim.v.shell_error ~= 0 then
 		vim.api.nvim_echo({
@@ -35,12 +35,25 @@ require("neo-tree").setup({
 })
 
 -- enable lua lsp
-vim.lsp.enable({'elvishls'})
+vim.lsp.enable({ 'elvishls' })
+vim.lsp.config("lua_ls", {
+	settings = {
+		Lua = {
+			workspace = {
+				library = vim.api.nvim_get_runtime_file("", true),
+			}
+		}
+	}
+})
 
 -- keymaps
-vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "LSP Hover" })
-vim.keymap.set("n", "<leader>lk", vim.lsp.buf.hover, { desc = "LSP Hover" })
-vim.keymap.set("n", "<leader>ld", vim.lsp.buf.definition, {desc = "LSP Definition"})
-vim.keymap.set("n", "<leader>lrf", vim.lsp.buf.references, {desc = "LSP References"})
-vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, {desc = "LSP Code Action"})
-vim.keymap.set("n", "<leader>lrn", vim.lsp.buf.rename, {desc = '[R]e[n]ame'})
+local km = vim.keymap
+km.set("n", "<leader>o", ":update<CR> :source<CR>", { desc = "Reload File" })
+km.set("n", "<leader>s", ":SudaWrite<CR>", { desc = "Sudo Write" })
+km.set("n", "K", vim.lsp.buf.hover, { desc = "LSP Hover" })
+km.set("n", "<leader>lf", vim.lsp.buf.format, { desc = "LSP Format" })
+km.set("n", "<leader>lk", vim.lsp.buf.hover, { desc = "LSP Hover" })
+km.set("n", "<leader>ld", vim.lsp.buf.definition, { desc = "LSP Definition" })
+km.set("n", "<leader>lrf", vim.lsp.buf.references, { desc = "LSP References" })
+km.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "LSP Code Action" })
+km.set("n", "<leader>lrn", vim.lsp.buf.rename, { desc = '[R]e[n]ame' })

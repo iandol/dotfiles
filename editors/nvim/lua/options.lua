@@ -6,6 +6,8 @@ vim.opt.wrap = false							-- Don't wrap lines
 vim.opt.scrolloff = 10							-- Keep 10 lines above/below cursor 
 vim.opt.sidescrolloff = 8						-- Keep 8 columns left/right of cursor
 
+vim.opt.winborder = "rounded"
+
 vim.o.fileencoding = 'utf-8'					-- the encoding written to a file
 
 vim.opt.smartindent = true						-- Smart auto-indenting
