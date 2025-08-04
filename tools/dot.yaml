@@ -7,12 +7,15 @@ global:
     starship.toml: ~/.config/starship.toml
     tmux.conf: ~/.tmux.conf
     yazi.toml: ~/.config/yazi/yazi.toml
-linux:
-  installs: 'curl -fsSL https://pixi.sh/install.sh | sh'
-darwin:
-  installs: 'curl -fsSL https://pixi.sh/install.sh | sh'
-windows:
-  installs: 'powershell -ExecutionPolicy ByPass -c "irm -useb https://pixi.sh/install.ps1 | iex"'
-linux[whoami.distro^="Raspberry"]:
-  links:
-    starshiprpi.toml: ~/.config/starship.toml
+    eget.toml: ~/.eget.toml
+# darwin|linux:
+#   installs: 
+#     - 'curl -fsSL https://pixi.sh/install.sh | sh'
+#     - 'curl https://zyedidia.github.io/eget.sh | sh'
+# windows:
+#   installs: 
+#     - 'powershell -ExecutionPolicy ByPass -c "irm -useb https://pixi.sh/install.ps1 | iex"'
+#     - 'irm volllly.github.io/rotz/install.sh | iex'
+# linux[whoami.distro^="Raspberry"]:
+#   links:
+#     starshiprpi.toml: ~/.config/starship.toml

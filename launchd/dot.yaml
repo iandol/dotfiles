@@ -3,3 +3,4 @@ darwin:
     dotfilesSync.plist: ~/Library/LaunchAgents/dotfilesSync.plist
     processPandocJSON.plist: ~/Library/LaunchAgents/processPandocJSON.plist
     syncBookends.plist: ~/Library/LaunchAgents/syncBookends.plist
+    setenv_XDG_CONFIG_HOME.plist: ~/Library/LaunchAgents/setenv_XDG_CONFIG_HOME.plist
