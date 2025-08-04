@@ -2,3 +2,4 @@ links:
   x.yaml: ~/.config/carapace/specs/x.yaml
   pandocomatic.yaml: ~/.config/carapace/specs/pandocomatic.yaml
   scrivomatic.yaml: ~/.config/carapace/specs/scrivomatic.yaml
+  bridges.yaml: ~/.config/carapace/bridges.yaml

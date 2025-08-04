@@ -8,11 +8,11 @@ global:
     tmux.conf: ~/.tmux.conf
     yazi.toml: ~/.config/yazi/yazi.toml
 linux:
-  install: 'curl -fsSL https://pixi.sh/install.sh | sh'
+  installs: 'curl -fsSL https://pixi.sh/install.sh | sh'
 darwin:
-  install: 'curl -fsSL https://pixi.sh/install.sh | sh'
+  installs: 'curl -fsSL https://pixi.sh/install.sh | sh'
 windows:
-  install: 'powershell -ExecutionPolicy ByPass -c "irm -useb https://pixi.sh/install.ps1 | iex"'
+  installs: 'powershell -ExecutionPolicy ByPass -c "irm -useb https://pixi.sh/install.ps1 | iex"'
 linux[whoami.distro^="Raspberry"]:
   links:
     starshiprpi.toml: ~/.config/starship.toml

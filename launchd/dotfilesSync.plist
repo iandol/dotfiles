@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
+"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>org.iandol.dotfilesSync</string>
+
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/local/bin/elvish</string>
+		<string>/Users/ian/.dotfiles/bin/dotfilesSync.elv</string>
+	</array>
+
+	<key>StartInterval</key>
+	<integer>7200</integer> <!-- Run every 2 hours -->
+
+	<key>StandardOutPath</key>
+	<string>/tmp/githubsync.out</string>
+
+	<key>StandardErrorPath</key>
+	<string>/tmp/githubsync.err</string>
+
+	<key>RunAtLoad</key>
+	<true/>
+</dict>
+</plist>

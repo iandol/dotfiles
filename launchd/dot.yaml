@@ -1,0 +1,5 @@
+darwin:
+  links:
+    dotfilesSync.plist: ~/Library/LaunchAgents/dotfilesSync.plist
+    processPandocJSON.plist: ~/Library/LaunchAgents/processPandocJSON.plist
+    syncBookends.plist: ~/Library/LaunchAgents/syncBookends.plist

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>org.iandol.syncBookends</string>
+
+	<key>Disabled</key>
+	<false/>
+
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>LANG</key>
+		<string>en_US.UTF-8</string>
+	</dict>
+	
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/osascript</string>
+		<string>/Users/ian/.dotfiles/bin/runSync.applescript</string>
+	</array>
+
+	<key>StandardErrorPath</key>
+	<string>/tmp/run-sync.job.err</string>
+
+	<key>StandardOutPath</key>
+	<string>/tmp/run-sync.job.out</string>
+
+	<key>StartInterval</key>
+	<integer>172800</integer>
+
+</dict>
+</plist>

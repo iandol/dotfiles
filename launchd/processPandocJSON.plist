@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>org.iandol.processPandocJSON</string>
+
+	<key>Disabled</key>
+	<false/>
+
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>LANG</key>
+		<string>en_US.UTF-8</string>
+		<key>PATH</key>
+		<string>/Users/ian/.pixi/bin:/opt/homebrew/bin/:/Users/ian/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+
+	<key>LowPriorityIO</key>
+	<true/>
+
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/local/bin/fdautil</string>
+		<string>exec</string>
+		<string>/Users/ian/.dotfiles/bin/tweakJSON.sh</string>
+		<string>/Users/ian/Library/CloudStorage/Dropbox/References/Core.json</string>
+		<string>CoreFast.json</string>
+	</array>
+
+	<key>StandardErrorPath</key>
+	<string>/Users/ian/Library/CloudStorage/Dropbox/References/sync.log</string>
+	
+	<key>StandardOutPath</key>
+	<string>/Users/ian/Library/CloudStorage/Dropbox/References/sync.log</string>
+	
+	<key>WatchPaths</key>
+	<array>
+		<string>/Users/ian/Library/CloudStorage/Dropbox/References/Core.json</string>
+	</array>
+	
+</dict>
+</plist>
