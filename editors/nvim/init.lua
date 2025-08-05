@@ -17,10 +17,15 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- general options
-require('options')
+require("options")
 
 -- Setup lazy.nvim
-require("lazy").setup("plugins")
+require("lazy").setup({
+	spec = { import = "plugins" },
+	git  = { timeout = 30 },
+	install = { missing = false },
+	ui = { size = { width = 0.8, height = 0.8 }, border = "", },
+})
 
 -- do not know why but plugin opts {} do not seem to work
 require("neo-tree").setup({
