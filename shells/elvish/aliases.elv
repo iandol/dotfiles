@@ -7,6 +7,7 @@ echo (styled "…loading command aliases…" bold italic yellow)
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>eo'] = '2>&1'
+set edit:command-abbr['cd'] = 'z' #switch to zoxide
 set edit:command-abbr['curld'] = 'curl --retry 5 -L -C -'
 set edit:command-abbr['xp'] = 'x proxy set 127.0.0.1:'
 set edit:command-abbr['xpu'] = 'x proxy unset'
