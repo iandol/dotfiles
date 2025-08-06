@@ -1,6 +1,9 @@
 use re; use str; use path; use math; use epm; use platform; use md; use os; use flag
 use github.com/iandol/elvish-modules/cmds # my utility module
-echo (styled "…loading command aliases…" bold italic yellow)
+fn msg { |@t| echo (styled "👉🏼 "$@t bold italic yellow) }
+fn header1 { |@t| echo (styled "\n   🌕===   "$@t"   ===🌕   " bold italic inverse magenta) }
+fn header2 { |@t| echo (styled "\n   🌗===   "$@t"   ===🌓   " bold italic inverse yellow) }
+msg "…loading command aliases…"
 
 #=================================================== - Abbreviations
 #set edit:command-abbr['help'] = doc:show
@@ -79,19 +82,19 @@ fn cloneReset { |hostname|
 	# Example: cloneReset my-new-hostname 
 	#
 	# https://gist.github.com/iandol/85f663cf670cb3b94ea1b661757bb356
-	if (not $hostname) { echo "Usage: cloneReset <new-hostname>"; return }
+	if (not $hostname) { msg "Usage: cloneReset <new-hostname>"; return }
 	if (not (cmds:is-linux)) { return }
 	hostnamectl
-	echo (styled "Old Machine ID: "(e:cat /etc/machine-id)" Old Hostname: "(e:cat /etc/hostname) bold cyan)
+	msg "Old Machine ID: "(e:cat /etc/machine-id)" Old Hostname: "(e:cat /etc/hostname)
 	sudo rm -f /etc/machine-id /var/lib/dbus/machine-id
 	sudo dbus-uuidgen --ensure=/etc/machine-id
 	hostnamectl set-hostname $hostname
 	sudo sed -i.bak -E 's/^[[:space:]]*127\.0\.1\.1.*/127.0.1.1 '$hostname'/' /etc/hosts
-	echo (styled "New Machine ID: "(e:cat /etc/machine-id)" New Hostname: "(e:cat /etc/hostname) bold cyan)
+	msg "New Machine ID: "(e:cat /etc/machine-id)" New Hostname: "(e:cat /etc/hostname)
 	try { sudo rm -f /etc/ssh/ssh_host_*
 	sudo dpkg-reconfigure openssh-server
 	sudo systemctl restart ssh } catch { echo "SSH host keys reset failed" }
-	echo "For netbird, you must [netbird profile add newprofile] and then [netbird profile select] it"
+	msg "For netbird, you must [netbird profile add newprofile] and then [netbird profile select] it"
 }
 edit:add-var cloneReset~ $cloneReset~
 
@@ -162,10 +165,10 @@ cmds:if-external python3 {
 cmds:if-external nvim { edit:add-var vi~ $e:nvim~ }
 
 edit:add-var listUDP~ { |@in|
-	echo "Searching for: "$@in
+	msg "Searching for: "$@in
 	sudo lsof -i UDP -P | grep -E $@in }
 edit:add-var listTCP~ { |@in|
-	echo "Searching for: "$@in
+	msg "Searching for: "$@in
 	sudo lsof -i TCP -P | grep -E $@in }
 
 edit:add-var myip~ { e:curl -s ipinfo.io/ip }
@@ -243,7 +246,7 @@ fn transfer {|@in &use=transfer|
 	var url = ''
 	if (==s $use "transfer") { set url = (e:curl --upload-file $@in 'https://transfer.sh/'$@in) 
 	} else { set url = (e:curl -F 'file=@'$@in 'https://0x0.st') }
-	echo "\n======================================================="
+	header1 "\n======================================================="
 	md:show "The *online URL* for the file is: "$url
 }
 edit:add-var transfer~ $transfer~
@@ -260,8 +263,8 @@ edit:add-var cl1p~ $cl1p~
 fn resetPIP { 
 	if ?(pgrep "Vivaldi" >/dev/null ) { echo (styled "\n!!!Warning: Vivaldi is running\n" bold red) }
 	var vp = $E:HOME"/Library/Application Support/Vivaldi/Default/Preferences"
-	echo (styled "\n=== Reset Vivaldi's PIP ===\n" bold yellow)
-	echo (styled "\tCurrent Value:\n" bold yellow)
+	msg "\n=== Reset Vivaldi's PIP ===\n"
+	msg "\tCurrent Value:\n"
 	jq '.vivaldi.pip_placement' $vp
 	cp $vp $vp'.bak'
 	jq '.vivaldi.pip_placement.top = 45 | .vivaldi.pip_placement.left = 20' $vp | sponge $vp
@@ -273,19 +276,19 @@ edit:add-var resetPIP~ $resetPIP~
 #===================================================Kill process listening on a port
 fn killPort {|port &dry-run=$false|
 	# Usage: killPort <port> [&dry-run=$true]
-	if (not $port) { echo "Usage: killPort <port> [&dry-run=$true]" > /dev/stderr; return }
+	if (not $port) { msg "Usage: killPort <port> [&dry-run=$true]" > /dev/stderr; return }
 	# Get PID of process listening on the given port
 	try {
 		var pid = (lsof -i :$port -sTCP:LISTEN -t | head -n 1)
 	} catch {
-		echo "No process listening @ port:"$port; return
+		msg "No process listening @ port:"$port; return
 	}
 	var pname = (ps -p $pid -o comm=) # Get process name
 	# Dry-run behavior
 	if (eq $dry-run $true) {
-		echo "[DRY-RUN] Would kill process "$pname" (PID "$pid") listening on port "$port
+		msg "[DRY-RUN] Would kill process "$pname" (PID "$pid") listening on port "$port
 	} else {
-		echo "Killing process "$pname" (PID "$pid") listening on port "$port"..."
+		msg "Killing process "$pname" (PID "$pid") listening on port "$port"..."
 		e:kill $pid
 	}
 }
@@ -302,7 +305,7 @@ fn sp {|@ina|
 		try { git config --global --unset http.proxy } catch { }; try { git config --global --unset https.proxy } catch { }
 	}
 	fn listProxies {
-		echo "PROXY: HTTP = "$E:http_proxy" | HTTPS = "$E:https_proxy" | ALL = "$E:all_proxy "\nBYPASS: "$E:no_proxy
+		msg "PROXY: HTTP = "$E:http_proxy" | HTTPS = "$E:https_proxy" | ALL = "$E:all_proxy"\nBYPASS: "$E:no_proxy
 		try { echo "GIT: "(git config --global --get-regexp http | slurp | str:replace "\n" " " (one)) } catch { }
 	}
 	fn parseAddress { |in|
@@ -321,14 +324,14 @@ fn sp {|@ina|
 	fn setgit { |&addr='127.0.0.1:16005' &xtls=$false| git config --global http.proxy $addr; git config --global https.proxy $addr }
 	#===
 	if $in[0][h] { 
-		echo (styled "sp Command Help:\n===============\n > sp 127.0.0.1:16005 to set proxy\n > sp without input to unset proxy\n … -l to list settings\n … -x uses XTLS mode" bold yellow)
+		msg "sp Command Help:\n===============\n > sp 127.0.0.1:16005 to set proxy\n > sp without input to unset proxy\n … -l to list settings\n … -x uses XTLS mode"
 	} elif $in[0][l] { 
-		echo (styled "List proxy:\n===============" bold yellow)
+		header1 "===========List proxy=========="
 	} elif (eq $in[1] []) {
-		echo (styled "Unset proxy:\n===============" bold yellow)
+		header1 "==========Unset proxy============"
 		unsetProxies
 	} else {
-		echo (styled "Set proxy:\n===============" bold yellow)
+		header1 "==========Set proxy============"
 		var @r = (parseAddress $in[1][0])
 		if (eq $r[0] $nil) { set r[0] = 'http' }; if (eq $r[2] $nil) { set r[2] = '16005' }
 		var p = (num $r[2]); set p = (+ $p 1); set p = (to-string $p)
@@ -378,7 +381,7 @@ edit:add-var installMATLAB~ $installMATLAB~
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
 fn updateTeX {|&repo=tuna &ctex=$false|
 	cmds:if-external tlmgr {
-		echo (styled "\n=== UPDATE TeX ===\n" bold yellow)
+		header2 "\n=== UPDATE TeX ===\n"
 		if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
 		tlmgr update --self
 		tlmgr update --all
@@ -401,9 +404,9 @@ edit:add-var updateTeX~ $updateTeX~
 
 #====================================================Update code and OS
 fn update {
-	sudo -Bv; echo "…Sudo priviledge obtained…"
+	sudo -Bv; msg "…Sudo priviledge obtained…"
 	sp -l
-	echo (styled "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
+	header1 "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n"
 	if (cmds:not-path $E:HOME"/.x-cmd.root") { curl https://get.x-cmd.com | sh -i }
 	if (cmds:not-path $E:HOME"/.pixi") { curl -fsSL https://pixi.sh/install.sh | bash }
 	var olddir = (pwd)
@@ -425,72 +428,73 @@ fn update {
 		try { timeout 10s git fetch -t -q --all 2>$path:dev-null } catch { echo "\t…couldn't fetch!" }
 		for y $branches {
 			if (re:match '^(dev|main|master|umaster)' $y) {
-				echo (styled "\n--->>> Updating "(styled $x bold)":"$y"…" bg-blue)
+				header2 "\n--->>> Updating "(styled $x bold)":"$y"…"
 				try {
 					git checkout -q $y 2>$path:dev-null
 					var changes = (git status --porcelain | slurp)
 					var stashed = $false
 					if (not (eq $changes '')) {
-						echo "	…local changes detected, stashing…"
+						msg "	…local changes detected, stashing…"
 						git stash
 						set stashed = $true
 					}
 					timeout 60s git pull --ff-only -v
 					if $stashed {
-						echo "	…unstashing changes…"
+						msg "	…unstashing changes…"
 						try { git stash pop } catch {
-							echo "	…couldn't pop stash, please resolve manually."
+							msg "	…couldn't pop stash, please resolve manually."
 						}
 					}
 				} catch {
-					echo "	…couldn't pull!"
+					msg "	…couldn't pull!"
 				}
 			}
 		}
 		git remote -v
 		if (re:match 'upstream' (git remote | slurp)) {
-			print "------> Fetching upstream…  "
-			try { git fetch -v upstream } catch { echo "  …couldn't fetch upstream!" }
+			msg "------> Fetching upstream…  "
+			try { git fetch -v upstream } catch { msg "  …couldn't fetch upstream!" }
 		}
 		try { git checkout -q $oldbranch 2>$path:dev-null } catch { }
 	}
 	cd $olddir
 	cmds:if-external brew {
-		echo (styled "\n\n---> Updating BREW…\n" bold bg-color5)
+		header2 "\n\n---> Updating BREW…\n"
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
-		try { 
+		try {
 			brew update; brew outdated
 			brew upgrade --no-quarantine --display-times
 			brew cleanup --prune=all
-		} catch { echo "\t\t …can't upgrade!"}
+		} catch { msg "\t\t …can't upgrade!" }
 	}
-	if (cmds:is-macos) { try { echo (styled "\n\n---> Check macOS updates…\n" bold bg-color5); softwareupdate --list } catch { } }
+	if (cmds:is-macos) { try { header2 "\n\n---> Check macOS updates…\n"; softwareupdate --list } catch { } }
 	if (cmds:is-linux) {
-		try { echo (styled "\n\n---> Updating APT…\n" bold bg-color5)
+		try { 
+			header2 "\n\n---> Updating APT…\n"
 			sudo apt update; sudo apt autoremove; apt list --upgradable
-		} catch { echo "\t…couldn't update APT!" }
-		echo (styled "\n\n---> Updating snap/flatpak/firmware…\n" bold bg-color5)
-		cmds:if-external snap { try { echo "\tsnap…"; sudo snap refresh } catch { } }
-		cmds:if-external flatpak { try { echo "\tflatpak…"; flatpak update -y } catch { } }
-		cmds:if-external fwupdmgr { try { echo "\tfirmware…"; fwupdmgr get-upgrades } catch { } }
+		} catch { msg "\t…couldn't update APT!"	}
+		header2 "\n\n---> Updating snap/flatpak/firmware…\n"
+		cmds:if-external snap { try { msg "\tsnap…"; sudo snap refresh } catch { } }
+		cmds:if-external flatpak { try { msg "\tflatpak…"; flatpak update -y } catch { } }
+		cmds:if-external fwupdmgr { try { msg "\tfirmware…"; fwupdmgr get-upgrades } catch { } }
 	}
 
 	# update cogmoteGO
 	curl -sS https://raw.githubusercontent.com/Ccccraz/cogmoteGO/main/install.sh | sh
 
 	# update other tools
-	cmds:if-external pixi { echo (styled "\n---> Update pixi\n" bold bg-color5); pixi self-update; pixi global sync; pixi global -v update }
-	cmds:if-external pkgx { echo (styled "\n---> Update pkgx\n" bold bg-color5); pkgx --sync; pkgx --update }
-	cmds:if-external micromamba { echo (styled "\n---> Update Micromamba…\n" bold bg-color5); micromamba self-update }
-	cmds:if-external gem { echo (styled "\n---> Update Ruby Gems\n" bold bg-color5); gem update; gem cleanup }
-	cmds:if-external rbenv { echo (styled "\n---> Rehash RBENV…\n" bold bg-color5); rbenv rehash }
-	cmds:if-external pyenv { echo (styled "\n---> Rehash PYENV…\n" bold bg-color5); pyenv rehash }
-	cmds:if-external tlmgr { echo (styled "\n---> Check TeX-Live…\n" bold bg-color5); tlmgr update --self; tlmgr update --all }
-	cmds:if-external npm { echo (styled "\n---> Update npm global\n" bold bg-color5); npm list -g; npm update -g; npm list -g }
+	cmds:if-external pixi { header2 "\n---> Update pixi\n"; pixi self-update; pixi global sync; pixi global -v update }
+	cmds:if-external pkgx { header2 "\n---> Update pkgx\n"; pkgx --sync; pkgx --update }
+	cmds:if-external micromamba { header2 "\n---> Update Micromamba…\n"; micromamba self-update }
+	cmds:if-external gem { header2 "\n---> Update Ruby Gems\n"; gem update; gem cleanup }
+	cmds:if-external rbenv { header2 "\n---> Rehash RBENV…\n"; rbenv rehash }
+	cmds:if-external pyenv { header2 "\n---> Rehash PYENV…\n"; pyenv rehash }
+	cmds:if-external tlmgr { header2 "\n---> Check TeX-Live…\n"; tlmgr update --self; tlmgr update --all }
+	cmds:if-external npm { header2 "\n---> Update npm global\n"; npm list -g; npm update -g; npm list -g }
 	
-	try { echo (styled "\n\n---> Updating Elvish Packages…\n" bold bg-color5);epm:upgrade } catch { echo "Couldn't update EPM packages…" }
-	cmds:if-external x-cmd { echo (styled "\n---> Update 文 x-cmd\n" bold bg-color5); x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod }
-	echo (styled "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n" italic fg-white bg-magenta)
+	try { header2 "\n\n---> Updating Elvish Packages…\n";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
+	cmds:if-external x-cmd { header2 "\n---> Update 文 x-cmd\n"; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod }
+	header2 "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n"
 }
 edit:add-var update~ $update~
 
@@ -530,8 +534,7 @@ fn updateMPV {
 		cmds:if-external $mpvPath { 
 			set newver = ($mpvPath --version | slurp) 
 			echo (styled "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n" bold yellow)
-		}
-	} catch { echo "Can't download MPV!" }
+		} } catch { msg "Can't download MPV!" }
 	cd $olddir
 	rm -rf $tmpdir
 }
