@@ -108,7 +108,7 @@ if (cmds:is-macintel) { cmds:prepend-to-path '/usr/local/bin' } # intel homebrew
 cmds:if-external brew {
 	var pfix = (brew --prefix)
 	if (cmds:is-macintel) { var pfix = '/usr/local' }
-	echo (styled "…configuring homebrew "$platform:os"-"$platform:arch" [runmode:"(uname -m)"] prefix: "$pfix" …" bold italic yellow)
+	echo (styled "👉🏼 …configuring homebrew "$platform:os"-"$platform:arch" [runmode:"(uname -m)"] prefix: "$pfix" …" bold italic yellow)
 	set-env HOMEBREW_PREFIX $pfix
 	set-env HOMEBREW_CELLAR $pfix'/Cellar'
 	set-env HOMEBREW_REPOSITORY $pfix'/Homebrew'
@@ -124,7 +124,7 @@ if (os:is-regular $E:HOME/.x-cmd.root/bin/x-cmd) {
 	if (not (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv)) { x-cmd elv --setup mod }
 	use x; x:init
 	edit:add-var •~ { |@in| use x; x:x chat --sendalias lms $@in; }
-	echo (styled "…x-cmd 文 integration…" bold italic yellow)
+	echo (styled "👉🏼 …x-cmd 文 integration…" bold italic yellow)
 }
 
 #==================================================== - KITTY INTEGRATION
@@ -135,13 +135,13 @@ if (has-env KITTY_INSTALLATION_DIR) {
 	set edit:before-readline = [ { send-pwd } { osc '133;A' } ]
 	set edit:after-readline = [ {|c| send-title (str:split ' ' $c | take 1) } {|c| osc '133;C' } ]
 	set after-chdir = [ {|_| send-pwd } ]
-	echo (styled "…kitty integration…" bold italic yellow)
+	echo (styled "👉🏼 …kitty integration…" bold italic yellow)
 }
 
 #==================================================== - GHOSTTY INTEGRATION
 if (eq $E:TERM "xterm-ghostty") {
 	use ghostty-integration
-	echo (styled "…ghostty integration…" bold italic yellow)
+	echo (styled "👉🏼 …ghostty integration…" bold italic yellow)
 }
 
 #==================================================== - CARAPACE INTEGRATION
@@ -151,7 +151,7 @@ cmds:if-external carapace {
 	set-env CARAPACE_EXCLUDES "systemctl"
 	set-env CARAPACE_MERGEFLAGS 1
 	eval (carapace _carapace | slurp)
-	echo (styled "…carapace integration…" bold italic yellow)
+	echo (styled "👉🏼 …carapace integration…" bold italic yellow)
 }
 
 #==================================================== - OTHER INTEGRATIONS
@@ -206,7 +206,7 @@ cmds:if-external fzf { set edit:insert:binding[Ctrl-r] = { aliases:history >/dev
 
 #==================================================== - THEME
 cmds:if-external starship {
-	echo (styled "…starship init…" bold italic yellow)
+	echo (styled "👉🏼 …starship init…" bold italic yellow)
 	eval ((search-external starship) init elvish --print-full-init | slurp)
 	eval ((search-external starship) completions elvish | slurp)
 } { use github.com/muesli/elvish-libs/theme/powerline }

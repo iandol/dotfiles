@@ -1,8 +1,8 @@
 use re; use str; use path; use math; use epm; use platform; use md; use os; use flag
 use github.com/iandol/elvish-modules/cmds # my utility module
 fn msg { |@t| echo (styled "👉🏼 "$@t bold italic yellow) }
-fn header1 { |@t| echo (styled "\n   🌕===   "$@t"   ===🌕   " bold italic inverse magenta) }
-fn header2 { |@t| echo (styled "\n   🌗===   "$@t"   ===🌓   " bold italic inverse yellow) }
+fn header1 { |@t| echo (styled "\n\n   🌕===   "$@t"   ===🌕   " bold italic inverse magenta) }
+fn header2 { |@t| echo (styled "\n\n   🌗===   "$@t"   ===🌓   " bold italic inverse yellow) }
 msg "…loading command aliases…"
 
 #=================================================== - Abbreviations
@@ -350,10 +350,11 @@ set edit:command-abbr['setproxy'] = 'sp'
 fn installMATLAB {|&version='R2025a' &action='install' &products='' &dest=''|
 	var dest = ''
 	var cmd = ''
+	header1 "MATLAB Installation using MPM"
 	cmds:if-external mpm {
-			echo (styled "mpm is already installed:\n" bold yellow)
+			msg "mpm is already installed!"
 	} { 
-		echo (styled "Install mpm:\n" bold yellow)
+		msg "Install mpm"
 		if ( cmds:is-macos ) { curl -L -o ~/bin/mpm https://www.mathworks.com/mpm/maca64/mpm } elif ( cmds:is-linux ) { curl -L -o ~/bin/mpm https://www.mathworks.com/mpm/glnxa64/mpm }
 		chmod +x ~/bin/mpm
 	}
@@ -366,14 +367,14 @@ fn installMATLAB {|&version='R2025a' &action='install' &products='' &dest=''|
 	set dest = $E:HOME"/tmp"
 	if (==s $action 'install') { 
 		set cmd = $E:HOME"/bin/mpm install --no-gpu --no-jre --release="$version" --destination="$dest" --products="$products
-		echo (styled "Install "$version" of MATLAB:\n\t"$cmd bold yellow) 
+		msg "Install "$version" of MATLAB:\n\t"$cmd
 		eval $cmd
 	} elif (==s $action 'download') { 
 		set cmd = $E:HOME"/bin/mpm download --release="$version" --destination="$E:HOME"/Downloads/matlab"$version" --products="$products
-		echo (styled "Download "$version" of MATLAB:\n\t"$cmd bold yellow)
+		msg "Download "$version" of MATLAB:\n\t"$cmd
 		eval $cmd
 	}
-	echo (styled "...Finished..." bold yellow)
+	msg "...Finished..."
 }
 edit:add-var installMATLAB~ $installMATLAB~
 
@@ -381,7 +382,7 @@ edit:add-var installMATLAB~ $installMATLAB~
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
 fn updateTeX {|&repo=tuna &ctex=$false|
 	cmds:if-external tlmgr {
-		header2 "\n=== UPDATE TeX ===\n"
+		header2 "=== UPDATE TeX ==="
 		if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
 		tlmgr update --self
 		tlmgr update --all
@@ -406,7 +407,7 @@ edit:add-var updateTeX~ $updateTeX~
 fn update {
 	sudo -Bv; msg "…Sudo priviledge obtained…"
 	sp -l
-	header1 "\n====>>> Start Update @ "(styled (date) bold)" <<<====\n"
+	header1 "====>>> Start Update @ "(styled (date) bold)" <<<===="
 	if (cmds:not-path $E:HOME"/.x-cmd.root") { curl https://get.x-cmd.com | sh -i }
 	if (cmds:not-path $E:HOME"/.pixi") { curl -fsSL https://pixi.sh/install.sh | bash }
 	var olddir = (pwd)
@@ -428,7 +429,7 @@ fn update {
 		try { timeout 10s git fetch -t -q --all 2>$path:dev-null } catch { echo "\t…couldn't fetch!" }
 		for y $branches {
 			if (re:match '^(dev|main|master|umaster)' $y) {
-				header2 "\n--->>> Updating "(styled $x bold)":"$y"…"
+				header2 "--->>> Updating "(styled $x bold)":"$y"…"
 				try {
 					git checkout -q $y 2>$path:dev-null
 					var changes = (git status --porcelain | slurp)
@@ -459,7 +460,7 @@ fn update {
 	}
 	cd $olddir
 	cmds:if-external brew {
-		header2 "\n\n---> Updating BREW…\n"
+		header2 "---> Updating BREW…"
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		try {
 			brew update; brew outdated
@@ -467,13 +468,13 @@ fn update {
 			brew cleanup --prune=all
 		} catch { msg "\t\t …can't upgrade!" }
 	}
-	if (cmds:is-macos) { try { header2 "\n\n---> Check macOS updates…\n"; softwareupdate --list } catch { } }
+	if (cmds:is-macos) { try { header2 "---> Check macOS updates…"; softwareupdate --list } catch { } }
 	if (cmds:is-linux) {
 		try { 
-			header2 "\n\n---> Updating APT…\n"
+			header2 "---> Updating APT…"
 			sudo apt update; sudo apt autoremove; apt list --upgradable
 		} catch { msg "\t…couldn't update APT!"	}
-		header2 "\n\n---> Updating snap/flatpak/firmware…\n"
+		header2 "---> Updating snap/flatpak/firmware…"
 		cmds:if-external snap { try { msg "\tsnap…"; sudo snap refresh } catch { } }
 		cmds:if-external flatpak { try { msg "\tflatpak…"; flatpak update -y } catch { } }
 		cmds:if-external fwupdmgr { try { msg "\tfirmware…"; fwupdmgr get-upgrades } catch { } }
@@ -483,18 +484,18 @@ fn update {
 	curl -sS https://raw.githubusercontent.com/Ccccraz/cogmoteGO/main/install.sh | sh
 
 	# update other tools
-	cmds:if-external pixi { header2 "\n---> Update pixi\n"; pixi self-update; pixi global sync; pixi global -v update }
-	cmds:if-external pkgx { header2 "\n---> Update pkgx\n"; pkgx --sync; pkgx --update }
-	cmds:if-external micromamba { header2 "\n---> Update Micromamba…\n"; micromamba self-update }
-	cmds:if-external gem { header2 "\n---> Update Ruby Gems\n"; gem update; gem cleanup }
-	cmds:if-external rbenv { header2 "\n---> Rehash RBENV…\n"; rbenv rehash }
-	cmds:if-external pyenv { header2 "\n---> Rehash PYENV…\n"; pyenv rehash }
-	cmds:if-external tlmgr { header2 "\n---> Check TeX-Live…\n"; tlmgr update --self; tlmgr update --all }
-	cmds:if-external npm { header2 "\n---> Update npm global\n"; npm list -g; npm update -g; npm list -g }
+	cmds:if-external pixi { header2 "---> Update pixi"; pixi self-update; pixi global sync; pixi global -v update }
+	cmds:if-external pkgx { header2 "---> Update pkgx"; pkgx --sync; pkgx --update }
+	cmds:if-external micromamba { header2 "---> Update Micromamba…"; micromamba self-update }
+	cmds:if-external gem { header2 "---> Update Ruby Gems"; gem update; gem cleanup }
+	cmds:if-external rbenv { header2 "---> Rehash RBENV…"; rbenv rehash }
+	cmds:if-external pyenv { header2 "---> Rehash PYENV…"; pyenv rehash }
+	cmds:if-external tlmgr { header2 "---> Check TeX-Live…"; tlmgr update --self; tlmgr update --all }
+	cmds:if-external npm { header2 "---> Update npm global"; npm list -g; npm update -g; npm list -g }
 	
-	try { header2 "\n\n---> Updating Elvish Packages…\n";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
-	cmds:if-external x-cmd { header2 "\n---> Update 文 x-cmd\n"; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod }
-	header2 "\n====>>> Finish Update @ "(styled (date) bold)" <<<====\n"
+	try { header2 "---> Updating Elvish Packages…";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
+	cmds:if-external x-cmd { header2 "---> Update 文 x-cmd"; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod }
+	header1 "====>>> Finish Update @ "(styled (date) bold)" <<<===="
 }
 edit:add-var update~ $update~
 
