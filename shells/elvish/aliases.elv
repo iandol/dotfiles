@@ -34,12 +34,13 @@ fn helpme { echo (styled "
 ᵛᴵᵐ :e load-buf │ :bn next-buf │ :ls list-buf │ :bd close-buf
   :tab ba buf>tabs │ gt next-tab │ :vert ba vertical
   ^w [s|v] split-viewport │ ^ww switch-vp │ ^wx exchange-vp
-  [N]yy=yank │ [N]dd=cut │ p=paste │ *# jump to word
-  / pattern-search │ n=next  │ :%s/a/b/g global a>b replace
+  <#>yy=yank │ <#>dd=cut │ p=paste │ *# jump to word
+  q[a-z]=macro │ @[a-z]=replay │ :reg=list registers
+  / pattern-search │ n=next │ :%s/a/b/g global a>b replace
 ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
 ᵀᵪ ●=prefix ^a │ tmux-pane: split=●| ●- close=●x focus=●o
   sessions=●s detach=●d window-create=●c switch=●n close=●&
-  commands=●: help=●? navigate=●w\n" bold '#AACCFF' ) }
+  commands=●: help=●? navigate=●w\n" bold '#FFCC99' ) }
 edit:add-var helpme~ $helpme~
 
 #==================================================== - KITTY

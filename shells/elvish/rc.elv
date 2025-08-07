@@ -162,6 +162,7 @@ cmds:if-external fd {
 		set-env FZF_DEFAULT_OPTS "--ansi"
 	}
 }
+cmds:if-external uv { eval (uv generate-shell-completion elvish | slurp) }
 cmds:if-external rotz { eval (rotz completions elvish | slurp) } 
 cmds:if-external bombadil { eval (bombadil generate-completions elvish | slurp) } 
 cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
