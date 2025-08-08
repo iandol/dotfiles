@@ -23,15 +23,15 @@ echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bo
 try { epm:install &silent-if-installed ^
 	github.com/iandol/elvish-modules ^
 	github.com/zzamboni/elvish-modules ^
-	github.com/muesli/elvish-libs } catch { echo "Cannot install external modules..." }
+	github.com/muesli/elvish-libs } catch { echo "…can't install elvish modules…" }
 
 use github.com/iandol/elvish-modules/cmds # my utility module
-use github.com/iandol/elvish-modules/ai # my ai module
+#use github.com/iandol/elvish-modules/ai # my ai module
 use github.com/iandol/elvish-modules/python # for python venv support
-use github.com/iandol/elvish-modules/mamba # for conda/mamba support
-use github.com/zzamboni/elvish-modules/bang-bang
+use github.com/iandol/elvish-modules/mamba # for conda support
+use github.com/zzamboni/elvish-modules/bang-bang # use ! for last command expansion
 bang-bang:init &plain-bang="Alt-1" # remember for kitty this is right alt key only
-use github.com/zzamboni/elvish-modules/spinners
+#use github.com/zzamboni/elvish-modules/spinners
 
 #==================================================== - BASIC ENVIRONMENT
 if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
@@ -60,7 +60,9 @@ set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:a
 
 #==================================================== - PATHS + VENVS
 try { cmds:path_helper } catch { } # /usr/libexec/path_helper for elvish
-var prefix; var suffix
+
+# MATLAB -- https://www.mathworks.com/help/matlab/matlab-environment.html
+var prefix suffix
 if (cmds:is-macos) { set prefix = "/Applications/MATLAB_R202"; set suffix = ".app/bin"
 } else { set prefix = "/usr/local/MATLAB/R202"; set suffix = "/bin" }
 var releases = [$prefix{6b 6a 5b 5a 4b 4a 3b 3a 2b 2a 1b 1a 0b 0a}$suffix]
@@ -79,31 +81,22 @@ if (cmds:is-macos) {
 	# cmds:do-if-path [/usr/local/MATLAB/MATLAB_Runtime/R202{5b 5a 4b 4a 3b 3a}/] { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }
 }
 
-each {|p| cmds:prepend-to-path $p } [
-	/Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
-	~/scoop/apps/msys2/current/usr/bin
-	~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims
-	/opt/amdgpu-pro/bin /opt/amdgpu/bin
-	~/.cache/lm-studio/bin
+# prepend / append paths only if they exist and not already in path
+each {|p| cmds:prepend-to-path $p } [ /Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
+	~/scoop/apps/msys2/current/usr/bin  ~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims
+	/opt/amdgpu-pro/bin  /opt/amdgpu/bin  ~/.cache/lm-studio/bin
 	/usr/local/bin  /usr/local/sbin  ~/.local/bin
-	/home/linuxbrew/.linuxbrew/bin
-	/opt/local/bin  /opt/homebrew/bin
-	/usr/local/opt/ruby/bin  /usr/local/lib/ruby/gems/3.{7 6 5 4 3}.0/bin
-	/opt/homebrew/opt/ruby/bin /opt/homebrew/lib/ruby/gems/3.{7 6 5 4 3}.0/bin
-	~/.pixi/envs/ruby/share/rubygems/bin
-	~/.x-cmd.root/bin
-	~/.pixi/bin ~/bin
-]
-each {|p| cmds:append-to-path $p } [
-	/opt/homebrew/opt/python@3.{15 14 13 12 11 10 9 8}/libexec/bin
-	/Library/Frameworks/GStreamer.framework/Commands
-]
+	/home/linuxbrew/.linuxbrew/bin  /opt/local/bin  /opt/homebrew/bin
+	/usr/local/opt/ruby/bin  /usr/local/lib/ruby/gems/3.{7 6 5 4 3}.0/bin  /opt/homebrew/opt/ruby/bin /opt/homebrew/lib/ruby/gems/3.{7 6 5 4 3}.0/bin
+	~/.pixi/envs/ruby/share/rubygems/bin  ~/.x-cmd.root/bin  ~/.pixi/bin ~/bin]
+each {|p| cmds:append-to-path $p } [ /opt/homebrew/opt/python@3.{15 14 13 12 11 10}/libexec/bin
+	/Library/Frameworks/GStreamer.framework/Commands]
 
 cmds:do-if-path $E:HOME/.pixi/envs/ruby/share/rubygems {|p| set-env GEM_HOME $p }
 cmds:do-if-path $E:HOME/.venv {|p| set python:venv-directory = $p }
 cmds:do-if-path [/media/cogp/micromamba /media/cog/data/micromamba $E:HOME/micromamba ] {|p| set mamba:root = $p; set-env MAMBA_ROOT_PREFIX $mamba:root }
 
-#==================================================== - SETUP HOMEBREW
+#==================================================== - HOMEBREW
 if (cmds:is-macintel) { cmds:prepend-to-path '/usr/local/bin' } # intel homebrew (native or via Rosetta 2)
 cmds:if-external brew {
 	var pfix = (brew --prefix)
@@ -150,21 +143,20 @@ cmds:if-external carapace {
 	set-env CARAPACE_BRIDGES "zsh,bash"
 	set-env CARAPACE_EXCLUDES "systemctl"
 	set-env CARAPACE_MERGEFLAGS 1
-	eval (carapace _carapace | slurp)
+	time { eval (carapace _carapace | slurp) }
 	echo (styled "👉🏼 …carapace integration…" bold italic yellow)
 }
 
 #==================================================== - OTHER INTEGRATIONS
-cmds:if-external zoxide { eval (zoxide init elvish | slurp) }
+cmds:if-external zoxide { eval (zoxide init elvish | slurp) } # better cd
 cmds:if-external fd {
 	cmds:if-external fzf {
 		set-env FZF_DEFAULT_COMMAND "fd --type file --color=always --follow --hidden --exclude .git"
 		set-env FZF_DEFAULT_OPTS "--ansi"
 	}
 }
-cmds:if-external uv { eval (uv generate-shell-completion elvish | slurp) }
-cmds:if-external rotz { eval (rotz completions elvish | slurp) } 
-cmds:if-external bombadil { eval (bombadil generate-completions elvish | slurp) } 
+cmds:if-external uv { eval (uv generate-shell-completion elvish | slurp) } # python manager
+cmds:if-external rotz { eval (rotz completions elvish | slurp) } # dotfile namager
 cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
 cmds:if-external nvim { set-env EDITOR 'nvim'; set-env VISUAL 'nvim' } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 cmds:if-external pixi {
@@ -173,7 +165,7 @@ cmds:if-external pixi {
 	var pixibin = (pixi info --json | from-json | put (one)[global_info][bin_dir])
 	# pixi doesn't expose tools installed with gem etc. so manually expose them
 	if (os:exists $pixienv/ruby/share/rubygems/bin/pandocomatic) { ln -sf $pixienv/ruby/share/rubygems/bin/pandocomatic $pixibin }
-}
+} # global package manager
 python:deactivate
 
 #==================================================== - GENERAL ENVIRONMENT
@@ -181,6 +173,7 @@ set-env PAPERSIZE A4
 set-env PROCESSOR (str:to-lower (uname -m))
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
 
+#==================================================== - LUA PATHS
 if (not (has-env LUA_PATH)) { set-env LUA_PATH ';'; set-env LUA_CPATH ';' }
 cmds:do-if-path ~/.local/share/pandoc/filters {|p| set-env LUA_PATH $p'/?.lua;'$E:LUA_PATH }
 cmds:do-if-path /opt/homebrew/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
@@ -191,11 +184,7 @@ cmds:do-if-path ~/.pixi/envs/luarocks/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.
 cmds:do-if-path ~/.pixi/envs/luarocks/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
 cmds:do-if-path ~/.local/share/pandoc/ {|p| set-env PD $p }
 
-#==================================================== - MAIN ALIASES
-if (cmds:not-file ~/.config/elvish/lib/aliases.elv) {
-	mkdir -p ~/.config/elvish/lib/
-	ln -sf ~/.dotfiles/shells/elvish/aliases.elv ~/.config/elvish/lib/aliases.elv
-}
+#==================================================== - MY ALIASES
 use aliases
 
 #==================================================== - KEY BINDINGS
@@ -207,9 +196,9 @@ cmds:if-external fzf { set edit:insert:binding[Ctrl-r] = { aliases:history >/dev
 
 #==================================================== - THEME
 cmds:if-external starship {
-	echo (styled "👉🏼 …starship init…" bold italic yellow)
 	eval ((search-external starship) init elvish --print-full-init | slurp)
 	eval ((search-external starship) completions elvish | slurp)
+	echo (styled "👉🏼 …starship init…" bold italic yellow)
 } { use github.com/muesli/elvish-libs/theme/powerline }
 
 #==================================================== - ENSURE SHIM PREPENDED
