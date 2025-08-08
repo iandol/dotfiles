@@ -105,16 +105,6 @@ channels = ["conda-forge"]
 dependencies = { fd-find = "*" }
 exposed = { fd = "fd" }
 
-[envs.pandoc]
-channels = ["conda-forge"]
-dependencies = { pandoc = "*" }
-exposed = { pandoc-lua = "pandoc-lua", pandoc-server = "pandoc-server", pandoc = "pandoc" }
-
-[envs.ruby]
-channels = ["conda-forge"]
-dependencies = { ruby = "*", compilers = "*" }
-exposed = { bundle = "bundle", bundler = "bundler", erb = "erb", gem = "gem", irb = "irb", racc = "racc", rake = "rake", rbs = "rbs", rdbg = "rdbg", rdoc = "rdoc", ri = "ri", ruby = "ruby", syntax_suggest = "syntax_suggest", typeprof = "typeprof" }
-
 [envs.openjdk]
 channels = ["conda-forge"]
 dependencies = { openjdk = "17.*" }
@@ -169,4 +159,9 @@ exposed = { corepack = "corepack", node = "node", npm = "npm", npx = "npx" }
 channels = ["conda-forge"]
 dependencies = { zoxide = "*" }
 exposed = { zoxide = "zoxide" }
+
+[envs.yazi]
+channels = ["conda-forge"]
+dependencies = { yazi = "*" }
+exposed = { ya = "ya", yazi = "yazi" }
 
