@@ -54,7 +54,9 @@ vim.lsp.config("lua_ls", {
 -- keymaps
 local km = vim.keymap
 km.set("n", "<leader>o", ":update<CR> :source<CR>", { desc = "Reload File" })
-km.set("n", "<leader>s", ":SudaWrite<CR>", { desc = "Sudo Write" })
+km.set("n", "<leader>w", ":write<CR>", { desc = "Write File" })
+km.set("n", "<leader>q", ":write<CR> :quit<CR>", { desc = "Write & Quit" })
+km.set("n", "<leader>s", ":SudaWrite<CR>", { desc = "Sudo Write File" })
 km.set("n", "K", vim.lsp.buf.hover, { desc = "LSP Hover" })
 km.set("n", "<leader>lf", vim.lsp.buf.format, { desc = "LSP Format" })
 km.set("n", "<leader>lk", vim.lsp.buf.hover, { desc = "LSP Hover" })
