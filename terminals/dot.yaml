@@ -5,6 +5,7 @@ links:
   kitty/kitty-keymap.py: ~/.config/kitty/kitty-keymap.py
   kitty/kitty.map: ~/.config/kitty/kitty.map
   kitty/quick-access-terminal.conf: ~/.config/kitty/quick-access-terminal.conf
+  colors.png: ~/.config/kitty/colors.png
   colors-dark.png: ~/.config/kitty/colors-dark.png
   alacritty.yml: ~/.config/alacritty.yml
   ghostty-config: ~/.config/ghostty/config
