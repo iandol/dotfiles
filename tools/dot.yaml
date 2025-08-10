@@ -5,7 +5,7 @@ global:
     pixi-global.toml: ~/.pixi/manifests/pixi-global.toml
     rubocop.yml: ~/.rubocop.yml
     starship.toml: ~/.config/starship.toml
-    tmux.conf: ~/.tmux.conf
+    tmux.conf: ~/.config/tmux/tmux.conf
     yazi.toml: ~/.config/yazi/yazi.toml
     eget.toml: ~/.eget.toml
 # darwin|linux:

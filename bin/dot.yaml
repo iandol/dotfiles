@@ -1,0 +1,11 @@
+global:
+  links:
+    makeJSON.sh: ~/bin/makeJSON.sh
+    checkZT: ~/bin/checkZT
+darwin:
+  links:
+    FitImagesToPageWidth.py: ~/Library/Application Support/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
+    runSync.applescript: ~/bin/runSync.applescript
+linux:
+  links:
+    FitImagesToPageWidth.py: ~/.config/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py

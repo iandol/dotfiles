@@ -1,3 +1,4 @@
+use os; use runtime; use path; if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) { use x; x:init; }     # boot up x-cmd in Elvish.
 #====================================================
 #  __|  |      _)       |   
 #  _|   | \ \ / | (_-<    \ 
@@ -110,16 +111,6 @@ cmds:if-external brew {
 	each {|p| cmds:prepend-to-path $p } [ $pfix'/bin' $pfix'/sbin']
 }
 
-#==================================================== - X-CMD 文
-if (os:is-regular $E:HOME/.x-cmd.root/bin/x-cmd) {
-	set-env ___X_CMD_LANG en
-	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 1
-	if (not (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv)) { x-cmd elv --setup mod }
-	use x; x:init
-	edit:add-var •~ { |@in| use x; x:x chat --sendalias lms $@in; }
-	echo (styled "👉🏼 …x-cmd 文 integration…" bold italic yellow)
-}
-
 #==================================================== - KITTY INTEGRATION
 if (has-env KITTY_INSTALLATION_DIR) {
 	fn osc {|c| print "\e]"$c"\a" }
@@ -138,13 +129,23 @@ if (eq $E:TERM "xterm-ghostty") {
 }
 
 #==================================================== - CARAPACE INTEGRATION
-#brew tap rsteube/homebrew-tap; brew install rsteube/tap/carapace
 cmds:if-external carapace {
 	set-env CARAPACE_BRIDGES "zsh,bash"
-	set-env CARAPACE_EXCLUDES "systemctl"
+	set-env CARAPACE_EXCLUDES "systemctl,x"
 	set-env CARAPACE_MERGEFLAGS 1
 	time { eval (carapace _carapace | slurp) }
 	echo (styled "👉🏼 …carapace integration…" bold italic yellow)
+}
+
+#==================================================== - X-CMD 文
+# …must come AFTER carapace
+if (os:is-regular $E:HOME/.x-cmd.root/bin/x-cmd) {
+	set-env ___X_CMD_LANG en
+	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 1
+	if (not (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv)) { x-cmd elv --setup mod }
+	use x; x:init
+	edit:add-var •~ { |@in| use x; x:x chat --sendalias lms $@in; }
+	echo (styled "👉🏼 …x-cmd 文 integration…" bold italic yellow)
 }
 
 #==================================================== - OTHER INTEGRATIONS
@@ -205,4 +206,3 @@ cmds:if-external starship {
 put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /.pixi/bin} | each {|p| cmds:prepend-to-path $p} # needs to go after brew init
 
 #==================================================== - THIS IS THE END, MY FRIEND
-aliases:helpme

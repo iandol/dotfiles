@@ -7,10 +7,6 @@ export HOMEBREW_INSTALL_CLEANUP=true
 [[ $PLATFORM == 'Darwin' ]] && [[ "$(arch)" == "arm64" ]] && [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 [[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-#------------------------------------X-CMD SETUP
-export ___X_CMD_LANG="en"
-[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
-
 #-------------------------------PREFER nvim
 if [[ -f $(which nvim) ]]; then
 	export EDITOR='nvim'
@@ -88,15 +84,6 @@ for p in $pth; do
 done
 export path
 
-#------------------------------------FINALISE OTHERS
-[[ -x $(which pyenv) ]] && eval "$(pyenv init - zsh)"
-[[ -x $(which rbenv) ]] && eval "$(rbenv init - zsh)"
-[[ -x $(which fzf) ]] && source <(fzf --zsh)
-[[ -x $(which pkgx) ]] && source <(pkgx --shellcode)  #docs.pkgx.sh/shellcode
-[[ -x $(which pixi) ]] && eval "$(pixi completion --shell zsh)"
-[[ -x $(which zoxide) ]] && eval "$(zoxide init zsh)"
-[[ -x $(which rotz) ]] && eval "$(rotz completions zsh)"
-[[ -f "$DF/shells/aliases" ]] && source "$DF/shells/aliases"
 
 #-------------------------------------ZINIT SETUP
 if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
@@ -116,6 +103,17 @@ zi light z-shell/F-Sy-H
 zi light zsh-users/zsh-autosuggestions
 ### End of Zi's installer chunk
 
+#------------------------------------X-CMD SETUP
+export ___X_CMD_LANG="en"
+[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
+
+#------------------------------------FINALISE OTHERS
+[[ -x $(which fzf) ]] && source <(fzf --zsh)
+[[ -x $(which pixi) ]] && eval "$(pixi completion --shell zsh)"
+[[ -x $(which zoxide) ]] && eval "$(zoxide init zsh)"
+[[ -x $(which rotz) ]] && eval "$(rotz completions zsh)"
+[[ -f "$DF/shells/aliases" ]] && source "$DF/shells/aliases"
+
 #---------------------------------------STARSHIP
 if [[ -f $(which starship) ]]; then
 	eval "$(starship init zsh)"
@@ -125,10 +123,3 @@ fi
 
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
-
-
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:$HOME/.cache/lm-studio/bin"
-# End of LM Studio CLI section
-

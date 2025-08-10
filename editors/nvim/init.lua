@@ -1,20 +1,5 @@
--- Bootstrap lazy.nvim
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable",
-		lazyrepo, lazypath })
-	if vim.v.shell_error ~= 0 then
-		vim.api.nvim_echo({
-			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-			{ out, "WarningMsg" },
-			{ "\nPress any key to exit..." },
-		}, true, {})
-		vim.fn.getchar()
-		os.exit(1)
-	end
-end
-vim.opt.rtp:prepend(lazypath)
+-- lazyvim plugin manager
+require("lazyvim") 
 
 -- general options
 require("options")
@@ -54,6 +39,7 @@ vim.lsp.config("lua_ls", {
 -- keymaps
 local km = vim.keymap
 km.set("n", "<leader>o", ":update<CR> :source<CR>", { desc = "Reload File" })
+km.set("n", "<leader>1", ":quit<CR>", { desc = "Quit" })
 km.set("n", "<leader>w", ":write<CR>", { desc = "Write File" })
 km.set("n", "<leader>q", ":write<CR> :quit<CR>", { desc = "Write & Quit" })
 km.set("n", "<leader>s", ":SudaWrite<CR>", { desc = "Sudo Write File" })
