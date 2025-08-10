@@ -6,6 +6,7 @@ export PROC
 
 alias cagelab-monitor="tmuxp load $HOME/.config/tmuxp/cagelab-monitor.yaml"
 alias cagelab-reset="systemctl --user restart cogmoteGO && systemctl --user restart theConductor"
+alias cagelab-zsh='ln -svf $SPATH/config/zshrc $HOME/.zshrc && ln -svf $SPATH/config/zsh-* $HOME && ln -svf $SPATH/config/aliases $HOME && source $HOME/.zshrc'
 
 if [[ -f $(which eza) ]]; then
 	alias lls='eza --icons=auto -al -r -s size'
