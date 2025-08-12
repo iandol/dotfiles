@@ -3,10 +3,11 @@ PLATFORM=$(uname -s)
 export PLATFORM
 PROC=$(uname -m)
 export PROC
+export SPATH="$HOME/Code/Setup"
 
 alias cagelab-monitor="tmuxp load $HOME/.config/tmuxp/cagelab-monitor.yaml"
 alias cagelab-reset="systemctl --user restart cogmoteGO && systemctl --user restart theConductor"
-alias cagelab-zsh="ln -svf $HOME/Code/Setup/config/zshrc $HOME/.zshrc && ln -svf $HOME/Code/Setup/config/zsh-* $HOME && ln -svf $HOME/Code/Setup/config/aliases $HOME && source $HOME/.zshrc"
+alias cagelab-zsh="ln -svf $HOME/Code/Setup/config/zshrc $HOME/.zshrc && ln -svf $HOME/Code/Setup/config/zsh-* $HOME && ln -svf $HOME/Code/Setup/config/aliases $HOME && ln -svf $HOME/Code/Setup/config/pixi-global.toml $HOME/.pixi/manifests && source $HOME/.zshrc"
 
 if [[ -f $(which eza) ]]; then
 	alias lls='eza --icons=auto -al -r -s size'
