@@ -6,7 +6,10 @@ global:
     rubocop.yml: ~/.rubocop.yml
     starship.toml: ~/.config/starship.toml
     tmux.conf: ~/.config/tmux/tmux.conf
-    yazi.toml: ~/.config/yazi/yazi.toml
+    yazi/yazi.toml: ~/.config/yazi/yazi.toml
+    yazi/keymap.toml: ~/.config/yazi/keymap.toml
+    yazi/theme.toml: ~/.config/yazi/theme.toml
+    yazi/package.toml: ~/.config/yazi/package.toml
     eget.toml: ~/.eget.toml
 # darwin|linux:
 #   installs: 

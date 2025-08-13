@@ -1,4 +1,4 @@
-use re; use str; use path; use math; use epm; use platform; use md; use os; use flag
+use re; use str; use path; use file; use math; use epm; use platform; use md; use os; use flag
 use github.com/iandol/elvish-modules/cmds # my utility module
 fn msg { |@t| echo (styled "👉🏼 "$@t bold italic yellow) }
 fn header1 { |@t| echo (styled "\n\n   🌕===   "$@t"   ===🌕   " bold italic inverse magenta) }
@@ -11,6 +11,7 @@ set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>eo'] = '2>&1'
 set edit:command-abbr['cd'] = 'z' #switch to zoxide
+set edit:command-abbr['lz'] = 'lazygit' #git tui
 set edit:command-abbr['curld'] = 'curl --retry 5 -L -C -'
 set edit:command-abbr['xp'] = 'x proxy set 127.0.0.1:'
 set edit:command-abbr['xpu'] = 'x proxy unset'
@@ -50,6 +51,16 @@ cmds:if-external kitty {
 	edit:add-var kssh~ { |@in| kitten ssh $@in --kitten login_shell=elvish }
 	edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.55/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
 	edit:add-var kittydark~ { sed -Ei '' 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }	
+}
+
+#==================================================== - YAZI
+edit:add-var y~ {|@argv|
+	var tmp = (os:temp-file)
+	yazi $@argv --cwd-file=$tmp[name]
+	var cwd = (slurp < $tmp)
+	file:close $tmp
+	os:remove $tmp[name]
+	if (and (not-eq $cwd '') (not-eq $cwd $pwd)) { cd $cwd }
 }
 
 #==================================================== - LS, prefer EZA if available

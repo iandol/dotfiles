@@ -1,0 +1,16 @@
+# A TOML linter such as https://taplo.tamasfe.dev/ can use this schema to validate your config.
+# If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
+"$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
+
+[flavor]
+dark  = "catppuccin-frappe"
+light = "catppuccin-latte"
+
+
+#[tabs]
+#active   = { bg = "red", fg = "black", bold = true }
+#inactive = { fg = "gray", bg = "white", italic = true, bold = false }
+
+# Separator
+#sep_inner = { open = "", close = "" }
+#sep_outer = { open = "", close = "" }
