@@ -485,7 +485,7 @@ fn update {
 	if (cmds:is-linux) {
 		try { 
 			header2 "---> Updating APT…"
-			sudo apt update; sudo apt autoremove; apt list --upgradable
+			sudo apt update; sudo apt autoremove -y; apt list --upgradable
 		} catch { msg "\t…couldn't update APT!"	}
 		header2 "---> Updating snap/flatpak/firmware…"
 		cmds:if-external snap { try { msg "\tsnap…"; sudo snap refresh } catch { } }

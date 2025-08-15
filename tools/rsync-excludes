@@ -1,0 +1,8 @@
+.git/
+node_modules/
+__pycache__/
+.mypy_cache/
+.DS_Store
+.venv/
+*.ipynb_checkpoints/
+software/resources/

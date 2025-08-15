@@ -1,5 +1,6 @@
 global:
   links:
+    rsync-excludes: ~/.config/.rsync-excludes
     ansiweatherrc: ~/.ansiweatherrc
     default-gems: ~/.config/default-gems
     pixi-global.toml: ~/.pixi/manifests/pixi-global.toml
