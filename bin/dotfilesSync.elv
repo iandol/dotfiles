@@ -3,9 +3,11 @@
 
 set-env PATH "/Users/ian/.pixi/bin:/opt/homebrew/bin:/Users/ian/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:"$E:PATH
 cd ~/Code/dotfiles
-ssh-add -v ~/.ssh/gitrepo2
-ssh-add -v ~/.ssh/gitrepo
+git status 
+ssh-add -v /Users/ian/.ssh/gitrepo2
+ssh-add -v /Users/ian/.ssh/gitrepo
 ssh-add -l
-git fetch -v codeberg
+git remote -v
+git fetch -v --all
 git merge codeberg/main
 git push origin main

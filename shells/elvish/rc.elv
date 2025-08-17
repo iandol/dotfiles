@@ -133,7 +133,7 @@ cmds:if-external carapace {
 	set-env CARAPACE_BRIDGES "zsh,bash"
 	set-env CARAPACE_EXCLUDES "systemctl,x"
 	set-env CARAPACE_MERGEFLAGS 1
-	time { eval (carapace _carapace | slurp) }
+	eval (carapace _carapace | slurp)
 	echo (styled "👉🏼 …carapace integration…" bold italic yellow)
 }
 
