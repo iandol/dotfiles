@@ -12,6 +12,12 @@ global:
     yazi/theme.toml: ~/.config/yazi/theme.toml
     yazi/package.toml: ~/.config/yazi/package.toml
     eget.toml: ~/.eget.toml
+darwin:
+  links:
+    clash.yaml: "~/Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml"
+linux:
+  links:
+    clash.yaml: ~/.local/share/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml
 # darwin|linux:
 #   installs: 
 #     - 'curl -fsSL https://pixi.sh/install.sh | sh'

@@ -1,0 +1,11 @@
+# Profile Enhancement Merge Template for Clash Verge
+
+profile:
+  store-selected: true
+
+dns:
+  use-system-hosts: false
+
+rules:
+  - "DOMAIN,codeberg.org,DIRECT"
+  - "DOMAIN,z.ai,DIRECT"
