@@ -5,3 +5,7 @@ profile:
 
 dns:
   use-system-hosts: false
+
+prepend:
+  - 'DOMAIN-SUFFIX,z.ai,DIRECT'
+  - 'DOMAIN-SUFFIX,codeberg.org,DIRECT'

@@ -180,3 +180,8 @@ channels = ["conda-forge"]
 dependencies = { go-yq = "*" }
 exposed = { yq = "yq" }
 
+[envs.resvg]
+channels = ["conda-forge"]
+dependencies = { resvg = "*" }
+exposed = { resvg = "resvg" }
+

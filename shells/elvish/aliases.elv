@@ -494,7 +494,7 @@ fn update {
 	}
 
 	# update cogmoteGO
-	curl -sS https://raw.githubusercontent.com/Ccccraz/cogmoteGO/main/install.sh | sh
+	try { curl -sS https://raw.githubusercontent.com/Ccccraz/cogmoteGO/main/install.sh | sh } catch { }
 
 	# update other tools
 	cmds:if-external pixi { header2 "---> Update pixi"; pixi self-update; pixi global sync; pixi global -v update }
@@ -507,7 +507,7 @@ fn update {
 	cmds:if-external npm { header2 "---> Update npm global"; npm list -g; npm update -g; npm list -g }
 	
 	try { header2 "---> Updating Elvish Packages…";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
-	cmds:if-external x-cmd { header2 "---> Update 文 x-cmd"; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod }
+	try { cmds:if-external x-cmd { header2 "---> Update 文 x-cmd"; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod } } catch { }
 	header1 "====>>> Finish Update @ "(styled (date) bold)" <<<===="
 }
 edit:add-var update~ $update~

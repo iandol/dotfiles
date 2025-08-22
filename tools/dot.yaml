@@ -15,17 +15,23 @@ global:
 darwin:
   links:
     clash.yaml: "~/Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml"
+    aerospace.toml: ~/.config/aerospace/aerospace.toml
 linux:
   links:
     clash.yaml: ~/.local/share/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml
-# darwin|linux:
-#   installs: 
-#     - 'curl -fsSL https://pixi.sh/install.sh | sh'
-#     - 'curl https://zyedidia.github.io/eget.sh | sh'
-# windows:
-#   installs: 
-#     - 'powershell -ExecutionPolicy ByPass -c "irm -useb https://pixi.sh/install.ps1 | iex"'
-#     - 'irm volllly.github.io/rotz/install.sh | iex'
-# linux[whoami.distro^="Raspberry"]:
-#   links:
-#     starshiprpi.toml: ~/.config/starship.toml
+linux:
+  installs: |
+    sudo apt install -y curl git ripgrep fd-find
+darwin|linux:
+  installs: |
+    curl -fsSL https://pixi.sh/install.sh | sh
+    curl https://zyedidia.github.io/eget.sh | sh
+    mv -f ./eget /usr/local/bin/eget
+    export ROTZ_INSTALL=/usr/local && curl -fsSL volllly.github.io/rotz/install.sh | sh
+windows:
+  installs: |
+    powershell -ExecutionPolicy ByPass -c "irm -useb https://pixi.sh/install.ps1 | iex"
+    irm volllly.github.io/rotz/install.sh | iex
+linux[whoami.distro^="Raspberry"]:
+  links:
+    starshiprpi.toml: ~/.config/starship.toml
