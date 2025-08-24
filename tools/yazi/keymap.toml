@@ -2,6 +2,11 @@
 # If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
+[[mgr.prepend_keymap]]
+on   = "<Enter>"
+run  = "plugin smart-enter"
+desc = "Enter the child directory, or open the file"
+
 [[mgr.append_keymap]]
 on = "<F8>"
 run = "remove"
@@ -16,3 +21,17 @@ desc = "Chmod on selected files"
 on   = [ "g", "i" ]
 run  = "plugin lazygit"
 desc = "run lazygit"
+
+[[mgr.prepend_keymap]]
+on   = "<C-p>"
+run = 'shell -- qlmanage -p "$@"'
+
+[[mgr.prepend_keymap]]
+on   = "!"
+run  = 'shell "elvish" --block'
+desc = "Open Elvish here"
+
+[[mgr.prepend_keymap]]
+on = "@"
+run = 'shell --block --interactive --cursor=0 "$@"'
+desc = "Run command"

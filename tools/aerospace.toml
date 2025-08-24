@@ -53,10 +53,13 @@ automatically-unhide-macos-hidden-apps = false
 [gaps]
     inner.horizontal = 4
     inner.vertical =   4
-    outer.left =       4
-    outer.bottom =     4
-    outer.top =        4
-    outer.right =      4
+    outer.left =       2
+    outer.bottom =     2
+    outer.top =        2
+    outer.right =      2
+
+[workspace-to-monitor-force-assignment]
+	a = ['secondary','main']
 
 [[on-window-detected]]
     if.app-id = 'net.kovidgoyal.kitty'
@@ -74,6 +77,9 @@ automatically-unhide-macos-hidden-apps = false
     if.app-id = 'com.apple.Music'
     run = 'layout floating'
 
+[[on-window-detected]]
+    if.app-id = 'net.pornel.ImageOptim'
+    run = 'layout floating'
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -113,16 +119,16 @@ automatically-unhide-macos-hidden-apps = false
     alt-comma = 'layout accordion horizontal vertical'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    alt-h = 'focus left'
-    alt-j = 'focus down'
-    alt-k = 'focus up'
-    alt-l = 'focus right'
+    alt-h = 'focus --boundaries-action wrap-around-the-workspace left'
+    alt-j = 'focus --boundaries-action wrap-around-the-workspace down'
+    alt-k = 'focus --boundaries-action wrap-around-the-workspace up'
+    alt-l = 'focus --boundaries-action wrap-around-the-workspace right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    alt-shift-h = 'move -boundaries-action wrap-around-the-workspace left'
-    alt-shift-j = 'move -boundaries-action wrap-around-the-workspace down'
-    alt-shift-k = 'move -boundaries-action wrap-around-the-workspace up'
-    alt-shift-l = 'move -boundaries-action wrap-around-the-workspace right'
+    alt-shift-h = 'move left'
+    alt-shift-j = 'move down'
+    alt-shift-k = 'move up'
+    alt-shift-l = 'move right'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#resize
     alt-minus = 'resize smart -50'
