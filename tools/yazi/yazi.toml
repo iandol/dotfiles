@@ -2,6 +2,7 @@
 # If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
+# https://yazi-rs.github.io/docs/configuration/overview
 
 [mgr]
 ratio          = [ 1, 4, 3 ]

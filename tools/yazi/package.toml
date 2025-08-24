@@ -13,6 +13,11 @@ use = "yazi-rs/plugins:smart-enter"
 rev = "d7588f6"
 hash = "56fdabc96fc1f4d53c96eb884b02a5be"
 
+[[plugin.deps]]
+use = "KKV9/compress"
+rev = "c264639"
+hash = "e17c11b605d989568a1d1741ca17c584"
+
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"
 rev = "9cd2ac4"
