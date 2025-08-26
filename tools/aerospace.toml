@@ -1,16 +1,15 @@
-# Place a copy of this config to ~/.aerospace.toml
-# After that, you can edit ~/.aerospace.toml to your liking
-
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = []
+after-startup-command = [
+  'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=4.0'
+]
 
 # Start AeroSpace at login
 start-at-login = true
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
 enable-normalization-flatten-containers = true
-enable-normalization-opposite-orientation-for-nested-containers = true
+enable-normalization-opposite-orientation-for-nested-containers = false
 
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
 # The 'accordion-padding' specifies the size of accordion padding
@@ -51,12 +50,12 @@ automatically-unhide-macos-hidden-apps = false
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 4
-    inner.vertical =   4
-    outer.left =       2
-    outer.bottom =     2
-    outer.top =        2
-    outer.right =      2
+    inner.horizontal =	4
+    inner.vertical =	4
+    outer.left =		4
+    outer.bottom =		4
+    outer.top =			4
+    outer.right =		4
 
 [workspace-to-monitor-force-assignment]
 	a = ['secondary','main']
@@ -64,6 +63,10 @@ automatically-unhide-macos-hidden-apps = false
 [[on-window-detected]]
     if.app-id = 'net.kovidgoyal.kitty'
     run = 'move-node-to-workspace 1'
+
+[[on-window-detected]]
+    if.app-id = 'com.hegenberg.BetterTouchTool'
+    run = 'layout floating'
 
 [[on-window-detected]]
     if.app-name-regex-substring = 'Clash Verge'
@@ -80,6 +83,11 @@ automatically-unhide-macos-hidden-apps = false
 [[on-window-detected]]
     if.app-id = 'net.pornel.ImageOptim'
     run = 'layout floating'
+
+[[on-window-detected]]
+	if.app-id = 'com.sonnysoftware.bookends2'
+	if.window-title-regex-substring = '^Search|Inspector'
+	run = 'layout tiling'
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -180,6 +188,10 @@ automatically-unhide-macos-hidden-apps = false
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
     esc = ['reload-config', 'mode main']
+	1 = ['layout h_tiles', 'mode main']
+	2 = ['layout v_tiles', 'mode main']
+	3 = ['layout h_accordion', 'mode main']
+	4 = ['layout v_accordion', 'mode main']
     r = ['flatten-workspace-tree', 'mode main'] # reset layout
     f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
     backspace = ['close-all-windows-but-current', 'mode main']

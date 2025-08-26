@@ -11,6 +11,7 @@ global:
     yazi/keymap.toml: ~/.config/yazi/keymap.toml
     yazi/theme.toml: ~/.config/yazi/theme.toml
     yazi/package.toml: ~/.config/yazi/package.toml
+    yazi/init.lua: ~/.config/yazi/init.lua
     eget.toml: ~/.eget.toml
 darwin:
   links:
