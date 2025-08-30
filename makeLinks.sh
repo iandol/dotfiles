@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# custom script to set up symlinks, deprecated as I now use rotz
+# Usage: ./makeLinks.sh [backup]
+# If 'backup' is provided as an argument, existing files will be backed up with a timestamp.
 cd ~ || exit
 
 if [ -z "$1" ]; then

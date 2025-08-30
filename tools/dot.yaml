@@ -16,7 +16,6 @@ global:
 darwin:
   links:
     clash.yaml: "~/Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml"
-    aerospace.toml: ~/.config/aerospace/aerospace.toml
 linux:
   links:
     clash.yaml: ~/.local/share/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml

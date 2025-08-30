@@ -476,6 +476,7 @@ function update() {
 	fi
 
 	[[ -f $(which pixi) ]] && (printf '\n\n---> Updating \e[92mPIXI\e[m...\n'; pixi self-update; pixi global -v update)
+	[[ -f $(which ya) ]] && (printf '\n\n---> Updating \e[92mYAZI\e[m...\n'; ya pkg upgrade)
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
 	[[ -f $(which pyenv) ]] && (printf '\n\n---> Rehash \e[92mPYENV\e[m...\n'; pyenv rehash)
 	[[ -e "$HOME/.zi" ]] && (printf '\n\n---> Updating \e[92mZINIT\e[m...\n';zi self-update; zi update -p --all)

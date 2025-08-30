@@ -63,6 +63,9 @@ edit:add-var y~ {|@argv|
 	if (and (not-eq $cwd '') (not-eq $cwd $pwd)) { cd $cwd }
 }
 
+#==================================================== - AEROSPACE
+edit:add-var as~ { aerospace list-windows --all | fzf --height 20 --bind 'enter:execute($SHELL -c "aerospace focus --window-id {1}")+abort' }
+
 #==================================================== - LS, prefer EZA if available
 cmds:if-external eza {
 	edit:add-var llt~ {|@in| e:eza --icons=auto --git -al -r -s time --group-directories-first $@in }
@@ -498,6 +501,7 @@ fn update {
 
 	# update other tools
 	cmds:if-external pixi { header2 "---> Update pixi"; pixi self-update; pixi global sync; pixi global -v update }
+	cmds:if-external ya { header2 "---> Update Yazi"; ya pkg upgrade }
 	cmds:if-external pkgx { header2 "---> Update pkgx"; pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { header2 "---> Update Micromamba…"; micromamba self-update }
 	cmds:if-external gem { header2 "---> Update Ruby Gems"; gem update; gem cleanup }
