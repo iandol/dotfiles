@@ -84,6 +84,10 @@ automatically-unhide-macos-hidden-apps = false
     run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
+    if.app-id = 'com.soma-zone.LaunchControl'
+    run = ['layout floating', 'move-node-to-workspace S']
+
+[[on-window-detected]]
     if.app-name-regex-substring = 'com.tencent.xinWeChat'
     run = ['layout floating', 'move-node-to-workspace S']
 

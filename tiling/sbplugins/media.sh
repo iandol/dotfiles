@@ -1,14 +1,14 @@
 #!/bin/bash
 # brew install media-control jq
 
-ICON_PLAY="  "
-ICON_PAUSE=" "
+ICON_PLAY=" "
+ICON_PAUSE=""
 ICON_NOMEDIA="󰝛 "
 MEDIA_JSON=$(/opt/homebrew/bin/media-control get)
 X=$(echo "$MEDIA_JSON" | jq -r '.bundleIdentifier')
 
 # Default case for fallback
-if [ -z "$MEDIA_JSON" ]; then
+if [ "$MEDIA_JSON" == 'null' ]; then
   sketchybar --set $NAME icon="$ICON_PLAY" \
                          label="Player Not Open" \
                          drawing=on
@@ -16,13 +16,13 @@ if [ -z "$MEDIA_JSON" ]; then
 fi
 BUNDLE_ID=$(echo "$MEDIA_JSON" | jq -r '.bundleIdentifier')
 PLAYBACK_RATE=$(echo "$MEDIA_JSON" | jq -r '.playbackRate')
-LABEL=$(echo "$MEDIA_JSON" | jq -r '.title + "—" + .artist + "—" + .album')
+LABEL=$(echo "$MEDIA_JSON" | jq -r '.title + "-" + .artist + "-" + .album')
 
 # Check if the media source is NOT Apple Music
 if [ "$BUNDLE_ID" != "com.apple.Music" ]; then
   sketchybar --set $NAME drawing=on \
 						 icon="$ICON_NOMEDIA" \
-						 label="None Detected - Open Apple Music"
+						 label="Հազարան Բլբուլ"
   exit 0
 fi
 
@@ -36,3 +36,4 @@ else
                          label="$LABEL" \
                          drawing=on
 fi
+
