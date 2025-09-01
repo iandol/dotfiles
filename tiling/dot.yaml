@@ -3,3 +3,6 @@ darwin:
     aerospace.toml: ~/.config/aerospace/aerospace.toml
     sketchybarrc: ~/.config/sketchybar/sketchybarrc
     sbplugins: ~/.config/sketchybar/plugins
+linux:
+  links:
+    i3config: ~/.config/i3/config
