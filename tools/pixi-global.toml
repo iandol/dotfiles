@@ -190,3 +190,8 @@ channels = ["conda-forge"]
 dependencies = { poppler = "*" }
 exposed = { pdfattach = "pdfattach", pdfdetach = "pdfdetach", pdffonts = "pdffonts", pdfimages = "pdfimages", pdfinfo = "pdfinfo", pdfseparate = "pdfseparate", pdfsig = "pdfsig", pdftocairo = "pdftocairo", pdftohtml = "pdftohtml", pdftoppm = "pdftoppm", pdftops = "pdftops", pdftotext = "pdftotext", pdfunite = "pdfunite" }
 
+[envs.btop]
+channels = ["conda-forge"]
+dependencies = { btop = "*" }
+exposed = { btop = "btop" }
+
