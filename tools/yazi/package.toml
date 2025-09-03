@@ -23,6 +23,11 @@ use = "Rolv-Apneseth/starship"
 rev = "a63550b"
 hash = "c2021386289a0cbb3e152a052f67c177"
 
+[[plugin.deps]]
+use = "uhs-robert/sshfs"
+rev = "25e8bb0"
+hash = "6ab2128fbbaa3928caa1dbf997293708"
+
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"
 rev = "9cd2ac4"
