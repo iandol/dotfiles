@@ -116,7 +116,7 @@ edit:add-var cloneReset~ $cloneReset~
 #==================================================== - GENERAL
 edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/stdin }
 edit:add-var cagelab-monitor~ { tmuxp load cagelab-monitor }
-edit:add-var cagelab-zsh~ { ln -svf $E:HOME/Code/Setup/config/zshrc $E:HOME/.zshrc; ln -svf $E:HOME/Code/Setup/config/zsh-* $E:HOME; ln -svf $E:HOME/Code/Setup/config/aliases $E:HOME; source $E:HOME/.zshrc }
+edit:add-var cagelab-zsh~ { ln -svf $E:HOME/Code/Setup/config/zshrc $E:HOME/.zshrc; ln -svf $E:HOME/Code/Setup/config/zsh-* $E:HOME; ln -svf $E:HOME/Code/Setup/config/aliases $E:HOME }
 edit:add-var cagelab-reset~ { systemctl --user restart cogmoteGO; systemctl --user restart theConductor }
 
 if ( cmds:is-macos ) {

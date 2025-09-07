@@ -8,7 +8,26 @@ export SPATH="$HOME/Code/Setup"
 alias cagelab-monitor="tmuxp load $HOME/.config/tmuxp/cagelab-monitor.yaml"
 alias cagelab-reset="systemctl --user restart cogmoteGO && systemctl --user restart theConductor"
 alias cagelab-zsh="ln -svf $HOME/Code/Setup/config/zshrc $HOME/.zshrc && ln -svf $HOME/Code/Setup/config/zsh-* $HOME && ln -svf $HOME/Code/Setup/config/aliases $HOME && ln -svf $HOME/Code/Setup/config/pixi-global.toml $HOME/.pixi/manifests && source $HOME/.zshrc"
+function cagelab-servicereset() {
+	cd "$HOME/.config/systemd/user" || return
+	systemctl --user disable cogmoteGO.service
+	rm -f cogmoteGO.service
+	cogmoteGO service
+	systemctl --user daemon-reload
+	sl=(theConductor.service mediamtx.service obs.service toggleInput.service)
+	for s in $sl; do
+		systemctl --user stop $s
+		systemctl --user disable $s
+		rm -f $s
+		ln -sf $HOME/Code/CageLab/software/services/$s $HOME/.config/systemd/user
+		systemctl --user daemon-reload
+		systemctl --user enable $s
+	done
+	sleep 1
+	systemctl --user restart cogmoteGO theConductor
+}
 
+#============================================EZA
 if [[ -f $(which eza) ]]; then
 	alias lls='eza --icons=auto -al -r -s size'
 	alias llt='eza --icons=auto -al -r -s time'
