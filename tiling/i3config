@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:rec mono casual 18
+font pango:Alegreya Sans 13
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -28,7 +28,7 @@ exec --no-startup-id dex --autostart --environment i3
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
-exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
+exec --no-startup-id xss-lock --ignore-sleep --ignore-xss -- i3lock --nofork
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
@@ -60,7 +60,7 @@ floating_modifier $mod
 tiling_drag modifier titlebar
 
 # start a terminal
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec ~/bin/kitty
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -197,8 +197,20 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
-		font pango:Alegreya Sans 20
-		tray_padding 0px
-		separator_symbol ":|:"
+	status_command i3status
+	font pango:Alegreya Sans 15
+	tray_padding 0px
+	separator_symbol ":|:"
+	workspace_min_width 50
+	padding 0px 5px 2px 5px
+	colors {
+		background #111111
+		statusline #eeeeee
+		separator #aaaaaa
+		focused_workspace  #99784c #775528 #ffffff
+		active_workspace   #333333 #5f676a #ffffff
+		inactive_workspace #333333 #222222 #888888
+		urgent_workspace   #2f343a #900000 #ffffff
+		binding_mode       #2f343a #999900 #ffffff
+    }	
 }
