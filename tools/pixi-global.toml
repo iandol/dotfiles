@@ -93,7 +93,7 @@ exposed = { chronic = "chronic", combine = "combine", errno = "errno", ifdata = 
 [envs.awscli]
 channels = ["conda-forge"]
 dependencies = { awscli = "*" }
-exposed = { aws = "aws", "aws.cmd" = "aws.cmd", aws_bash_completer = "aws_bash_completer", aws_completer = "aws_completer", aws_zsh_completer = "aws_zsh_completer" }
+exposed = { aws = "aws", aws_completer = "aws_completer" }
 
 [envs.fd-find]
 channels = ["conda-forge"]
