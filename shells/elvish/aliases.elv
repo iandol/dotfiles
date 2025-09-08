@@ -118,7 +118,7 @@ edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/s
 edit:add-var cagelab-monitor~ { tmuxp load cagelab-monitor }
 edit:add-var cagelab-zsh~ { ln -svf $E:HOME/Code/Setup/config/zshrc $E:HOME/.zshrc; ln -svf $E:HOME/Code/Setup/config/zsh-* $E:HOME; ln -svf $E:HOME/Code/Setup/config/aliases $E:HOME }
 edit:add-var cagelab-reset~ { systemctl --user restart cogmoteGO; systemctl --user restart theConductor }
-
+edit:add-var cagelab-reset-OBS~ {'systemctl --user stop mediamtx; systemctl --user stop obs; sleep 1; systemctl --user start mediamtx; systemctl --user start obs' }
 if ( cmds:is-macos ) {
 	edit:add-var mano~ { |@cmds|
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
