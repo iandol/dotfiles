@@ -1,7 +1,17 @@
+#########################################
+# AEROSPACE CONFIG                      #
+#########################################
+
+# ensure path
+[exec]
+    inherit-env-vars = true
+[exec.env-vars]
+    PATH = '${HOME}/.pixi/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
+
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-	'exec-and-forget sketchybar',
+	#'exec-and-forget sketchybar', #use it as a brew service is better
 	'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=3.0',
 ]
 
@@ -80,15 +90,23 @@ automatically-unhide-macos-hidden-apps = false
     run = 'layout floating'
 
 [[on-window-detected]]
+    if.app-id = 'com.binarynights.ForkLift'
+    run = 'layout floating'
+
+[[on-window-detected]]
     if.app-name-regex-substring = 'Clash Verge'
     run = ['layout floating', 'move-node-to-workspace S']
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'LuLu Alert'
+    run = ['layout floating']
 
 [[on-window-detected]]
     if.app-id = 'com.soma-zone.LaunchControl'
     run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
-    if.app-name-regex-substring = 'com.tencent.xinWeChat'
+    if.app-id = 'com.tencent.xinWeChat'
     run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
@@ -107,6 +125,12 @@ automatically-unhide-macos-hidden-apps = false
 	if.app-id = 'com.sonnysoftware.bookends2'
 	if.window-title-regex-substring = '^Search|Inspector'
 	run = 'layout tiling'
+
+[[on-window-detected]]
+	if.app-name-regex-substring = 'Zotero'
+	if.window-title-regex-substring = 'Citation|Document'
+	run = 'layout floating'
+
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
