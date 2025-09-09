@@ -2,12 +2,6 @@
 # AEROSPACE CONFIG                      #
 #########################################
 
-# ensure path
-[exec]
-    inherit-env-vars = true
-[exec.env-vars]
-    PATH = '${HOME}/.pixi/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
-
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
@@ -52,6 +46,12 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
 automatically-unhide-macos-hidden-apps = false
 
+# ensure path
+[exec]
+    inherit-env-vars = true
+[exec.env-vars]
+    PATH = '${HOME}/.pixi/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
+
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
@@ -73,10 +73,13 @@ automatically-unhide-macos-hidden-apps = false
     outer.top =			[ { monitor."Built-in" = 0 }, 30 ]
     outer.right =		4
 
-[workspace-to-monitor-force-assignment]
+# Workspace to monitor force assignment.
+# See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 	A = ['secondary','main']
 	S = ['secondary','main']
 
+# You can use 'on-window-detected' blocks to run commands when new window is created.
+# See: https://nikitabobko.github.io/AeroSpace/guide#callbacks
 [[on-window-detected]]
     if.app-id = 'com.vivaldi.Vivaldi'
     run = 'move-node-to-workspace A'
