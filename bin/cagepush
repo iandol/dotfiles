@@ -31,19 +31,54 @@ RSYNC_FLAGS=(
 
 # ===== ARGUMENTS =====
 # Usage:
-#   cagepush [-n] <src_dir1> [src_dir2 ...]
-# If no sources are given, default to ~/Code/CageLab.
+#   cagepush [-n] [-s user@host] <src_dir1> [src_dir2 ...]
+#   cagepush [-n] [-suser@host]  <src_dir1> [src_dir2 ...]
+# If no sources are given, defaults to ~/Code/CageLab.
+# -n / --dry-run : rsync dry-run
+# -s : override DEST_USER_HOST (separate arg)
+# -suser@host : override DEST_USER_HOST (attached form)
 DRYRUN=0
 sources=()
 
-# Parse a very small option set: -n / --dry-run
-for arg in "$@"; do
-  case "$arg" in
-    -n|--dry-run) DRYRUN=1 ;;
-    --) shift; break ;;
-    -*) echo "Unknown option: $arg" >&2; exit 2 ;;
-    *) sources+=("$arg") ;;
+# Parse options
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -n|--dry-run)
+      DRYRUN=1
+      shift
+      ;;
+    -s)
+      if [[ $# -lt 2 ]]; then
+        echo "Error: -s requires an argument (user@host)" >&2
+        exit 2
+      fi
+      DEST_USER_HOST="$2"
+      shift 2
+      ;;
+    -s*)
+      # Attached form: -suser@host
+      DEST_USER_HOST="${1#-s}"
+      shift
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      echo "Unknown option: $1" >&2
+      exit 2
+      ;;
+    *)
+      sources+=("$1")
+      shift
+      ;;
   esac
+done
+
+# Any remaining args after -- go in sources
+while [[ $# -gt 0 ]]; do
+  sources+=("$1")
+  shift
 done
 
 # If nothing was added after options, default to one project
