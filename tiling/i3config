@@ -52,6 +52,7 @@ tiling_drag modifier titlebar
 for_window [title="Event Tester"] floating enable
 for_window [title="xclock"] floating enable
 for_window [class="copyq"] floating enable
+for_window [title="Bitwarden"] floating enable
 
 ###################################### KEYS
 
