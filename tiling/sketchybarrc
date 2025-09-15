@@ -96,21 +96,24 @@ sketchybar	--add item clock right								\
 			--set cpu	update_freq=2							\
 						icon=									\
 						script="$PLUGIN_DIR/cpu.sh"				\
+			--subscribe volume volume_change					\
 			--add item sie right								\
 			--set sie	update_freq=15							\
 						script="$PLUGIN_DIR/secure_input.sh"	\
+			--subscribe sie mouse.entered						\
 			--add item music q									\
 			--set music label.color=0x66ffffff					\
 						icon.color=0x66ffffff					\
 						background.color=0x22ffffff				\
 						label.max_chars=24						\
 						scroll_texts=true						\
+						label.scroll_duration=300				\
 						padding_right=-8						\
 						icon.padding_right=0					\
 						label.padding_left=1					\
 						script="$PLUGIN_DIR/media.sh"			\
 						click_script="/opt/homebrew/bin/media-control toggle-play-pause" \
-						update_freq=30							\
+						update_freq=10							\
 						background.drawing=on					
 			#--subscribe music mouse.entered system_woke
 

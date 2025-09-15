@@ -501,16 +501,15 @@ fn update {
 
 	# update other tools
 	cmds:if-external pixi { header2 "---> Update pixi"; pixi self-update; pixi global sync; pixi global -v update }
-	cmds:if-external ya { header2 "---> Update Yazi"; ya pkg upgrade }
 	cmds:if-external pkgx { header2 "---> Update pkgx"; pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { header2 "---> Update Micromamba…"; micromamba self-update }
 	cmds:if-external gem { header2 "---> Update Ruby Gems"; gem update; gem cleanup }
 	cmds:if-external rbenv { header2 "---> Rehash RBENV…"; rbenv rehash }
 	cmds:if-external pyenv { header2 "---> Rehash PYENV…"; pyenv rehash }
-	cmds:if-external tlmgr { header2 "---> Check TeX-Live…"; tlmgr update --self; tlmgr update --all }
 	cmds:if-external npm { header2 "---> Update npm global"; npm list -g; npm update -g; npm list -g }
 	cmds:if-external nvim { header2 "---> Update NVIM plugins…"; nvim --headless "+Lazy! sync" +qa }
-	
+	cmds:if-external ya { header2 "---> Update Yazi"; ya pkg upgrade }
+
 	try { header2 "---> Updating Elvish Packages…";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
 	try { cmds:if-external x-cmd { header2 "---> Update 文 x-cmd"; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod } } catch { }
 	header1 "====>>> Finish Update @ "(styled (date) bold)" <<<===="
@@ -698,10 +697,12 @@ edit:add-var updateOptickaPages~ $updateOptickaPages~
 fn updateAll {
 	update
 	if (cmds:is-linux) { sudo apt full-upgrade -y }
-	updateuBlock
 	updateMPV
 	updateElvish
 	updateFFmpeg
 	updateTeX
+	updateuBlock
+	header1 "====>>> Finish UpdateAll @ "(styled (date) bold)" <<<===="
+
 }
 edit:add-var updateAll~ $updateAll~

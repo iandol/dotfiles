@@ -25,15 +25,15 @@ hash = "c2021386289a0cbb3e152a052f67c177"
 
 [[plugin.deps]]
 use = "uhs-robert/sshfs"
-rev = "25e8bb0"
-hash = "6ab2128fbbaa3928caa1dbf997293708"
+rev = "4a87093"
+hash = "263cafaa248b348568e0e35495f2f78"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"
-rev = "3e6da98"
+rev = "4296a38"
 hash = "f9a1b9936072893ab27de5738988b710"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-latte"
-rev = "3e6da98"
+rev = "4296a38"
 hash = "509055ecc7e6315cb574be36da7a4495"
