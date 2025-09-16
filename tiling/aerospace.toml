@@ -167,6 +167,9 @@ automatically-unhide-macos-hidden-apps = false
     #     activate
     # end tell'
     # '''
+	
+	# Open Kitty terminal with alt + enter shortcut
+	alt-enter = 'exec-and-forget open -n /Applications/Kitty.app'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
     alt-slash = 'layout tiles horizontal vertical'
@@ -216,30 +219,31 @@ automatically-unhide-macos-hidden-apps = false
     alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-    alt-shift-z = 'mode service'
+    alt-shift-z = ['mode service', 'exec-and-forget sketchybar --bar color=0x80ff2453']
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
-    esc = ['reload-config', 'mode main']
-	1 = ['layout h_tiles', 'mode main']
-	2 = ['layout v_tiles', 'mode main']
-	3 = ['layout h_accordion', 'mode main']
-	4 = ['layout v_accordion', 'mode main']
-    r = ['flatten-workspace-tree', 'mode main'] # reset layout
-    f = ['layout floating tiling', 'mode main'] # Toggle between floating and tiling layout
-    s = ['fullscreen --no-outer-gaps', 'mode main']
-	t = ['macos-native-fullscreen']
-	backspace = ['close-all-windows-but-current', 'mode main']
+    esc = ['reload-config', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+    r = ['flatten-workspace-tree', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000'] # reset layout
+    f = ['layout floating tiling', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000'] # Toggle between floating and tiling layout
+    s = ['fullscreen --no-outer-gaps', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+	t = ['exec-and-forget sketchybar --bar color=0xaa000000', 'macos-native-fullscreen']
+	backspace = ['close-all-windows-but-current', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
 
     # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
     #s = ['layout sticky tiling', 'mode main']
 
-    alt-shift-h = ['join-with left', 'mode main']
-    alt-shift-j = ['join-with down', 'mode main']
-    alt-shift-k = ['join-with up', 'mode main']
-    alt-shift-l = ['join-with right', 'mode main']
+    h = ['join-with left', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+    j = ['join-with down', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+    k = ['join-with up', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+    l = ['join-with right', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+
+	minus = 'resize width -50'
+    equal = 'resize width +50'
+	9 = 'resize height -50'
+    0 = 'resize height +50'
 
     down = 'volume down'
     up = 'volume up'
-    shift-down = ['volume set 0', 'mode main']
+    shift-down = ['volume set 0', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
