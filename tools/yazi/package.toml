@@ -1,7 +1,7 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:chmod"
-rev = "109b13d"
-hash = "1adc12c2b2b025411ab61eb8f0879574"
+rev = "d1c8baa"
+hash = "8ad3e90b079190b4905f24a44f4ca06b"
 
 [[plugin.deps]]
 use = "Lil-Dank/lazygit"
@@ -10,7 +10,7 @@ hash = "ee71543790f0ce3951161045a3787abd"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "109b13d"
+rev = "d1c8baa"
 hash = "56fdabc96fc1f4d53c96eb884b02a5be"
 
 [[plugin.deps]]

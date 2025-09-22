@@ -366,11 +366,11 @@ set edit:command-abbr['setproxy'] = 'sp'
 fn installMATLAB {|&version='R2025a' &action='install' &products='' &dest=''|
 	var dest = ''
 	var cmd = ''
-	header1 "MATLAB Installation using MPM"
+	cmds:header1 "MATLAB Installation using MPM"
 	cmds:if-external mpm {
-			msg "mpm is already installed!"
+			cmds:msg "mpm is already installed!"
 	} { 
-		msg "Install mpm"
+		cmds:msg "Install mpm"
 		if ( cmds:is-macos ) { curl -L -o ~/bin/mpm https://www.mathworks.com/mpm/maca64/mpm } elif ( cmds:is-linux ) { curl -L -o ~/bin/mpm https://www.mathworks.com/mpm/glnxa64/mpm }
 		chmod +x ~/bin/mpm
 	}
@@ -380,17 +380,17 @@ fn installMATLAB {|&version='R2025a' &action='install' &products='' &dest=''|
 	if (==s $dest '') { 
 		if ( cmds:is-macos ) { set dest = '/Applications/MATLAB/'$version } elif ( cmds:is-linux ) { set dest = '/usr/local/MATLAB/'$version }
 	}
-	set dest = $E:HOME"/tmp"
+	set dest = "/usr/local/MATLAB/"$version
 	if (==s $action 'install') { 
 		set cmd = $E:HOME"/bin/mpm install --no-gpu --no-jre --release="$version" --destination="$dest" --products="$products
-		msg "Install "$version" of MATLAB:\n\t"$cmd
+		cmds:msg "Install "$version" of MATLAB:\n\t"$cmd
 		eval $cmd
 	} elif (==s $action 'download') { 
 		set cmd = $E:HOME"/bin/mpm download --release="$version" --destination="$E:HOME"/Downloads/matlab"$version" --products="$products
-		msg "Download "$version" of MATLAB:\n\t"$cmd
+		cmds:msg "Download "$version" of MATLAB:\n\t"$cmd
 		eval $cmd
 	}
-	msg "...Finished..."
+	cmds:msg "...Finished..."
 }
 edit:add-var installMATLAB~ $installMATLAB~
 

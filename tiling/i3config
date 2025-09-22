@@ -53,6 +53,9 @@ for_window [title="Event Tester"] floating enable
 for_window [title="xclock"] floating enable
 for_window [class="copyq"] floating enable
 for_window [title="Bitwarden"] floating enable
+for_window [title="CageLab-GUI"] floating enable
+for_window [title=" "] floating enable
+
 
 ###################################### KEYS
 
@@ -94,11 +97,9 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-# split in horizontal orientation
+# split in horizontal / orientation
 bindsym $mod+minus split h
-
-# split in vertical orientation
-bindsym $mod+v split v
+bindsym $mod+backslash split v 
 
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle

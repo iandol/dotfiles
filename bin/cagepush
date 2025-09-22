@@ -1,4 +1,20 @@
 #!/usr/bin/env zsh
+# cagepush: Push local project directories to remote server via rsync over SSH
+# - Designed for CageLab development environment, but easily adaptable.
+# - Syncs one or more local source dirs to DEST_USER_HOST:DEST_BASE/<dirname>/
+# - Uses robust SSH options for non-interactive use.
+# - Supports dry-run mode and custom remote host via args.
+# - Excludes files/dirs listed in ~/.config/.rsync-excludes if present.
+# - Creates remote dirs if needed (with --mkpath if available).
+# - Use with SSH keys for passwordless auth (e.g., ssh-agent).
+# ===== ARGUMENTS =====
+# Usage:
+#   cagepush [-n] [-s user@host] <src_dir1> [src_dir2 ...]
+#   cagepush [-n] [-suser@host]  <src_dir1> [src_dir2 ...]
+# If no sources are given, defaults to ~/Code/CageLab.
+# -n / --dry-run : rsync dry-run
+# -s : override DEST_USER_HOST (separate arg)
+# -suser@host : override DEST_USER_HOST (attached form)
 set -euo pipefail
 
 # ===== CONFIG (edit as needed) =====
@@ -29,14 +45,7 @@ RSYNC_FLAGS=(
 # Optional bandwidth cap (KB/s): e.g., 20000 ≈ 20 MB/s
 # RSYNC_FLAGS+=(--bwlimit=20000)
 
-# ===== ARGUMENTS =====
-# Usage:
-#   cagepush [-n] [-s user@host] <src_dir1> [src_dir2 ...]
-#   cagepush [-n] [-suser@host]  <src_dir1> [src_dir2 ...]
-# If no sources are given, defaults to ~/Code/CageLab.
-# -n / --dry-run : rsync dry-run
-# -s : override DEST_USER_HOST (separate arg)
-# -suser@host : override DEST_USER_HOST (attached form)
+# ===== ARG PARSING =====
 DRYRUN=0
 sources=()
 
