@@ -56,7 +56,6 @@ for_window [title="Bitwarden"] floating enable
 for_window [title="CageLab-GUI"] floating enable
 for_window [title=" "] floating enable
 
-
 ###################################### KEYS
 
 # start a terminal
@@ -165,9 +164,9 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
-# resize window (you can also use the mouse for that)
-mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
+# service mode 
+mode "service" {
+        # These bindings trigger as soon as you enter the service mode
 
         # Pressing left will shrink the window’s width.
         # Pressing right will grow the window’s width.
@@ -190,7 +189,7 @@ mode "resize" {
         bindsym $mod+r mode "default"
 }
 
-bindsym $mod+r mode "resize"
+bindsym $mod+Shift+z mode "service"
 
 # COLORS
 # class                 border  backgr. text    indicator child_border
