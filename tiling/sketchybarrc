@@ -12,8 +12,9 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 # If you are looking for other colors, see the color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-sketchybar --bar position=top height=28 blur_radius=20 color=0xAA000000 \
-			font_smoothing=on padding_left=4 padding_right=3
+sketchybar --bar position=top height=28 blur_radius=20 color=0x88000000 \
+			font_smoothing=on padding_left=4 padding_right=3 \
+			shadow=off
 
 ##### Changing Defaults #####
 # We now change some default values, which are applied to all further items.
@@ -24,49 +25,52 @@ default=(
 	padding_left=5
 	padding_right=5
 	icon.font="Symbols Nerd Font:Regular:18.0"
-	label.font="Rec Mono Casual:Italic:14.0"
-	icon.color=0xccffffff
-	label.color=0xccffffff
+	label.font="Rec Mono Casual:Italic:13.0"
+	icon.color=0xaaffffff
+	label.color=0xaaffffff
+	label.align=center
 	icon.padding_left=3
 	icon.padding_right=3
 	label.padding_left=3
 	label.padding_right=3
-	background.color=0x55ffffff
+	background.color=0x44ffffff
 	background.corner_radius=5
-	background.height=20
+	background.height=22
 	background.drawing=off
-
 )
 sketchybar --default "${default[@]}"
 
-##### Adding Mission Control Space Indicators #####
+# ##### Adding Mission Control Space Indicators #####
 sketchybar --add event aerospace_workspace_change
-
-for sid in $(aerospace list-workspaces --all); do
-	sketchybar --add item space.$sid left					\
-		--subscribe space.$sid aerospace_workspace_change	\
-		--set space.$sid									\
-			label="$sid"									\
-			click_script="aerospace workspace $sid"			\
-			script="$PLUGIN_DIR/aerospace.sh $sid"			\
-			label.padding_right=8							\
-			label.padding_left=0							
+WORKSPACES=$(aerospace list-workspaces --all)
+WORKSPACE_ITEMS=()
+for WS in $WORKSPACES; do
+	WORKSPACE_ITEMS+=("space.$WS")
+	sketchybar --add item space.$WS left					\
+		--subscribe space.$WS aerospace_workspace_change	\
+		--set space.$WS										\
+			label="$WS"										\
+			click_script="aerospace workspace $WS"			\
+			script="$PLUGIN_DIR/aerospaceold.sh $WS"		\
+			label.padding_right=5							\
+			label.padding_left=4							\
+			icon.padding_left=0								\
+			icon.padding_right=0
 done
-
 
 ##### Adding Left Items #####
 # We add some regular items to the left side of the bar, where
 # only the properties deviating from the current defaults need to be set
-sketchybar	--add item chevron left \
-			--set chevron	icon=❧ \
-							label.drawing=off \
-							padding_right=0 \
-							icon.padding_left=0 \
-							icon.padding_right=0 \
-			--add item front_app left \
-			--set front_app	icon.drawing=off \
-							padding_left=0 \
-							padding_right=0 \
+sketchybar	--add item chevron left					\
+			--set chevron	icon=❧					\
+							label.drawing=off		\
+							padding_right=0			\
+							icon.padding_left=0		\
+							icon.padding_right=0	\
+			--add item front_app left				\
+			--set front_app	icon.drawing=off		\
+							padding_left=0			\
+							padding_right=0			\
 							script="$PLUGIN_DIR/front_app.sh" \
 			--subscribe front_app front_app_switched
 
@@ -81,7 +85,13 @@ sketchybar	--add item chevron left \
 # volume is registered. More info about the event system can be found here:
 # https://felixkratz.github.io/SketchyBar/config/events
 
-sketchybar	--add item clock right								\
+sketchybar	--add item weather right							\
+			--set weather	update_freq=600						\
+							script="$PLUGIN_DIR/weather.sh"		\
+							click_script="open -a Weather"		\
+							label.max_chars=10					\
+			--subscribe weather mouse.entered					\
+			--add item clock right								\
 			--set clock		update_freq=10						\
 							icon=								\
 							script="$PLUGIN_DIR/clock.sh"		\
@@ -101,19 +111,20 @@ sketchybar	--add item clock right								\
 			--set sie	update_freq=15							\
 						script="$PLUGIN_DIR/secure_input.sh"	\
 			--subscribe sie mouse.entered						\
-			--add item music q									\
+			--add item music e									\
 			--set music label.color=0x66ffffff					\
 						icon.color=0x66ffffff					\
 						background.color=0x22ffffff				\
 						label.max_chars=24						\
 						scroll_texts=true						\
-						label.scroll_duration=300				\
-						padding_right=-8						\
+						label.scroll_duration=150				\
+						background.padding_left=-8				\
+						background.padding_right=-8				\
 						icon.padding_right=0					\
 						label.padding_left=1					\
 						script="$PLUGIN_DIR/media.sh"			\
 						click_script="/opt/homebrew/bin/media-control toggle-play-pause" \
-						update_freq=10							\
+						update_freq=15							\
 						background.drawing=on					
 			#--subscribe music mouse.entered system_woke
 

@@ -126,3 +126,8 @@ echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | �
 export PATH="/Users/ian/.pixi/bin:$PATH"
 
 
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/ian/.cache/lm-studio/bin"
+# End of LM Studio CLI section
+
