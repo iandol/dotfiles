@@ -6,15 +6,16 @@ font-family = "Cascadia Code"
 font-family = "Symbols Nerd Font"
 window-title-font-family = "Dolly Pro Bold Italic"
 
-window-decoration = auto
+window-decoration = none
 macos-titlebar-style = "tabs"
-macos-icon = paper
-
-gtk-adwaita = true
+macos-icon = official
 
 theme = Espresso
 background-opacity = 0.9
 background-blur = true
+background-image = "~/.dotfiles/terminals/everforest.jpg"
+background-image-opacity = 0.4
+background-image-fit = cover
 window-width = 100
 window-height = 90
 

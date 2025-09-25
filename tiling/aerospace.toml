@@ -81,7 +81,7 @@ automatically-unhide-macos-hidden-apps = false
 
 [[on-window-detected]]
     if.app-id = 'com.vivaldi.Vivaldi'
-    run = 'move-node-to-workspace A'
+    run = 'move-node-to-workspace A' 
 
 [[on-window-detected]]
     if.app-id = 'net.kovidgoyal.kitty'
@@ -176,7 +176,7 @@ automatically-unhide-macos-hidden-apps = false
     # '''
 	
 	# Open Kitty terminal with alt + enter shortcut
-	alt-enter = 'exec-and-forget open -n /Applications/Kitty.app'
+	alt-enter = 'exec-and-forget /opt/homebrew/bin/kitty --single-instance'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
     alt-slash = 'layout tiles horizontal vertical'
