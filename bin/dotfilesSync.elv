@@ -7,6 +7,7 @@ git status
 ssh-add -v /Users/ian/.ssh/gitrepo2
 ssh-add -v /Users/ian/.ssh/gitrepo
 ssh-add -l
+git checkout .
 git remote -v
 git fetch -v --all
 git merge codeberg/main

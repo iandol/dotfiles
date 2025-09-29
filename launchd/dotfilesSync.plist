@@ -20,6 +20,6 @@
 	<key>StandardOutPath</key>
 	<string>/tmp/githubsync.out</string>
 	<key>StartInterval</key>
-	<integer>7200</integer>
+	<integer>86400</integer>
 </dict>
 </plist>

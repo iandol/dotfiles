@@ -70,13 +70,14 @@ automatically-unhide-macos-hidden-apps = false
 [gaps]
     inner.horizontal =	4
     inner.vertical =	4
-    outer.left =		4
-    outer.bottom =		6
-    outer.top =			[ { monitor."Built-in" = -5 }, 30 ]
-    outer.right =		4
+    outer.left =		3
+    outer.bottom =		[ { monitor."Built-in" = 6 }, 3 ]
+    outer.top =			[ { monitor."Built-in" = -6 }, 30 ]
+    outer.right =		3
 
 [workspace-to-monitor-force-assignment]
 	A = ['secondary','main']
+	D = ['secondary','main']
 	S = ['secondary','main']
 
 [[on-window-detected]]
@@ -88,7 +89,7 @@ automatically-unhide-macos-hidden-apps = false
     run = 'move-node-to-workspace 1'
 
 [[on-window-detected]]
-    if.app-id = 'com.hegenberg.BetterTouchTool'
+    if.app-id = 'com.bitwarden.desktop'
     run = 'layout floating'
 
 [[on-window-detected]]
@@ -116,7 +117,7 @@ automatically-unhide-macos-hidden-apps = false
     run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
-    if.app-id = 'com.bitwarden.desktop'
+    if.app-id = 'com.vivaldi.Vivaldi'
 	if.app-name-regex-substring = 'Bitwarden - Vivaldi'
     run = ['layout floating']
 
@@ -179,8 +180,9 @@ automatically-unhide-macos-hidden-apps = false
 	alt-enter = 'exec-and-forget /opt/homebrew/bin/kitty --single-instance'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    alt-slash = 'layout tiles horizontal vertical'
-    alt-comma = 'layout accordion horizontal vertical'
+    alt-shift-slash = 'layout tiles horizontal vertical'
+    alt-shift-comma = 'layout accordion horizontal vertical'
+	alt-shift-period = 'layout floating tiling'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
     alt-h = 'focus --boundaries-action wrap-around-the-workspace left'

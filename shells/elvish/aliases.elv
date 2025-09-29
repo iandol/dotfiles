@@ -257,6 +257,19 @@ fn history {
 	set edit:current-command = $new-cmd
 }
 
+
+#==================================================== - TOGGLE NVIM
+fn nvimToggle { 
+  if (cmds:is-path ~/.config/nvim.ian) {
+    mv ~/.config/nvim{,.lazy}; mv ~/.local/state/nvim{,.lazy}; mv ~/.local/share/nvim{,.lazy}
+    mv ~/.config/nvim{.ian,}; mv ~/.local/state/nvim{.ian,}; mv ~/.local/share/nvim{.ian,}
+  } elif (cmds:is-path ~/.config/nvim.lazy) {
+    mv ~/.config/nvim{,.ian}; mv ~/.local/state/nvim{,.ian}; mv ~/.local/share/nvim{,.ian}
+    mv ~/.config/nvim{.lazy,}; mv ~/.local/state/nvim{.lazy,}; mv ~/.local/share/nvim{.lazy,}
+  }
+}
+edit:add-var nvimToggle~ $nvimToggle~
+
 #===================================================Transfer a file (using either transfer.sh or 0x0.st)
 fn transfer {|@in &use=transfer| 
 	var url = ''

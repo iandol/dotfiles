@@ -22,8 +22,8 @@ sketchybar --bar position=top height=28 blur_radius=20 color=0x88000000 \
 # https://felixkratz.github.io/SketchyBar/config/items
 
 default=(
-	padding_left=5
-	padding_right=5
+	padding_left=3
+	padding_right=3
 	icon.font="Symbols Nerd Font:Regular:18.0"
 	label.font="Rec Mono Casual:Italic:13.0"
 	icon.color=0xaaffffff
@@ -85,11 +85,11 @@ sketchybar	--add item chevron left					\
 # volume is registered. More info about the event system can be found here:
 # https://felixkratz.github.io/SketchyBar/config/events
 
-sketchybar	--add item weather right							\
+sketchybar	--add item weather q							\
 			--set weather	update_freq=600						\
 							script="$PLUGIN_DIR/weather.sh"		\
 							click_script="open -a Weather"		\
-							label.max_chars=10					\
+							label.max_chars=15					\
 			--subscribe weather mouse.entered					\
 			--add item clock right								\
 			--set clock		update_freq=10						\
