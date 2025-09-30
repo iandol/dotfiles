@@ -2,7 +2,6 @@ global:
   links:
     makeJSON.sh: ~/bin/makeJSON.sh
     checkZT: ~/bin/checkZT
-    cagepush: ~/bin/cagepush
 darwin:
   links:
     FitImagesToPageWidth.py: ~/Library/Application Support/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
