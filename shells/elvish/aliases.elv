@@ -15,8 +15,8 @@ set edit:command-abbr['lz'] = 'lazygit' #git tui
 set edit:command-abbr['curld'] = 'curl --retry 5 -L -C -'
 set edit:command-abbr['xp'] = 'x proxy set 127.0.0.1:'
 set edit:command-abbr['xpu'] = 'x proxy unset'
-set edit:command-abbr['sds'] = 'sudo -E systemctl status'
-set edit:command-abbr['sdu'] = 'systemctl --user status'
+set edit:command-abbr['sds'] = 'sudo -E systemctl st'
+set edit:command-abbr['sdu'] = 'systemctl --user st'
 set edit:command-abbr['ju'] = 'journalctl --user --all -f -u'
 set edit:command-abbr['js'] = 'journalctl --all -f -u'
 set edit:command-abbr['edit'] = 'nvim'
@@ -49,6 +49,7 @@ edit:add-var kittymap~ { cat ~/.config/kitty/kitty.map | fzf --ansi --style full
 cmds:if-external kitty {
 	edit:add-var kittydef~ {  kitty +runpy 'from kitty.config import *; print(commented_out_default_config())' > $E:HOME/.dotfiles/terminals/kitty/kitty-default.conf }
 	edit:add-var kssh~ { |@in| kitten ssh $@in --kitten login_shell=elvish }
+	edit:add-var ksshz~ { |@in| kitten ssh $@in --kitten login_shell=zsh }
 	edit:add-var kittylight~ { sed -Ei '' 's/background_tint .+/background_tint 0.55/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }
 	edit:add-var kittydark~ { sed -Ei '' 's/background_tint .+/background_tint 0.85/g' ~/.dotfiles/configs/kitty.conf; kitty +kitten themes --reload-in=all }	
 }

@@ -25,8 +25,8 @@ hash = "c2021386289a0cbb3e152a052f67c177"
 
 [[plugin.deps]]
 use = "uhs-robert/sshfs"
-rev = "1a466c8"
-hash = "216b0497421e49b7fda5f07d20435400"
+rev = "0d6e699"
+hash = "458a404b1b9d6e72ee27812629782a0b"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"
