@@ -145,11 +145,6 @@ channels = ["conda-forge"]
 dependencies = { zenith = "*" }
 exposed = { zenith = "zenith" }
 
-[envs.nodejs]
-channels = ["conda-forge"]
-dependencies = { nodejs = "*" }
-exposed = { corepack = "corepack", node = "node", npm = "npm", npx = "npx" }
-
 [envs.zoxide]
 channels = ["conda-forge"]
 dependencies = { zoxide = "*" }
@@ -194,4 +189,9 @@ exposed = { pdfattach = "pdfattach", pdfdetach = "pdfdetach", pdffonts = "pdffon
 channels = ["conda-forge"]
 dependencies = { btop = "*" }
 exposed = { btop = "btop" }
+
+[envs.nodejs]
+channels = ["conda-forge"]
+dependencies = { nodejs = "*" }
+exposed = { corepack = "corepack", node = "node", npm = "npm", npx = "npx" }
 

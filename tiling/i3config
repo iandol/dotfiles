@@ -54,12 +54,12 @@ for_window [title="xclock"] floating enable
 for_window [class="copyq"] floating enable
 for_window [title="Bitwarden"] floating enable
 for_window [title="CageLab-GUI"] floating enable
-for_window [title=" "] floating enable
+#for_window [title=" "] floating enable
 
 ###################################### KEYS
 
 # start a terminal
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec "kitty --single-instance -d ~"
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -101,15 +101,15 @@ bindsym $mod+minus split h
 bindsym $mod+backslash split v 
 
 # enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+Shift+slash layout toggle split
+bindsym $mod+Shift+comma layout tabbed
+bindsym $mod+Shift+period floating toggle
 
 # toggle tiling / floating
-bindsym $mod+Shift+space floating toggle
+bindsym $mod+Shift+space layout stacking
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
@@ -167,6 +167,10 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 # service mode 
 mode "service" {
         # These bindings trigger as soon as you enter the service mode
+
+		# split in horizontal / orientation
+		bindsym minus split h
+		bindsym backslash split v 
 
         # Pressing left will shrink the window’s width.
         # Pressing right will grow the window’s width.
