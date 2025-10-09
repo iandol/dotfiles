@@ -28,6 +28,11 @@ use = "uhs-robert/sshfs"
 rev = "0d6e699"
 hash = "458a404b1b9d6e72ee27812629782a0b"
 
+[[plugin.deps]]
+use = "iandol/sudo"
+rev = "997ac5b"
+hash = "b587f1fb49563562003ed84446a351bc"
+
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"
 rev = "2d73b79"
