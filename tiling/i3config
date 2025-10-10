@@ -28,7 +28,7 @@ exec --no-startup-id nm-applet
 exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh,secrets,pkcs11
 
 # wallpaper
-exec --no-startup-id /usr/bin/nitrogen --set-scaled ~/.dotfiles/terminals/colors-dark.png
+exec --no-startup-id /usr/bin/nitrogen --set-scaled ~/.dotfiles/terminals/ristretto.jpg
 
 # Configure space between windows and to the screen edges.
 gaps inner 5px
@@ -65,7 +65,7 @@ bindsym $mod+Return exec "kitty --single-instance -d ~"
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec --no-startup-id "rofi -show combi -modes combi -combi-modes 'window,drun,run'"
+bindsym $mod+Shift+space exec --no-startup-id "rofi -show combi -modes combi -combi-modes 'window,drun,run'"
 # A more modern dmenu replacement is rofi:
 # bindcode $mod+40 exec "rofi -modi drun,run -show drun"
 # There also is i3-dmenu-desktop which only displays applications shipping a
@@ -109,7 +109,7 @@ bindsym $mod+Shift+comma layout tabbed
 bindsym $mod+Shift+period floating toggle
 
 # toggle tiling / floating
-bindsym $mod+Shift+space layout stacking
+bindsym $mod+Shift+s layout stacking
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle

@@ -119,7 +119,7 @@ if (has-env KITTY_INSTALLATION_DIR) {
 	set edit:before-readline = [ { send-pwd } { osc '133;A' } ]
 	set edit:after-readline = [ {|c| send-title (str:split ' ' $c | take 1) } {|c| osc '133;C' } ]
 	set after-chdir = [ {|_| send-pwd } ]
-	echo (styled "👉🏼 …kitty integration…" bold italic yellow)
+	echo (styled "👉🏼 …"(kitty --version)" integration…" bold italic yellow)
 }
 
 #==================================================== - GHOSTTY INTEGRATION
