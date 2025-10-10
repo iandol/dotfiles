@@ -105,11 +105,6 @@ channels = ["conda-forge"]
 dependencies = { openjdk = "17.*" }
 exposed = { jar = "jar", jarsigner = "jarsigner", java = "java", javac = "javac", javadoc = "javadoc", javap = "javap", jcmd = "jcmd", jconsole = "jconsole", jdb = "jdb", jdeprscan = "jdeprscan", jdeps = "jdeps", jfr = "jfr", jhsdb = "jhsdb", jimage = "jimage", jinfo = "jinfo", jlink = "jlink", jmap = "jmap", jmod = "jmod", jpackage = "jpackage", jps = "jps", jrunscript = "jrunscript", jshell = "jshell", jstack = "jstack", jstat = "jstat", jstatd = "jstatd", keytool = "keytool", rmiregistry = "rmiregistry", serialver = "serialver" }
 
-[envs.uutils-coreutils]
-channels = ["conda-forge"]
-dependencies = { uutils-coreutils = "*" }
-exposed = { timeout = "timeout" }
-
 [envs.uv]
 channels = ["conda-forge"]
 dependencies = { uv = "*" }
@@ -194,4 +189,9 @@ exposed = { btop = "btop" }
 channels = ["conda-forge"]
 dependencies = { nodejs = "*" }
 exposed = { corepack = "corepack", node = "node", npm = "npm", npx = "npx" }
+
+[envs.uutils-coreutils]
+channels = ["conda-forge"]
+dependencies = { uutils-coreutils = "*" }
+exposed = { timeout = "timeout" }
 
