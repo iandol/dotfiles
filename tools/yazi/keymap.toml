@@ -13,11 +13,6 @@ run = "remove"
 desc = "Trash selected files"
 
 [[mgr.prepend_keymap]]
-on   = [ "c", "m" ]
-run  = "plugin chmod"
-desc = "Chmod on selected files"
-
-[[mgr.prepend_keymap]]
 on   = [ "g", "i" ]
 run  = "plugin lazygit"
 desc = "run lazygit"
@@ -36,6 +31,11 @@ desc = "Open Elvish here"
 on = "@"
 run = 'shell --block --interactive --cursor=0 "$@"'
 desc = "Run command"
+
+[[mgr.prepend_keymap]]
+on   = [ "c", "m" ]
+run  = "plugin chmod"
+desc = "Chmod on selected files"
 
 [[mgr.prepend_keymap]]
 on   = [ "c", "a", "a" ]
@@ -97,17 +97,17 @@ on = ["g","m"]
 run = "plugin sshfs -- jump"
 desc = "Jump to mount"
 
-# sudo cp/mv
+# sudo touch/mkdir
 [[mgr.prepend_keymap]]
-on = ["R", "p", "p"]
-run = "plugin sudo -- paste"
-desc = "sudo paste"
+on = ["R", "a"]
+run = "plugin sudo -- create"
+desc = "sudo create"
 
-# sudo cp/mv --force
+# sudo delete
 [[mgr.prepend_keymap]]
-on = ["R", "P"]
-run = "plugin sudo -- paste --force"
-desc = "sudo paste"
+on = ["R", "D"]
+run = "plugin sudo -- remove --permanently"
+desc = "sudo delete"
 
 # sudo mv
 [[mgr.prepend_keymap]]
@@ -115,38 +115,36 @@ on = ["R", "r"]
 run = "plugin sudo -- rename"
 desc = "sudo rename"
 
+# sudo cp/mv
+[[mgr.prepend_keymap]]
+on = ["R", "p"]
+run = "plugin sudo -- paste"
+desc = "sudo paste"
+
+# sudo cp/mv --force
+[[mgr.prepend_keymap]]
+on = ["R", "P"]
+run = "plugin sudo -- paste --force"
+desc = "sudo paste force"
+
 # sudo ln -s (absolute-path)
 [[mgr.prepend_keymap]]
-on = ["R", "p", "l"]
+on = ["R", "l"]
 run = "plugin sudo -- link"
 desc = "sudo link"
 
 # sudo ln -s (relative-path)
 [[mgr.prepend_keymap]]
-on = ["R", "p", "r"]
+on = ["R", "r"]
 run = "plugin sudo -- link --relative"
 desc = "sudo link relative path"
 
 # sudo ln
 [[mgr.prepend_keymap]]
-on = ["R", "p", "L"]
+on = ["R", "L"]
 run = "plugin sudo -- hardlink"
 desc = "sudo hardlink"
 
-# sudo touch/mkdir
-[[mgr.prepend_keymap]]
-on = ["R", "a"]
-run = "plugin sudo -- create"
-desc = "sudo create"
 
-# sudo trash
-[[mgr.prepend_keymap]]
-on = ["R", "d"]
-run = "plugin sudo -- remove"
-desc = "sudo trash"
 
-# sudo delete
-[[mgr.prepend_keymap]]
-on = ["R", "D"]
-run = "plugin sudo -- remove --permanently"
-desc = "sudo delete"
+

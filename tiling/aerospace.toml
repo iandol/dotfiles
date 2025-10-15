@@ -82,20 +82,29 @@ automatically-unhide-macos-hidden-apps = false
 
 [[on-window-detected]]
     if.app-id = 'com.vivaldi.Vivaldi'
-    run = 'move-node-to-workspace A' 
+    run = 'move-node-to-workspace A'
+	check-further-callbacks = true
+
+[[on-window-detected]]
+	if.app-name-regex-substring = 'Vivaldi'
+	if.window-title-regex-substring = 'Bitwarden'
+    run = ['layout floating']
+	check-further-callbacks = true
 
 [[on-window-detected]]
     if.app-id = 'net.kovidgoyal.kitty'
     run = 'move-node-to-workspace 1'
+	check-further-callbacks = true
 
 [[on-window-detected]]
     if.app-id = 'com.bitwarden.desktop'
     run = ['layout floating', 'move-node-to-workspace S']
+	check-further-callbacks = true
 
 [[on-window-detected]]
     if.app-id = 'com.hegenberg.BetterTouchTool'
     run = 'layout floating'
-
+	
 [[on-window-detected]]
     if.app-id = 'com.binarynights.ForkLift'
     run = 'layout floating'
@@ -103,6 +112,21 @@ automatically-unhide-macos-hidden-apps = false
 [[on-window-detected]]
     if.app-name-regex-substring = 'Clash Verge'
     run = ['layout floating', 'move-node-to-workspace S']
+
+[[on-window-detected]]
+    if.app-id = 'io.mpv'
+    run = ['layout floating', 'move-node-to-workspace S']
+	check-further-callbacks = true
+
+[[on-window-detected]]
+    if.app-name-regex-substring = 'mpv'
+    run = ['layout floating', 'move-node-to-workspace S']
+	check-further-callbacks = true
+
+[[on-window-detected]]
+    if.app-id = 'org.videolan.vlc'
+    run = ['layout floating', 'move-node-to-workspace S']
+	check-further-callbacks = true
 
 [[on-window-detected]]
     if.app-name-regex-substring = 'LuLu Alert'
@@ -115,10 +139,6 @@ automatically-unhide-macos-hidden-apps = false
 [[on-window-detected]]
     if.app-id = 'com.tencent.xinWeChat'
     run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'Bitwarden - Vivaldi'
-    run = ['layout floating']
 
 [[on-window-detected]]
     if.app-id = 'com.apple.Music'

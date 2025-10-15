@@ -13,6 +13,8 @@ global:
     yazi/package.toml: ~/.config/yazi/package.toml
     yazi/init.lua: ~/.config/yazi/init.lua
     eget.toml: ~/.eget.toml
+    mpv/mpv.conf: ~/.config/mpv/mpv.conf
+    mpv/input.conf: ~/.config/mpv/input.conf
 darwin:
   links:
     clash.yaml: "~/Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml"
