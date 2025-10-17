@@ -66,6 +66,8 @@ bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+Shift+space exec --no-startup-id "rofi -show combi -modes combi -combi-modes 'window,drun,run'"
+bindsym $mod+d exec --no-startup-id "rofi -show combi -modes combi -combi-modes 'window,drun,run'"
+
 # A more modern dmenu replacement is rofi:
 # bindcode $mod+40 exec "rofi -modi drun,run -show drun"
 # There also is i3-dmenu-desktop which only displays applications shipping a
@@ -104,9 +106,9 @@ bindsym $mod+backslash split v
 bindsym $mod+Shift+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+Shift+slash layout toggle split
 bindsym $mod+Shift+comma layout tabbed
 bindsym $mod+Shift+period floating toggle
+bindsym $mod+Shift+slash layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+s layout stacking
