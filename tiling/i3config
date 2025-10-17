@@ -106,12 +106,9 @@ bindsym $mod+backslash split v
 bindsym $mod+Shift+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+Shift+comma layout tabbed
+bindsym $mod+Shift+comma layout toggle tabbed stacking
 bindsym $mod+Shift+period floating toggle
-bindsym $mod+Shift+slash layout toggle split
-
-# toggle tiling / floating
-bindsym $mod+Shift+s layout stacking
+bindsym $mod+Shift+slash layout toggle splitv splith
 
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
