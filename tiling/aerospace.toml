@@ -110,6 +110,10 @@ automatically-unhide-macos-hidden-apps = false
     run = 'layout floating'
 
 [[on-window-detected]]
+    if.app-id = 'com.objective-see.lulu.app'
+    run = 'layout floating'
+
+[[on-window-detected]]
     if.app-name-regex-substring = 'Clash Verge'
     run = ['layout floating', 'move-node-to-workspace S']
 
