@@ -28,7 +28,7 @@ exec --no-startup-id nm-applet
 exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh,secrets,pkcs11
 
 # wallpaper
-exec --no-startup-id /usr/bin/nitrogen --set-scaled ~/.dotfiles/terminals/ristretto.jpg
+exec --no-startup-id /usr/bin/nitrogen --set-scaled ~/.dotfiles/terminals/everforest.jpg
 
 # Configure space between windows and to the screen edges.
 gaps inner 5px
@@ -53,9 +53,10 @@ for_window [title="Event Tester"] floating enable
 for_window [title="xclock"] floating enable
 for_window [class="copyq"] floating enable
 for_window [title="Bitwarden"] floating enable
-for_window [class="^Matlab" title="CageLab-GUI"] floating enable
-for_window [class="^Matlab" title="^PTB Onscreen Window"] floating enable
-for_window [class="^Matlab" title="^Figures"] floating enable
+for_window [title="CageLab-GUI"] floating enable
+for_window [title="^PTB Onscreen Window"] floating enable
+for_window [title="^Figures"] floating enable
+for_window [title="^Opticka"] floating enable
 
 ###################################### KEYS
 
@@ -162,7 +163,7 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exec "i3-nagbar -f 'pango:Alegreya Sans 20' -t warning -m 'Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 # service mode 
 mode "service" {
