@@ -1,5 +1,5 @@
 -- lazyvim plugin manager
-require("lazyvim") 
+require("lazyvim")
 
 -- general options
 require("options")
@@ -31,6 +31,15 @@ vim.lsp.config("lua_ls", {
 		Lua = {
 			workspace = {
 				library = vim.api.nvim_get_runtime_file("", true),
+			}
+		}
+	}
+})
+vim.lsp.config("matlab_ls", {
+	settings = {
+		MATLAB = {
+			langserver = {
+				installPath = '/Applications/MATLAB_R2025b.app',
 			}
 		}
 	}

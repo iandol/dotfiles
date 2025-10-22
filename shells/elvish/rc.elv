@@ -204,6 +204,6 @@ cmds:if-external starship {
 } { use github.com/muesli/elvish-libs/theme/powerline }
 
 #==================================================== - ENSURE SHIM PREPENDED
-put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /.pixi/bin} | each {|p| cmds:prepend-to-path $p} # needs to go after brew init
+put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /.pixi/bin /bin} | each {|p| cmds:prepend-to-path $p} # needs to go after brew init
 
 #==================================================== - THIS IS THE END, MY FRIEND
