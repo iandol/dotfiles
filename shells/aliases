@@ -5,28 +5,10 @@ PROC=$(uname -m)
 export PROC
 export SPATH="$HOME/Code/Setup"
 
-alias cagelab-monitor="tmuxp load $HOME/.config/tmuxp/cagelab-monitor.yaml"
-alias cagelab-reset="systemctl --user restart cogmoteGO && systemctl --user restart theConductor"
-alias cagelab-zsh="ln -svf $HOME/Code/Setup/config/zshrc $HOME/.zshrc && ln -svf $HOME/Code/Setup/config/zsh-* $HOME && ln -svf $HOME/Code/Setup/config/aliases $HOME && ln -svf $HOME/Code/Setup/config/pixi-global.toml $HOME/.pixi/manifests && source $HOME/.zshrc"
-alias cagelab-reset-OBS='systemctl --user stop mediamtx && systemctl --user stop obs && sleep 1 && systemctl --user start mediamtx && systemctl --user start obs'
-function cagelabServiceReset() {
-	cd "$HOME/.config/systemd/user" || return
-	systemctl --user disable cogmoteGO.service
-	rm -f cogmoteGO.service
-	cogmoteGO service
-	systemctl --user daemon-reload
-	sl=(theConductor.service mediamtx.service obs.service toggleInput.service)
-	for s in $sl; do
-		systemctl --user stop $s
-		systemctl --user disable $s
-		rm -f $s
-		ln -sf $HOME/Code/CageLab/software/services/$s $HOME/.config/systemd/user
-		systemctl --user daemon-reload
-		systemctl --user enable $s
-	done
-	sleep 1
-	systemctl --user restart cogmoteGO theConductor
-}
+#alias cagelab-monitor="tmuxp load $HOME/.config/tmuxp/cagelab-monitor.yaml"
+#alias cagelab-reset="systemctl --user restart cogmoteGO && systemctl --user restart theConductor"
+#alias cagelab-zsh="ln -svf $HOME/Code/Setup/config/zshrc $HOME/.zshrc && ln -svf $HOME/Code/Setup/config/zsh-* $HOME && ln -svf $HOME/Code/Setup/config/aliases $HOME && ln -svf $HOME/Code/Setup/config/pixi-global.toml $HOME/.pixi/manifests && source $HOME/.zshrc"
+#alias cagelab-reset-OBS='systemctl --user stop mediamtx && systemctl --user stop obs && sleep 1 && systemctl --user start mediamtx && systemctl --user start obs'
 
 #============================================EZA
 if [[ -f $(which eza) ]]; then
@@ -442,16 +424,18 @@ function update() {
 	~/Code/scrivomatic ~/Code/dotpandoc ~/Code/bookends-tools ~/Code/pandocomatic 
 	~/Code/gears ~/Code/paru 
 	"/media/$USER/data/Code/octicka" "/media/$USER/data/Code/Psychtoolbox-3")
-	for x in $ul; do
+	for x in "${ul[@]}"; do
 		if [[ -d ${x}/.git ]]; then
 			printf "\n\n---> Updating \e[92m%s\e[m...\n" "${x}"
 			cd "${x}" || exit
 			oldbranch=$(git branch | grep -e '\*' | cut -b 3-)
 
-			# Check for local changes
+			# Check for local changes and stash if needed
+			stashed=false
 			if [[ -n $(git status --porcelain) ]]; then
 				printf "\t\t---> Found local changes in \e[93m%s\e[m, stashing...\n" "${x}"
 				git stash save "Auto-stashed by update function $(date)"
+				stashed=true
 				printf "\t\t---> Changes stashed. Use 'git stash list/pop' to recover\n"
 			fi
 
@@ -466,8 +450,8 @@ function update() {
 			fi
 			git pull
 			git status
-			if [[ -n $(git remote 2>/dev/null | grep upstream) ]]; then
-				printf "\t\t---> Fetching \e[92m${x}\e[m upstream...\n"
+			if git remote 2>/dev/null | grep -q upstream; then
+				printf "\t\t---> Fetching \e[92m%s\e[m upstream...\n" "${x}"
 				git fetch -v upstream
 				if [[ ! ${x} =~ Psychtoolbox ]]; then
 					git merge --ff-only -v upstream/master
@@ -475,6 +459,14 @@ function update() {
 			fi
 			if [[ ! ${oldbranch} =~ 'master' ]]; then
 				git checkout "${oldbranch}"
+			fi
+
+			# Pop stashed changes after updating
+			if [[ "$stashed" == true ]]; then
+				printf "\t\t---> Restoring stashed changes in \e[93m%s\e[m...\n" "${x}"
+				if ! git stash pop; then
+					printf "\t\t---> WARNING: Could not pop stash. Please resolve manually.\n"
+				fi
 			fi
 		fi
 	done
@@ -501,7 +493,7 @@ function update() {
 	[[ -f $(which pyenv) ]] && (printf '\n\n---> Rehash \e[92mPYENV\e[m...\n'; pyenv rehash)
 	[[ -e "$HOME/.zi" ]] && (printf '\n\n---> Updating \e[92mZINIT\e[m...\n';zi self-update; zi update -p --all)
 	[[ -e "$HOME/.x-cmd.root/bin/x-cmd" ]] &&  (printf '\n\n---> Updating \e[92mX-CMD\e[m...\n'; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force)
-	printf "\n=====>>> Finish Update @ \e[93m$(date)\e[m <<<=====\n"
+	printf "\n=====>>> Finish Update @ \e[93m%s\e[m <<<=====\n" "$(date)"
 }
 
 function updateElvish () {
@@ -514,7 +506,7 @@ function updateElvish () {
 	if [[ $(uname -m) = 'arm64' || $(uname -m) = 'aarch64' ]]; then
 		tpr='arm64'
 	fi
-	printf "\nElvish download: OS = ${tos} | Processor = ${tpr}\n"
+	printf "\nElvish download: OS = %s | Processor = %s\n" "${tos}" "${tpr}"
 	curl -C - -O "https://mirrors.tuna.tsinghua.edu.cn/elvish/$tos-$tpr/elvish-HEAD.tar.gz" &&
 	tar xvf elvish-HEAD.tar.gz &&
 	sudo mkdir -p /usr/local/bin &&
@@ -528,7 +520,7 @@ function updateElvish () {
 }
 
 function doBib() {
-	myolddir=$(pwd); cd ~/Desktop
+	myolddir=$(pwd); cd ~/Desktop || return
 	if [[ $# -eq 0 ]]; then
 		[[ -f "🌊Core.bib" ]] && mv 🌊Core.bib Core.bib
 		filename="Core.bib"
@@ -552,8 +544,8 @@ function doBib() {
 		printf "fixCase for %s - Loop: %i PID = %i\n" $x $i ${PIDS[$i]:-"Unknown"}
 		((i++)) #https://linuxize.com/post/bash-increment-decrement-variable/
 	done
-	echo "Waiting for PIDS: ${PIDS}"
-	wait ${PIDS}
+	echo "Waiting for PIDS: ${PIDS[*]}"
+	wait "${PIDS[@]}"
 	echo "Finshed processing title case"
 	printf '\n---> Minifying JSON...\n'
 	[[ -f Temp.json ]] && jq -c . < Temp.json > Core.json
@@ -566,13 +558,13 @@ function doBib() {
 
 function updatePTB() {
 	printf '\n---> Merging PTB...\n'
-	cd ~/Code/Psychtoolbox-3
+	cd ~/Code/Psychtoolbox-3 || exit
 	git checkout master
 	git pull
 	git fetch upstream
 	git merge --ff-only -v upstream/master
 	printf '\n\n---> Merging Fieldtrip MASTER...\n'
-	cd ~/Code/fieldtrip
+	cd ~/Code/fieldtrip || exit
 	git checkout umaster
 	git pull
 	git fetch upstream
@@ -615,7 +607,7 @@ function listTCP() {
 }
 
 function define() {
-	local y="$@";
+	local y="$*";
 	curl -sA "Opera" "http://www.google.com/search?q=define:${y// /+}" | grep -Po '(?<=<li>)[^<]+'|nl|perl -MHTML::Entities -pe 'decode_entities($_)' 2>/dev/null;
 }
 
@@ -637,7 +629,7 @@ function wireshark() {
 function _up() {
 	local rx updir
 	rx=$(ruby -e "print '$1'.gsub(/\s+/,'').split('').join('.*?')")
-	updir=`echo $PWD | ruby -e "print STDIN.read.sub(/(.*\/${rx}[^\/]*\/).*/i,'\1')"`
+	updir=$(echo "$PWD" | ruby -e "print STDIN.read.sub(/(.*\/${rx}[^\/]*\/).*/i,'\1')")
 	echo -n "$updir"
 }
 

@@ -457,25 +457,26 @@ fn update {
 		try { set oldbranch = (git branch --show-current) } catch { }
 		var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
 		try { timeout 10s git fetch -t -q --all 2>$path:dev-null } catch { echo "\t…couldn't fetch!" }
+		
+		# Stash changes before working with branches
+		var changes = (git status --porcelain | slurp)
+		var stashed = $false
+		if (not (eq $changes '')) {
+			msg "	…local changes detected, stashing…"
+			try { 
+				git stash push -u -m "Auto-stash before update on "(date)
+				set stashed = $true
+			} catch {
+				msg "	…couldn't stash changes!"
+			}
+		}
+		
 		for y $branches {
 			if (re:match '^(dev|main|master|umaster)' $y) {
 				header2 "--->>> Updating "(styled $x bold)":"$y"…"
 				try {
 					git checkout -q $y 2>$path:dev-null
-					var changes = (git status --porcelain | slurp)
-					var stashed = $false
-					if (not (eq $changes '')) {
-						msg "	…local changes detected, stashing…"
-						git stash
-						set stashed = $true
-					}
 					timeout 60s git pull --ff-only -v
-					if $stashed {
-						msg "	…unstashing changes…"
-						try { git stash pop } catch {
-							msg "	…couldn't pop stash, please resolve manually."
-						}
-					}
 				} catch {
 					msg "	…couldn't pull!"
 				}
@@ -487,6 +488,17 @@ fn update {
 			try { git fetch -v upstream } catch { msg "  …couldn't fetch upstream!" }
 		}
 		try { git checkout -q $oldbranch 2>$path:dev-null } catch { }
+		
+		# Unstash changes after returning to original branch
+		if $stashed {
+			msg "	…unstashing changes…"
+			try { 
+				git stash pop 
+			} catch {
+				git stash show -u # show stash contents for manual resolution
+				msg "	…couldn't pop stash, please resolve manually."
+			}
+		}
 	}
 	cd $olddir
 	cmds:if-external brew {

@@ -1,6 +1,6 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:chmod"
-rev = "9a52857"
+rev = "8f1d971"
 hash = "8ad3e90b079190b4905f24a44f4ca06b"
 
 [[plugin.deps]]
@@ -10,7 +10,7 @@ hash = "ee71543790f0ce3951161045a3787abd"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "9a52857"
+rev = "8f1d971"
 hash = "56fdabc96fc1f4d53c96eb884b02a5be"
 
 [[plugin.deps]]
@@ -25,8 +25,8 @@ hash = "c2021386289a0cbb3e152a052f67c177"
 
 [[plugin.deps]]
 use = "uhs-robert/sshfs"
-rev = "0d6e699"
-hash = "458a404b1b9d6e72ee27812629782a0b"
+rev = "924f0eb"
+hash = "730c21c785d579a85be2ae34d9a316f1"
 
 [[plugin.deps]]
 use = "iandol/sudo"
@@ -35,10 +35,10 @@ hash = "b587f1fb49563562003ed84446a351bc"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"
-rev = "2d73b79"
-hash = "ca94f5dc2b87919439b5be2a62cf4871"
+rev = "f9ae9f2"
+hash = "cda7a4f472d2459497456da8996b5113"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-latte"
-rev = "2d73b79"
-hash = "9e789c612c34f941a2afd42e7ded39f"
+rev = "f9ae9f2"
+hash = "5c121753646df9128fbcb38481889cb5"
