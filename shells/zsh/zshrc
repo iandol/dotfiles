@@ -74,34 +74,16 @@ pth=("/Library/TeX/texbin" "$HOME/Library/TinyTeX/bin/universal-darwin"
 	"/opt/amdgpu-pro/bin" "opt/amdgpu/bin"
 	"/usr/local/sbin" "/usr/local/bin"
 	"/opt/homebrew/opt/ruby/bin" "/opt/homebrew/lib/ruby/gems/3.4.0/bin"
-	"/snap/bin" "$HOME/.local/bin" "$HOME/bin" 
+	"/snap/bin" "$HOME/.local/bin" 
 	"$HOME/.cache/lm-studio/bin"
-	"$HOME/.pixi/envs/ruby/share/rubygems/bin" "$HOME/.pixi/bin")
+	"$HOME/.pixi/envs/ruby/share/rubygems/bin"
+	"$HOME/.pixi/bin" "$HOME/bin")
 for p in $pth; do
 	if [[ -d $p ]]; then
 		path=($p $path)
 	fi
 done
 export path
-
-
-#-------------------------------------ZINIT SETUP
-if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
-	print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
-	command mkdir -p "$HOME/.zi" && command chmod go-rwX "$HOME/.zi"
-	command git clone -q --depth=1 --branch "main" https://github.com/z-shell/zi "$HOME/.zi/bin" && \
-	print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-	print -P "%F{160}▓▒░ The clone has failed.%f%b"
-fi
-source "$HOME/.zi/bin/zi.zsh"
-autoload -Uz _zi
-(( ${+_comps} )) && _comps[zi]=_zi
-zi light zsh-users/zsh-completions
-zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
-#zi light z-shell/H-S-MW 
-zi light z-shell/F-Sy-H 
-zi light zsh-users/zsh-autosuggestions
-### End of Zi's installer chunk
 
 #------------------------------------X-CMD SETUP
 export ___X_CMD_LANG="en"
@@ -114,6 +96,33 @@ export ___X_CMD_LANG="en"
 [[ -x $(which rotz) ]] && eval "$(rotz completions zsh)"
 [[ -f "$DF/shells/aliases" ]] && source "$DF/shells/aliases"
 
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+	zdharma-continuum/zinit-annex-as-monitor \
+	zdharma-continuum/zinit-annex-bin-gem-node \
+	zdharma-continuum/zinit-annex-patch-dl \
+	zdharma-continuum/zinit-annex-rust \
+	z-shell/F-Sy-H \
+	zsh-users/zsh-autosuggestions \
+	marlonrichert/zsh-autocomplete
+#
+
+### End of Zinit's installer chunk
+# marlonrichert/zsh-autocomplete
+
 #---------------------------------------STARSHIP
 if [[ -f $(which starship) ]]; then
 	eval "$(starship init zsh)"
@@ -123,11 +132,5 @@ fi
 
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
-export PATH="/Users/ian/.pixi/bin:$PATH"
 
-
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/ian/.cache/lm-studio/bin"
-# End of LM Studio CLI section
 

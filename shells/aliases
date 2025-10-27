@@ -491,7 +491,7 @@ function update() {
 	[[ -f $(which ya) ]] && (printf '\n\n---> Updating \e[92mYAZI\e[m...\n'; ya pkg upgrade)
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
 	[[ -f $(which pyenv) ]] && (printf '\n\n---> Rehash \e[92mPYENV\e[m...\n'; pyenv rehash)
-	[[ -e "$HOME/.zi" ]] && (printf '\n\n---> Updating \e[92mZINIT\e[m...\n';zi self-update; zi update -p --all)
+	[[ -e "$HOME/.local/share/zinit" ]] && (printf '\n\n---> Updating \e[92mZINIT\e[m...\n';zinit self-update; zinit update -p --all)
 	[[ -e "$HOME/.x-cmd.root/bin/x-cmd" ]] &&  (printf '\n\n---> Updating \e[92mX-CMD\e[m...\n'; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force)
 	printf "\n=====>>> Finish Update @ \e[93m%s\e[m <<<=====\n" "$(date)"
 }
