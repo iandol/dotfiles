@@ -134,6 +134,7 @@ if ( cmds:is-macos ) {
 	edit:add-var dequarantine~ { |@in| e:xattr -v -d com.apple.quarantine $@in }
 	edit:add-var nitenite~ { e:exec pmset sleepnow }
 	edit:add-var startarp~ {
+		open -a LaunchControl.app
 		try { sudo launchctl start system/com.sangfor.EasyMonitor } catch { echo "EasyMonitor start error" }
 		try { launchctl start gui/501/com.sangfor.ECAgentProxy } catch { echo "ECAgentProxy start error" }
 		open "https://newvpn.arp.cn/com/installClient.html"
