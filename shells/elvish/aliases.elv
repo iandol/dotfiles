@@ -535,6 +535,8 @@ fn update {
 	cmds:if-external npm { header2 "---> Update npm global"; npm list -g; npm update -g; npm list -g }
 	cmds:if-external nvim { header2 "---> Update NVIM plugins…"; nvim --headless "+Lazy! sync" +qa }
 	cmds:if-external ya { header2 "---> Update Yazi"; ya pkg upgrade }
+	cmds:if-external eget { header2 "---> Update eget"; eget zyedidia/eget --upgrade-only }
+ 
 
 	try { header2 "---> Updating Elvish Packages…";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
 	try { cmds:if-external x-cmd { header2 "---> Update 文 x-cmd"; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod } } catch { }
