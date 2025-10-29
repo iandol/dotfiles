@@ -25,20 +25,25 @@ hash = "c2021386289a0cbb3e152a052f67c177"
 
 [[plugin.deps]]
 use = "uhs-robert/sshfs"
-rev = "924f0eb"
-hash = "730c21c785d579a85be2ae34d9a316f1"
+rev = "2728b14"
+hash = "8ee736ae855ed80ae341136bb8fb353c"
 
 [[plugin.deps]]
 use = "iandol/sudo"
 rev = "997ac5b"
 hash = "b587f1fb49563562003ed84446a351bc"
 
+[[plugin.deps]]
+use = "yazi-rs/plugins:mount"
+rev = "8f1d971"
+hash = "4fccaaf10c36dc2466e2438a386ff017"
+
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"
-rev = "f9ae9f2"
-hash = "cda7a4f472d2459497456da8996b5113"
+rev = "f6b425a"
+hash = "69cd81ca19a1039352ef981fc4cf1b63"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-latte"
-rev = "f9ae9f2"
-hash = "5c121753646df9128fbcb38481889cb5"
+rev = "f6b425a"
+hash = "d7353bc6c4c10cff53bb63e1471f44a5"

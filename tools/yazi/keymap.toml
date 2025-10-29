@@ -68,6 +68,10 @@ run  = "plugin compress -phl"
 desc = "Archive selected files (password+header+level)"
 
 [[mgr.prepend_keymap]]
+on  = [ "M", "d" ]
+run = "plugin mount"
+
+[[mgr.prepend_keymap]]
 on = ["M","m"] 
 run = "plugin sshfs -- mount --jump"  
 desc = "Mount & jump"
