@@ -88,6 +88,20 @@ cmds:if-external eza {
 }
 
 #==================================================== - Management
+fn sshTab { |@hostname|
+	# This function opens a new terminal tab and SSH into the given hostname.
+	# It works on both macOS and Linux systems.
+	#
+	# Usage: sshTab <hostname>
+	# Example: sshTab my-server.com
+	each { |h|
+		put "Opening SSH tab to "$h
+		cmds:if-external kitty {
+			kitty @ launch --type tab --tab-title $h kitten ssh $h --kitten login_shell=elvish
+		} { ssh $hostname[0] }
+	} $@hostname
+}
+edit:add-var sshTab~ $sshTab~
 fn cloneReset { |hostname|
 	# This function resets the machine ID and hostname for a Linux clone. It
 	# is useful when you clone a VM or a machine and want to avoid conflicts
@@ -114,9 +128,7 @@ fn cloneReset { |hostname|
 }
 edit:add-var cloneReset~ $cloneReset~
 edit:add-var cagelab-monitor~ { tmuxp load cagelab-monitor }
-edit:add-var cagelab-zsh~ { ln -svf $E:HOME/Code/Setup/config/zshrc $E:HOME/.zshrc; ln -svf $E:HOME/Code/Setup/config/zsh-* $E:HOME; ln -svf $E:HOME/Code/Setup/config/aliases $E:HOME }
-edit:add-var cagelab-reset~ { systemctl --user restart cogmoteGO; systemctl --user restart theConductor }
-edit:add-var cagelab-reset-OBS~ { systemctl --user stop mediamtx; systemctl --user stop obs; sleep 1; systemctl --user start mediamtx; systemctl --user start obs & }
+edit:add-var cagelab-zsh~ { ln -svf $E:HOME/Code/Setup/config/zshrc $E:HOME/.zshrc; ln -svf $E:HOME/Code/Setup/config/zsh-* $E:HOME/.config; ln -svf $E:HOME/Code/Setup/config/aliases $E:HOME/.config }
 
 #==================================================== - GENERAL
 edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/stdin }

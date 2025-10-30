@@ -1,8 +1,12 @@
-links:
-  elvish/rc.elv: ~/.config/elvish/rc.elv
-  elvish/aliases.elv: ~/.config/elvish/lib/aliases.elv
-  zsh/zshrc: ~/.zshrc
-  zsh/zprofile: ~/.zprofile
-  bash/bashrc: ~/.bashrc
-  bash/bash_profile: ~/.bash_profile
-  aliases: ~/.config/aliases
+global:
+  links:
+    elvish/rc.elv: ~/.config/elvish/rc.elv
+    elvish/aliases.elv: ~/.config/elvish/lib/aliases.elv
+    zsh/zshrc: ~/.zshrc
+    zsh/zprofile: ~/.zprofile
+    bash/bashrc: ~/.bashrc
+    bash/bash_profile: ~/.bash_profile
+    aliases: ~/.config/aliases
+windows:
+  links:
+    powershell/Microsoft.PowerShell_profile.ps1: $HOME\Documents\PowerShell\Microsoft.PowerShell_profile.ps1

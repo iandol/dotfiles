@@ -32,6 +32,7 @@ darwin|linux:
     export ROTZ_INSTALL=/usr/local && curl -fsSL volllly.github.io/rotz/install.sh | sh
 windows:
   installs: |
+    winget install Microsoft.PowerShell
     powershell -ExecutionPolicy ByPass -c "irm -useb https://pixi.sh/install.ps1 | iex"
     irm volllly.github.io/rotz/install.sh | iex
 linux[whoami.distro^="Raspberry"]:
