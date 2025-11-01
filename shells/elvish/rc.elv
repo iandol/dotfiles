@@ -160,6 +160,7 @@ cmds:if-external fd {
 cmds:if-external uv { eval (uv generate-shell-completion elvish | slurp) } # python manager
 cmds:if-external rotz { eval (rotz completions elvish | slurp) } # dotfile namager
 cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
+cmds:if-external mihomosh { eval (mihomosh shell-completion elvish | slurp) } # mihomo shell
 cmds:if-external nvim { set-env EDITOR (which nvim); set-env VISUAL (which nvim) } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 cmds:if-external pixi {
 	eval (pixi completion --shell elvish | slurp)
