@@ -32,7 +32,7 @@ exec --no-startup-id /usr/bin/nitrogen --set-scaled ~/.dotfiles/terminals/everfo
 
 # Configure space between windows and to the screen edges.
 gaps inner 5px
-gaps outer 5px
+gaps outer 0px
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
@@ -163,7 +163,7 @@ bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -f 'pango:Alegreya Sans 20' -t warning -m 'Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+bindsym $mod+Shift+e exec "i3-nagbar -f 'pango:Alegreya Sans 25' -t warning -m 'Exit i3? This will end your X session.' -B 'Exit i3' 'i3-msg exit'"
 
 # service mode 
 mode "service" {
