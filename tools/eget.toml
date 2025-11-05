@@ -1,4 +1,3 @@
 [global]
 	target = "/usr/local/bin"
 	quiet = false
-	upgrade_only = true
