@@ -2,10 +2,13 @@ global:
   links:
     makeJSON.sh: ~/bin/makeJSON.sh
     checkZT: ~/bin/checkZT
+    egetAll.sh: ~/bin/egetAll
+    makeTools.sh: ~/bin/makeTools
 darwin:
   links:
     FitImagesToPageWidth.py: ~/Library/Application Support/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
     runSync.applescript: ~/bin/runSync.applescript
 linux:
   links:
+    snapcache.sh: ~/bin/snapcache.sh
     FitImagesToPageWidth.py: ~/.config/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
