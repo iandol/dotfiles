@@ -74,6 +74,7 @@ elif [ "$PLATFORM" = "Linux" ]; then
 	sudo apt -my install libunrar5 libdc1394-25 libraw1394-11
 	sudo apt -my install gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly
 	sudo apt -my install synaptic zathura
+	sudo apt -my install rofi nitrogen i3
 	
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
@@ -106,16 +107,14 @@ elif [ "$PLATFORM" = "LinuxRPi" ]; then
 	sudo apt -my install freeglut3 gawk mesa-utils zathura
 	sudo apt -my install p7zip-full figlet jq ansiweather exfat-fuse exfat-utils htop 
 	sudo apt -my install libdc1394-25 libraw1394-11
-	sudo apt -my install code snapd synaptic
+	sudo apt -my install code snapd synaptic zathura
+	sudo apt -my install rofi nitrogen i3
 	sudo apt -my install python3-pip
 	sudo snap install core
 	sudo snap install starship --edge
 	mkdir -p bin
 	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
 	chmod +x bin/diff-so-fancy
-	#cd ~/Downloads/
-	#wget https://github.com/dandavison/delta/releases/download/0.16.5/git-delta_0.16.5_arm64.deb
-	#sudo dpkg -i git-delta_0.16.5_arm64.deb
 elif [ "$PLATFORM" = "LinuxWSL" ]; then
 	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
@@ -179,17 +178,21 @@ if [ -d ~/.zplug/ ]; then
 	printf '\t...Going to replace zplug with ZI... '
 	rm -rf ~/.zplug/
 fi
-if [ -d ~/.zinit/ ]; then
+if [ -d ~/.zi/ ]; then
 	printf '\t...Going to replace zinit with ZI... '
-	rm -rf ~/.zinit/
+	rm -rf ~/.zi/
 fi
-if [[ ! -f $HOME/.zi/bin/zi.zsh ]]; then
-  print -P "%F{33}▓▒░ %F{160}Installing (%F{33}z-shell/zi%F{160})…%f"
-  command mkdir -p "$HOME/.zi" && command chmod go-rwX "$HOME/.zi"
-  command git clone -q --depth=1 --branch "main" https://github.com/z-shell/zi "$HOME/.zi/bin" && \
-    print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-    print -P "%F{160}▓▒░ The clone has failed.%f%b"
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
 fi
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
 
 printf 'Linking some bin files in ~/bin/: \n'
 printf '\e[32m'
