@@ -539,10 +539,9 @@ fn update {
 	try { curl -sS https://raw.githubusercontent.com/Ccccraz/cogmoteGO/main/install.sh | sh } catch { }
 
 	# update other tools
-	cmds:if-external pixi { header2 "---> Update pixi"; pixi self-update; pixi global sync; pixi global -v update }
 	cmds:if-external pkgx { header2 "---> Update pkgx"; pkgx --sync; pkgx --update }
+	cmds:if-external pixi { header2 "---> Update pixi"; pixi self-update; pixi global sync; pixi global -v update }	
 	cmds:if-external micromamba { header2 "---> Update Micromamba…"; micromamba self-update }
-	cmds:if-external gem { header2 "---> Update Ruby Gems"; gem update; gem cleanup }
 	cmds:if-external rbenv { header2 "---> Rehash RBENV…"; rbenv rehash }
 	cmds:if-external pyenv { header2 "---> Rehash PYENV…"; pyenv rehash }
 	cmds:if-external npm { header2 "---> Update npm global"; npm list -g; npm update -g; npm list -g }
@@ -550,7 +549,6 @@ fn update {
 	cmds:if-external ya { header2 "---> Update Yazi"; ya pkg upgrade }
 	cmds:if-external eget { header2 "---> Update eget"; eget zyedidia/eget --upgrade-only }
  
-
 	try { header2 "---> Updating Elvish Packages…";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
 	try { cmds:if-external x-cmd { header2 "---> Update 文 x-cmd"; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod } } catch { }
 	header1 "====>>> Finish Update @ "(styled (date) bold)" <<<===="
@@ -738,11 +736,13 @@ edit:add-var updateOptickaPages~ $updateOptickaPages~
 fn updateAll {
 	update
 	if (cmds:is-linux) { sudo apt full-upgrade -y }
+	try { egetAll } catch { }
 	updateMPV
 	updateElvish
 	updateFFmpeg
 	updateTeX
 	updateuBlock
+	cmds:if-external gem { header2 "---> Update Ruby Gems"; gem update; gem cleanup }
 	header1 "====>>> Finish UpdateAll @ "(styled (date) bold)" <<<===="
 
 }
