@@ -25,8 +25,8 @@ hash = "c2021386289a0cbb3e152a052f67c177"
 
 [[plugin.deps]]
 use = "uhs-robert/sshfs"
-rev = "2728b14"
-hash = "8ee736ae855ed80ae341136bb8fb353c"
+rev = "a6ddd03"
+hash = "617d83a0e1d916a5ddcb90968eb3b5f6"
 
 [[plugin.deps]]
 use = "iandol/sudo"
