@@ -26,6 +26,7 @@ set edit:command-abbr['arch'] = 'arch -x86_64'
 # set edit:small-word-abbr['ls'] = 'ls -GF'
 
 #==================================================== - ELVISH
+edit:add-var za {|pfx st ed sfx| (print "(")(print $pfx{(range st ed)}$sfx)(print ")") } #zsh array as a string
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pprint $edit:insert:binding }
 fn helpme { echo (styled "
