@@ -5,4 +5,5 @@ darwin:
     sbplugins: ~/.config/sketchybar/plugins
 linux:
   links:
-    i3config: ~/.config/i3/config
+     i3config: ~/.config/i3/config
+     swayconfig: ~/.config/sway/config
