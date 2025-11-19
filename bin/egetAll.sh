@@ -16,8 +16,8 @@ UPGRADE_FLAG=(--upgrade-only)
 
 eget zyedidia/eget "${UPGRADE_FLAG[@]}" --to=/usr/local/bin
 
-[[ $OS = "Linux" ]] && eget volllly/rotz "${UPGRADE_FLAG[@]}" ---to=/usr/local/bin -a gnu.zip
-[[ $OS = "Darwin" ]] && eget volllly/rotz "${UPGRADE_FLAG[@]}" ---to=/usr/local/bin -a darwin.zip
+[[ $OS = "Linux" ]] && eget volllly/rotz "${UPGRADE_FLAG[@]}" --to=/usr/local/bin -a gnu.zip
+[[ $OS = "Darwin" ]] && eget volllly/rotz "${UPGRADE_FLAG[@]}" --to=/usr/local/bin -a darwin.zip
 
 eget bluenviron/mediamtx "${UPGRADE_FLAG[@]}" --to=/usr/local/bin
 

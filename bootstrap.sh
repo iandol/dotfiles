@@ -68,13 +68,17 @@ elif [ "$PLATFORM" = "Linux" ]; then
 	printf 'Assume we are setting up a Ubuntu machine\n'
 	#make sure our minimum packages are installed
 	sudo apt update
+	sudo apt -my install apt-transport-https ca-certificates software-properties-common
 	sudo apt -my install build-essential zsh git gparted vim curl file mc
 	sudo apt -my install freeglut3 gawk mesa-utils exfatprogs
 	sudo apt -my install p7zip-full p7zip-rar figlet jq ansiweather htop 
 	sudo apt -my install libunrar5 libdc1394-25 libraw1394-11
 	sudo apt -my install gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly
-	sudo apt -my install synaptic zathura
-	sudo apt -my install rofi nitrogen i3
+	sudo apt -my install synaptic zathura zathura-pdf-poppler zathura-ps
+	sudo apt -my install rofi nitrogen i3 xdotool
+	sudo apt -my install python3-pip python3-venv
+	sudo apt -my install openssh-server
+	sudo apt -my install wakeonlan etherwake
 	
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
@@ -109,7 +113,9 @@ elif [ "$PLATFORM" = "LinuxRPi" ]; then
 	sudo apt -my install libdc1394-25 libraw1394-11
 	sudo apt -my install code snapd synaptic zathura
 	sudo apt -my install rofi nitrogen i3
-	sudo apt -my install python3-pip
+	sudo apt -my install python3-pip python3-venv
+	sudo apt -my install openssh-server
+	sudo apt -my install wakeonlan etherwake
 	sudo snap install core
 	sudo snap install starship --edge
 	mkdir -p bin
