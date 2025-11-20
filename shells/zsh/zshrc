@@ -134,3 +134,6 @@ fi
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
 
 
+
+# Added by Antigravity
+export PATH="/Users/ian/.antigravity/antigravity/bin:$PATH"

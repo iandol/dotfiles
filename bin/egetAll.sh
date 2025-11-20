@@ -15,18 +15,17 @@ UPGRADE_FLAG=(--upgrade-only)
 (( FORCE_REFRESH )) && UPGRADE_FLAG=()
 
 eget zyedidia/eget "${UPGRADE_FLAG[@]}" --to=/usr/local/bin
+eget bluenviron/mediamtx "${UPGRADE_FLAG[@]}" --to=/usr/local/bin
 
 [[ $OS = "Linux" ]] && eget volllly/rotz "${UPGRADE_FLAG[@]}" --to=/usr/local/bin -a gnu.zip
 [[ $OS = "Darwin" ]] && eget volllly/rotz "${UPGRADE_FLAG[@]}" --to=/usr/local/bin -a darwin.zip
-
-eget bluenviron/mediamtx "${UPGRADE_FLAG[@]}" --to=/usr/local/bin
 
 [[ $OS = "Linux" ]] && eget clash-verge-rev/clash-verge-rev "${UPGRADE_FLAG[@]}" -a amd64.deb --to=~/Downloads/clash.deb
 [[ $OS = "Darwin" ]] && eget clash-verge-rev/clash-verge-rev "${UPGRADE_FLAG[@]}" -a aarch64.dmg --to=~/Downloads/clash.dmg
 
 [[ $OS = "Linux" ]] && eget --pre-release sxyazi/yazi --to=$HOME/bin --file="yazi" -a gnu.zip \
 	&& eget --pre-release "${UPGRADE_FLAG[@]}" sxyazi/yazi --to=$HOME/bin --file="ya" -a gnu.zip 
-[[ $OS = "Darwin" ]] && eget --pre-release sxyazi/yazi --to=$HOME/bin --file="yzi" \
+[[ $OS = "Darwin" ]] && eget --pre-release sxyazi/yazi --to=$HOME/bin --file="yazi" \
 	&& eget --pre-release "${UPGRADE_FLAG[@]}" sxyazi/yazi --to=$HOME/bin --file="ya"
 
 [[ $OS = "Linux" ]] && eget MetaCubeX/mihomo "${UPGRADE_FLAG[@]}" ---to=/usr/local/bin -a gz -a amd64-v3-v
