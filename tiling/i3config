@@ -115,6 +115,9 @@ bindsym $mod+Shift+slash layout toggle splitv splith
 # change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
+# show keys
+bindsym $mod+F1 exec ~/.dotfiles/bin/i3Keys.py
+
 # focus the parent container
 bindsym $mod+a focus parent
 
