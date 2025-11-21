@@ -5,9 +5,9 @@ darwin:
     sbplugins: ~/.config/sketchybar/plugins
 linux:
   links:
-    .Xresources: ~/.Xresources100
+    Xresources100: ~/.Xresources
     i3config: ~/.config/i3/config
     swayconfig: ~/.config/sway/config
 linux[whoami.hostname="cog5"]:
   links:
-    .Xresources: ~/.Xresources150
+    Xresources150: ~/.Xresources
