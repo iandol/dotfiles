@@ -27,6 +27,15 @@ set edit:command-abbr['arch'] = 'arch -x86_64'
 
 #==================================================== - ELVISH
 edit:add-var za~ {|prefix start end suffix| put "("(print $prefix(range $start $end)$suffix)")" } #zsh array as a string
+edit:add-var ssh-agent-setup~ {
+	if (has-env SSH_AUTH_SOCK) { msg "Agent already running"; return }
+	try {
+		var output = (ssh-agent -s | slurp)
+		set-env SSH_AUTH_SOCK (re:find 'SSH_AUTH_SOCK=([^;]+);' $output)[groups][1][text]
+		set-env SSH_AGENT_PID (re:find 'SSH_AGENT_PID=([^;]+);' $output)[groups][1][text]
+		msg "SSH agent with PID "$E:SSH_AGENT_PID" configured..."
+	} catch { msg "Problem setting up SSH agent!" }
+}
 edit:add-var pp~ {|@in| pprint $@in }
 edit:add-var shortcuts~ { pprint $edit:insert:binding }
 fn helpme { echo (styled "
