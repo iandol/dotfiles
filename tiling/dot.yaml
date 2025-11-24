@@ -1,6 +1,7 @@
 darwin:
   links:
     aerospace.toml: ~/.config/aerospace/aerospace.toml
+    rift.toml: ~/.config/rift/config.toml
     sketchybarrc: ~/.config/sketchybar/sketchybarrc
     sbplugins: ~/.config/sketchybar/plugins
 linux:
