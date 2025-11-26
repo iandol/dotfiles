@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-ACTIVE_COLOR=0xaaAA9999
+ACTIVE_COLOR=0xbbBB9988
 NOTEMPTY_COLOR=0x77777777
 
 # Use the environment variable passed by aerospace trigger, fallback to direct call
@@ -18,28 +18,24 @@ if [ "$WORKSPACE_NAME" = "$CURRENT" ]; then
 	sketchybar --set $NAME \
 		label="$WORKSPACE_NAME" \
 		label.color=0xffffffff \
-		label.font.size=11 \
 		background.drawing=on \
 		background.color=$ACTIVE_COLOR \
-		background.border_width=0
+		background.border_width=0 \
+		label.font.size=14
 elif [ "$WINDOW_COUNT" -gt 0 ]; then
 	# This workspace has windows but is not active - show with darker background
 	sketchybar --set $NAME \
 		label="$WORKSPACE_NAME" \
 		label.color=0xccffffff \
-		label.font.size=11 \
 		background.drawing=on \
 		background.color=$NOTEMPTY_COLOR \
 		background.border_width=0 \
-		padding_left=3 \
-		padding_right=3
+		label.font.size=12
 else
 	# This is an empty workspace - show as dimmed without background
 	sketchybar --set $NAME \
 		label="$WORKSPACE_NAME" \
 		label.color=0x66ffffff \
-		label.font.size=11 \
 		background.drawing=off \
-		padding_left=3 \
-		padding_right=3
+		label.font.size=11
 fi

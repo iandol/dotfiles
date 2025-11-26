@@ -55,10 +55,14 @@ sketchybar --add event aerospace_mode_change
 
 sketchybar --add item aerospace_mode left \
   --subscribe aerospace_mode aerospace_mode_change \
-  --set aerospace_mode icon="¶" \
+  --set aerospace_mode icon="󰪭"\
+  icon.font.size=25 \
   script="$PLUGIN_DIR/aerospace_mode.sh" \
-  icon.color=0xaaffffff \
+  icon.color=0xaa99ffcc \
   icon.padding_left=4 \
+  icon.padding_right=0 \
+  background.color=0x55ffeeaa \
+  background.drawing=on \
   drawing=off
 
 WORKSPACES=$(aerospace list-workspaces --all)
