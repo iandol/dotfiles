@@ -2,6 +2,10 @@
 # AEROSPACE CONFIG                      #
 #########################################
 
+# Config version for compatibility and deprecations
+# Fallback value (if you omit the key): config-version = 1
+config-version = 2
+
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
@@ -11,8 +15,13 @@ after-startup-command = [
 
 # Notify Sketchybar about workspace change
 exec-on-workspace-change = ['/bin/bash', '-c',
-    'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+	'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
 ]
+
+# A callback that runs every time binding mode changes
+# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
+# See: https://nikitabobko.github.io/AeroSpace/commands#mode
+on-mode-changed = ['exec-and-forget sketchybar --trigger aerospace_mode_change']
 
 # Start AeroSpace at login
 start-at-login = true
@@ -46,18 +55,26 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
 automatically-unhide-macos-hidden-apps = false
 
-# ensure path
-[exec]
-    inherit-env-vars = true
-[exec.env-vars]
-    PATH = '${HOME}/.pixi/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
-	LANG = 'en_US.UTF-8'
-	LC_ALL = 'en_US.UTF-8'
+# List of workspaces that should stay alive even when they contain no windows,
+# even when they are invisible.
+# This config version is only available since 'config-version = 2'
+# Fallback value (if you omit the key): persistent-workspaces = []
+persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
+
+
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
-    preset = 'qwerty'
+	preset = 'qwerty'
+
+# ensure path
+[exec]
+	inherit-env-vars = true
+[exec.env-vars]
+	PATH = '${HOME}/.pixi/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
+	LANG = 'en_US.UTF-8'
+	LC_ALL = 'en_US.UTF-8'
 
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
 # Possible values:
@@ -68,103 +85,103 @@ automatically-unhide-macos-hidden-apps = false
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal =	4
-    inner.vertical =	4
-    outer.left =		3
-    outer.bottom =		[ { monitor."Built-in" = 6 }, 3 ]
-    outer.top =			[ { monitor."Built-in" = -6 }, 30 ]
-    outer.right =		3
+	inner.horizontal =	4
+	inner.vertical =	4
+	outer.left =		3
+	outer.bottom =		[ { monitor."Built-in" = 6 }, 3 ]
+	outer.top =			[ { monitor."Built-in" = -6 }, 30 ]
+	outer.right =		3
 
 [workspace-to-monitor-force-assignment]
 	A = ['secondary','main']
-	D = ['secondary','main']
 	S = ['secondary','main']
+	D = ['secondary','main']
 
 [[on-window-detected]]
-    if.app-id = 'com.vivaldi.Vivaldi'
-    run = 'move-node-to-workspace A'
+	if.app-id = 'com.vivaldi.Vivaldi'
+	run = 'move-node-to-workspace A'
 	check-further-callbacks = true
 
 [[on-window-detected]]
 	if.app-name-regex-substring = 'Vivaldi'
 	if.window-title-regex-substring = 'Bitwarden'
-    run = ['layout floating']
+	run = ['layout floating']
 	check-further-callbacks = true
 
 [[on-window-detected]]
 	if.window-title-regex-substring = 'Bitwarden'
-    run = ['layout floating']
+	run = ['layout floating']
 	check-further-callbacks = true
 
 [[on-window-detected]]
-    if.app-id = 'net.kovidgoyal.kitty'
-    run = 'move-node-to-workspace 1'
+	if.app-id = 'net.kovidgoyal.kitty'
+	run = 'move-node-to-workspace 1'
 	check-further-callbacks = true
 
 [[on-window-detected]]
-    if.app-id = 'com.bitwarden.desktop'
-    run = ['layout floating', 'move-node-to-workspace S']
+	if.app-id = 'com.bitwarden.desktop'
+	run = ['layout floating', 'move-node-to-workspace S']
 	check-further-callbacks = true
 
 [[on-window-detected]]
-    if.app-id = 'com.hegenberg.BetterTouchTool'
-    run = 'layout floating'
+	if.app-id = 'com.hegenberg.BetterTouchTool'
+	run = 'layout floating'
 	
 [[on-window-detected]]
-    if.app-id = 'com.binarynights.ForkLift'
-    run = 'layout floating'
+	if.app-id = 'com.binarynights.ForkLift'
+	run = 'layout floating'
 
 [[on-window-detected]]
 	if.window-title-regex-substring = 'Windows App'
-    run = ['layout floating']
+	run = ['layout floating']
 	check-further-callbacks = true
 
 [[on-window-detected]]
-    if.app-id = 'com.objective-see.lulu.app'
-    run = 'layout floating'
+	if.app-id = 'com.objective-see.lulu.app'
+	run = 'layout floating'
 
 [[on-window-detected]]
-    if.app-name-regex-substring = 'Clash Verge'
-    run = ['layout floating', 'move-node-to-workspace S']
+	if.app-name-regex-substring = 'Clash Verge'
+	run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
-    if.app-id = 'io.mpv'
-    run = ['layout floating', 'move-node-to-workspace S']
+	if.app-id = 'io.mpv'
+	run = ['layout floating', 'move-node-to-workspace S']
 	check-further-callbacks = true
 
 [[on-window-detected]]
-    if.app-name-regex-substring = 'mpv'
-    run = ['layout floating', 'move-node-to-workspace S']
+	if.app-name-regex-substring = 'mpv'
+	run = ['layout floating', 'move-node-to-workspace S']
 	check-further-callbacks = true
 
 [[on-window-detected]]
-    if.app-id = 'org.videolan.vlc'
-    run = ['layout floating', 'move-node-to-workspace S']
+	if.app-id = 'org.videolan.vlc'
+	run = ['layout floating', 'move-node-to-workspace S']
 	check-further-callbacks = true
 
 [[on-window-detected]]
-    if.app-name-regex-substring = 'LuLu Alert'
-    run = ['layout floating']
+	if.app-name-regex-substring = 'LuLu Alert'
+	run = ['layout floating']
 
 [[on-window-detected]]
-    if.app-id = 'com.soma-zone.LaunchControl'
-    run = ['layout floating', 'move-node-to-workspace S']
+	if.app-id = 'com.soma-zone.LaunchControl'
+	run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
-    if.app-id = 'com.tencent.xinWeChat'
-    run = ['layout floating', 'move-node-to-workspace S']
+	if.app-id = 'com.tencent.xinWeChat'
+	run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.Music'
-    run = ['layout floating', 'move-node-to-workspace S']
+	if.app-id = 'com.apple.Music'
+	run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
-    if.app-id = 'com.apple.FaceTime'
-    run = ['layout floating']
+	if.app-id = 'com.apple.FaceTime'
+	run = ['layout floating']
 
 [[on-window-detected]]
-    if.app-id = 'net.pornel.ImageOptim'
-    run = 'layout floating'
+	if.app-id = 'net.pornel.ImageOptim'
+	run = 'layout floating'
 
 [[on-window-detected]]
 	if.app-id = 'com.sonnysoftware.bookends2'
@@ -182,110 +199,110 @@ automatically-unhide-macos-hidden-apps = false
 # Fallback value (if you omit the key): mode.main.binding = {}
 [mode.main.binding]
 
-    # All possible keys:
-    # - Letters.        a, b, c, ..., z
-    # - Numbers.        0, 1, 2, ..., 9
-    # - Keypad numbers. keypad0, keypad1, keypad2, ..., keypad9
-    # - F-keys.         f1, f2, ..., f20
-    # - Special keys.   minus, equal, period, comma, slash, backslash, quote, semicolon,
-    #                   backtick, leftSquareBracket, rightSquareBracket, space, enter, esc,
-    #                   backspace, tab, pageUp, pageDown, home, end, forwardDelete,
-    #                   sectionSign (ISO keyboards only, european keyboards only)
-    # - Keypad special. keypadClear, keypadDecimalMark, keypadDivide, keypadEnter, keypadEqual,
-    #                   keypadMinus, keypadMultiply, keypadPlus
-    # - Arrows.         left, down, up, right
+	# All possible keys:
+	# - Letters.        a, b, c, ..., z
+	# - Numbers.        0, 1, 2, ..., 9
+	# - Keypad numbers. keypad0, keypad1, keypad2, ..., keypad9
+	# - F-keys.         f1, f2, ..., f20
+	# - Special keys.   minus, equal, period, comma, slash, backslash, quote, semicolon,
+	#                   backtick, leftSquareBracket, rightSquareBracket, space, enter, esc,
+	#                   backspace, tab, pageUp, pageDown, home, end, forwardDelete,
+	#                   sectionSign (ISO keyboards only, european keyboards only)
+	# - Keypad special. keypadClear, keypadDecimalMark, keypadDivide, keypadEnter, keypadEqual,
+	#                   keypadMinus, keypadMultiply, keypadPlus
+	# - Arrows.         left, down, up, right
 
-    # All possible modifiers: cmd, alt, ctrl, shift
+	# All possible modifiers: cmd, alt, ctrl, shift
 
-    # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
+	# All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-    # You can uncomment the following lines to open up terminal with alt + enter shortcut
-    # (like in i3)
-    # alt-enter = '''exec-and-forget osascript -e '
-    # tell application "Terminal"
-    #     do script
-    #     activate
-    # end tell'
-    # '''
+	# See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
+	# You can uncomment the following lines to open up terminal with alt + enter shortcut
+	# (like in i3)
+	# alt-enter = '''exec-and-forget osascript -e '
+	# tell application "Terminal"
+	#     do script
+	#     activate
+	# end tell'
+	# '''
 	
 	# Open Kitty terminal with alt + enter shortcut
 	alt-enter = 'exec-and-forget /opt/homebrew/bin/kitty --single-instance -d ~'
 	
 	# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-    alt-tab = 'workspace-back-and-forth'
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
-    alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+	alt-tab = 'workspace-back-and-forth'
+	# See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
+	alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#layout
-    alt-shift-comma = 'layout accordion horizontal vertical'
+	# See: https://nikitabobko.github.io/AeroSpace/commands#layout
+	alt-shift-comma = 'layout accordion horizontal vertical'
 	alt-shift-period = 'layout floating tiling'
 	alt-shift-slash = 'layout tiles horizontal vertical'
 
 	# See: https://nikitabobko.github.io/AeroSpace/commands#focus
-    alt-h = 'focus --boundaries-action wrap-around-the-workspace left'
-    alt-j = 'focus --boundaries-action wrap-around-the-workspace down'
-    alt-k = 'focus --boundaries-action wrap-around-the-workspace up'
-    alt-l = 'focus --boundaries-action wrap-around-the-workspace right'
+	alt-h = 'focus --boundaries-action wrap-around-the-workspace left'
+	alt-j = 'focus --boundaries-action wrap-around-the-workspace down'
+	alt-k = 'focus --boundaries-action wrap-around-the-workspace up'
+	alt-l = 'focus --boundaries-action wrap-around-the-workspace right'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#move
-    alt-shift-h = 'move left'
-    alt-shift-j = 'move down'
-    alt-shift-k = 'move up'
-    alt-shift-l = 'move right'
+	# See: https://nikitabobko.github.io/AeroSpace/commands#move
+	alt-shift-h = 'move left'
+	alt-shift-j = 'move down'
+	alt-shift-k = 'move up'
+	alt-shift-l = 'move right'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#resize
-    alt-minus = 'resize smart -50'
-    alt-equal = 'resize smart +50'
+	# See: https://nikitabobko.github.io/AeroSpace/commands#resize
+	alt-minus = 'resize smart -50'
+	alt-equal = 'resize smart +50'
 
-    # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-    alt-1 = 'workspace 1'
-    alt-2 = 'workspace 2'
-    alt-3 = 'workspace 3'
-    alt-4 = 'workspace 4'
-    alt-5 = 'workspace 5'
-    alt-6 = 'workspace 6'
-    alt-a = 'workspace A' # In your config, you can drop workspace bindings that you don't need
-    alt-s = 'workspace S'
-    alt-d = 'workspace D'
-    
+	# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
+	alt-1 = 'workspace 1'
+	alt-2 = 'workspace 2'
+	alt-3 = 'workspace 3'
+	alt-4 = 'workspace 4'
+	alt-5 = 'workspace 5'
+	alt-6 = 'workspace 6'
+	alt-a = 'workspace A' # In your config, you can drop workspace bindings that you don't need
+	alt-s = 'workspace S'
+	alt-d = 'workspace D'
+
 	# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-    alt-shift-1 = 'move-node-to-workspace 1'
-    alt-shift-2 = 'move-node-to-workspace 2'
-    alt-shift-3 = 'move-node-to-workspace 3'
-    alt-shift-4 = 'move-node-to-workspace 4'
-    alt-shift-5 = 'move-node-to-workspace 5'
-    alt-shift-6 = 'move-node-to-workspace 6'
-    alt-shift-a = 'move-node-to-workspace A'
-    alt-shift-s = 'move-node-to-workspace S'
-    alt-shift-d = 'move-node-to-workspace D'
-   
-    # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-    alt-shift-z = ['mode service', 'exec-and-forget sketchybar --bar color=0x80ff2453']
+	alt-shift-1 = 'move-node-to-workspace 1'
+	alt-shift-2 = 'move-node-to-workspace 2'
+	alt-shift-3 = 'move-node-to-workspace 3'
+	alt-shift-4 = 'move-node-to-workspace 4'
+	alt-shift-5 = 'move-node-to-workspace 5'
+	alt-shift-6 = 'move-node-to-workspace 6'
+	alt-shift-a = 'move-node-to-workspace A'
+	alt-shift-s = 'move-node-to-workspace S'
+	alt-shift-d = 'move-node-to-workspace D'
+
+	# See: https://nikitabobko.github.io/AeroSpace/commands#mode
+	alt-shift-z = ['mode service']
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
-    esc = ['reload-config', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
-    r = ['flatten-workspace-tree', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000'] # reset layout
-    f = ['layout floating tiling', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000'] # Toggle between floating and tiling layout
-    s = ['fullscreen --no-outer-gaps', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+	esc = ['reload-config', 'mode main']
+	r = ['flatten-workspace-tree', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000'] # reset layout
+	f = ['layout floating tiling', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000'] # Toggle between floating and tiling layout
+	s = ['fullscreen --no-outer-gaps', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
 	t = ['exec-and-forget sketchybar --bar color=0xaa000000', 'macos-native-fullscreen']
 	backspace = ['close-all-windows-but-current', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
 
-    # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
-    #s = ['layout sticky tiling', 'mode main']
+	# sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
+	#s = ['layout sticky tiling', 'mode main']
 
-    h = ['join-with left', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
-    j = ['join-with down', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
-    k = ['join-with up', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
-    l = ['join-with right', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+	h = ['join-with left', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+	j = ['join-with down', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+	k = ['join-with up', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+	l = ['join-with right', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
 
 	minus = 'resize width -50'
-    equal = 'resize width +50'
+	equal = 'resize width +50'
 	9 = 'resize height -50'
-    0 = 'resize height +50'
+	0 = 'resize height +50'
 
-    down = 'volume down'
-    up = 'volume up'
-    shift-down = ['volume set 0', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+	down = 'volume down'
+	up = 'volume up'
+	shift-down = ['volume set 0', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']

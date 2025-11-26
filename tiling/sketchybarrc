@@ -3,7 +3,8 @@
 # For a (much) more advanced configuration example see my dotfiles:
 # https://github.com/FelixKratz/dotfiles
 
-PLUGIN_DIR="$CONFIG_DIR/plugins"
+export CONFIG_DIR="$HOME/.config/sketchybar"
+export PLUGIN_DIR="$CONFIG_DIR/plugins"
 
 ##### Bar Appearance #####
 # Configuring the general appearance of the bar.
@@ -12,9 +13,17 @@ PLUGIN_DIR="$CONFIG_DIR/plugins"
 # If you are looking for other colors, see the color picker:
 # https://felixkratz.github.io/SketchyBar/config/tricks#color-picker
 
-sketchybar --bar position=top height=28 blur_radius=20 color=0x88000000 \
-			font_smoothing=on padding_left=4 padding_right=3 \
-			shadow=off
+bar=(
+	position=top
+	height=28
+	blur_radius=20
+	color=0x88000000
+	font_smoothing=on
+	padding_left=4
+	padding_right=3
+	shadow=off
+)
+sketchybar --bar "${bar[@]}"
 
 ##### Changing Defaults #####
 # We now change some default values, which are applied to all further items.
@@ -40,9 +49,20 @@ default=(
 )
 sketchybar --default "${default[@]}"
 
-# ##### Adding Mission Control Space Indicators #####
+# ##### Aerospace Workspaces #####
 sketchybar --add event aerospace_workspace_change
+sketchybar --add event aerospace_mode_change
+
+sketchybar --add item aerospace_mode left \
+  --subscribe aerospace_mode aerospace_mode_change \
+  --set aerospace_mode icon="¶" \
+  script="$PLUGIN_DIR/aerospace_mode.sh" \
+  icon.color=0xaaffffff \
+  icon.padding_left=4 \
+  drawing=off
+
 WORKSPACES=$(aerospace list-workspaces --all)
+FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
 WORKSPACE_ITEMS=()
 for WS in $WORKSPACES; do
 	WORKSPACE_ITEMS+=("space.$WS")
@@ -51,7 +71,7 @@ for WS in $WORKSPACES; do
 		--set space.$WS										\
 			label="$WS"										\
 			click_script="aerospace workspace $WS"			\
-			script="$PLUGIN_DIR/aerospaceold.sh $WS"		\
+			script="$PLUGIN_DIR/aerospace.sh $WS"			\
 			label.padding_right=5							\
 			label.padding_left=4							\
 			icon.padding_left=0								\

@@ -26,7 +26,7 @@ animation_easing = "ease_in_out"
 #   and you must toggle activation via a keybind (toggle_space_activated).
 # - If false, spaces are managed by default and you can disable specific ones.
 # Default is true; uncomment to change.
-#default_disable = false
+default_disable = false
 
 # Mouse/Focus behavior
 # - focus_follows_mouse: moving the mouse into a window focuses it
@@ -34,7 +34,7 @@ animation_easing = "ease_in_out"
 # - mouse_hides_on_focus: hide the mouse cursor after focusing a window
 focus_follows_mouse = true
 mouse_follows_focus = true
-mouse_hides_on_focus = true
+mouse_hides_on_focus = false
 # focus_follows_mouse_disable_hotkey temporarily suspends focus-follows-mouse while held
 # e.g. "Fn"; omit or set to null to keep focus-follows-mouse always active
 #focus_follows_mouse_disable_hotkey = "Fn"
@@ -103,14 +103,14 @@ default_orientation = "perpendicular"
 #   Use the display's UUID as the key (for example, from system profiler or via rift CLI).
 
 [settings.layout.gaps.outer]
-top = 0
-left = 0
-bottom = 0
-right = 0
+top = 3
+left = 1
+bottom = 3
+right = 1
 
 [settings.layout.gaps.inner]
-horizontal = 0
-vertical = 0
+horizontal = 3
+vertical = 3
 
 # Example per-display overrides:
 # Replace the quoted key with your display's UUID. Only specify values you want to override.
@@ -125,7 +125,7 @@ vertical = 0
 # vertical = 8
 [settings.ui.menu_bar]
 # enable menu bar workspace indicators
-enabled = false
+enabled = true
 # if enabled, it will show all workspaces including empty ones. disabled because this
 # tends to take up too much room in the menubar and then is auto hidden by macos
 show_empty = false
@@ -139,7 +139,7 @@ display_style = "layout"
 
 [settings.ui.stack_line]
 # experimental stack line indicator (defaults to off)
-enabled = false
+enabled = true
 # in a horizontal stack where the line will be (top/bottom)
 horiz_placement = "top"
 # in a vertical stack where the line will be (left/right)
@@ -151,7 +151,7 @@ spacing = 0.0
 
 # experimental mission control
 [settings.ui.mission_control]
-enabled = false
+enabled = true
 # enable fade animation when entering/exiting mission control
 fade_enabled = false
 # native macos mission control fade is about 180ms
@@ -195,7 +195,7 @@ drag_swap_fraction = 0.3
 #   that's already active, it will switch to the last workspace instead
 # - reapply_app_rules_on_title_change: if true, app rules are re-evaluated when a window's title changes
 enabled = true
-default_workspace_count = 4
+default_workspace_count = 9
 auto_assign_windows = true
 preserve_focus_per_workspace = true
 workspace_auto_back_and_forth = false
@@ -211,8 +211,15 @@ reapply_app_rules_on_title_change = false
 # remaining workspaces are named "Workspace X".
 # Do not provide more names than default_workspace_count.
 workspace_names = [
-	"first",
-	"second"
+	"1",
+	"2",
+	"3",
+	"Q",
+	"W",
+	"E",
+	"A",
+	"S",
+	"D"
 ]
 
 # App rules (automatic assignment)
@@ -277,7 +284,23 @@ workspace_names = [
 #       ]
 #
 # By default there are no app rules; add or uncomment rules below as needed.
-app_rules = []
+app_rules = [
+	{ app_id = "com.apple.Spotlight", floating = true },
+	{ app_id = "com.binarynights.ForkLift", floating = true },
+	{ app_id = "com.apple.systempreferences", floating = true },
+	{ app_id = "com.apple.Music", workspace = 9, floating = true },
+	{ app_id = "com.apple.FaceTime", floating = true },
+	{ app_id = "net.pornel.ImageOptim", floating = true },
+	{ app_name = "Clash Verge", workspace = 9, floating = true },
+	{ app_id = "com.bitwarden.desktop", workspace = 9, floating = true },
+	{ app_id = "com.hegenberg.BetterTouchTool'", floating = true },
+	{ app_id = "com.apple.finder", workspace = 9 },
+	{ app_id = "net.kovidgoyal.kitty", workspace = 1 },
+	{ app_id = "com.vivaldi.Vivaldi", workspace = 7 },
+	{ app_id = "io.mpv", workspace = 8 },
+	{ app_id = "com.brave.Browser", workspace = 7 },
+	{ app_id = "com.microsoft.edgemac", workspace = 7 }
+]
 
 # Modifier combinations that can be reused in key bindings
 # Define common modifier combinations to avoid repetition.
@@ -314,6 +337,8 @@ comb1 = "Alt + Shift"
 # - debug / serialize / save_and_exit
 # - show_timing
 
+"Alt + Enter" = { exec = ["/opt/homebrew/bin/litty", "--single-instance", "-d", "~"] }
+
 "Alt + Z" = "toggle_space_activated"
 
 "Alt + H" = { move_focus = "left" }
@@ -330,11 +355,23 @@ comb1 = "Alt + Shift"
 "Alt + 1" = { switch_to_workspace = 1 }
 "Alt + 2" = { switch_to_workspace = 2 }
 "Alt + 3" = { switch_to_workspace = 3 }
+"Alt + 4" = { switch_to_workspace = 4 }
+"Alt + 5" = { switch_to_workspace = 5 }
+"Alt + 6" = { switch_to_workspace = 6 }
+"Alt + A" = { switch_to_workspace = 7 }
+"Alt + S" = { switch_to_workspace = 8 }
+"Alt + D" = { switch_to_workspace = 9 }
 
 "comb1 + 0" = { move_window_to_workspace = 0 }
 "comb1 + 1" = { move_window_to_workspace = 1 }
 "comb1 + 2" = { move_window_to_workspace = 2 }
 "comb1 + 3" = { move_window_to_workspace = 3 }
+"comb1 + 4" = { move_window_to_workspace = 4 }
+"comb1 + 5" = { move_window_to_workspace = 5 }
+"comb1 + 6" = { move_window_to_workspace = 6 }
+"comb1 + A" = { move_window_to_workspace = 7 }
+"comb1 + S" = { move_window_to_workspace = 8 }
+"comb1 + D" = { move_window_to_workspace = 9 }
 
 "Alt + Tab" = "switch_to_last_workspace"
 
@@ -342,13 +379,15 @@ comb1 = "Alt + Shift"
 "Alt + Shift + Right" = { join_window = "right" }
 "Alt + Shift + Up" = { join_window = "up" }
 "Alt + Shift + Down" = { join_window = "down" }
-"Alt + Comma" = "toggle_stack"
-"Alt + Slash" = "toggle_orientation"
+
+"comb1 + Comma" = "toggle_stack"
+"comb1 + Period" = "toggle_window_floating"
+"comb1 + Slash" = "toggle_orientation"
 "Alt + Ctrl + E" = "unjoin_windows"
 
 "Alt + Shift + Space" = "toggle_window_floating"
 "Alt + F" = "toggle_fullscreen"
-"Alt + Shift + F" = "toggle_fullscreen_within_gaps"
+#"Alt + Shift + F" = "toggle_fullscreen_within_gaps"
 "comb1 + Ctrl + Space" = "toggle_focus_floating" # briefly bring focus to floating window
 
 # smartly resize windows
@@ -365,9 +404,9 @@ comb1 = "Alt + Shift"
 
 # if mission control is enabled
 # this will show an exploded view of the windows in the active workspace
-# "Alt + Ctrl + Shift + M" = "show_mission_control_current"
+"comb1 + M" = "show_mission_control_current"
 # this will show the mission control view shown in the readme
-# "Alt + Ctrl + M" = "show_mission_control_all"
+"comb1 + N" = "show_mission_control_all"
 
 "Alt + Shift + D" = "debug" # prints layout tree
 

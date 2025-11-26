@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+ACTIVE_COLOR=0xaaAA9999
+NOTEMPTY_COLOR=0x77777777
+
 # Use the environment variable passed by aerospace trigger, fallback to direct call
 CURRENT=${FOCUSED_WORKSPACE:-$(aerospace list-workspaces --focused)}
 
@@ -7,40 +10,36 @@ CURRENT=${FOCUSED_WORKSPACE:-$(aerospace list-workspaces --focused)}
 WORKSPACE_NAME=${NAME#space.}
 
 # Check if this workspace has any windows
-WINDOW_COUNT=$(aerospace list-windows --workspace "$WORKSPACE_NAME" 2>/dev/null | wc -l)
+WINDOW_COUNT=$(aerospace list-windows --workspace "$WORKSPACE_NAME" 2>/dev/null | wc -l | xargs)
 
 # Check if this workspace is the currently focused one
 if [ "$WORKSPACE_NAME" = "$CURRENT" ]; then
-    # This is the active workspace - highlight it with background
-    sketchybar --set $NAME \
-        label="$WORKSPACE_NAME" \
-        label.color=0xffffffff \
-        label.font.size=11 \
-        background.drawing=on \
-        background.color=0xff0F574F \
-        background.corner_radius=4 \
-        background.height=18 \
-        background.border_width=0
+	# This is the active workspace - highlight it with background
+	sketchybar --set $NAME \
+		label="$WORKSPACE_NAME" \
+		label.color=0xffffffff \
+		label.font.size=11 \
+		background.drawing=on \
+		background.color=$ACTIVE_COLOR \
+		background.border_width=0
 elif [ "$WINDOW_COUNT" -gt 0 ]; then
-    # This workspace has windows but is not active - show with darker background
-    sketchybar --set $NAME \
-        label="$WORKSPACE_NAME" \
-        label.color=0xffffffff \
-        label.font.size=11 \
-        background.drawing=on \
-        background.color=0xff09342F \
-        background.corner_radius=4 \
-        background.height=18 \
-        background.border_width=0 \
-        padding_left=3 \
-        padding_right=3
+	# This workspace has windows but is not active - show with darker background
+	sketchybar --set $NAME \
+		label="$WORKSPACE_NAME" \
+		label.color=0xccffffff \
+		label.font.size=11 \
+		background.drawing=on \
+		background.color=$NOTEMPTY_COLOR \
+		background.border_width=0 \
+		padding_left=3 \
+		padding_right=3
 else
-    # This is an empty workspace - show as dimmed without background
-    sketchybar --set $NAME \
-        label="$WORKSPACE_NAME" \
-        label.color=0x88ffffff \
-        label.font.size=11 \
-        background.drawing=off \
-        padding_left=3 \
-        padding_right=3
+	# This is an empty workspace - show as dimmed without background
+	sketchybar --set $NAME \
+		label="$WORKSPACE_NAME" \
+		label.color=0x66ffffff \
+		label.font.size=11 \
+		background.drawing=off \
+		padding_left=3 \
+		padding_right=3
 fi
