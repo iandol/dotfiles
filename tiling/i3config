@@ -57,6 +57,9 @@ for_window [title="CageLab-GUI"] floating enable
 for_window [title="^PTB Onscreen Window"] floating enable
 for_window [title="^Figures"] floating enable
 for_window [title="^Opticka"] floating enable
+for_window [title="^Comments"] floating enable
+for_window [class="^Matlab-GLEE"] floating enable
+
 
 ###################################### KEYS
 
