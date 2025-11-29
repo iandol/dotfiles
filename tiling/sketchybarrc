@@ -55,7 +55,7 @@ sketchybar --add event aerospace_mode_change
 
 sketchybar --add item aerospace_mode left \
   --subscribe aerospace_mode aerospace_mode_change \
-  --set aerospace_mode icon="󰪭"\
+  --set aerospace_mode icon="󰪭" \
   icon.font.size=25 \
   script="$PLUGIN_DIR/aerospace_mode.sh" \
   icon.color=0xaa99ffcc \
@@ -131,10 +131,6 @@ sketchybar	--add item weather q							\
 						icon=									\
 						script="$PLUGIN_DIR/cpu.sh"				\
 			--subscribe volume volume_change					\
-			--add item sie right								\
-			--set sie	update_freq=15							\
-						script="$PLUGIN_DIR/secure_input.sh"	\
-			--subscribe sie mouse.entered						\
 			--add item music e									\
 			--set music label.color=0x66ffffff					\
 						icon.color=0x66ffffff					\
@@ -150,7 +146,6 @@ sketchybar	--add item weather q							\
 						click_script="/opt/homebrew/bin/media-control toggle-play-pause" \
 						update_freq=15							\
 						background.drawing=on					
-			#--subscribe music mouse.entered system_woke
 
 ##### Force all scripts to run the first time (never do this in a script) #####
 sketchybar --update
