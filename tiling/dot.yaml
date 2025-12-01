@@ -8,6 +8,7 @@ linux:
   links:
     Xresources100: ~/.Xresources
     i3config: ~/.config/i3/config
+    i3status: ~/.config/i3status/config
     swayconfig: ~/.config/sway/config
 linux[whoami.hostname="cog5"]:
   links:
