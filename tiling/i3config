@@ -59,12 +59,20 @@ for_window [title="^Figures"] floating enable
 for_window [title="^Opticka"] floating enable
 for_window [title="^Comments"] floating enable
 for_window [class="^Matlab-GLEE"] floating enable
-
+for_window [class="kitty"] border none
 
 ###################################### KEYS
-
 # start a terminal
 bindsym $mod+Return exec "kitty --single-instance -d ~"
+
+# toggle border
+bindsym $mod+Shift+b border toggle 2
+
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+minus scratchpad show
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -211,61 +219,19 @@ client.urgent           #2f343a #900000 #ffffff #900000   #900000
 client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
 client.background       #444444
 
-# Example: custom i3bar layout showing workspace buttons, memory, tray icons,
-# and whichever network interface is currently up.
-# Uncomment and tweak if you want a dedicated bar; by default this stays as
-# documentation only.
-# bar {
-# 	id custom-status
-# 	mode dock
-# 	position top
-# 	status_command i3status -c ~/.config/i3status/active-net.conf
-# 	workspace_buttons yes   # always show i3 workspaces on the left
-# 	tray_output primary     # keep system tray icons visible
-# 	separator_symbol "|"
-# 	font pango:Alegreya Sans 14
-# }
-#
-# Example i3status config (~/.config/i3status/active-net.conf) that pairs with
-# the above bar and only prints the active network interface:
-#
-# general {
-# 	colors = true
-# 	interval = 2
-# }
-# order += "memory"
-# order += "wireless _first_"
-# order += "ethernet _first_"
-#
-# memory {
-# 	format = "  %used/%total"
-# }
-# wireless _first_ {
-# 	format_up = "  %essid %quality"
-# 	format_down = ""   # hide when no wireless interface is up
-# }
-# ethernet _first_ {
-# 	format_up = "  %ip"
-# 	format_down = ""   # hide when no wired interface is up
-# }
-
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
 bar {
 	mode dock
 	position bottom
-	workspace_buttons yes   # always show i3 workspaces on the left
-	tray_output primary     # keep system tray icons visible
 	status_command i3status
 	font pango:Alegreya Sans 15
 	tray_padding 2px
-	separator_symbol "|"
+	separator_symbol "⸾"
 	workspace_min_width 50
 	padding 0px 5px 2px 5px
 	colors {
-		background #111111
+		background #112022
 		statusline #eeeeee
-		separator #555555
+		separator #777777
 		focused_workspace  #99784c #775528 #ffffff
 		active_workspace   #333333 #5f676a #ffffff
 		inactive_workspace #333333 #222222 #888888
@@ -273,3 +239,45 @@ bar {
 		binding_mode       #2f343a #999900 #ffffff
 	}
 }
+
+# Example: custom i3bar layout showing workspace buttons, memory, tray icons,
+# # and whichever network interface is currently up.
+# # Uncomment and tweak if you want a dedicated bar; by default this stays as
+# # documentation only.
+# # bar {
+# #		id custom-status
+# #		mode dock
+# #		position top
+# #		status_command i3status -c ~/.config/i3status/active-net.conf
+# #		workspace_buttons yes   # always show i3 workspaces on the left
+# #		tray_output primary     # keep system tray icons visible
+# #		separator_symbol "|"
+# #		font pango:Alegreya Sans 14
+# # }
+# #
+# # Example i3status config (~/.config/i3status/active-net.conf) that pairs with
+# # the above bar and only prints the active network interface:
+# #
+# # general {
+# #		colors = true
+# #		interval = 2
+# # }
+# # order += "memory"
+# # order += "wireless _first_"
+# # order += "ethernet _first_"
+# #
+# # memory {
+# #		format = "  %used/%total"
+# # }
+# # wireless _first_ {
+# #		format_up = "  %essid %quality"
+# #		format_down = ""   # hide when no wireless interface is up
+# # }
+# # ethernet _first_ {
+# #		format_up = "  %ip"
+# #		format_down = ""   # hide when no wired interface is up
+# # }
+#
+# # Start i3bar to display a workspace bar (plus the system information i3status
+# # finds out, if available)
+#

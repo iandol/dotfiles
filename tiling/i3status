@@ -13,13 +13,13 @@ order += "disk /"
 order += "tztime local"
 
 wireless _first_ {
-        format_up = "W: (%quality at %essid, %bitrate) %ip"
+        format_up = "  %quality %essid"
         format_down = ""
 }
 
 ethernet _first_ {
-        format_up = "%ip (%speed)"
-        format_down = "down"
+        format_up = "  %ip"
+        format_down = "  down"
 }
 
 tztime local {
