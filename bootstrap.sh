@@ -75,7 +75,7 @@ elif [ "$PLATFORM" = "Linux" ]; then
 	sudo apt -my install libunrar5 libdc1394-25 libraw1394-11
 	sudo apt -my install gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly
 	sudo apt -my install synaptic zathura zathura-pdf-poppler zathura-ps
-	sudo apt -my install rofi nitrogen i3 xdotool
+	sudo apt -my install rofi nitrogen i3 xdotool unicode gucharmap
 	sudo apt -my install python3-pip python3-venv
 	sudo apt -my install openssh-server
 	sudo apt -my install wakeonlan etherwake

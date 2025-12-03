@@ -2,6 +2,9 @@ general {
         output_format = "i3bar"
         colors = true
         interval = 5
+		color_good = "#AAFFAA"
+		color_degraded = "#AAFF33"
+		color_bad = "#FFAAAA"
 }
 
 order += "wireless _first_"
@@ -10,7 +13,7 @@ order += "memory"
 order += "cpu_usage"
 order += "load"
 order += "disk /"
-order += "tztime local"
+order += "time"
 
 wireless _first_ {
         format_up = "  %quality %essid"
@@ -19,30 +22,29 @@ wireless _first_ {
 
 ethernet _first_ {
         format_up = "  %ip"
-        format_down = "  down"
+        format_down = "  x"
 }
 
-tztime local {
+time {
         format = "%Y-%m-%d %H:%M"
-        hide_if_equals_localtime = false
 }
 
 load {
-        format = "%1min"
+        format = "󰊚 %1min"
 }
 
 cpu_usage {
-		format = "%usage"
+		format = "󰍛 %usage"
 }
 
 memory {
-        format = "%used"
+        format = "󰟖 %free"
         threshold_degraded = "10%"
         format_degraded = ": %free"
 }
 
 disk "/" {
-        format = "%free"
+        format = "󰋊 %free"
 }
 
 read_file uptime {
