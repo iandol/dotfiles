@@ -1,0 +1,6 @@
+# Path to your dotfile directory containing this config file (relative to $HOME). 
+dotfiles_dir = ".dotfiles"
+
+[settings.dots]
+
+zsh = { source = "shells/zsh/zshrc", target = ".zshrc" }

@@ -124,6 +124,23 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 	check-further-callbacks = true
 
 [[on-window-detected]]
+	if.app-id = 'com.apple.MobileSMS'
+	run = ['layout floating', 'move-node-to-workspace S']
+	check-further-callbacks = true
+
+[[on-window-detected]]
+	if.app-id = 'com.apple.Music'
+	run = ['layout floating', 'move-node-to-workspace S']
+
+[[on-window-detected]]
+	if.app-id = 'com.apple.FaceTime'
+	run = ['layout floating']
+
+[[on-window-detected]]
+	if.app-id = 'com.apple.AppStore'
+	run = ['layout floating']
+
+[[on-window-detected]]
 	if.app-id = 'com.hegenberg.BetterTouchTool'
 	run = 'layout floating'
 	
@@ -151,12 +168,12 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 
 [[on-window-detected]]
 	if.app-name-regex-substring = 'mpv'
-	run = ['layout floating', 'move-node-to-workspace S']
+	run = ['layout floating', 'move-node-to-workspace D']
 	check-further-callbacks = true
 
 [[on-window-detected]]
 	if.app-id = 'org.videolan.vlc'
-	run = ['layout floating', 'move-node-to-workspace S']
+	run = ['layout floating', 'move-node-to-workspace D']
 	check-further-callbacks = true
 
 [[on-window-detected]]
@@ -170,14 +187,6 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 [[on-window-detected]]
 	if.app-id = 'com.tencent.xinWeChat'
 	run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
-	if.app-id = 'com.apple.Music'
-	run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
-	if.app-id = 'com.apple.FaceTime'
-	run = ['layout floating']
 
 [[on-window-detected]]
 	if.app-id = 'net.pornel.ImageOptim'

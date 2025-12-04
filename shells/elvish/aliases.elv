@@ -137,7 +137,6 @@ fn cloneReset { |hostname|
 	msg "For netbird, you must [netbird profile add newprofile] and then [netbird profile select] it"
 }
 edit:add-var cloneReset~ $cloneReset~
-edit:add-var cagelab-monitor~ { tmuxp load cagelab-monitor }
 edit:add-var cagelab-zsh~ { ln -svf $E:HOME/Code/Setup/config/zshrc $E:HOME/.zshrc; ln -svf $E:HOME/Code/Setup/config/zsh-* $E:HOME/.config; ln -svf $E:HOME/Code/Setup/config/aliases $E:HOME/.config }
 
 #==================================================== - GENERAL
@@ -556,7 +555,7 @@ fn update {
 	cmds:if-external pyenv { header2 "---> Rehash PYENV…"; pyenv rehash }
 	cmds:if-external npm { header2 "---> Update npm global"; npm list -g; npm update -g; npm list -g }
 	cmds:if-external nvim { header2 "---> Update NVIM plugins…"; nvim --headless "+Lazy! sync" +qa }
-	cmds:if-external ya { header2 "---> Update Yazi"; ya pkg upgrade }
+	cmds:if-external ya { header2 "---> Update Yazi"; rm -rf ~/.config/yazi/plugins; ya pkg upgrade }
 	cmds:if-external eget { header2 "---> Update eget"; eget zyedidia/eget --upgrade-only }
  
 	try { header2 "---> Updating Elvish Packages…";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
