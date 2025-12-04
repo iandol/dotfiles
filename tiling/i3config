@@ -227,11 +227,15 @@ client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
 client.background       #444444
 
 bar {
-	mode dock
+	mode hide
+	hidden_state hide
+	modifier Mod4
+	bindsym button1 bar hidden_state show
+	bindsym button3 bar hidden_state hide
 	position bottom
 	status_command i3status
 	font pango:Alegreya Sans 15
-	tray_padding 0px
+	tray_padding 2px
 	separator_symbol "⸾"
 	workspace_min_width 50
 	padding 0px 5px 2px 5px
