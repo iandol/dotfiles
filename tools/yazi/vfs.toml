@@ -1,0 +1,13 @@
+[providers.cagelab-dev]
+type     = "sftp"
+host     = "cagelab-dev.cloud.lab"
+user     = "cagelab"
+port     = 22
+key_file = "~/.ssh/cagelab"
+
+[providers.cagelab-dev]
+type     = "sftp"
+host     = "cof21.cloud.lab"
+user     = "cog"
+port     = 22
+key_file = "~/.ssh/cagelab"
