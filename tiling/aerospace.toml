@@ -202,6 +202,11 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 	if.window-title-regex-substring = 'Citation|Document'
 	run = 'layout floating'
 
+[[on-window-detected]]
+	if.app-id = 'org.localsend.localsendApp'
+	run = 'layout floating'
+
+
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 # 'main' binding mode must be always presented

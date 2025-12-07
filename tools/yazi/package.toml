@@ -1,7 +1,7 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:chmod"
-rev = "2301ff8"
-hash = "8ad3e90b079190b4905f24a44f4ca06b"
+rev = "19dc890"
+hash = "5b2eb0cc2050cec1e4de83cfa51a5b90"
 
 [[plugin.deps]]
 use = "Lil-Dank/lazygit"
@@ -10,7 +10,7 @@ hash = "ee71543790f0ce3951161045a3787abd"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "2301ff8"
+rev = "19dc890"
 hash = "56fdabc96fc1f4d53c96eb884b02a5be"
 
 [[plugin.deps]]
@@ -20,13 +20,13 @@ hash = "e17c11b605d989568a1d1741ca17c584"
 
 [[plugin.deps]]
 use = "Rolv-Apneseth/starship"
-rev = "a63550b"
-hash = "c2021386289a0cbb3e152a052f67c177"
+rev = "eca1861"
+hash = "e519d894e94ded741e06aae4d4775981"
 
 [[plugin.deps]]
 use = "uhs-robert/sshfs"
-rev = "ea0b089"
-hash = "14c5b354b75e954a0b18a7e0706ac5f9"
+rev = "75a025c"
+hash = "e1cebecfee70daef1f97aa083209340c"
 
 [[plugin.deps]]
 use = "iandol/sudo"
@@ -35,8 +35,13 @@ hash = "b587f1fb49563562003ed84446a351bc"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:mount"
-rev = "2301ff8"
+rev = "19dc890"
 hash = "4fccaaf10c36dc2466e2438a386ff017"
+
+[[plugin.deps]]
+use = "yazi-rs/plugins:toggle-pane"
+rev = "19dc890"
+hash = "8a7c58225816a163a6e8730c0adafbc8"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"

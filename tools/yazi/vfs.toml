@@ -5,9 +5,17 @@ user     = "cagelab"
 port     = 22
 key_file = "~/.ssh/cagelab"
 
-[providers.cagelab-dev]
+[providers.cog5]
 type     = "sftp"
-host     = "cof21.cloud.lab"
+host     = "cog5.cloud.lab"
+user     = "cog5"
+port     = 22
+key_file = "~/.ssh/id_rsa"
+
+[providers.cog21]
+type     = "sftp"
+host     = "cog21.cloud.lab"
 user     = "cog"
 port     = 22
-key_file = "~/.ssh/cagelab"
+key_file = "~/.ssh/id_rsa"
+

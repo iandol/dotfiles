@@ -5,14 +5,14 @@
 # https://yazi-rs.github.io/docs/configuration/overview
 
 [mgr]
-ratio          = [ 1, 4, 3 ]
-sort_by        = "mtime"
-sort_reverse   = true
-sort_dir_first = true
-linemode       = "mtime"
-show_symlink   = true
+ratio			= [ 1, 3, 4 ]
+sort_by			= "mtime"
+sort_reverse	= true
+sort_dir_first	= true
+linemode		= "mtime"
+show_symlink	= true
 
 [preview]
-tab_size        = 2
-
-
+tab_size		= 2
+max_width		= 1000
+max_height		= 1000

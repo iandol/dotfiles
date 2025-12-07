@@ -3,6 +3,16 @@
 "$schema" = "https://yazi-rs.github.io/schemas/yazi.json"
 
 [[mgr.prepend_keymap]]
+on   = ["T", "x"]
+run  = "plugin toggle-pane max-preview"
+desc = "Maximize or restore the preview pane"
+
+[[mgr.prepend_keymap]]
+on   = ["T", "m"]
+run  = "plugin toggle-pane min-preview"
+desc = "Minimize or restore the preview pane"
+
+[[mgr.prepend_keymap]]
 on   = "<Enter>"
 run  = "plugin smart-enter"
 desc = "Enter the child directory, or open the file"

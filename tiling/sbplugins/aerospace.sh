@@ -35,7 +35,7 @@ else
 	# This is an empty workspace - show as dimmed without background
 	sketchybar --set $NAME \
 		label="$WORKSPACE_NAME" \
-		label.color=0x66ffffff \
+		label.color=0x55ffffff \
 		background.drawing=off \
 		label.font.size=11
 fi
