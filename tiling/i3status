@@ -1,10 +1,10 @@
 general {
-        output_format = "i3bar"
-        colors = true
-        interval = 5
-		color_good = "#AAFFAA"
-		color_degraded = "#ffa033ff"
-		color_bad = "#FFAAAA"
+	output_format = "i3bar"
+	colors = true
+	interval = 5
+	color_good = "#AAFFAA"
+	color_degraded = "#F05511"
+	color_bad = "#FFAAAA"
 }
 
 order += "wireless _first_"
@@ -16,37 +16,37 @@ order += "disk /"
 order += "time"
 
 wireless _first_ {
-        format_up = "  %quality %essid"
-        format_down = ""
+	format_up = "  %quality %essid"
+	format_down = ""
 }
 
 ethernet _first_ {
-        format_up = "  %ip"
-        format_down = "  x"
+	format_up = "  %ip"
+	format_down = "  x"
 }
 
 time {
-        format = "%Y-%m-%d %H:%M"
+	format = "%Y-%m-%d %H:%M"
 }
 
 load {
-        format = "󰊚 %1min"
+	format = "󰊚 %1min"
 }
 
 cpu_usage {
-		format = "󰍛 %usage"
+	format = "󰍛 %usage"
 }
 
 memory {
-        format = "󰟖 %free"
-        threshold_degraded = "10%"
-        format_degraded = ": %free"
+	format = "󰟖 %free"
+	threshold_degraded = "10%"
+	format_degraded = ": %free"
 }
 
 disk "/" {
-        format = "󰋊 %free"
+	format = "󰋊 %free"
 }
 
 read_file uptime {
-        path = "/proc/uptime"
+	path = "/proc/uptime"
 }
