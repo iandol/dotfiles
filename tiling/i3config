@@ -28,6 +28,9 @@ exec --no-startup-id nm-applet
 # UseIn=gnome;i3
 exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh,secrets,pkcs11
 
+# scaling for X
+exec --no-startup-id xrdb -merge ~/.Xresources
+
 # wallpaper
 exec --no-startup-id /usr/bin/nitrogen --set-scaled ~/.dotfiles/terminals/everforest.jpg
 
@@ -49,6 +52,7 @@ floating_modifier $mod
 # or left-clicking anywhere into the window while holding the floating modifier.
 tiling_drag modifier titlebar
 
+# other settings
 title_align right
 default_border normal 2
 default_floating_border pixel 2
@@ -184,7 +188,7 @@ bindsym $mods+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mods+r restart
 # exit i3 (logs you out of your X session)
-bindsym $mods+e exec "i3-nagbar -f 'pango:Alegreya Sans 25' -t warning -m 'Exit i3 & X session?' -B 'Exit i3' 'i3-msg exit'"
+bindsym $mods+e exec "i3-nagbar -f 'pango:Alegreya Sans Italic 25' -t warning -m 'Exit i3 & X session?' -B 'Exit i3' 'i3-msg exit'"
 
 # service mode 
 mode "service" {
@@ -230,8 +234,8 @@ bar {
 	mode hide
 	hidden_state hide
 	modifier Mod4
-	bindsym button1 bar hidden_state show
-	bindsym button3 bar hidden_state hide
+	bindsym $mod+button1 bar hidden_state show
+	bindsym $mod+button3 bar hidden_state hide
 	position bottom
 	status_command i3status
 	font pango:Alegreya Sans 15
