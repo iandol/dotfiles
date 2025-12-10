@@ -29,9 +29,9 @@ setopt hist_ignore_all_dups		# Delete old recorded entry if new entry is a dupli
 setopt hist_ignore_space		# Don't record an entry starting with a space.
 setopt hist_save_no_dups		# Don't write duplicate entries in the history file.
 setopt hist_reduce_blanks		# Remove superfluous blanks before recording entry.
-setopt inc_append_history     	# write to the history file immediately, not when the shell exits.
-setopt share_history          	# share command history data
-export MANPAGER='less -X'       # don't clear after quitting man
+setopt inc_append_history		# write to the history file immediately, not when the shell exits.
+setopt share_history			# share command history data
+export MANPAGER='less -X'		# don't clear after quitting man
 typeset -U PATH path			# don't allow duplicates in path
 
 unalias run-help >& /dev/null
@@ -41,28 +41,35 @@ alias help=run-help
 #------------------------------------PATHS/ENVS ETC.
 ([[ -x $(which brew) ]] && [[ -d "$(brew --prefix)/share/zsh/site-functions/" ]]) && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
 
+jl=("temurin-25-jdk" "temurin-21-jdk" "temurin-17-jdk" "java-21-openjdk" "java-17-openjdk")
+for j in $jl; do
+	if [[ -d "/usr/lib/jvm/${j}-amd64" ]]; then
+		export JAVA_HOME="/usr/lib/jvm/${j}-amd64"
+		export MATLAB_JAVA="/usr/lib/jvm/${j}-amd64"
+		path=("${JAVA_HOME}/bin" $path) 
+		break
+	fi
+done
+
 ul=("R2025b" "R2025a" "R2024b" "R2024a" "R2023b" "R2023a" "R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
-match=0
 if [[ $PLATFORM == 'Darwin' ]]; then
 	for x in $ul; do
-		if ( [[ $match == 0 ]] && [[ -d "/Applications/MATLAB_${x}.app/bin" ]] ); then
-			match=1
+		if [[ -d "/Applications/MATLAB_${x}.app/bin" ]]; then
 			path=("/Applications/MATLAB_${x}.app/bin" $path) # matlab
 			export MATLAB_EXECUTABLE="/Applications/MATLAB_${x}.app/bin/matlab" # matlab
 			ln -sf "/Applications/MATLAB_${x}.app/bin/maci64/mlint" ~/bin/mlint # matlab
+			break
 		fi
 	done
 else
 	for x in $ul; do
-		if ( [[ $match == 0 ]] && [[ -d "/usr/local/MATLAB/${x}/bin" ]]); then
-			match=1
+		if [[ -d "/usr/local/MATLAB/${x}/bin" ]]; then
 			path=("/usr/local/MATLAB/${x}/bin" $path) # matlab
 			export MATLAB_EXECUTABLE="/usr/local/MATLAB/${x}/bin/matlab" # matlab
 			ln -sf "/usr/local/MATLAB/${x}/bin/glnxa64/mlint" ~/bin/mlint &> /dev/null # matlab
+			break
 		fi
 	done
-	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/" # Linux Java
-	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export path=("${JAVA_HOME}bin" $path) # Linux JDK
 fi
 #------------------------------------LUA
 [[ -d "$HOME/.local/share/pandoc/filters" ]] && export LUA_PATH="$HOME/.local/share/pandoc/filters/?.lua;;"
@@ -76,6 +83,7 @@ pth=("/Library/TeX/texbin" "$HOME/Library/TinyTeX/bin/universal-darwin"
 	"/opt/homebrew/opt/ruby/bin" "/opt/homebrew/lib/ruby/gems/3.4.0/bin"
 	"/snap/bin" "$HOME/.local/bin" 
 	"$HOME/.cache/lm-studio/bin"
+	"$HOME/.antigravity/antigravity/bin"
 	"$HOME/.pixi/envs/ruby/share/rubygems/bin"
 	"$HOME/.pixi/bin" "$HOME/bin")
 for p in $pth; do
@@ -132,8 +140,4 @@ fi
 
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
-
-
-
-# Added by Antigravity
-export PATH="/Users/ian/.antigravity/antigravity/bin:$PATH"
+#---------------------------------------END OF FILE
