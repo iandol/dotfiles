@@ -143,6 +143,10 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 [[on-window-detected]]
 	if.app-id = 'com.hegenberg.BetterTouchTool'
 	run = 'layout floating'
+
+[[on-window-detected]]
+	if.app-id = 'com.runningwithcrayons.Alfred-Preferences'
+	run = 'layout floating'
 	
 [[on-window-detected]]
 	if.app-id = 'com.binarynights.ForkLift'
@@ -151,7 +155,6 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 [[on-window-detected]]
 	if.window-title-regex-substring = 'Windows App'
 	run = ['layout floating']
-	check-further-callbacks = true
 
 [[on-window-detected]]
 	if.app-id = 'com.objective-see.lulu.app'
@@ -162,8 +165,13 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 	run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
-	if.app-id = 'io.mpv'
+	if.app-id = 'com.metacubex.ClashX.meta'
 	run = ['layout floating', 'move-node-to-workspace S']
+
+
+[[on-window-detected]]
+	if.app-id = 'io.mpv'
+	run = ['layout floating', 'move-node-to-workspace D']
 	check-further-callbacks = true
 
 [[on-window-detected]]
