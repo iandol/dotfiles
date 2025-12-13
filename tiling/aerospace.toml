@@ -167,7 +167,11 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 [[on-window-detected]]
 	if.app-id = 'com.metacubex.ClashX.meta'
 	run = ['layout floating', 'move-node-to-workspace S']
+	check-further-callbacks = true
 
+[[on-window-detected]]
+	if.app-name-regex-substring = 'ClashX Meta'
+	run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
 	if.app-id = 'io.mpv'

@@ -1,4 +1,3 @@
-use os; use runtime; use path; if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) { use x; x:init; }     # boot up x-cmd in Elvish.
 #====================================================
 #  __|  |      _)       |   
 #  _|   | \ \ / | (_-<    \ 
@@ -73,14 +72,12 @@ cmds:do-if-path $releases { |p|
 	if (cmds:is-macos) { ln -sf $p"/maci64/mlint" $E:HOME/bin/mlint }
 }
 if (cmds:is-macos) {
-	cmds:do-if-path [(/usr/libexec/java_home -v {25 21 17 11 8})] {|p| set-env JAVA_HOME $p; set-env MATLAB_JAVA $p }
+	cmds:do-if-path [(/usr/libexec/java_home -v {25 21 17 11 8})] {|p| set-env JAVA_HOME $p }
 	cmds:do-if-path	[(/usr/libexec/java_home -v {21 17 11 8})] {|p| set-env MATLAB_JAVA $p }
 } elif (cmds:is-linux) {
-	var jt = [/usr/lib/jvm/temurin-{21 17 11 8}-jdk-amd64]
-	var jps = [/usr/lib/jvm/java-{21 17 11 8}-openjdk-amd64]
-	var jp = [$E:HOME'/.pixi/envs/openjdk/lib/jvm/']
-	var jj = [$@jt $@jps $@jp]
-	put $jj
+	var jj = [/usr/lib/jvm/temurin-{21 17 11 8}-jdk-amd64 
+		/usr/lib/jvm/java-{21 17 11 8}-openjdk-amd64 
+		$E:HOME'/.pixi/envs/openjdk/lib/jvm/']
 	cmds:do-if-path $jj { |p| set-env JAVA_HOME $p; set-env MATLAB_JAVA $p }
 	# This breaks MESA drivers
 	# cmds:do-if-path [/usr/local/MATLAB/MATLAB_Runtime/R202{5b 5a 4b 4a 3b 3a}/] { |p| set-env LD_LIBRARY_PATH $p'runtime/glnxa64:'$p'bin/glnxa64:'$p'sys/os/glnxa64:'$p'extern/bin/glnxa64:'$p'sys/opengl/lib/glnxa64:'$E:LD_LIBRARY_PATH }

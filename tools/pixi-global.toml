@@ -173,7 +173,7 @@ exposed = { btop = "btop" }
 [envs.nodejs]
 channels = ["conda-forge"]
 dependencies = { nodejs = "*" }
-exposed = { corepack = "corepack", node = "node", npm = "npm", npx = "npx" }
+exposed = { node = "node", npm = "npm", npx = "npx" }
 
 [envs.uutils-coreutils]
 channels = ["conda-forge"]
