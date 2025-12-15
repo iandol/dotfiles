@@ -5,3 +5,4 @@ __pycache__/
 .DS_Store
 .venv/
 *.ipynb_checkpoints/
+opticka/docs
