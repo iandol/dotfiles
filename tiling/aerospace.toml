@@ -10,7 +10,7 @@ config-version = 2
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
 	'exec-and-forget borders active_color=0xfffeefe0 inactive_color=0xff644d49 width=4.0',
-	#'exec-and-forget sketchybar', #as a brew service it is better
+	#'exec-and-forget sketchybar', #use a brew service as it is better
 ]
 
 # Notify Sketchybar about workspace change
@@ -59,7 +59,7 @@ automatically-unhide-macos-hidden-apps = false
 # even when they are invisible.
 # This config version is only available since 'config-version = 2'
 # Fallback value (if you omit the key): persistent-workspaces = []
-persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
+persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 
 
 
@@ -218,7 +218,6 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 	if.app-id = 'org.localsend.localsendApp'
 	run = 'layout floating'
 
-
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 # 'main' binding mode must be always presented
@@ -262,7 +261,7 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 
 	# See: https://nikitabobko.github.io/AeroSpace/commands#layout
 	alt-shift-comma = 'layout accordion horizontal vertical'
-	alt-shift-period = 'layout floating tiling'
+	alt-shift-period = 'layout floating tiling' # Toggle between floating and tiling layout
 	alt-shift-slash = 'layout tiles horizontal vertical'
 
 	# See: https://nikitabobko.github.io/AeroSpace/commands#focus
@@ -282,23 +281,23 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 	alt-equal = 'resize smart +50'
 
 	# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-	alt-1 = 'workspace 1'
-	alt-2 = 'workspace 2'
-	alt-3 = 'workspace 3'
-	alt-4 = 'workspace 4'
-	alt-5 = 'workspace 5'
-	alt-6 = 'workspace 6'
-	alt-a = 'workspace A' # In your config, you can drop workspace bindings that you don't need
-	alt-s = 'workspace S'
-	alt-d = 'workspace D'
+	alt-1 = 'workspace 1 --auto-back-and-forth'
+	alt-2 = 'workspace 2 --auto-back-and-forth'
+	alt-3 = 'workspace 3 --auto-back-and-forth'
+	alt-q = 'workspace Q --auto-back-and-forth'
+	alt-w = 'workspace W --auto-back-and-forth'
+	alt-e = 'workspace E --auto-back-and-forth'
+	alt-a = 'workspace A --auto-back-and-forth' 
+	alt-s = 'workspace S --auto-back-and-forth'
+	alt-d = 'workspace D --auto-back-and-forth'
 
 	# See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 	alt-shift-1 = 'move-node-to-workspace 1'
 	alt-shift-2 = 'move-node-to-workspace 2'
 	alt-shift-3 = 'move-node-to-workspace 3'
-	alt-shift-4 = 'move-node-to-workspace 4'
-	alt-shift-5 = 'move-node-to-workspace 5'
-	alt-shift-6 = 'move-node-to-workspace 6'
+	alt-shift-q = 'move-node-to-workspace Q'
+	alt-shift-w = 'move-node-to-workspace W'
+	alt-shift-e = 'move-node-to-workspace E'
 	alt-shift-a = 'move-node-to-workspace A'
 	alt-shift-s = 'move-node-to-workspace S'
 	alt-shift-d = 'move-node-to-workspace D'
@@ -310,19 +309,18 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 [mode.service.binding]
 	esc = ['reload-config', 'mode main']
-	r = ['flatten-workspace-tree', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000'] # reset layout
-	f = ['layout floating tiling', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000'] # Toggle between floating and tiling layout
-	s = ['fullscreen --no-outer-gaps', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
-	t = ['exec-and-forget sketchybar --bar color=0xaa000000', 'macos-native-fullscreen']
-	backspace = ['close-all-windows-but-current', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+	r = ['flatten-workspace-tree', 'mode main'] # reset layout
+	f = ['fullscreen --no-outer-gaps', 'mode main']
+	g = ['macos-native-fullscreen']
+	backtick = ['close-all-windows-but-current', 'mode main']
 
 	# sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 	#s = ['layout sticky tiling', 'mode main']
 
-	h = ['join-with left', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
-	j = ['join-with down', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
-	k = ['join-with up', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
-	l = ['join-with right', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+	h = ['join-with left', 'mode main']
+	j = ['join-with down', 'mode main']
+	k = ['join-with up', 'mode main']
+	l = ['join-with right', 'mode main']
 
 	minus = 'resize width -50'
 	equal = 'resize width +50'
@@ -331,4 +329,4 @@ persistent-workspaces = [ '1', '2', '3', '4', '5', '6', 'A', 'S', 'D' ]
 
 	down = 'volume down'
 	up = 'volume up'
-	shift-down = ['volume set 0', 'mode main', 'exec-and-forget sketchybar --bar color=0xaa000000']
+	shift-down = ['volume set 0', 'mode main']

@@ -65,7 +65,8 @@ sketchybar --add item aerospace_mode left \
   background.drawing=on \
   drawing=off
 
-WORKSPACES=$(aerospace list-workspaces --all)
+WORKSPACES="1 2 3 Q W E A S D"
+# WORKSPACES=$(aerospace list-workspaces --all)
 FOCUSED_WORKSPACE=$(aerospace list-workspaces --focused)
 WORKSPACE_ITEMS=()
 for WS in $WORKSPACES; do

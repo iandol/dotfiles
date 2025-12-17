@@ -1,5 +1,9 @@
 require("starship"):setup()
 
+require("zoxide"):setup {
+  update_db = true,
+}
+
 -- Minimal reliable setup
 require("sshfs"):setup({
   sshfs_options = {

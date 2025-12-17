@@ -545,7 +545,7 @@ fn update {
 	}
 
 	# update cogmoteGO
-	try { curl -sS https://raw.githubusercontent.com/Ccccraz/cogmoteGO/main/install.sh | sh } catch { }
+	try { curl -sS https://raw.githubusercontent.com/cagelab/cogmoteGO/main/install.sh | sh } catch { }
 
 	# update other tools
 	cmds:if-external pkgx { header2 "---> Update pkgx"; pkgx --sync; pkgx --update }

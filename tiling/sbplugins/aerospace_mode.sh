@@ -3,9 +3,7 @@
 CURRENT_MODE=$(aerospace list-modes --current)
 
 if [ "$CURRENT_MODE" == "main" ]; then
-	sketchybar --set "$NAME" \
-		drawing=off
+	sketchybar --bar color=0x66000000 --set "$NAME" drawing=off
 else
-	sketchybar --set "$NAME" \
-		drawing=on
+	sketchybar --bar color=0x66cc5555 --set "$NAME" drawing=on
 fi
