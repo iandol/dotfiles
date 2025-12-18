@@ -8,7 +8,7 @@
 	<string>org.iandol.dotfilesSync</string>
 	<key>ProgramArguments</key>
 	<array>
-		<string>/usr/local/bin/fdautil</string>
+		<string>/Applications/LaunchControl.app/Contents/MacOS/fdautil</string>
 		<string>exec</string>
 		<string>/usr/local/bin/elvish</string>
 		<string>/Users/ian/.dotfiles/bin/dotfilesSync.elv</string>

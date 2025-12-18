@@ -302,6 +302,10 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	alt-shift-s = 'move-node-to-workspace S'
 	alt-shift-d = 'move-node-to-workspace D'
 
+	# Scratchpad toggle and send
+	alt-quote = 'exec-and-forget bash ~/.config/aerospace/scratchpad.sh show'
+	alt-shift-quote = 'exec-and-forget bash ~/.config/aerospace/scratchpad.sh send'
+
 	# See: https://nikitabobko.github.io/AeroSpace/commands#mode
 	alt-shift-z = ['mode service']
 
