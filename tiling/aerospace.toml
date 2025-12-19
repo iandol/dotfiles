@@ -97,20 +97,13 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	S = ['secondary','main']
 	D = ['secondary','main']
 
+# Callbacks that run when a new window is detected
+# See: https://nikitabobko.github.io/AeroSpace/guide#on-window
+
+######################################### ID
 [[on-window-detected]]
 	if.app-id = 'com.vivaldi.Vivaldi'
 	run = 'move-node-to-workspace A'
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'Vivaldi'
-	if.window-title-regex-substring = 'Bitwarden'
-	run = ['layout floating']
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.window-title-regex-substring = 'Bitwarden'
-	run = ['layout floating']
 	check-further-callbacks = true
 
 [[on-window-detected]]
@@ -153,16 +146,8 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	run = 'layout floating'
 
 [[on-window-detected]]
-	if.window-title-regex-substring = 'Windows App'
-	run = ['layout floating']
-
-[[on-window-detected]]
 	if.app-id = 'com.objective-see.lulu.app'
 	run = 'layout floating'
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'Clash Verge'
-	run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
 	if.app-id = 'com.metacubex.ClashX.meta'
@@ -170,27 +155,9 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	check-further-callbacks = true
 
 [[on-window-detected]]
-	if.app-name-regex-substring = 'ClashX Meta'
-	run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
 	if.app-id = 'io.mpv'
 	run = ['layout floating', 'move-node-to-workspace D']
 	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'mpv'
-	run = ['layout floating', 'move-node-to-workspace D']
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.app-id = 'org.videolan.vlc'
-	run = ['layout floating', 'move-node-to-workspace D']
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'LuLu Alert'
-	run = ['layout floating']
 
 [[on-window-detected]]
 	if.app-id = 'com.soma-zone.LaunchControl'
@@ -210,13 +177,52 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	run = 'layout tiling'
 
 [[on-window-detected]]
+	if.app-id = 'org.localsend.localsendApp'
+	run = 'layout floating'
+
+[[on-window-detected]]
+	if.app-id = 'org.videolan.vlc'
+	run = ['layout floating', 'move-node-to-workspace D']
+	check-further-callbacks = true
+
+############################# APP-NAME
+[[on-window-detected]]
+	if.app-name-regex-substring = 'Clash Verge'
+	run = ['layout floating', 'move-node-to-workspace S']
+
+[[on-window-detected]]
+	if.app-name-regex-substring = 'ClashX Meta'
+	run = ['layout floating', 'move-node-to-workspace S']
+
+[[on-window-detected]]
+	if.app-name-regex-substring = 'mpv'
+	run = ['layout floating', 'move-node-to-workspace D']
+	check-further-callbacks = true
+
+[[on-window-detected]]
+	if.app-name-regex-substring = 'LuLu Alert'
+	run = ['layout floating']
+
+[[on-window-detected]]
 	if.app-name-regex-substring = 'Zotero'
 	if.window-title-regex-substring = 'Citation|Document'
 	run = 'layout floating'
 
+############################ WINDOW TITLE
 [[on-window-detected]]
-	if.app-id = 'org.localsend.localsendApp'
-	run = 'layout floating'
+	if.window-title-regex-substring = 'Bitwarden'
+	run = ['layout floating']
+	check-further-callbacks = true
+
+[[on-window-detected]]
+	if.window-title-regex-substring = 'Windows App'
+	run = ['layout floating']
+
+[[on-window-detected]]
+	if.window-title-regex-substring = 'CageLab'
+	run = ['layout floating']
+	check-further-callbacks = true
+#########################################
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
