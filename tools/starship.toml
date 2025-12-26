@@ -10,8 +10,8 @@ scan_timeout = 10
 command_timeout = 750
 
 [character] 
-success_symbol = "[➪](bold green)"
-error_symbol = "[◎](bold red)"
+success_symbol = "⚡️"
+error_symbol = "💥"
 
 [directory]
 style = "bold yellow"
@@ -20,15 +20,23 @@ read_only_style = "red"
 truncation_symbol = "…/"
 
 [directory.substitutions]
-"Documents" = "󰈙 "
-"Downloads" = " "
-"Music" = " "
-"Pictures" = " "
-"Code" = " "
+"Documents" = "📄"
+"Downloads" = "🗂️"
+"Music" = "🎷"
+"Pictures" = "🏞️"
+"Code" = "⌨️"
+"Desktop" = "🖥️"
+
+[hostname]
+ssh_symbol = "🌐"
+trim_at = "."
+format = "[$ssh_symbol$hostname]($style)"
+style = "green dimmed bold"
+ssh_only = false
 
 [username]
 detect_env_vars = []
-format = "[$user]($style) in "
+format = "[$user]($style)"
 style_root = "red bold"
 style_user = "yellow bold"
 show_always = false
@@ -39,7 +47,7 @@ disabled = false
 
 [shlvl]
 threshold = 2
-symbol = "↕️ "
+symbol = "↕️"
 format = "[$symbol$shlvl]($style) "
 repeat = false
 repeat_offset = 0
@@ -61,20 +69,13 @@ style = "bold mauve"
 tag_symbol = "  " 
 
 [ruby]
-format = "via [$symbol($version )]($style)"
+format = "▷[$symbol($version )]($style)"
 version_format = "v${raw}"
 symbol = " "
 
-[hostname]
-ssh_symbol = "🌐"
-trim_at = "."
-format = "[$ssh_symbol$hostname]($style) in "
-style = "green dimmed bold"
-ssh_only = false
-
 [memory_usage]
 threshold = 75
-format = "via $symbol[$ram( | $swap)]($style) "
+format = " $symbol[$ram( | $swap)]($style) "
 style = "white bold dimmed"
 symbol = "󰍛 "
 disabled = true

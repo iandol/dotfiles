@@ -78,7 +78,7 @@ if (( DECOMPRESS_ONLY )); then
 	exit 0
 fi
 
-[[ ! -f ~/Downloads/nomachine.deb ]] && curl -L -o ~/Downloads/nomachine.deb https://web9001.nomachine.com/download/9.2/Linux/nomachine_9.2.18_3_amd64.deb
+[[ ! -f ~/Downloads/nomachine.deb ]] && curl -L -o ~/Downloads/nomachine.deb https://web9001.nomachine.com/download/9.3/Linux/nomachine_9.3.7_1_amd64.deb
 
 ~/.dotfiles/bin/egetAll.sh
 

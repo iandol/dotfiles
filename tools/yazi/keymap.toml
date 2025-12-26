@@ -48,6 +48,11 @@ run  = "plugin chmod"
 desc = "Chmod on selected files"
 
 [[mgr.prepend_keymap]]
+on   = [ "c", "p" ]
+run  = "plugin pandoc"
+desc = "Convert with Pandoc"
+
+[[mgr.prepend_keymap]]
 on   = [ "c", "a", "a" ]
 run  = "plugin compress"
 desc = "Archive selected files"

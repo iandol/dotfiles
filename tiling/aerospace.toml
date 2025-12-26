@@ -152,12 +152,10 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 [[on-window-detected]]
 	if.app-id = 'com.metacubex.ClashX.meta'
 	run = ['layout floating', 'move-node-to-workspace S']
-	check-further-callbacks = true
 
 [[on-window-detected]]
 	if.app-id = 'io.mpv'
 	run = ['layout floating', 'move-node-to-workspace D']
-	check-further-callbacks = true
 
 [[on-window-detected]]
 	if.app-id = 'com.soma-zone.LaunchControl'
@@ -201,7 +199,7 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 
 [[on-window-detected]]
 	if.app-name-regex-substring = 'LuLu Alert'
-	run = ['layout floating']
+	run = 'layout floating'
 
 [[on-window-detected]]
 	if.app-name-regex-substring = 'Zotero'
@@ -210,18 +208,19 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 
 ############################ WINDOW TITLE
 [[on-window-detected]]
-	if.window-title-regex-substring = 'Bitwarden'
-	run = ['layout floating']
-	check-further-callbacks = true
-
-[[on-window-detected]]
 	if.window-title-regex-substring = 'Windows App'
-	run = ['layout floating']
+	run = 'layout floating'
 
 [[on-window-detected]]
 	if.window-title-regex-substring = 'CageLab'
-	run = ['layout floating']
+	run = 'layout floating'
 	check-further-callbacks = true
+
+[[on-window-detected]]
+	if.workspace = 'A'
+	if.window-title-regex-substring = '^Bitwarden'
+	check-further-callbacks = true
+	run = 'layout floating'
 #########################################
 
 # 'main' binding mode declaration

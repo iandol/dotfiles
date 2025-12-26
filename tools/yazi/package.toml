@@ -1,16 +1,16 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:chmod"
-rev = "19dc890"
+rev = "7ca66b4"
 hash = "5b2eb0cc2050cec1e4de83cfa51a5b90"
 
 [[plugin.deps]]
 use = "Lil-Dank/lazygit"
-rev = "8f37dc5"
-hash = "ee71543790f0ce3951161045a3787abd"
+rev = "a90fc71"
+hash = "894e801b788d0fca94627b58f8c9e1d4"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "19dc890"
+rev = "7ca66b4"
 hash = "56fdabc96fc1f4d53c96eb884b02a5be"
 
 [[plugin.deps]]
@@ -35,20 +35,25 @@ hash = "b587f1fb49563562003ed84446a351bc"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:mount"
-rev = "19dc890"
+rev = "7ca66b4"
 hash = "4fccaaf10c36dc2466e2438a386ff017"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:toggle-pane"
-rev = "19dc890"
+rev = "7ca66b4"
 hash = "8a7c58225816a163a6e8730c0adafbc8"
+
+[[plugin.deps]]
+use = "lmnek/pandoc"
+rev = "6230a94"
+hash = "e89631ed41c2531f848dd00e211a6853"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"
-rev = "3edeb49"
-hash = "69cd81ca19a1039352ef981fc4cf1b63"
+rev = "9276ffa"
+hash = "6f261f00e5235001b8d6bcd7464d3077"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-latte"
-rev = "3edeb49"
-hash = "d7353bc6c4c10cff53bb63e1471f44a5"
+rev = "9276ffa"
+hash = "525675a9180ed23a097b07399627294a"
