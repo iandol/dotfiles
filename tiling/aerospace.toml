@@ -9,7 +9,7 @@ config-version = 2
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-	'exec-and-forget borders active_color=0xfffeefe0 inactive_color=0xff644d49 width=4.0',
+	'exec-and-forget borders active_color=0xccfeaf60 inactive_color=0xaa644d29 width=4.0',
 	#'exec-and-forget sketchybar', #use a brew service as it is better
 ]
 
@@ -182,6 +182,10 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	if.app-id = 'org.videolan.vlc'
 	run = ['layout floating', 'move-node-to-workspace D']
 	check-further-callbacks = true
+
+[[on-window-detected]]
+	if.app-id = 'com.wanwire.12vpx.app'
+	run = ['layout floating', 'move-node-to-workspace S']
 
 ############################# APP-NAME
 [[on-window-detected]]

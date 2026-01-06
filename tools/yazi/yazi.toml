@@ -13,15 +13,18 @@ linemode		= "size_and_mtime"
 show_symlink	= true
 
 [preview]
+wrap			= "yes"
 tab_size		= 2
 max_width		= 1000
 max_height		= 1000
 
 [opener]
 play = [
-	{ run = "mpv %s", orphan = true, for = "unix" },
-	{ run = "vlc %s", orphan = true, for = "unix" },
-	{ run = '"C:\Program Files\mpv.exe" %s', orphan = true, for = "windows" }
+	{ run = "mpv %s", desc = "mpv", orphan = true, for = "unix" },
+	{ run = "vlc %s", desc = "vlc",  orphan = true, for = "unix" },
+	{ run = '"C:\Program Files\mpv.exe" %s', desc = "mpv", orphan = true, for = "windows" },
+	{ run = "mediainfo %s1; echo 'Press enter to exit'; read _", block = true, desc = "Show media info", for = "unix" },
+	{ run = "mediainfo %s1 & pause", block = true, desc = "Show media info", for = "windows" },
 ]
 edit = [
 	{ run = "nvim %s", block = true, for = "unix", desc = "Edit with Neovim" },
@@ -31,9 +34,10 @@ edit = [
 	{ run = "%EDITOR% %s", block = true, for = "windows" },
 ]
 open = [
-	{ run = "xdg-open %s", desc = "Open" , orphan = true, for = "linux" },
+	{ run = "xdg-open %s1", desc = "Open" , orphan = true, for = "linux" },
 	{ run = "open %s", desc = "Open", orphan = true, for = "macos" },
 	{ run = "start %s", desc = "Open", orphan = true, for = "windows" },
+	{ run = 'zathura "$@"', orphan = true, desc = "Open PDFs with Zathura", for = "unix" },
 ]
 [open]
 prepend_rules = [

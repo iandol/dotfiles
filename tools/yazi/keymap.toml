@@ -53,6 +53,16 @@ run  = "plugin pandoc"
 desc = "Convert with Pandoc"
 
 [[mgr.prepend_keymap]]
+on   = [ "c", "P", "w" ]
+run  = "plugin pandoc -- --to_ext=docx --defaults=docx-refs"
+desc = "Convert with Pandoc DOCX (with references)"
+
+[[mgr.prepend_keymap]]
+on   = [ "c", "P", "l" ]
+run  = "plugin pandoc -- --to_ext=pdf --defaults=letter"
+desc = "Convert with Pandoc Letter (PDF)"
+
+[[mgr.prepend_keymap]]
 on   = [ "c", "a", "a" ]
 run  = "plugin compress"
 desc = "Archive selected files"

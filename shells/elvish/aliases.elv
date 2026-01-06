@@ -464,9 +464,10 @@ fn update {
 	if (cmds:not-path $E:HOME"/.pixi") { curl -fsSL https://pixi.sh/install.sh | bash }
 	var olddir = (pwd)
 	var oldbranch = ''
-	var ul = [~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/Pingpong ^
-	~/Code/CageLab ~/Code/matmoteGO ~/Code/PTBSimia ~/Code/Notes ^
+	var ul = [~/.dotfiles ~/Code/opticka ~/Code/CageLab ~/Code/Setup ^
+	~/Code/matmoteGO ~/Code/PTBSimia ~/Code/Notes ^
 	~/Code/matlab-jzmq ~/Code/matlab-zmq ^
+	~/Code/octicka ~/Code/Titta ~/Code/Pingpong ^
 	~/Code/AfterImage ~/Code/equiluminance ~/Code/Pinna ~/Code/spikes ^
 	~/Code/Psychtoolbox-3 ~/Code/fieldtrip ~/Code/Training ~/Code/Palamedes ^
 	~/Code/Mymou ~/Documents/MATLAB/gramm ^
