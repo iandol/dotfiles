@@ -14,6 +14,8 @@ OS=$(uname -s)
 UPGRADE_FLAG=(--upgrade-only)
 (( FORCE_REFRESH )) && UPGRADE_FLAG=()
 
+[[ ! -x /usr/local/bin/eget ]] && curl https://zyedidia.github.io/eget.sh | sh && mv eget /usr/local/bin
+
 eget zyedidia/eget "${UPGRADE_FLAG[@]}" --to=/usr/local/bin
 eget bluenviron/mediamtx "${UPGRADE_FLAG[@]}" --to=/usr/local/bin
 

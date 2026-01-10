@@ -102,11 +102,6 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 
 ######################################### ID
 [[on-window-detected]]
-	if.app-id = 'com.vivaldi.Vivaldi'
-	run = 'move-node-to-workspace A'
-	check-further-callbacks = true
-
-[[on-window-detected]]
 	if.app-id = 'net.kovidgoyal.kitty'
 	run = 'move-node-to-workspace 1'
 	check-further-callbacks = true
@@ -189,6 +184,11 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 
 ############################# APP-NAME
 [[on-window-detected]]
+	if.app-name-regex-substring = 'Vivaldi'
+	run = ['move-node-to-workspace A']
+	check-further-callbacks = true
+
+[[on-window-detected]]
 	if.app-name-regex-substring = 'Clash Verge'
 	run = ['layout floating', 'move-node-to-workspace S']
 
@@ -262,6 +262,9 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	
 	# Open Kitty terminal with alt + enter shortcut
 	alt-enter = 'exec-and-forget /opt/homebrew/bin/kitty --single-instance -d ~'
+
+	# spacelist 
+	alt-shift-enter = 'exec-and-forget /opt/homebrew/bin/kitten  quick-access-terminal -- spacelist'
 	
 	# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 	alt-tab = 'workspace-back-and-forth'

@@ -190,3 +190,8 @@ channels = ["conda-forge"]
 dependencies = { procs = "*" }
 exposed = { procs = "procs" }
 
+[envs.ouch]
+channels = ["conda-forge"]
+dependencies = { ouch = "*" }
+exposed = { ouch = "ouch" }
+
