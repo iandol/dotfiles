@@ -26,12 +26,10 @@ try { epm:install &silent-if-installed ^
 	github.com/muesli/elvish-libs } catch { echo "…can't install elvish modules…" }
 
 use github.com/iandol/elvish-modules/cmds # my utility module
-#use github.com/iandol/elvish-modules/ai # my ai module
 use github.com/iandol/elvish-modules/python # for python venv support
 use github.com/iandol/elvish-modules/mamba # for conda support
 use github.com/zzamboni/elvish-modules/bang-bang # use ! for last command expansion
-bang-bang:init &plain-bang="Alt-1" # remember for kitty this is right alt key only
-#use github.com/zzamboni/elvish-modules/spinners
+bang-bang:init &plain-bang="Alt-1" # remember for kitty this is RIGHT alt key only
 
 #==================================================== - BASIC ENVIRONMENT
 if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
@@ -160,7 +158,8 @@ cmds:if-external fd {
 }
 cmds:if-external uv { eval (uv generate-shell-completion elvish | slurp) } # python manager
 cmds:if-external rotz { eval (rotz completions elvish | slurp) } # dotfile namager
-cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) }
+cmds:if-external dua { eval (dua completions elvish | slurp ) } # disk usage analyzer
+cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) } # process viewer
 cmds:if-external mihomosh { eval (mihomosh shell-completion elvish | slurp) } # mihomo shell
 cmds:if-external nvim { set-env EDITOR (which nvim); set-env VISUAL (which nvim) } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 cmds:if-external pixi {

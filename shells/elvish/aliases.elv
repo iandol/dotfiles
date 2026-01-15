@@ -55,7 +55,7 @@ fn helpme { echo (styled "
 edit:add-var helpme~ $helpme~
 
 #==================================================== - KITTY
-edit:add-var kittymap~ { cat ~/.config/kitty/kitty.map | fzf --ansi --style full }
+edit:add-var kittymap~ { bat ~/.config/kitty/kitty.map | fzf --ansi --style full }
 cmds:if-external kitty {
 	edit:add-var kittydef~ {  kitty +runpy 'from kitty.config import *; print(commented_out_default_config())' > $E:HOME/.dotfiles/terminals/kitty/kitty-default.conf }
 	edit:add-var kssh~ { |@in| kitten ssh $@in --kitten login_shell=elvish }
@@ -196,7 +196,7 @@ if ( cmds:is-macos ) {
 }
 
 cmds:if-external httping { edit:add-var hping~ {|@in| e:httping -K $@in } }
-cmds:if-external bat { edit:add-var cat~ {|@in| e:bat -n $@in } }
+cmds:if-external bat { edit:add-var cat~ {|@in| e:bat $@in } }
 cmds:if-external python3 { 
 	edit:add-var urlencode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } 
 	edit:add-var urldecode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 

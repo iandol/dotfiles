@@ -20,8 +20,9 @@ max_height		= 1000
 
 [opener]
 play = [
-	{ run = "mpv %s", desc = "mpv", orphan = true, for = "unix" },
-	{ run = "vlc %s", desc = "vlc",  orphan = true, for = "unix" },
+	{ run = "mpv %s",  desc = "Play with MPV",  orphan = true, for = "unix" },
+	{ run = "iina %s", desc = "Play with IINA", orphan = true, for = "unix" },
+	{ run = "vlc %s",  desc = "Play with VLC",  orphan = true, for = "unix" },
 	{ run = '"C:\Program Files\mpv.exe" %s', desc = "mpv", orphan = true, for = "windows" },
 	{ run = "mediainfo %s1; echo 'Press enter to exit'; read _", block = true, desc = "Show media info", for = "unix" },
 	{ run = "mediainfo %s1 & pause", block = true, desc = "Show media info", for = "windows" },
@@ -41,8 +42,8 @@ open = [
 ]
 [open]
 prepend_rules = [
-	{ url = "*.json", use = "edit" },
-	{ url = "*.md", use = "edit" },
+	{ url = "*.json", use = [ "edit", "reveal" ] },
+	{ url = "*.md", use = [ "edit", "reveal" ] },
 	{ url = "*.mp4", use = "play" },
 	{ url = "*.mkv", use = "play" },
 	{ url = "*.avi", use = "play" },
@@ -51,9 +52,9 @@ prepend_rules = [
 	{ url = "*.flac", use = "play" },
 	{ url = "*.mp3", use = "play" },
 	{ url = "*.wav", use = "play" },
-	{ url = "*.pdf", use = "open" },
-	{ url = "*.png", use = ["open","edit"] },
+	{ url = "*.jpg", use = [ "open", "edit", "reveal" ] },
+	#{ url = "*.pdf", use = [ "open", "edit", "reveal" ] },
+	{ url = "*.png", use = [ "open", "edit", "reveal" ] },
 	{ url = "*.txt", use = "edit" },
-	# Multiple openers for a single rule
-	{ url = "*.html", use = [ "open", "edit" ] },
+	{ url = "*.html", use = [ "open", "edit", "reveal" ] },
 ]
