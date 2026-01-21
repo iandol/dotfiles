@@ -221,6 +221,11 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	check-further-callbacks = true
 
 [[on-window-detected]]
+	if.window-title-regex-substring = 'Opticka'
+	run = 'layout floating'
+	check-further-callbacks = true
+
+[[on-window-detected]]
 	if.workspace = 'A'
 	if.window-title-regex-substring = '^Bitwarden'
 	check-further-callbacks = true

@@ -145,7 +145,7 @@ horiz_placement = "top"
 # in a vertical stack where the line will be (left/right)
 vert_placement = "left"
 # how thick the line indicator will be (in px) -- default 0 when disabled
-thickness = 0.0
+thickness = 2.0
 # spacing between the stack line and window edges (in px)
 spacing = 0.0
 
@@ -153,7 +153,7 @@ spacing = 0.0
 [settings.ui.mission_control]
 enabled = true
 # enable fade animation when entering/exiting mission control
-fade_enabled = false
+fade_enabled = true
 # native macos mission control fade is about 180ms
 fade_duration_ms = 180.0
 
@@ -198,14 +198,14 @@ enabled = true
 default_workspace_count = 9
 auto_assign_windows = true
 preserve_focus_per_workspace = true
-workspace_auto_back_and_forth = false
+workspace_auto_back_and_forth = true
 reapply_app_rules_on_title_change = false
 
 
 # Default workspace to activate on startup (0-based index).
 # If omitted, defaults to 0 (first workspace). Must be less than default_workspace_count.
 # Uncomment to change:
-# default_workspace = 0
+default_workspace = 0
 
 # Workspace names (indexed order). If fewer than default_workspace_count are provided,
 # remaining workspaces are named "Workspace X".
@@ -288,11 +288,11 @@ app_rules = [
 	{ app_id = "com.apple.Spotlight", floating = true },
 	{ app_id = "com.binarynights.ForkLift", floating = true },
 	{ app_id = "com.apple.systempreferences", floating = true },
-	{ app_id = "com.apple.Music", workspace = 9, floating = true },
+	{ app_id = "com.apple.Music", workspace = 8, floating = true },
 	{ app_id = "com.apple.FaceTime", floating = true },
 	{ app_id = "net.pornel.ImageOptim", floating = true },
-	{ app_name = "Clash Verge", workspace = 9, floating = true },
-	{ app_id = "com.bitwarden.desktop", workspace = 9, floating = true },
+	{ app_name = "Clash Verge", workspace = 8, floating = true },
+	{ app_id = "com.bitwarden.desktop", workspace = 8, floating = true },
 	{ app_id = "com.hegenberg.BetterTouchTool'", floating = true },
 	{ app_id = "com.apple.finder", workspace = 9 },
 	{ app_id = "net.kovidgoyal.kitty", workspace = 1 },
@@ -303,15 +303,15 @@ app_rules = [
 ]
 
 # Modifier combinations that can be reused in key bindings
-# Define common modifier combinations to avoid repetition.
-# Example usage: with `comb1 = "Alt + Shift"`, you can write:
-#   "comb1 + H" = { move_node = "left" }
+# Define common modifier combinations sto avoid repetition.
+# Example usage: with `Mod = "Alt + hift"`, you can write:
+#   "Mod + H" = { move_node = "left" }
 [modifier_combinations]
-comb1 = "Alt + Shift"
+Mod = "Alt + Shift"
 
 [keys]
 # Key binding syntax
-# - Use quotes around the key: "Alt + Shift + H"
+# - Use quotes around the key: "Mod + H"
 # - Supported modifiers: Alt, Ctrl, Shift, Meta (Meta = Command ⌘ on macOS)
 # - Arrow keys can be written as ArrowUp/ArrowDown/ArrowLeft/ArrowRight, or just Up/Down/Left/Right
 # - Spacing is flexible: "Alt+Down" and "Alt + Down" are equivalent
@@ -337,78 +337,76 @@ comb1 = "Alt + Shift"
 # - debug / serialize / save_and_exit
 # - show_timing
 
-"Alt + Enter" = { exec = ["/opt/homebrew/bin/litty", "--single-instance", "-d", "~"] }
+"Alt + Enter" = { exec = ["/opt/homebrew/bin/kitty", "--single-instance", "-d", "~"] }
 
-"Alt + Z" = "toggle_space_activated"
+"Mod + Z" = "toggle_space_activated"
 
 "Alt + H" = { move_focus = "left" }
 "Alt + J" = { move_focus = "down" }
 "Alt + K" = { move_focus = "up" }
 "Alt + L" = { move_focus = "right" }
 
-"comb1 + H" = { move_node = "left" }
-"comb1 + J" = { move_node = "down" }
-"comb1 + K" = { move_node = "up" }
-"comb1 + L" = { move_node = "right" }
+"Mod + H" = { move_node = "left" }
+"Mod + J" = { move_node = "down" }
+"Mod + K" = { move_node = "up" }
+"Mod + L" = { move_node = "right" }
 
-"Alt + 0" = { switch_to_workspace = 0 }
-"Alt + 1" = { switch_to_workspace = 1 }
-"Alt + 2" = { switch_to_workspace = 2 }
-"Alt + 3" = { switch_to_workspace = 3 }
-"Alt + 4" = { switch_to_workspace = 4 }
-"Alt + 5" = { switch_to_workspace = 5 }
-"Alt + 6" = { switch_to_workspace = 6 }
-"Alt + A" = { switch_to_workspace = 7 }
-"Alt + S" = { switch_to_workspace = 8 }
-"Alt + D" = { switch_to_workspace = 9 }
+"Alt + 1" = { switch_to_workspace = 0 }
+"Alt + 2" = { switch_to_workspace = 1 }
+"Alt + 3" = { switch_to_workspace = 2 }
+"Alt + Q" = { switch_to_workspace = 3 }
+"Alt + W" = { switch_to_workspace = 4 }
+"Alt + E" = { switch_to_workspace = 5 }
+"Alt + A" = { switch_to_workspace = 6 }
+"Alt + S" = { switch_to_workspace = 7 }
+"Alt + D" = { switch_to_workspace = 8 }
 
-"comb1 + 0" = { move_window_to_workspace = 0 }
-"comb1 + 1" = { move_window_to_workspace = 1 }
-"comb1 + 2" = { move_window_to_workspace = 2 }
-"comb1 + 3" = { move_window_to_workspace = 3 }
-"comb1 + 4" = { move_window_to_workspace = 4 }
-"comb1 + 5" = { move_window_to_workspace = 5 }
-"comb1 + 6" = { move_window_to_workspace = 6 }
-"comb1 + A" = { move_window_to_workspace = 7 }
-"comb1 + S" = { move_window_to_workspace = 8 }
-"comb1 + D" = { move_window_to_workspace = 9 }
+"Mod + 1" = { move_window_to_workspace = 0 }
+"Mod + 2" = { move_window_to_workspace = 1 }
+"Mod + 3" = { move_window_to_workspace = 2 }
+"Mod + Q" = { move_window_to_workspace = 3 }
+"Mod + W" = { move_window_to_workspace = 4 }
+"Mod + E" = { move_window_to_workspace = 5 }
+"Mod + A" = { move_window_to_workspace = 6 }
+"Mod + S" = { move_window_to_workspace = 7 }
+"Mod + D" = { move_window_to_workspace = 8 }
 
 "Alt + Tab" = "switch_to_last_workspace"
 
-"Alt + Shift + Left" = { join_window = "left" }
-"Alt + Shift + Right" = { join_window = "right" }
-"Alt + Shift + Up" = { join_window = "up" }
-"Alt + Shift + Down" = { join_window = "down" }
+"Mod + Left" = { join_window = "left" }
+"Mod + Right" = { join_window = "right" }
+"Mod + Up" = { join_window = "up" }
+"Mod + Down" = { join_window = "down" }
 
-"comb1 + Comma" = "toggle_stack"
-"comb1 + Period" = "toggle_window_floating"
-"comb1 + Slash" = "toggle_orientation"
+"Mod + Comma" = "toggle_stack"
+"Mod + Period" = "toggle_window_floating"
+"Mod + Slash" = "toggle_orientation"
 "Alt + Ctrl + E" = "unjoin_windows"
 
-"Alt + Shift + Space" = "toggle_window_floating"
+"Mod + Space" = "toggle_window_floating"
 "Alt + F" = "toggle_fullscreen"
-#"Alt + Shift + F" = "toggle_fullscreen_within_gaps"
-"comb1 + Ctrl + Space" = "toggle_focus_floating" # briefly bring focus to floating window
+#"Mod + F" = "toggle_fullscreen_within_gaps"
+"Mod + Ctrl + Space" = "toggle_focus_floating" # briefly bring focus to floating window
 
 # smartly resize windows
-"Alt + Shift + Equal" = "resize_window_grow"
-"Alt + Shift + Minus" = "resize_window_shrink"
+"Mod + Equal" = "resize_window_grow"
+"Mod + Minus" = "resize_window_shrink"
 
 # Move mouse cursor to display by index (0-based) or UUID
 # Examples:
-# "Alt + Shift + A" = { move_mouse_to_display = 0 }
-# "Alt + Shift + S" = { move_mouse_to_display = 1 }
-# "Alt + Shift + D" = { move_mouse_to_display = "e9a4f5a1-2f8b-45c1-9f4e-5a6b7c8d9e0f" }
+# "Mod + A" = { move_mouse_to_display = 0 }
+# "Mod + S" = { move_mouse_to_display = 1 }
+# "Mod + D" = { move_mouse_to_display = "e9a4f5a1-2f8b-45c1-9f4e-5a6b7c8d9e0f" }
 # Focus another display (direction/index/uuid)
-# "Alt + Shift + F" = { focus_display = { direction = "right" } }
+# "Mod + F" = { focus_display = { direction = "right" } }
 
 # if mission control is enabled
 # this will show an exploded view of the windows in the active workspace
-"comb1 + M" = "show_mission_control_current"
+"Mod + M" = "show_mission_control_current"
 # this will show the mission control view shown in the readme
-"comb1 + N" = "show_mission_control_all"
+"Mod + N" = "show_mission_control_all"
 
-"Alt + Shift + D" = "debug" # prints layout tree
+"Mod + D" = "debug" # prints layout tree
 
 "Alt + Ctrl + S" = "serialize"
 "Alt + Ctrl + Q" = "save_and_exit"

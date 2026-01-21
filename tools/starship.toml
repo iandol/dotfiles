@@ -1,6 +1,12 @@
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# Pipes ╰─ ╭─
+# Powerline symbols                                     
+# Wedges 🭧🭒 🭣🭧🭓
+# Random noise 🬖🬥🬔🬗
+# Cool stuff 󰜥    󰕾 󰖀 󰖁 󰖂 󰖃 󰖄 󰖅 󰖆 󰖇 󰖈 󰖉 󰖊 󰖋 󰖌 󰖍 󰖎 󰖏 󰖐 󰖑 󰖒 󰖓 󰖔 󰖕 󰖖 󰖗 󰖘 󰖙 󰖚 󰖛 󰖜 󰖝 󰖞 󰖟 󰖠 󰖡 󰖢 󰖣 󰖤 󰖥 󰖦 󰖧 󰖨 󰖩 󰖪 󰖫 󰖬 󰖭 󰖮 󰖯 󰖰 󰖱 󰖲 󰖳 󰖴 󰖵 󰖶 󰖷
+
 # catppuccin
 palette = "catppuccin_mocha"
 
@@ -10,8 +16,8 @@ scan_timeout = 10
 command_timeout = 750
 
 [character] 
-success_symbol = "⚡️"
-error_symbol = "💥"
+success_symbol = "[](bold fg:blue)"
+error_symbol = "[](bold fg:red)"
 
 [directory]
 style = "bold yellow"
@@ -27,19 +33,33 @@ truncation_symbol = "…/"
 "Code" = "⌨️"
 "Desktop" = "🖥️"
 
-[hostname]
-ssh_symbol = "🌐"
-trim_at = "."
-format = "[$ssh_symbol$hostname]($style)"
-style = "green dimmed bold"
-ssh_only = false
+#[hostname]
+#ssh_symbol = "🌐"
+#trim_at = "."
+#format = "[$ssh_symbol$hostname]($style)"
+#style = "green dimmed bold"
+#ssh_only = false
+
+#[username]
+#detect_env_vars = []
+#format = "[$user]($style)"
+#style_root = "red bold"
+#style_user = "yellow bold"
+#show_always = false
+#disabled = false
 
 [username]
-detect_env_vars = []
-format = "[$user]($style)"
+style_user = "bold bg:cyan fg:black"
 style_root = "red bold"
-style_user = "yellow bold"
-show_always = false
+format = "[](bold fg:cyan)[$user]($style)"
+disabled = false
+show_always = true
+
+[hostname]
+ssh_symbol = "🌐"
+ssh_only = false
+format =  "[•$ssh_symbol$hostname](bg:cyan bold fg:black)[](bold fg:cyan)"
+trim_at = "."
 disabled = false
 
 [sudo]
@@ -61,12 +81,35 @@ elvish_indicator = "ε"
 style = "dimmed yellow"
 disabled = false
 
-[git_branch]
-symbol = " "
-style = "bold mauve"
+#[git_branch]
+#symbol = " "
+#style = "bold mauve"
 
-[git_commit]
-tag_symbol = "  " 
+[git_branch]
+style = "bg: cyan"
+symbol = "󰘬"
+truncation_length = 12
+truncation_symbol = ""
+format = "[](bold fg:cyan)[$symbol $branch(:$remote_branch)](fg:black bg:cyan)[ ](bold fg:cyan)"
+
+#[git_commit]
+#tag_symbol = "  " 
+
+[git_state]
+format = '[\($state( $progress_current of $progress_total)\)]($style) '
+cherry_pick = "[🍒 PICKING](bold red)"
+
+[git_status]
+conflicted = " 🏳 "
+ahead = " 🏎💨 "
+behind = " 😰 "
+diverged = " 😵 "
+untracked = " 🤷 ‍"
+stashed = " 📦 "
+modified = " 📝 "
+staged = '[++\($count\)](green)'
+renamed = " ✍️ "
+deleted = " 🗑 "
 
 [ruby]
 format = "▷[$symbol($version )]($style)"
