@@ -18,6 +18,16 @@ tab_size		= 2
 max_width		= 2500
 max_height		= 2500
 
+
+[plugin]
+prepend_previewers = [
+	{ url = '*.typ*', run = 'preview-typst' },
+]
+
+prepend_preloaders = [
+	{ url = '*.typ*', run = 'preview-typst' },
+]
+
 [opener]
 play = [
 	{ run = "mpv %s",  desc = "Play with MPV",  orphan = true, for = "unix" },
@@ -42,6 +52,7 @@ open = [
 ]
 [open]
 prepend_rules = [
+	{ url = "*.command", use = [ "open", "edit", "reveal" ] },
 	{ url = "*.json", use = [ "edit", "reveal" ] },
 	{ url = "*.md", use = [ "edit", "reveal" ] },
 	{ url = "*.mp4", use = "play" },
@@ -53,7 +64,6 @@ prepend_rules = [
 	{ url = "*.mp3", use = "play" },
 	{ url = "*.wav", use = "play" },
 	{ url = "*.jpg", use = [ "open", "edit", "reveal" ] },
-	#{ url = "*.pdf", use = [ "open", "edit", "reveal" ] },
 	{ url = "*.png", use = [ "open", "edit", "reveal" ] },
 	{ url = "*.txt", use = "edit" },
 	{ url = "*.html", use = [ "open", "edit", "reveal" ] },

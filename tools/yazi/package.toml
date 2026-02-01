@@ -1,6 +1,6 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:chmod"
-rev = "4e55902"
+rev = "d078b01"
 hash = "8da0b15a97b5dfd13941d1ecc617ac7c"
 
 [[plugin.deps]]
@@ -10,13 +10,13 @@ hash = "ab2e66065a94cca4886b303518e44bd8"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "4e55902"
+rev = "d078b01"
 hash = "56fdabc96fc1f4d53c96eb884b02a5be"
 
 [[plugin.deps]]
 use = "KKV9/compress"
-rev = "c9c16d8"
-hash = "a68bde26a61da040131aa95069f638c2"
+rev = "cb6e8ec"
+hash = "424ada4807b20ccd4fc85d1d7c26d1e4"
 
 [[plugin.deps]]
 use = "Rolv-Apneseth/starship"
@@ -35,12 +35,12 @@ hash = "b587f1fb49563562003ed84446a351bc"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:mount"
-rev = "4e55902"
-hash = "e2d4bfccf31e5ab05f46fee4797c5215"
+rev = "d078b01"
+hash = "f1967e991e727ce45b1be5e8f0d1ff8e"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:toggle-pane"
-rev = "4e55902"
+rev = "d078b01"
 hash = "8a7c58225816a163a6e8730c0adafbc8"
 
 [[plugin.deps]]
@@ -48,12 +48,17 @@ use = "lmnek/pandoc"
 rev = "fd2798b"
 hash = "5af4b06948bb7b825a243131eea2075c"
 
+[[plugin.deps]]
+use = "AminurAlam/yazi-plugins:preview-typst"
+rev = "8b14819"
+hash = "b30c20172c5f7d552342fdc14a11f92a"
+
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"
-rev = "4a1802a"
-hash = "6f261f00e5235001b8d6bcd7464d3077"
+rev = "ac51f0f"
+hash = "e25fb61c14484de843b52430a72b5196"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-latte"
-rev = "4a1802a"
-hash = "525675a9180ed23a097b07399627294a"
+rev = "ac51f0f"
+hash = "c6b710b2aa0fb9c6c7f1ec4db6146104"

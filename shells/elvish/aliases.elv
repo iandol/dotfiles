@@ -549,12 +549,7 @@ fn update {
 	try { curl -sS https://raw.githubusercontent.com/cagelab/cogmoteGO/main/install.sh | sh } catch { }
 
 	# update other tools
-	cmds:if-external pkgx { header2 "---> Update pkgx"; pkgx --sync; pkgx --update }
 	cmds:if-external pixi { header2 "---> Update pixi"; pixi self-update; pixi global sync; pixi global -v update }	
-	cmds:if-external micromamba { header2 "---> Update Micromamba…"; micromamba self-update }
-	cmds:if-external rbenv { header2 "---> Rehash RBENV…"; rbenv rehash }
-	cmds:if-external pyenv { header2 "---> Rehash PYENV…"; pyenv rehash }
-	cmds:if-external npm { header2 "---> Update npm global"; npm list -g; npm update -g; npm list -g }
 	cmds:if-external nvim { header2 "---> Update NVIM plugins…"; nvim --headless "+Lazy! sync" +qa }
 	cmds:if-external ya { header2 "---> Update Yazi"; rm -rf ~/.config/yazi/flavors; rm -rf ~/.config/yazi/plugins; ya pkg upgrade }
 	cmds:if-external eget { header2 "---> Update eget"; eget zyedidia/eget --upgrade-only }
@@ -752,8 +747,15 @@ fn updateAll {
 	updateFFmpeg
 	updateTeX
 	updateuBlock
+	cmds:if-external pkgx { header2 "---> Update pkgx"; pkgx --sync; pkgx --update }
+	cmds:if-external micromamba { header2 "---> Update Micromamba…"; micromamba self-update }
+	cmds:if-external rbenv { header2 "---> Rehash RBENV…"; rbenv rehash }
+	cmds:if-external pyenv { header2 "---> Rehash PYENV…"; pyenv rehash }
+	cmds:if-external npm { header2 "---> Update npm global"; npm list -g; npm update -g; npm list -g }
+	cmds:if-external uv { header2 "---> Update UV tools"; uv tool upgrade --all }
+	cmds:if-external pipx { header2 "---> Update PIPX packages"; pipx upgrade-all }
 	cmds:if-external gem { header2 "---> Update Ruby Gems"; gem update; gem cleanup }
 	header1 "====>>> Finish UpdateAll @ "(styled (date) bold)" <<<===="
-
 }
 edit:add-var updateAll~ $updateAll~
+
