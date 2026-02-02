@@ -48,7 +48,7 @@ open = [
 	{ run = "xdg-open %s1", desc = "Open" , orphan = true, for = "linux" },
 	{ run = "open %s", desc = "Open", orphan = true, for = "macos" },
 	{ run = "start %s", desc = "Open", orphan = true, for = "windows" },
-	{ run = 'zathura "$@"', orphan = true, desc = "Open PDFs with Zathura", for = "unix" },
+	{ run = 'zathura %s', orphan = true, desc = "Open PDFs with Zathura", for = "unix" },
 ]
 [open]
 prepend_rules = [
@@ -65,6 +65,9 @@ prepend_rules = [
 	{ url = "*.wav", use = "play" },
 	{ url = "*.jpg", use = [ "open", "edit", "reveal" ] },
 	{ url = "*.png", use = [ "open", "edit", "reveal" ] },
-	{ url = "*.txt", use = "edit" },
+	{ url = "*.jpg", use = [ "open", "edit", "reveal" ] },
+	{ url = "*.heic", use = [ "open", "edit", "reveal" ] },
+	{ url = "*.tif", use = [ "open", "edit", "reveal" ] },
+	{ url = "*.txt", use = ["edit", "reveal"] },
 	{ url = "*.html", use = [ "open", "edit", "reveal" ] },
 ]

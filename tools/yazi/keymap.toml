@@ -29,7 +29,7 @@ desc = "run lazygit"
 
 [[mgr.prepend_keymap]]
 on   = "<C-p>"
-run = 'shell -- qlmanage -p "$@"'
+run = 'shell -- qlmanage -p %s'
 desc = "Quick Look selected files"
 
 [[mgr.prepend_keymap]]
@@ -39,8 +39,13 @@ desc = "Open Elvish here"
 
 [[mgr.prepend_keymap]]
 on = "@"
-run = 'shell --block --interactive --cursor=0 "$@"'
+run = 'shell --block --interactive --cursor=0 " %s"'
 desc = "Run command"
+
+[[mgr.prepend_keymap]]
+on   = "#"
+run = 'shell --block --interactive "open --interactive %s"'
+desc = "Interactive Open"
 
 [[mgr.prepend_keymap]]
 on   = [ "c", "m" ]
