@@ -16,7 +16,7 @@ set -euo pipefail
 COMMAND="${1:-}"
 SCRATCHPAD="S"
 FIRST_WS="1"
-CURRENT_WS=$(aerospace list-workspaces --focused)
+CURRENT_WS=$(aerospace list-workspaces --focused) # (kept, but no longer relied upon)
 QUEUE_DIR="$HOME/.config/aerospace/aerospace-scratchpad"
 QUEUE_FILE="$QUEUE_DIR/queue"
 
@@ -50,19 +50,38 @@ queue_first() {
 
 # Returns the next window ID in the queue after the given window ID
 queue_next_after() {
-    local current="$1"
-    local list=($(queue_all))
+    local current="${1:-}"
+
+    # Read queue safely (one ID per line) in Bash 3.2-compatible way
+    local list=()
+    local line=""
+    while IFS= read -r line; do
+        [[ -n "$line" ]] && list+=("$line")
+    done < "$QUEUE_FILE"
+
+    # Empty queue
+    (( ${#list[@]} == 0 )) && { echo ""; return; }
+
+    # If current is empty, start from the beginning
+    if [[ -z "$current" ]]; then
+        echo "${list[0]}"
+        return
+    fi
+
     for i in "${!list[@]}"; do
         if [[ "${list[$i]}" == "$current" ]]; then
+            # Wrap around when current is the last element
             if (( i + 1 < ${#list[@]} )); then
                 echo "${list[$((i+1))]}"
-                return
+            else
+                echo "${list[0]}"
             fi
+            return
         fi
     done
 
-    # Return empty string if current is last
-    echo ""
+    # Current wasn't in the queue -> start from first
+    echo "${list[0]}"
 }
 
 # ------------------------------------------------------------
@@ -76,7 +95,9 @@ window_exists() {
 
 # Returns true if the window exists on the current workspace
 window_in_current_ws() {
-    aerospace list-windows --workspace "$CURRENT_WS" --format "%{window-id}" | grep -q "$1"
+    local ws
+    ws="$(get_current_workspace)"
+    aerospace list-windows --workspace "$ws" --format "%{window-id}" | grep -qx "$1"
 }
 
 # Ensures the window is floating and ignores errors if it already is
@@ -100,6 +121,12 @@ ensure_floating() {
 # Returns the currently focused window ID
 get_focused_window_id() {
     aerospace list-windows --focused --format "%{window-id}"
+}
+
+# Returns the current workspace
+get_current_workspace() {
+    # In case Aerospace prints multiple lines, take the first focused workspace
+    aerospace list-workspaces --focused | head -n1
 }
 
 # ------------------------------------------------------------
@@ -148,31 +175,41 @@ hide_window() {
 # Shows a window from the scratchpad on the current workspace
 show_window() {
     local id="$1"
-    aerospace move-node-to-workspace "$CURRENT_WS" --window-id "$id"
+    local ws
+    ws="$(get_current_workspace)"
+    aerospace move-node-to-workspace "$ws" --window-id "$id"
     ensure_floating "$id"
     aerospace focus --window-id "$id"
 }
 
 # Returns the currently visible scratchpad window on the current workspace
 get_current_visible_window() {
-    for id in $(queue_all); do
+    # Read queue line-by-line (avoid word-splitting)
+    local id=""
+    while IFS= read -r id; do
+        [[ -z "$id" ]] && continue
         if window_in_current_ws "$id"; then
             echo "$id"
             return
         fi
-    done
+    done < "$QUEUE_FILE"
     echo ""
 }
 
 # Removes windows from the queue if they are closed
 cleanup_queue() {
-    local list=($(queue_all))
-    > "$QUEUE_FILE"
-    for id in "${list[@]}"; do
+    local tmp="$QUEUE_FILE.tmp"
+    : > "$tmp"
+
+    local id=""
+    while IFS= read -r id; do
+        [[ -z "$id" ]] && continue
         if window_exists "$id"; then
-            echo "$id" >> "$QUEUE_FILE"
+            echo "$id" >> "$tmp"
         fi
-    done
+    done < "$QUEUE_FILE"
+
+    mv "$tmp" "$QUEUE_FILE"
 }
 
 # Shows the next window in the FIFO queue and hides the current one
@@ -180,16 +217,30 @@ show_next_window() {
     cleanup_queue
     local current
     current=$(get_current_visible_window)
+
     local next=""
-    
-    if [ -z "$current" ]; then
-        next=$(queue_first)
-    else
-        next=$(queue_next_after "$current")
+    next=$(queue_next_after "$current")
+
+    # Nothing to show
+    [[ -z "$next" ]] && return 0
+
+    # If only one window (or next == current), toggle:
+    # - if it's focused, hide it back to scratchpad
+    # - otherwise, focus it
+    if [[ -n "$current" && "$next" == "$current" ]]; then
+        local focused=""
+        focused=$(get_focused_window_id || true)
+
+        if [[ -n "$focused" && "$focused" == "$current" ]]; then
+            hide_window "$current"
+        else
+            show_window "$current"
+        fi
+        return 0
     fi
 
-    [ -n "$current" ] && hide_window "$current"
-    [ -n "$next" ] && show_window "$next"
+    [[ -n "$current" ]] && hide_window "$current"
+    show_window "$next"
 }
 
 # ------------------------------------------------------------

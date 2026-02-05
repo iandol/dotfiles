@@ -9,7 +9,7 @@ config-version = 2
 # You can use it to add commands that run after AeroSpace startup.
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-	'exec-and-forget borders active_color=0xccfeaf60 inactive_color=0xaa644d29 width=4.0',
+	'exec-and-forget borders active_color=0xaafeaf60 inactive_color=0x66644d29 width=8.0',
 	#'exec-and-forget sketchybar', #use a brew service as it is better
 ]
 
@@ -325,6 +325,7 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 
 	# See: https://nikitabobko.github.io/AeroSpace/commands#mode
 	alt-shift-z = ['mode service']
+	alt-shift-x = ['mode entry']
 
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -351,3 +352,8 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	down = 'volume down'
 	up = 'volume up'
 	shift-down = ['volume set 0', 'mode main']
+
+# no bindings so you can use alt+key mappings without conflictsq
+[mode.entry.binding]
+	esc = ['reload-config', 'mode main']
+
