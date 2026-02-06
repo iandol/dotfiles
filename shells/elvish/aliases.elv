@@ -518,7 +518,6 @@ fn update {
 			try { 
 				git stash pop 
 			} catch {
-				git stash show -u # show stash contents for manual resolution
 				msg "	…couldn't pop stash, please resolve manually."
 			}
 		}
