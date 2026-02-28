@@ -68,6 +68,11 @@ run  = "plugin pandoc -- --to_ext=pdf --defaults=letter"
 desc = "Convert with Pandoc Letter (PDF)"
 
 [[mgr.prepend_keymap]]
+on = [ "c", "o" ]
+run = "plugin ouch"
+desc = "Compress with ouch"
+
+[[mgr.prepend_keymap]]
 on   = [ "c", "a", "a" ]
 run  = "plugin compress"
 desc = "Archive selected files"

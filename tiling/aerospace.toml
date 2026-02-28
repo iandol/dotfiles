@@ -28,7 +28,7 @@ start-at-login = true
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
 enable-normalization-flatten-containers = true
-enable-normalization-opposite-orientation-for-nested-containers = false
+enable-normalization-opposite-orientation-for-nested-containers = true
 
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
 # The 'accordion-padding' specifies the size of accordion padding
@@ -60,8 +60,6 @@ automatically-unhide-macos-hidden-apps = false
 # This config version is only available since 'config-version = 2'
 # Fallback value (if you omit the key): persistent-workspaces = []
 persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
-
-
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -182,6 +180,14 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	if.app-id = 'com.wanwire.12vpx.app'
 	run = ['layout floating', 'move-node-to-workspace S']
 
+[[on-window-detected]]
+	if.app-id = 'com.apple.appleseed.FeedbackAssistant'
+	run = ['layout floating', 'move-node-to-workspace S']
+
+[[on-window-detected]]
+	if.app-id = 'co.fluder.FSNotes'
+	run = 'layout floating'
+
 ############################# APP-NAME
 [[on-window-detected]]
 	if.app-name-regex-substring = 'Vivaldi'
@@ -203,6 +209,10 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 
 [[on-window-detected]]
 	if.app-name-regex-substring = 'LuLu Alert'
+	run = 'layout floating'
+
+[[on-window-detected]]
+	if.app-name-regex-substring = 'Pixelmator Pro'
 	run = 'layout floating'
 
 [[on-window-detected]]

@@ -22,9 +22,6 @@ eget bluenviron/mediamtx "${UPGRADE_FLAG[@]}" --to=/usr/local/bin
 [[ $OS = "Linux" ]] && eget volllly/rotz "${UPGRADE_FLAG[@]}" --to=/usr/local/bin -a gnu.zip
 [[ $OS = "Darwin" ]] && eget volllly/rotz "${UPGRADE_FLAG[@]}" --to=/usr/local/bin -a darwin.zip
 
-[[ $OS = "Linux" ]] && eget --pre-release clash-verge-rev/clash-verge-rev "${UPGRADE_FLAG[@]}" -a "amd64.deb" -a "^sig" --to=~/Downloads/clash.deb
-[[ $OS = "Darwin" ]] && eget --pre-release clash-verge-rev/clash-verge-rev "${UPGRADE_FLAG[@]}" -a "aarch64.dmg" -a "^sig" --to=~/Downloads/clash.dmg
-
 [[ $OS = "Linux" ]] && eget --pre-release sxyazi/yazi --to=$HOME/bin --file="yazi" -a gnu.zip \
 	&& eget --pre-release "${UPGRADE_FLAG[@]}" sxyazi/yazi --to=$HOME/bin --file="ya" -a gnu.zip 
 [[ $OS = "Darwin" ]] && eget --pre-release sxyazi/yazi --to=$HOME/bin --file="yazi" \
@@ -34,4 +31,7 @@ eget bluenviron/mediamtx "${UPGRADE_FLAG[@]}" --to=/usr/local/bin
 [[ $OS = "Darwin" ]] && eget MetaCubeX/mihomo "${UPGRADE_FLAG[@]}" ---to=/usr/local/bin -a arm64-v
 
 eget SamuNatsu/mihomosh "${UPGRADE_FLAG[@]}" ---to=/usr/local/bin -a gz
+
+[[ $OS = "Linux" ]] && eget --pre-release clash-verge-rev/clash-verge-rev "${UPGRADE_FLAG[@]}" -a "amd64.deb" -a "^sig" --to=~/Downloads/clash.deb
+[[ $OS = "Darwin" ]] && eget --pre-release clash-verge-rev/clash-verge-rev "${UPGRADE_FLAG[@]}" -a "aarch64.dmg" -a "^sig" --to=~/Downloads/clash.dmg
 

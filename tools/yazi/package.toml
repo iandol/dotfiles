@@ -1,7 +1,7 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:chmod"
-rev = "230b9c6"
-hash = "8da0b15a97b5dfd13941d1ecc617ac7c"
+rev = "1962818"
+hash = "f0c8c378184d5f8abd1b095a443d336d"
 
 [[plugin.deps]]
 use = "Lil-Dank/lazygit"
@@ -52,6 +52,11 @@ hash = "5af4b06948bb7b825a243131eea2075c"
 use = "AminurAlam/yazi-plugins:preview-typst"
 rev = "af6c3b6"
 hash = "b30c20172c5f7d552342fdc14a11f92a"
+
+[[plugin.deps]]
+use = "ndtoan96/ouch"
+rev = "594b8a2"
+hash = "c9e628fc0312d198db22ae2fa74883b"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"
