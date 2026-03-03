@@ -17,13 +17,14 @@ use md
 use os
 use runtime
 if $platform:is-unix { use unix; edit:add-var unix: $unix: }
-echo (styled "◖ Elvish V"$version"—"$platform:os"▷"$platform:arch" ◗" bold italic yellow)
+echo (styled "𓁜◖" bold "#FFAA33")(styled "Elvish V"$version"—"$platform:os"▷"$platform:arch bold italic bg-"#FFAA33" black)(styled "◗𓁝" bold "#FFAA33")
+fn msg { |@t| echo (styled "👉🏼 "$@t bold italic yellow) }
 
 #==================================================== - EXTERNAL MODULES
 try { epm:install &silent-if-installed ^
 	github.com/iandol/elvish-modules ^
 	github.com/zzamboni/elvish-modules ^
-	github.com/muesli/elvish-libs } catch { echo "…can't install elvish modules…" }
+	github.com/muesli/elvish-libs } catch { msg "…can't install elvish modules…" }
 
 use github.com/iandol/elvish-modules/cmds # my utility module
 use github.com/iandol/elvish-modules/python # for python venv support
@@ -84,7 +85,8 @@ if (cmds:is-macos) {
 # prepend / append paths only if they exist and not already in path
 each {|p| cmds:prepend-to-path $p } [ /Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
 	~/scoop/apps/msys2/current/usr/bin  ~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims
-	/opt/amdgpu-pro/bin  /opt/amdgpu/bin  ~/.cache/lm-studio/bin
+	/opt/amdgpu-pro/bin  /opt/amdgpu/bin  
+	~/.cache/lm-studio/bin ~/.antigravity/antigravity/bin
 	/Applications/mpv.app/Contents/MacOS
 	/usr/local/bin  /usr/local/sbin  ~/.local/bin
 	/home/linuxbrew/.linuxbrew/bin  /opt/local/bin  /opt/homebrew/bin
@@ -119,13 +121,13 @@ if (has-env KITTY_INSTALLATION_DIR) {
 	set edit:before-readline = [ { send-pwd } { osc '133;A' } ]
 	set edit:after-readline = [ {|c| send-title (str:split ' ' $c | take 1) } {|c| osc '133;C' } ]
 	set after-chdir = [ {|_| send-pwd } ]
-	echo (styled "👉🏼 …"(kitty --version)" integration…" bold italic yellow)
+	msg "…"(kitty --version)" integration…"
 }
 
 #==================================================== - GHOSTTY INTEGRATION
 if (eq $E:TERM "xterm-ghostty") {
 	use ghostty-integration
-	echo (styled "👉🏼 …ghostty integration…" bold italic yellow)
+	msg "…ghostty integration…"
 }
 
 #==================================================== - CARAPACE INTEGRATION
@@ -134,7 +136,7 @@ cmds:if-external carapace {
 	set-env CARAPACE_EXCLUDES "systemctl,x"
 	set-env CARAPACE_MERGEFLAGS 1
 	eval (carapace _carapace | slurp)
-	echo (styled "👉🏼 …carapace integration…" bold italic yellow)
+	msg "…carapace integration…"
 }
 
 #==================================================== - X-CMD 文
@@ -145,7 +147,7 @@ if (os:is-regular $E:HOME/.x-cmd.root/bin/x-cmd) {
 	if (not (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv)) { x-cmd elv --setup mod }
 	use x; x:init
 	edit:add-var •~ { |@in| use x; x:x chat --sendalias lms $@in; }
-	echo (styled "👉🏼 …x-cmd 文 integration…" bold italic yellow)
+	msg "…x-cmd 文 integration…"
 }
 
 #==================================================== - OTHER INTEGRATIONS
@@ -201,7 +203,7 @@ cmds:if-external fzf { set edit:insert:binding[Ctrl-r] = { aliases:history >/dev
 cmds:if-external starship {
 	eval ((search-external starship) init elvish --print-full-init | slurp)
 	eval ((search-external starship) completions elvish | slurp)
-	echo (styled "👉🏼 …starship init…" bold italic yellow)
+	msg "…starship init…"
 } { use github.com/muesli/elvish-libs/theme/powerline }
 
 #==================================================== - ENSURE SHIM PREPENDED

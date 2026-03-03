@@ -70,7 +70,7 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 [exec]
 	inherit-env-vars = true
 [exec.env-vars]
-	PATH = '${HOME}/.pixi/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
+	PATH = '/Applications/kitty.app/Contents/MacOS:${HOME}/bin:${HOME}/.pixi/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
 	LANG = 'en_US.UTF-8'
 	LC_ALL = 'en_US.UTF-8'
 
@@ -276,10 +276,10 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	# '''
 	
 	# Open Kitty terminal with alt + enter shortcut
-	alt-enter = 'exec-and-forget /opt/homebrew/bin/kitty --single-instance -d ~'
+	alt-enter = 'exec-and-forget kitty --single-instance -d ~'
 
 	# spacelist 
-	alt-shift-enter = 'exec-and-forget /opt/homebrew/bin/kitten  quick-access-terminal -- spacelist'
+	alt-shift-enter = 'exec-and-forget kitten quick-access-terminal -o lines=35 -- spacelist'
 	
 	# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 	alt-tab = 'workspace-back-and-forth'

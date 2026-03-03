@@ -183,16 +183,6 @@ if ( cmds:is-macos ) {
 		sudo systemctl stop avahi-daemon.service
 		sudo systemctl status avahi-daemon.service
 	}
-	# Linux way to update/install kitty
-	edit:add-var installKitty~ { 
-		curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
-		ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/
-		cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
-		cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
-		sed -i "s|Icon=kitty|Icon=/home/"$E:USER"/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
-		sed -i "s|Exec=kitty|Exec=/home/"$E:USER"/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
-		echo "kitty.desktop" > ~/.config/xdg-terminals.list
-	}
 }
 
 cmds:if-external httping { edit:add-var hping~ {|@in| e:httping -K $@in } }
@@ -397,6 +387,24 @@ fn sp {|@ina|
 }
 edit:add-var sp~ $sp~
 set edit:command-abbr['setproxy'] = 'sp'
+
+#===================================================Install/Update KITTY
+fn installKitty {|&nightly=$false|
+	if $nightly {
+		curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin installer=nightly
+	} else {
+		curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+	}
+	if (cmds:is-linux) {
+		ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/
+		cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/
+		cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/
+		sed -i "s|Icon=kitty|Icon=/home/"$E:USER"/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty*.desktop
+		sed -i "s|Exec=kitty|Exec=/home/"$E:USER"/.local/kitty.app/bin/kitty|g" ~/.local/share/applications/kitty*.desktop
+		echo "kitty.desktop" > ~/.config/xdg-terminals.list
+	}
+}
+edit:add-var installKitty~ $installKitty~
 
 #===================================================Install MATLAB
 fn installMATLAB {|&version='R2025a' &action='install' &products='' &dest=''|
