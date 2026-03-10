@@ -140,13 +140,11 @@ cmds:if-external carapace {
 }
 
 #==================================================== - X-CMD 文
-# …must come AFTER carapace
-if (os:is-regular $E:HOME/.x-cmd.root/bin/x-cmd) {
+# …should come AFTER carapace
+if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
 	set-env ___X_CMD_LANG en
-	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 1
-	if (not (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv)) { x-cmd elv --setup mod }
+	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 0
 	use x; x:init
-	edit:add-var •~ { |@in| use x; x:x chat --sendalias lms $@in; }
 	msg "…x-cmd 文 integration…"
 }
 
