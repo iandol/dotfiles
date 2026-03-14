@@ -32,10 +32,10 @@ fi
 	&& eget --pre-release "${UPGRADE_FLAG[@]}" sxyazi/yazi --to=$HOME/bin --file="ya"
 
 if (( ! YAZI_ONLY )); then
-	[[ $OS = "Linux" ]] && eget MetaCubeX/mihomo "${UPGRADE_FLAG[@]}" ---to=/usr/local/bin -a gz -a amd64-v3-v
-	[[ $OS = "Darwin" ]] && eget MetaCubeX/mihomo "${UPGRADE_FLAG[@]}" ---to=/usr/local/bin -a arm64-v
-
-	eget SamuNatsu/mihomosh "${UPGRADE_FLAG[@]}" ---to=/usr/local/bin -a gz
+	[[ $OS = "Linux" ]] && eget v2fly/v2ray-core "${UPGRADE_FLAG[@]}" ---to=/usr/local/bin -a "linux-64.zip" -a "^dgst"
+	[[ $OS = "Darwin" ]] && eget v2fly/v2ray-core "${UPGRADE_FLAG[@]}" ---to=/usr/local/bin -a "arm64-v8a.zip" -a "^dgst"
+	
+	#eget SamuNatsu/mihomosh "${UPGRADE_FLAG[@]}" ---to=/usr/local/bin -a gz
 
 	[[ $OS = "Linux" ]] && eget --pre-release clash-verge-rev/clash-verge-rev "${UPGRADE_FLAG[@]}" -a "amd64.deb" -a "^sig" --to=~/Downloads/clash.deb
 	[[ $OS = "Darwin" ]] && eget --pre-release clash-verge-rev/clash-verge-rev "${UPGRADE_FLAG[@]}" -a "aarch64.dmg" -a "^sig" --to=~/Downloads/clash.dmg
