@@ -143,7 +143,7 @@ check_v2ray_remote_version() {
 		exit 1
 	fi
 	v2ray_remote_version=$(grep tag_name "$v2ray_temp_file" | awk -F "tag_name" '{printf $2}' | awk -F "," '{printf $1}' | awk -F '"' '{printf $3}')
-	v2ray_url="https://ghfast.com/github.com/v2fly/v2ray-core/releases/download/$v2ray_remote_version/v2ray-linux-$v2ray_arch.zip"
+	v2ray_url="https://github.com/v2fly/v2ray-core/releases/download/$v2ray_remote_version/v2ray-linux-$v2ray_arch.zip"
 	rm -f "$v2ray_temp_file"
 }
 check_xray_local_version() {
@@ -160,7 +160,7 @@ check_xray_remote_version() {
 		exit 1
 	fi
 	xray_remote_version=$(grep tag_name "$xray_temp_file" | awk -F "tag_name" '{printf $2}' | awk -F "," '{printf $1}' | awk -F '"' '{printf $3}')
-	xray_url="https://ghfast.com/github.com/XTLS/Xray-core/releases/download/$xray_remote_version/Xray-linux-$v2ray_arch.zip"
+	xray_url="https://github.com/XTLS/Xray-core/releases/download/$xray_remote_version/Xray-linux-$v2ray_arch.zip"
 	rm -f "$xray_temp_file"
 }
 check_v2raya_local_version() {
@@ -178,7 +178,7 @@ check_v2raya_remote_version() {
 	fi
 	v2raya_remote_version=$(grep tag_name "$v2raya_temp_file" | awk -F "tag_name" '{printf $2}' | awk -F "," '{printf $1}' | awk -F '"' '{printf $3}')
 	v2raya_short_version=$(echo "$v2raya_remote_version" | cut -d "v" -f2)
-	v2raya_url="https://ghfast.top/github.com/v2rayA/v2rayA/releases/download/${v2raya_remote_version}/v2raya_linux_${v2raya_arch}_${v2raya_short_version}"
+	v2raya_url="https://github.com/v2rayA/v2rayA/releases/download/${v2raya_remote_version}/v2raya_linux_${v2raya_arch}_${v2raya_short_version}"
 	rm -f "$v2raya_temp_file"
 }
 
@@ -223,16 +223,27 @@ compare_v2raya_version() {
 	fi
 }
 
+validate_zip_archive() {
+	archive_path="$1"
+	archive_name="$2"
+	archive_url="$3"
+	if ! unzip -tq "$archive_path" >/dev/null 2>&1; then
+		echo "${RED}Error: Downloaded $archive_name archive is not a valid zip file!${RESET}"
+		echo "${RED}Error: URL was $archive_url${RESET}"
+		exit 1
+	fi
+}
+
 ## Downloading
 download_v2ray() {
 	v2ray_temp_file="$(mktemp -u)"
 	echo "${GREEN}Downloading v2ray version $v2ray_remote_version${RESET}"
 	echo "${GREEN}Downloading from $v2ray_url${RESET}"
-	if ! curl -L -H "Cache-Control: no-cache" -o "$v2ray_temp_file" -# "$v2ray_url"; then
+	if ! curl -fL -H "Cache-Control: no-cache" -o "$v2ray_temp_file" -# "$v2ray_url"; then
 		echo "${RED}Error: Failed to download v2ray!${RESET}"
 		exit 1
 	fi
-	if ! curl -L -H "Cache-Control: no-cache" -o "$v2ray_temp_file.dgst" -s "$v2ray_url".dgst; then
+	if ! curl -fL -H "Cache-Control: no-cache" -o "$v2ray_temp_file.dgst" -s "$v2ray_url".dgst; then
 		echo "${RED}Error: Failed to download v2ray dgst!${RESET}"
 		exit 1
 	fi
@@ -244,16 +255,17 @@ download_v2ray() {
 		echo "Actually: $local_v2ray_hash"
 		exit 1
 	fi
+	validate_zip_archive "$v2ray_temp_file" "v2ray" "$v2ray_url"
 }
 download_xray() {
 	xray_temp_file="$(mktemp -u)"
 	echo "${GREEN}Downloading xray version $xray_remote_version${RESET}"
 	echo "${GREEN}Downloading from $xray_url${RESET}"
-	if ! curl -L -H "Cache-Control: no-cache" -o "$xray_temp_file" -# "$xray_url"; then
+	if ! curl -fL -H "Cache-Control: no-cache" -o "$xray_temp_file" -# "$xray_url"; then
 		echo "${RED}Error: Failed to download xray!${RESET}"
 		exit 1
 	fi
-	if ! curl -L -H "Cache-Control: no-cache" -o "$xray_temp_file.dgst" -s "$xray_url".dgst; then
+	if ! curl -fL -H "Cache-Control: no-cache" -o "$xray_temp_file.dgst" -s "$xray_url".dgst; then
 		echo "${RED}Error: Failed to download xray dgst!${RESET}"
 		exit 1
 	fi
@@ -265,24 +277,25 @@ download_xray() {
 		echo "Actually: $local_xray_hash"
 		exit 1
 	fi
+	validate_zip_archive "$xray_temp_file" "xray" "$xray_url"
 }
 download_v2raya_service() {
 	if [ -z "$v2raya_temp_file" ]; then
 		v2raya_temp_file="$(mktemp -u)"
 	fi
 	if has_systemd; then
-		service_file_url="https://ghfast.top/github.com/v2rayA/v2rayA-installer/raw/main/systemd/v2raya.service"
+		service_file_url="https://raw.githubusercontent.com/v2rayA/v2rayA-installer/main/systemd/v2raya.service"
 		echo "${GREEN}Downloading v2rayA service file${RESET}"
 		echo "${GREEN}Downloading from $service_file_url${RESET}"
-		if ! curl -L -H "Cache-Control: no-cache" -o "$v2raya_temp_file".service -# "$service_file_url"; then
+		if ! curl -fL -H "Cache-Control: no-cache" -o "$v2raya_temp_file".service -# "$service_file_url"; then
 			echo "${RED}Error: Failed to download v2rayA service file!${RESET}"
 			exit 1
 		fi
 	elif has_openrc; then
-		service_script_url="https://github.com/v2rayA/v2rayA-installer/raw/main/openrc/v2raya"
+		service_script_url="https://raw.githubusercontent.com/v2rayA/v2rayA-installer/main/openrc/v2raya"
 		echo "${GREEN}Downloading v2rayA service file${RESET}"
 		echo "${GREEN}Downloading from $service_script_url${RESET}"
-		if ! curl -L -H "Cache-Control: no-cache" -o "$v2raya_temp_file"-openrc -s "$service_script_url"; then
+		if ! curl -fL -H "Cache-Control: no-cache" -o "$v2raya_temp_file"-openrc -s "$service_script_url"; then
 			echo "${RED}Error: Failed to download v2rayA service file!${RESET}"
 			exit 1
 		fi
@@ -292,11 +305,11 @@ download_v2raya() {
 	v2raya_temp_file="$(mktemp -u)"
 	echo "${GREEN}Downloading v2rayA version $v2raya_remote_version${RESET}"
 	echo "${GREEN}Downloading from $v2raya_url${RESET}"
-	if ! curl -L -H "Cache-Control: no-cache" -o "$v2raya_temp_file" -# "$v2raya_url"; then
+	if ! curl -fL -H "Cache-Control: no-cache" -o "$v2raya_temp_file" -# "$v2raya_url"; then
 		echo "${RED}Error: Failed to download v2rayA!${RESET}"
 		exit 1
 	fi
-	if ! curl -L -H "Cache-Control: no-cache" -o "$v2raya_temp_file".sha256.txt -s "$v2raya_url".sha256.txt; then
+	if ! curl -fL -H "Cache-Control: no-cache" -o "$v2raya_temp_file".sha256.txt -s "$v2raya_url".sha256.txt; then
 		echo "${RED}Error: Failed to download v2rayA sha256 txt!${RESET}"
 		exit 1
 	fi
@@ -325,6 +338,7 @@ stop_v2raya() {
 
 ## Installing
 install_v2ray() {
+	echo "${GREEN}Installing v2ray version $v2ray_remote_version${RESET}"
 	unzip -q "$v2ray_temp_file" -d "$v2ray_temp_file"_unzipped
 	install "$v2ray_temp_file"_unzipped/v2ray /usr/local/bin/v2ray
 	[ -d /usr/local/share/v2ray ] || mkdir -p /usr/local/share/v2ray
@@ -334,6 +348,7 @@ install_v2ray() {
 	echo "${GREEN}v2ray version $v2ray_remote_version installed successfully!${RESET}"
 }
 install_xray() {
+	echo "${GREEN}Installing xray version $xray_remote_version${RESET}"
 	unzip -q "$xray_temp_file" -d "$xray_temp_file"_unzipped
 	install "$xray_temp_file"_unzipped/xray /usr/local/bin/xray
 	[ -d /usr/local/share/xray ] || mkdir -p /usr/local/share/xray
@@ -344,10 +359,14 @@ install_xray() {
 }
 install_v2raya_service() {
 	if has_systemd; then
+		echo "${GREEN}Installing v2rayA systemd service${RESET}"
 		install -m 644 "$v2raya_temp_file".service /etc/systemd/system/v2raya.service
 		systemctl daemon-reload
+		echo "${GREEN}v2rayA systemd service installed successfully!${RESET}"
 	elif has_openrc; then
+		echo "${GREEN}Installing v2rayA OpenRC service${RESET}"
 		install "$v2raya_temp_file"-openrc /etc/init.d/v2raya
+		echo "${GREEN}v2rayA OpenRC service installed successfully!${RESET}"
 	fi
 }
 cleanup_v2raya_download() {
@@ -356,6 +375,7 @@ cleanup_v2raya_download() {
 	[ -f "$v2raya_temp_file"-openrc ] && rm -f "$v2raya_temp_file"-openrc
 }
 install_v2raya() {
+	echo "${GREEN}Installing v2rayA version $v2raya_remote_version${RESET}"
 	install "$v2raya_temp_file" /usr/local/bin/v2raya
 	install_v2raya_service
 	cleanup_v2raya_download
@@ -420,7 +440,6 @@ if [ "$1" = '' ] || [ "$1" = '--with-v2ray' ]; then
 		elif [ "$install_v2raya_service_need" = "yes" ]; then
 			install_v2raya_service
 			cleanup_v2raya_download
-			echo "${GREEN}v2rayA service installed successfully!${RESET}"
 		fi
 		start_v2raya
 	fi
@@ -455,7 +474,6 @@ if [ "$1" = '--with-xray' ]; then
 		elif [ "$install_v2raya_service_need" = "yes" ]; then
 			install_v2raya_service
 			cleanup_v2raya_download
-			echo "${GREEN}v2rayA service installed successfully!${RESET}"
 		fi
 		start_v2raya
 	fi
