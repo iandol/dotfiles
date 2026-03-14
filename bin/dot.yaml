@@ -10,5 +10,6 @@ darwin:
     runSync.applescript: ~/bin/runSync.applescript
 linux:
   links:
+    installV2RAYA.sh: ~/bin/installV2RAYA.sh
     snapcache.sh: ~/bin/snapcache.sh
     FitImagesToPageWidth.py: ~/.config/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
