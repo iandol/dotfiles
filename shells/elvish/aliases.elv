@@ -352,21 +352,21 @@ fn sp {|@ina|
 	}
 	fn parseAddress { |in|
 		set in = (to-string $in)
-		var protocol = 'http'; var addr = '127.0.0.1'; var port = '16005'
+		var protocol = 'http'; var addr = '127.0.0.1'; var port = '20171'
 		var @tmp = (str:split "://" $in)
 		if (== (count $tmp) 1) { set addr = $tmp[0] } elif (== (count $tmp) 2) { set protocol = $tmp[0]; set addr = $tmp[1] }
 		var @tmp = (str:split ":" $addr)
 		if (== (count $tmp) 2) { set addr = $tmp[0]; set port = $tmp[1] }
 		put $protocol $addr $port
 	}
-	fn setenv { |&addr='127.0.0.1:16005'|
+	fn setenv { |&addr='127.0.0.1:20171'|
 		set-env no_proxy "localhost, 127.0.0.1, ::1"
 		each {|t| set-env $t $addr; set-env (str:to-upper $t) $addr } $plist
 	}
 	fn setgit { |&addr='127.0.0.1:16005' &xtls=$false| git config --global http.proxy $addr; git config --global https.proxy $addr }
 	#===
 	if $in[0][h] { 
-		msg "sp Command Help:\n===============\n > sp 127.0.0.1:16005 to set proxy\n > sp without input to unset proxy\n … -l to list settings\n … -x uses XTLS mode"
+		msg "sp Command Help:\n===============\n > sp 127.0.0.1:20171 to set proxy\n > sp without input to unset proxy\n … -l to list settings\n … -x uses XTLS mode"
 	} elif $in[0][l] { 
 		header1 "===========List proxy=========="
 	} elif (eq $in[1] []) {
@@ -375,7 +375,7 @@ fn sp {|@ina|
 	} else {
 		header1 "==========Set proxy============"
 		var @r = (parseAddress $in[1][0])
-		if (eq $r[0] $nil) { set r[0] = 'http' }; if (eq $r[2] $nil) { set r[2] = '16005' }
+		if (eq $r[0] $nil) { set r[0] = 'http' }; if (eq $r[2] $nil) { set r[2] = '20171' }
 		var p = (num $r[2]); set p = (+ $p 1); set p = (to-string $p)
 		if $in[0][x] {
 			setenv &addr="http://"$r[1]":"$p; setgit &addr="socks5://"$r[1]":"$r[2] &xtls=$in[0][x]
@@ -407,7 +407,7 @@ fn installKitty {|&nightly=$false|
 edit:add-var installKitty~ $installKitty~
 
 #===================================================Install MATLAB
-fn installMATLAB {|&version='R2025a' &action='install' &products='' &dest=''|
+fn installMATLAB {|&version='R2025b' &action='install' &products='' &dest=''|
 	var dest = ''
 	var cmd = ''
 	cmds:header1 "MATLAB Installation using MPM"
@@ -594,7 +594,7 @@ fn updateMPV {
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
-	var mpvURL = 'https://nightly.link/mpv-player/mpv/workflows/build/master/mpv-macos-15-arm.zip'
+	var mpvURL = 'https://nightly.link/mpv-player/mpv/workflows/build/master/mpv-macos-26-arm.zip'
 	echo (styled "\n=== GET MPV ===\nURL: "$mpvURL bold yellow)
 	try { wget --no-check-certificate -O mpv.zip $mpvURL
 		unzip -p mpv.zip | tar -xf -

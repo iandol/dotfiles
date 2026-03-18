@@ -86,7 +86,7 @@ if (cmds:is-macos) {
 each {|p| cmds:prepend-to-path $p } [ /Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
 	~/scoop/apps/msys2/current/usr/bin  ~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims
 	/opt/amdgpu-pro/bin  /opt/amdgpu/bin  
-	~/.cache/lm-studio/bin ~/.antigravity/antigravity/bin
+	~/.cache/lm-studio/bin ~/.antigravity/antigravity/bin ~/.opencode/bin
 	/Applications/mpv.app/Contents/MacOS
 	/usr/local/bin  /usr/local/sbin  ~/.local/bin
 	/home/linuxbrew/.linuxbrew/bin  /opt/local/bin  /opt/homebrew/bin

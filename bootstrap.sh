@@ -108,28 +108,44 @@ elif [ "$PLATFORM" = "LinuxRPi" ]; then
 	#make sure our minimum packages are installed
 	sudo apt update
 	sudo apt -my install build-essential gparted vim curl file zsh git mc
-	sudo apt -my install freeglut3 gawk mesa-utils zathura
-	sudo apt -my install p7zip-full figlet jq ansiweather exfat-fuse exfat-utils htop 
-	sudo apt -my install libdc1394-25 libraw1394-11
-	sudo apt -my install code snapd synaptic zathura
-	sudo apt -my install rofi nitrogen i3
-	sudo apt -my install python3-pip python3-venv
+	sudo apt -my install gawk mesa-utils exfatprogs
+	sudo apt -my install freeglut3-dev 
+	sudo apt -my install libglut-dev
+	sudo apt -my install pipewire-pulse pulseaudio-utils
 	sudo apt -my install openssh-server
+	sudo apt -my install i3 rofi nitrogen xdotool
+	sudo apt -my install p7zip-full p7zip-rar figlet jq ansiweather exfat-fuse exfat-utils htop 
+	sudo apt -my install libunrar5 libdc1394-25 libraw1394-11
+	sudo apt -my install snapd synaptic zathura zathura-pdf-poppler zathura-ps
+	sudo apt -my install flatpak
 	sudo apt -my install wakeonlan etherwake
+	sudo apt -my install python3-pip python3-venv
 	sudo snap install core
 	sudo snap install starship --edge
-	mkdir -p bin
-	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
-	chmod +x bin/diff-so-fancy
+
+	# get update i3 desktop manager
+	"$SPATH/config/geti3.sh"
+
+	# Install snap packages
+	[[ ! -f $(which vlc) ]] && sudo snap install vlc
+	[[ ! -f $(which code) ]] && sudo snap install --classic code
+
+	# flatpak
+	flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+	flatpak install -y flathub com.obsproject.Studio
+
+	mkdir -p ~/bin
+	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > ~/bin/diff-so-fancy
+	chmod +x ~/bin/diff-so-fancy
 elif [ "$PLATFORM" = "LinuxWSL" ]; then
 	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
 	#make sure our minimum packages are installed
 	sudo apt update
 	sudo apt-get install build-essential vim curl p7zip-full p7zip-rar file zsh git figlet jq ansiweather wget rbenv ruby gawk
 	printf 'We will not install homebrew under WSL, try scoop in PS...'
-	mkdir -p bin
-	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > bin/diff-so-fancy
-	chmod +x bin/diff-so-fancy
+	mkdir -p ~/bin
+	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > ~/bin/diff-so-fancy
+	chmod +x ~/bin/diff-so-fancy
 fi
 
 sleep 1

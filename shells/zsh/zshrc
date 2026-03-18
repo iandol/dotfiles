@@ -83,6 +83,7 @@ pth=("/Library/TeX/texbin" "$HOME/Library/TinyTeX/bin/universal-darwin"
 	"/opt/homebrew/opt/ruby/bin" "/opt/homebrew/lib/ruby/gems/3.4.0/bin"
 	"/snap/bin" "$HOME/.local/bin" 
 	"$HOME/.cache/lm-studio/bin"
+	"$HOME/.opencode/bin"
 	"$HOME/.antigravity/antigravity/bin"
 	"$HOME/.pixi/envs/ruby/share/rubygems/bin"
 	"$HOME/.pixi/bin" "$HOME/bin")
@@ -141,3 +142,5 @@ fi
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
 #---------------------------------------END OF FILE
+
+
