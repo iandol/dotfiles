@@ -754,6 +754,7 @@ fn updateAll {
 	updateFFmpeg
 	updateTeX
 	updateuBlock
+	cmds:if-external opencode { header2 "---> Upgrade opencode"; opencode upgrade }
 	cmds:if-external pkgx { header2 "---> Update pkgx"; pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { header2 "---> Update Micromamba…"; micromamba self-update }
 	cmds:if-external rbenv { header2 "---> Rehash RBENV…"; rbenv rehash }

@@ -266,7 +266,6 @@ alias sha='openssl sha'
 alias sha1='openssl sha1'
 alias sha256sum='shasum --algorithm 256'
 
-
 #==================================================== - How to reset a Linux clone
 function cloneReset () { 
 	# This function resets the machine ID and hostname for a Linux clone. It
@@ -578,6 +577,7 @@ function updateAll() {
 	update
 	egetAll
 	updateElvish
+	[[ -f $(which opencode) ]] && (printf '\n\n---> Upgrade \e[92mOPENCODE\e[m...\n'; opencode upgrade)
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
 	[[ -f $(which pyenv) ]] && (printf '\n\n---> Rehash \e[92mPYENV\e[m...\n'; pyenv rehash)
 	[[ -f $(which uv) ]] && (printf '\n\n---> \e[92muv tools\e[m...\n'; uv tools upgrade --all)
