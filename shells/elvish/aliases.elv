@@ -558,7 +558,7 @@ fn update {
 	# update other tools
 	cmds:if-external pixi { header2 "---> Update pixi"; pixi self-update; pixi global sync; pixi global -v update }	
 	cmds:if-external nvim { header2 "---> Update NVIM plugins…"; nvim --headless "+Lazy! sync" +qa }
-	cmds:if-external ya { header2 "---> Update Yazi"; rm -rf ~/.config/yazi/flavors; rm -rf ~/.config/yazi/plugins; ya pkg upgrade }
+	cmds:if-external ya { header2 "---> Update Yazi"; ya pkg upgrade --discard }
 	cmds:if-external eget { header2 "---> Update eget"; eget zyedidia/eget --upgrade-only }
  
 	try { header2 "---> Updating Elvish Packages…";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
