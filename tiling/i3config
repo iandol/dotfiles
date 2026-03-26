@@ -13,6 +13,15 @@ font pango:Alegreya Sans Italic 12
 # https://wiki.archlinux.org/index.php/XDG_Autostart
 exec --no-startup-id dex --autostart --environment i3
 
+# scaling for X
+exec --no-startup-id xrdb -merge ~/.Xresources
+
+# wallpaper
+exec --no-startup-id /usr/bin/nitrogen --set-scaled ~/.dotfiles/terminals/everforest.jpg
+
+# bluetooth only if blueman is installed
+exec --no-startup-id command -v /usr/bin/blueman-applet && /usr/bin/blueman-applet
+
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --ignore-sleep --ignore-xss -- i3lock --nofork
@@ -27,12 +36,6 @@ exec --no-startup-id nm-applet
 # try to start gnome keyring, also edit /usr/share/xdg-desktop-portal/portals/gnome-keyring.portal
 # UseIn=gnome;i3
 exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=ssh,secrets,pkcs11
-
-# scaling for X
-exec --no-startup-id xrdb -merge ~/.Xresources
-
-# wallpaper
-exec --no-startup-id /usr/bin/nitrogen --set-scaled ~/.dotfiles/terminals/everforest.jpg
 
 # Configure space between windows and to the screen edges.
 gaps inner 5px
