@@ -56,6 +56,7 @@ prepend_rules = [
 	{ url = "*.command", use = [ "open", "edit", "reveal" ] },
 	{ url = "*.json", use = [ "edit", "reveal" ] },
 	{ url = "*.md", use = [ "edit", "reveal" ] },
+	{ url = "*.txt", use = ["edit", "reveal"] },
 	{ url = "*.mp4", use = "play" },
 	{ url = "*.mkv", use = "play" },
 	{ url = "*.avi", use = "play" },
@@ -69,6 +70,6 @@ prepend_rules = [
 	{ url = "*.jpg", use = [ "open", "edit", "reveal" ] },
 	{ url = "*.heic", use = [ "open", "edit", "reveal" ] },
 	{ url = "*.tif", use = [ "open", "edit", "reveal" ] },
-	{ url = "*.txt", use = ["edit", "reveal"] },
+	{ url = "*.jasp", use = [ "open", "reveal" ] },
 	{ url = "*.html", use = [ "open", "edit", "reveal" ] },
 ]

@@ -442,7 +442,7 @@ edit:add-var installMATLAB~ $installMATLAB~
 # tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
 fn updateTeX {|&repo=tuna &ctex=$false|
 	cmds:if-external tlmgr {
-		header2 "=== UPDATE TeX ==="
+		header2 "UPDATE TeX"
 		if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
 		tlmgr update --self
 		tlmgr update --all
@@ -484,6 +484,7 @@ fn update {
 	/media/$E:USER/data/Code/octicka /media/$E:USER/data/Code/Psychtoolbox-3]
 	for x $ul {
 		if (not (cmds:is-path $x/.git)) { continue }
+		header2 "Git: Checking "$x
 		tmp pwd = $x
 		try { set oldbranch = (git branch --show-current) } catch { }
 		var @branches = (git branch -l | each { |x| str:trim (str:trim-space $x) '* ' })
@@ -504,7 +505,7 @@ fn update {
 		
 		for y $branches {
 			if (re:match '^(dev|main|master|umaster)' $y) {
-				header2 "--->>> Updating "(styled $x bold)":"$y"…"
+				msg "--->>> Updating "(styled $x bold)":"$y"…"
 				try {
 					git checkout -q $y 2>$path:dev-null
 					timeout 60s git pull --ff-only -v
@@ -515,7 +516,7 @@ fn update {
 		}
 		git remote -v
 		if (re:match 'upstream' (git remote | slurp)) {
-			msg "------> Fetching upstream…  "
+			msg "--->>> Fetching upstream…  "
 			try { git fetch -v upstream } catch { msg "  …couldn't fetch upstream!" }
 		}
 		try { git checkout -q $oldbranch 2>$path:dev-null } catch { }
@@ -532,7 +533,7 @@ fn update {
 	}
 	cd $olddir
 	cmds:if-external brew {
-		header2 "---> Updating BREW…"
+		header2 "Updating BREW…"
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		try {
 			brew update; brew outdated
@@ -540,13 +541,13 @@ fn update {
 			brew cleanup --prune=all
 		} catch { msg "\t\t …can't upgrade!" }
 	}
-	if (cmds:is-macos) { try { header2 "---> Check macOS updates…"; softwareupdate --list } catch { } }
+	if (cmds:is-macos) { try { header2 "Check macOS updates…"; softwareupdate --list } catch { } }
 	if (cmds:is-linux) {
 		try { 
-			header2 "---> Updating APT…"
+			header2 "Updating APT…"
 			sudo apt update; sudo apt autoremove -y; apt list --upgradable
 		} catch { msg "\t…couldn't update APT!"	}
-		header2 "---> Updating snap/flatpak/firmware…"
+		header2 "Updating snap/flatpak/firmware…"
 		cmds:if-external snap { try { msg "\tsnap…"; sudo snap refresh } catch { } }
 		cmds:if-external flatpak { try { msg "\tflatpak…"; flatpak update -y } catch { } }
 		cmds:if-external fwupdmgr { try { msg "\tfirmware…"; fwupdmgr get-upgrades } catch { } }
@@ -556,13 +557,13 @@ fn update {
 	try { curl -sS https://raw.githubusercontent.com/cagelab/cogmoteGO/main/install.sh | sh } catch { }
 
 	# update other tools
-	cmds:if-external pixi { header2 "---> Update pixi"; pixi self-update; pixi global sync; pixi global -v update }	
-	cmds:if-external nvim { header2 "---> Update NVIM plugins…"; nvim --headless "+Lazy! sync" +qa }
-	cmds:if-external ya { header2 "---> Update Yazi"; ya pkg upgrade --discard }
-	cmds:if-external eget { header2 "---> Update eget"; eget zyedidia/eget --upgrade-only }
+	cmds:if-external pixi { header2 "Update pixi"; pixi self-update; pixi global sync; pixi global -v update }	
+	cmds:if-external nvim { header2 "Update NVIM plugins…"; nvim --headless "+Lazy! sync" +qa }
+	cmds:if-external ya { header2 "Update Yazi"; ya pkg upgrade --discard }
+	cmds:if-external eget { header2 "Update eget"; eget zyedidia/eget --upgrade-only }
  
-	try { header2 "---> Updating Elvish Packages…";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
-	try { cmds:if-external x-cmd { header2 "---> Update 文 x-cmd"; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod } } catch { }
+	try { header2 "Updating Elvish Packages…";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
+	try { cmds:if-external x-cmd { header2 "Update 文 x-cmd"; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod } } catch { }
 	header1 "====>>> Finish Update @ "(styled (date) bold)" <<<===="
 }
 edit:add-var update~ $update~
@@ -573,7 +574,8 @@ fn updateuBlock {
 	each { |rel| 
 		if (cmds:is-match $rel[name] "chromium.zip$") {
 			var url = $rel[browser_download_url]
-			echo (styled "\n=== GET uBLOCK "$rel[name]" ===\nURL: "$url bold yellow)
+			header2 "uBlock "$rel[name]
+			msg "URL: "$url
 			try {
 				curl -k -L -o ublock.zip $url
 				rm -rf $E:HOME/Downloads/uBlock0.chromium
@@ -595,7 +597,7 @@ fn updateMPV {
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
 	var mpvURL = 'https://nightly.link/mpv-player/mpv/workflows/build/master/mpv-macos-26-arm.zip'
-	echo (styled "\n=== GET MPV ===\nURL: "$mpvURL bold yellow)
+	header2 "GET MPV URL: "$mpvURL
 	try { wget --no-check-certificate -O mpv.zip $mpvURL
 		unzip -p mpv.zip | tar -xf -
 		sudo rm -rf /Applications/mpv.app
@@ -612,7 +614,7 @@ edit:add-var updateMPV~ $updateMPV~
 #====================================================UPDATE XRAY
 fn updateXRay {
 	if (!=s $platform:os 'linux') { return }
-	echo (styled "\n=== UPDATE XRAY & V2RAYA ===\n" bold yellow)
+	header2 "UPDATE XRAY & V2RAYA"
 	var xLabel = ''; var vLabel = ''
 	if (and (cmds:is-mac) (cmds:is-arm64)) {
 		var xLabel = "Xray-macos-arm64-v8a.zip$"
@@ -675,7 +677,7 @@ fn updateElvish {|&source=tuna|
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
-	echo (styled "\n===GET ELVISH===\nURL: "$url bold yellow)
+	header2 "ELVISH URL: "$url
 	try { wget --no-check-certificate $url
 	} catch { echo "Couldn't download for some reason!" 
 	} else { 
@@ -703,7 +705,7 @@ fn updateFFmpeg {
 	var os = $platform:os
 	if (eq $os 'darwin') { set os = 'macos'}
 	cmds:if-external ffmpeg { set oldver = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
-	echo (styled "\n===FFMPEG UPDATE===\nOS: "$os" & Arch: "$platform:arch bold yellow)
+	header2 "FFMPEG UPDATE OS: "$os" & Arch: "$platform:arch
 	var tnames = [ffmpeg ffplay ffprobe]
 	for x $tnames {
 		try {
@@ -748,21 +750,21 @@ edit:add-var updateOptickaPages~ $updateOptickaPages~
 fn updateAll {
 	update
 	if (cmds:is-linux) { sudo apt full-upgrade -y }
-	try { egetAll } catch { }
 	updateMPV
 	updateElvish
 	updateFFmpeg
 	updateTeX
 	updateuBlock
-	cmds:if-external opencode { header2 "---> Upgrade opencode"; opencode upgrade }
-	cmds:if-external pkgx { header2 "---> Update pkgx"; pkgx --sync; pkgx --update }
-	cmds:if-external micromamba { header2 "---> Update Micromamba…"; micromamba self-update }
-	cmds:if-external rbenv { header2 "---> Rehash RBENV…"; rbenv rehash }
-	cmds:if-external pyenv { header2 "---> Rehash PYENV…"; pyenv rehash }
-	cmds:if-external npm { header2 "---> Update npm global"; npm list -g; npm update -g; npm list -g }
-	cmds:if-external uv { header2 "---> Update UV tools"; uv tool upgrade --all }
-	cmds:if-external pipx { header2 "---> Update PIPX packages"; pipx upgrade-all }
-	cmds:if-external gem { header2 "---> Update Ruby Gems"; gem update; gem cleanup }
+	cmds:if-external opencode { header2 "Upgrade opencode"; opencode upgrade }
+	cmds:if-external pkgx { header2 "Update pkgx"; pkgx --sync; pkgx --update }
+	cmds:if-external micromamba { header2 "Update Micromamba…"; micromamba self-update }
+	cmds:if-external rbenv { header2 "Rehash RBENV…"; rbenv rehash }
+	cmds:if-external pyenv { header2 "Rehash PYENV…"; pyenv rehash }
+	cmds:if-external npm { header2 "Update npm global"; npm list -g; npm update -g; npm list -g }
+	cmds:if-external uv { header2 "Update UV tools"; uv tool upgrade --all }
+	cmds:if-external pipx { header2 "Update PIPX packages"; pipx upgrade-all }
+	#cmds:if-external gem { header2 "Update Ruby Gems"; gem update; gem cleanup }
+	try { egetAll } catch { }
 	header1 "====>>> Finish UpdateAll @ "(styled (date) bold)" <<<===="
 }
 edit:add-var updateAll~ $updateAll~
