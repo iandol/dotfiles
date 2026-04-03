@@ -114,10 +114,10 @@ sketchybar	--add item weather q							\
 			--set weather	update_freq=600						\
 							script="$PLUGIN_DIR/weather.sh"		\
 							click_script="open -a Weather"		\
-							label.max_chars=15					\
+							label.max_chars=16					\
 			--subscribe weather mouse.entered					\
 			--add item clock right								\
-			--set clock		update_freq=10						\
+			--set clock		update_freq=30						\
 							icon=								\
 							script="$PLUGIN_DIR/clock.sh"		\
 			--add item volume right								\
@@ -133,19 +133,19 @@ sketchybar	--add item weather q							\
 						script="$PLUGIN_DIR/cpu.sh"				\
 			--subscribe volume volume_change					\
 			--add item music e									\
-			--set music label.color=0x66ffffff					\
-						icon.color=0x66ffffff					\
-						background.color=0x22ffffff				\
-						label.max_chars=24						\
+			--set music label.color=0xffaaaaaa					\
+						icon.color=0xffaaaaaa					\
+						background.color=0x11ffffff				\
+						label.max_chars=35						\
 						scroll_texts=true						\
-						label.scroll_duration=150				\
+						label.scroll_duration=30				\
 						background.padding_left=-8				\
 						background.padding_right=-8				\
 						icon.padding_right=0					\
 						label.padding_left=1					\
 						script="$PLUGIN_DIR/media.sh"			\
 						click_script="/opt/homebrew/bin/media-control toggle-play-pause" \
-						update_freq=15							\
+						update_freq=30							\
 						background.drawing=on					
 
 ##### Force all scripts to run the first time (never do this in a script) #####

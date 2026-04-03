@@ -30,10 +30,12 @@ fi
 if [ "$PLAYBACK_RATE" -gt 0 ]; then
   sketchybar --set $NAME icon="$ICON_PLAY" \
                          label="$LABEL" \
-                         drawing=on
+                         drawing=on \
+						 scroll_texts=true
 else
   sketchybar --set $NAME icon="$ICON_PAUSE" \
                          label="$LABEL" \
-                         drawing=on
+                         drawing=on \
+						 scroll_texts=false
 fi
 

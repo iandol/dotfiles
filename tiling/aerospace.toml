@@ -13,9 +13,10 @@ after-startup-command = [
 	#'exec-and-forget sketchybar', #use a brew service as it is better
 ]
 
-# Notify Sketchybar about workspace change
-exec-on-workspace-change = ['/bin/bash', '-c',
-	'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+# Notify Sketchybar / aegis about workspace change
+exec-on-workspace-change = [
+	'/bin/bash', '-c', 'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+	#'/bin/bash', '-c', '$HOME/.config/aegis/aegis-aerospace-notify'
 ]
 
 # A callback that runs every time binding mode changes

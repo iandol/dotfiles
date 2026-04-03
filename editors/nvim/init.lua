@@ -45,6 +45,12 @@ vim.lsp.config("matlab_ls", {
 	}
 })
 
+vim.filetype.add({
+  extension = {
+    elv = "elvish",
+  },
+})
+
 -- keymaps
 local km = vim.keymap
 km.set("n", "<leader>o", ":update<CR> :source<CR>", { desc = "Reload File" })
