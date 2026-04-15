@@ -200,6 +200,10 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	run = 'layout floating'
 
 [[on-window-detected]]
+	if.app-name-regex-substring = 'Console'
+	run = 'layout floating'
+
+[[on-window-detected]]
 	if.app-name-regex-substring = 'Vivaldi'
 	run = ['move-node-to-workspace A']
 	check-further-callbacks = true

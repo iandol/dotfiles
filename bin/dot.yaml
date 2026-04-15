@@ -4,6 +4,7 @@ global:
     checkZT: ~/bin/checkZT
     egetAll.sh: ~/bin/egetAll
     makeTools.sh: ~/bin/makeTools
+    zoteroSearch.sh: ~/bin/zoteroSearch
 darwin:
   links:
     FitImagesToPageWidth.py: ~/Library/Application Support/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py

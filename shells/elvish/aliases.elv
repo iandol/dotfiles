@@ -570,7 +570,13 @@ edit:add-var update~ $update~
 
 #====================================================UPDATE UBLOCK
 fn updateuBlock {
-	var @uSrc = (curl -s https://api.github.com/repos/gorhill/uBlock/releases | jq -r 'map(select(.prerelease)) | sort_by(.published_at) | last | .assets[]' | from-json)
+	var @uSrc = []
+	try {
+		set @uSrc = (curl -s https://api.github.com/repos/gorhill/uBlock/releases | jq -r 'map(select(.prerelease)) | sort_by(.published_at) | last | .assets[]' | from-json)
+	} catch {
+		msg "…Can't retrieve uBlock release metadata!"
+		return
+	}
 	each { |rel| 
 		if (cmds:is-match $rel[name] "chromium.zip$") {
 			var url = $rel[browser_download_url]
@@ -581,7 +587,7 @@ fn updateuBlock {
 				rm -rf $E:HOME/Downloads/uBlock0.chromium
 				unzip -oq ublock.zip -d $E:HOME/Downloads/
 				rm ublock.zip
-			} catch { echo "Can't download uBlock!" }
+			} catch { msg "…Can't download uBlock!" }
 		}
 	} $uSrc
 }
@@ -653,7 +659,7 @@ fn updateXRay {
 		echo (styled "\n=== GET XRAY ===\nURL: "$xURL bold yellow)
 		try { wget --no-check-certificate -O xray.zip $xURL
 			sudo unzip -o xray.zip -d /usr/local/bin
-		} catch { echo "Can't download Xray!" }
+		} catch { msg "…Can't download Xray!" }
 	}
 
 	each {|a| 
@@ -663,7 +669,7 @@ fn updateXRay {
 		echo (styled "\n=== GET V2RAYA ===\nURL: "$vURL bold yellow)
 		try { wget --no-check-certificate -O v2raya.deb $vURL
 			if cmds:is-linux { sudo dpkg -i v2raya.deb }
-		} catch { echo "Can't download V2raya!" }
+		} catch { msg "…Can't download V2raya!" }
 	}
 }
 edit:add-var updateXRay~ $updateXRay~
@@ -679,7 +685,7 @@ fn updateElvish {|&source=tuna|
 	cd $tmpdir
 	header2 "ELVISH URL: "$url
 	try { wget --no-check-certificate $url
-	} catch { echo "Couldn't download for some reason!" 
+	} catch { msg "…Couldn't download for some reason!" 
 	} else { 
 		tar xvf elvish-HEAD.tar.gz
 		if (cmds:is-file ./elvish-HEAD) { mv ./elvish-HEAD ./elvish }
@@ -711,7 +717,7 @@ fn updateFFmpeg {
 		try {
 			wget --no-check-certificate -O $x.zip 'https://ffmpeg.martin-riedl.de/redirect/latest/'$os'/'$platform:arch'/snapshot/'$x'.zip'
 			unzip -o $x.zip -d /usr/local/bin/
-		} catch { echo "Can't download "$x }
+		} catch { msg "…Can't download "$x }
 	}
 	cmds:if-external ffmpeg { set newver = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
 	echo (styled "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n" bold yellow)
