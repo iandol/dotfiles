@@ -134,7 +134,7 @@ if (eq $E:TERM "xterm-ghostty") {
 cmds:if-external carapace {
 	set-env CARAPACE_BRIDGES "zsh,bash"
 	set-env CARAPACE_EXCLUDES "systemctl,x"
-	set-env CARAPACE_MERGEFLAGS 1
+	# set-env CARAPACE_MERGEFLAGS 1
 	eval (carapace _carapace | slurp)
 	msg "…carapace integration…"
 }
@@ -144,8 +144,8 @@ cmds:if-external carapace {
 if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
 	set-env ___X_CMD_LANG en
 	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 0
-	use x; x:init
-	msg "…x-cmd 文 integration…"
+	# use x; x:init
+	# msg "…x-cmd 文 integration…"
 }
 
 #==================================================== - OTHER INTEGRATIONS

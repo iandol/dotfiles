@@ -144,3 +144,6 @@ echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | �
 #---------------------------------------END OF FILE
 
 
+
+# opencode
+export PATH=/home/cog5/.opencode/bin:$PATH

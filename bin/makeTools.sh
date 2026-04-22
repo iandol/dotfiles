@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
+NM_PATH="https://web9001.nomachine.com/download/9.4/Linux/nomachine_9.4.14_1_x86_64.rpm"
 ARCHIVE_PATH="${HOME}/Downloads/tools.7z"
 DECOMPRESS_ONLY=0
 TRACKED_PATHS=(
@@ -78,7 +79,7 @@ if (( DECOMPRESS_ONLY )); then
 	exit 0
 fi
 
-[[ ! -f ~/Downloads/nomachine.deb ]] && curl -L -o ~/Downloads/nomachine.deb https://web9001.nomachine.com/download/9.3/Linux/nomachine_9.3.7_1_amd64.deb
+[[ ! -f ~/Downloads/nomachine.deb ]] && curl -L -o ~/Downloads/nomachine.deb $NM_PATH
 
 ~/.dotfiles/bin/egetAll.sh
 
