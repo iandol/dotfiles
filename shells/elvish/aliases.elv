@@ -25,6 +25,14 @@ set edit:command-abbr['arch'] = 'arch -x86_64'
 # set edit:small-word-abbr['ll'] = 'ls -alFGh@'
 # set edit:small-word-abbr['ls'] = 'ls -GF'
 
+#==================================================== - BUGFIX
+edit:add-var runMATLAB~ {
+	echo "Xft.dpi: 96" > ~/.Xres; xrdb -merge ~/.Xres
+	sleep 1
+	matlab &
+	sleep 10
+	echo "Xft.dpi: 150" > ~/.Xres; xrdb -merge ~/.Xres }
+
 #==================================================== - ELVISH
 edit:add-var za~ {|prefix start end suffix| put "("(print $prefix(range $start $end)$suffix)")" } #zsh array as a string
 edit:add-var ssh-agent-setup~ {
