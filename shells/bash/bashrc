@@ -42,6 +42,8 @@ fi
 #------------------------------------PATHS/ENVS ETC.
 [[ -f $(which starship) ]] && eval "$(starship init bash)"
 [[ -f $(which pixi) ]] && eval "$(pixi completion --shell bash)"
+[[ -f $(which mc) ]] && complete -C /usr/local/bin/mc mc
+
 [[ -f "$DF/shells/aliases" ]] && source "$DF/shells/aliases"
 
 #---------------------------------------SAY HELLO
@@ -53,4 +55,6 @@ echo -e "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 |
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/ian/.cache/lm-studio/bin"
 # End of LM Studio CLI section
+
+
 
