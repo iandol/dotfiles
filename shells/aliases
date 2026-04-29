@@ -10,8 +10,6 @@ export SPATH="$HOME/Code/Setup"
 #alias cagelab-zsh="ln -svf $HOME/Code/Setup/config/zshrc $HOME/.zshrc && ln -svf $HOME/Code/Setup/config/zsh-* $HOME && ln -svf $HOME/Code/Setup/config/aliases $HOME && ln -svf $HOME/Code/Setup/config/pixi-global.toml $HOME/.pixi/manifests && source $HOME/.zshrc"
 #alias cagelab-reset-OBS='systemctl --user stop mediamtx && systemctl --user stop obs && sleep 1 && systemctl --user start mediamtx && systemctl --user start obs'
 
-alias runMATLAB "echo "Xft.dpi: 96" > ~/.Xres && xrdb -merge ~/.Xres && sleep 1 && matlab & && sleep 10 && echo "Xft.dpi: 150" > ~/.Xres && xrdb -merge ~/.Xres"
-
 #============================================EZA
 if [[ -f $(which eza) ]]; then
 	alias lls='eza --icons=auto -al -r -s size'
