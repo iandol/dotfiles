@@ -130,24 +130,6 @@ if (eq $E:TERM "xterm-ghostty") {
 	msg "…ghostty integration…"
 }
 
-#==================================================== - CARAPACE INTEGRATION
-cmds:if-external carapace {
-	set-env CARAPACE_BRIDGES "zsh,bash"
-	set-env CARAPACE_EXCLUDES "systemctl,x"
-	# set-env CARAPACE_MERGEFLAGS 1
-	eval (carapace _carapace | slurp)
-	msg "…carapace integration…"
-}
-
-#==================================================== - X-CMD 文
-# …should come AFTER carapace
-if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
-	set-env ___X_CMD_LANG en
-	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 0
-	# use x; x:init
-	# msg "…x-cmd 文 integration…"
-}
-
 #==================================================== - OTHER INTEGRATIONS
 cmds:if-external zoxide { eval (zoxide init elvish | slurp) } # better cd
 cmds:if-external fd {
@@ -156,20 +138,38 @@ cmds:if-external fd {
 		set-env FZF_DEFAULT_OPTS "--ansi"
 	}
 }
+cmds:if-external nvim { set-env EDITOR (which nvim); set-env VISUAL (which nvim) } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 cmds:if-external uv { eval (uv generate-shell-completion elvish | slurp) } # python manager
 cmds:if-external rotz { eval (rotz completions elvish | slurp) } # dotfile namager
 cmds:if-external dua { eval (dua completions elvish | slurp ) } # disk usage analyzer
-cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) } # process viewer
+#cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) } # process viewer
 cmds:if-external mihomosh { eval (mihomosh shell-completion elvish | slurp) } # mihomo shell
-cmds:if-external nvim { set-env EDITOR (which nvim); set-env VISUAL (which nvim) } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
 cmds:if-external pixi {
-	eval (pixi completion --shell elvish | slurp)
+	#eval (pixi completion --shell elvish | slurp)
 	var pixienv = (pixi info --json | from-json | put (one)[global_info][env_dir])
 	var pixibin = (pixi info --json | from-json | put (one)[global_info][bin_dir])
 	# pixi doesn't expose tools installed with gem etc. so manually expose them
 	if (os:exists $pixienv/ruby/share/rubygems/bin/pandocomatic) { ln -sf $pixienv/ruby/share/rubygems/bin/pandocomatic $pixibin }
 } # global package manager
 python:deactivate
+
+#==================================================== - CARAPACE INTEGRATION
+cmds:if-external carapace {
+	set-env CARAPACE_BRIDGES "zsh"
+	set-env CARAPACE_EXCLUDES "systemctl,x"
+	set-env CARAPACE_MERGEFLAGS 1
+	eval (carapace _carapace elvish | slurp)
+	msg "…carapace integration…"
+}
+
+#==================================================== - X-CMD 文
+# …should come AFTER carapace
+if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
+	set-env ___X_CMD_LANG en
+	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 0
+	use x; x:init
+	msg "…x-cmd 文 integration…"
+}
 
 #==================================================== - GENERAL ENVIRONMENT
 set-env PAPERSIZE A4

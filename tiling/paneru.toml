@@ -1,0 +1,17 @@
+# basic .paneru.toml
+# https://github.com/karinushka/paneru/blob/main/CONFIGURATION.md
+[options]
+focus_follows_mouse = true
+mouse_follows_focus = true
+	auto_center = true
+
+[bindings]
+window_focus_west = "alt - h"
+window_focus_east = "alt - l"
+window_virtual_north = "alt - k"
+window_virtual_south = "alt - j"
+window_virtualmove_north = "shift + alt - k"
+window_virtualmove_south = "shift + alt - j"
+window_resize = "alt - r"
+window_center = "alt - c"
+quit = "ctrl + alt - q"

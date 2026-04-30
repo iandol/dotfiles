@@ -72,4 +72,5 @@ prepend_rules = [
 	{ url = "*.tif", use = [ "open", "edit", "reveal" ] },
 	{ url = "*.jasp", use = [ "open", "reveal" ] },
 	{ url = "*.html", use = [ "open", "edit", "reveal" ] },
+	{ url = "*.key", use = [ "open", "reveal" ] },
 ]

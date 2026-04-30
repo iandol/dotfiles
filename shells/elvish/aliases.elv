@@ -106,20 +106,28 @@ cmds:if-external eza {
 }
 
 #==================================================== - Management
-fn sshTab { |@hostname|
+fn sshTab { |@hostname &tool=ssh|
 	# This function opens a new terminal tab and SSH into the given hostname.
 	# It works on both macOS and Linux systems.
 	#
 	# Usage: sshTab <hostname>
 	# Example: sshTab my-server.com
 	each { |h|
-		put "Opening SSH tab to "$h
-		cmds:if-external kitty {
-			kitty @ launch --type tab --tab-title $h kitten ssh $h --kitten login_shell=elvish
-		} { ssh $hostname[0] }
+		if ( ==s $tool 'mosh' )	{
+			put "Opening MOSH tab to "$h
+			cmds:if-external kitty {
+				kitty @ launch --type tab --tab-title $h mosh $h
+			} { mosh $h }
+		} else {
+			put "Opening SSH tab to "$h
+			cmds:if-external kitty {
+				kitty @ launch --type tab --tab-title $h kitten ssh $h --kitten login_shell=elvish
+			} { ssh $hostname[0] }
+		}
 	} $@hostname
 }
 edit:add-var sshTab~ $sshTab~
+
 fn cloneReset { |hostname|
 	# This function resets the machine ID and hostname for a Linux clone. It
 	# is useful when you clone a VM or a machine and want to avoid conflicts
@@ -769,6 +777,7 @@ fn updateAll {
 	updateFFmpeg
 	updateTeX
 	updateuBlock
+	cmds:if-external hermes { header2 "Upgrade Hermes"; hermes update }
 	cmds:if-external opencode { header2 "Upgrade opencode"; opencode upgrade }
 	cmds:if-external pkgx { header2 "Update pkgx"; pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { header2 "Update Micromamba…"; micromamba self-update }

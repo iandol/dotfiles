@@ -2,7 +2,8 @@ darwin:
   links:
     aerospace.toml: ~/.config/aerospace/aerospace.toml
     scratchpad.sh: ~/.config/aerospace/scratchpad.sh
-    rift.toml: ~/.config/rift/config.toml
+    rift.toml: ~/.config/rift/config.toml 
+    paneru.toml: ~/.config/paneru/paneru.toml
     sketchybarrc: ~/.config/sketchybar/sketchybarrc
     sbplugins: ~/.config/sketchybar/plugins
 linux:
