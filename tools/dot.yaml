@@ -2,8 +2,6 @@ global:
   links:
     rsync-excludes: ~/.config/.rsync-excludes
     ansiweatherrc: ~/.ansiweatherrc
-    default-gems: ~/.config/default-gems
-    pixi-global.toml: ~/.pixi/manifests/pixi-global.toml
     rubocop.yml: ~/.rubocop.yml
     starship.toml: ~/.config/starship.toml
     tmux.conf: ~/.config/tmux/tmux.conf
@@ -12,7 +10,6 @@ global:
     yazi/theme.toml: ~/.config/yazi/theme.toml
     yazi/package.toml: ~/.config/yazi/package.toml
     yazi/init.lua: ~/.config/yazi/init.lua
-    eget.toml: ~/.eget.toml
     mpv/mpv.conf: ~/.config/mpv/mpv.conf
     mpv/input.conf: ~/.config/mpv/input.conf
 darwin:
@@ -24,12 +21,6 @@ linux:
 linux:
   installs: |
     sudo apt install -y curl git ripgrep fd-find
-darwin|linux:
-  installs: |
-    curl -fsSL https://pixi.sh/install.sh | sh
-    curl https://zyedidia.github.io/eget.sh | sh
-    mv -f ./eget /usr/local/bin/eget
-    export ROTZ_INSTALL=/usr/local && curl -fsSL volllly.github.io/rotz/install.sh | sh
 windows:
   installs: |
     winget install Microsoft.PowerShell

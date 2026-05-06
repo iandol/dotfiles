@@ -1,0 +1,12 @@
+global:
+  links:
+    default-gems: ~/.config/default-gems
+    pixi-global.toml: ~/.pixi/manifests/pixi-global.toml
+    eget.toml: ~/.eget.toml
+darwin|linux:
+  installs: |
+    curl -fsSL https://pixi.sh/install.sh | sh
+    curl https://zyedidia.github.io/eget.sh | sh
+    mv -f ./eget /usr/local/bin/eget
+    export ROTZ_INSTALL=/usr/local && curl -fsSL volllly.github.io/rotz/install.sh | sh
+
