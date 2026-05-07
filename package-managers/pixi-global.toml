@@ -200,3 +200,13 @@ channels = ["conda-forge"]
 dependencies = { minio-client = "*" }
 exposed = { mc = "mc" }
 
+[envs.tssh]
+channels = ["conda-forge"]
+dependencies = { tssh = "*" }
+exposed = { tssh = "tssh" }
+
+[envs.tsshd]
+channels = ["conda-forge"]
+dependencies = { tsshd = "*" }
+exposed = { tsshd = "tsshd" }
+
