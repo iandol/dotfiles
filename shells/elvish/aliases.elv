@@ -118,6 +118,11 @@ fn sshTab { |@hostname &tool=ssh|
 			cmds:if-external kitty {
 				kitty @ launch --type tab --tab-title $h mosh $h
 			} { mosh $h }
+		} elif ( ==s $tool 'tssh' )	{
+			put "Opening TSSH tab to "$h
+			cmds:if-external kitty {
+				kitty @ launch --type tab --tab-title $h tssh --udp $h 
+			} { tssh $hostname[0] }
 		} else {
 			put "Opening SSH tab to "$h
 			cmds:if-external kitty {

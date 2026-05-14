@@ -155,10 +155,11 @@ python:deactivate
 
 #==================================================== - CARAPACE INTEGRATION
 cmds:if-external carapace {
-	set-env CARAPACE_BRIDGES "zsh"
+	set-env CARAPACE_BRIDGES "bash,zsh"
 	set-env CARAPACE_EXCLUDES "systemctl,x"
 	set-env CARAPACE_MERGEFLAGS 1
 	eval (carapace _carapace elvish | slurp)
+	carapace --choice ansible/zsh@bridge
 	msg "…carapace integration…"
 }
 
