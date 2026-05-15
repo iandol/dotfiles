@@ -17,6 +17,8 @@
 	<true/>
 	<key>ProgramArguments</key>
 	<array>
+		<string>/Applications/LaunchControl.app/Contents/MacOS/fdautil</string>
+		<string>exec</string>
 		<string>/Users/ian/.dotfiles/bin/tweakJSON.sh</string>
 		<string>/Users/ian/Library/CloudStorage/Dropbox/References/Core.json</string>
 	</array>
