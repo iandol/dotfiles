@@ -577,10 +577,12 @@ function updateAll() {
 	update
 	egetAll
 	updateElvish
+	[[ -f $(which hermes) ]] && (printf '\n\n---> Upgrade \e[92mHERMES\e[m...\n'; hermes update)
 	[[ -f $(which opencode) ]] && (printf '\n\n---> Upgrade \e[92mOPENCODE\e[m...\n'; opencode upgrade)
+	[[ -f $(which nvim) ]] && (printf '\n\n---> Upgrade \e[92mNVIM\e[m...\n';nvim --headless "+Lazy! sync" +qa  )
 	[[ -f $(which rbenv) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; rbenv rehash)
 	[[ -f $(which pyenv) ]] && (printf '\n\n---> Rehash \e[92mPYENV\e[m...\n'; pyenv rehash)
-	[[ -f $(which uv) ]] && (printf '\n\n---> \e[92muv tools\e[m...\n'; uv tools upgrade --all)
+	[[ -f $(which uv) ]] && (printf '\n\n---> \e[92muv tools\e[m...\n'; uv tool upgrade --all)
 	[[ -f $(which pipx) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; pipx upgrade-all)
 	printf '\n\n---> Checking OS X updates...\n'
 	sudo softwareupdate --list
