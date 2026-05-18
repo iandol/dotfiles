@@ -11,6 +11,8 @@ darwin:
     runSync.applescript: ~/bin/runSync.applescript
 linux:
   links:
+    matlab_hang_capture.sh: ~/bin/matlab_hang_capture.sh
+    matlab_hang_toolinstall.sh: ~/bin/matlab_hang_toolinstall.sh
     installV2RAYA.sh: ~/bin/installV2RAYA.sh
     snapcache.sh: ~/bin/snapcache.sh
     FitImagesToPageWidth.py: ~/.config/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
