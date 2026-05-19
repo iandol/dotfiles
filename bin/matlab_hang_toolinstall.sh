@@ -221,9 +221,9 @@ verify_tools() {
     stackcollapse-perf.pl
   )
 
-  local cmd path
+  local cmd cmd_path
   for cmd in "${commands[@]}"; do
-    if path=$(command -v "$cmd" 2>/dev/null); then
+    if cmd_path=$(command -v "$cmd" 2>/dev/null); then
       printf '  %-24s %s\n' "$cmd" "$path"
     else
       printf '  %-24s %s\n' "$cmd" "MISSING"

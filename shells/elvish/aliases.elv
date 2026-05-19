@@ -106,7 +106,7 @@ cmds:if-external eza {
 }
 
 #==================================================== - Management
-fn sshTab { |@hostname &tool=ssh|
+fn sshTab { |@hostname &tool=tssh|
 	# This function opens a new terminal tab and SSH into the given hostname.
 	# It works on both macOS and Linux systems.
 	#
@@ -116,12 +116,12 @@ fn sshTab { |@hostname &tool=ssh|
 		if ( ==s $tool 'mosh' )	{
 			put "Opening MOSH tab to "$h
 			cmds:if-external kitty {
-				kitty @ launch --type tab --tab-title $h mosh $h
+				kitty @ launch --type tab --tab-title $h (which mosh) $h
 			} { mosh $h }
 		} elif ( ==s $tool 'tssh' )	{
 			put "Opening TSSH tab to "$h
 			cmds:if-external kitty {
-				kitty @ launch --type tab --tab-title $h tssh --udp $h 
+				kitty @ launch --type tab --tab-title $h -- (which tssh) --udp $h
 			} { tssh $hostname[0] }
 		} else {
 			put "Opening SSH tab to "$h

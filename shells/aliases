@@ -3,7 +3,6 @@ PLATFORM=$(uname -s)
 export PLATFORM
 PROC=$(uname -m)
 export PROC
-export SPATH="$HOME/Code/Setup"
 
 #alias cagelab-monitor="tmuxp load $HOME/.config/tmuxp/cagelab-monitor.yaml"
 #alias cagelab-reset="systemctl --user restart cogmoteGO && systemctl --user restart theConductor"
@@ -35,8 +34,8 @@ else
 	alias l.='ls -d .[^.]*' #only show .dot files
 fi
 
-alias installmicromamba='"${SHELL}" <(curl -L micro.mamba.pm/install.sh)'
-alias updateKitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin &&
+alias installMicromamba='"${SHELL}" <(curl -L micro.mamba.pm/install.sh)'
+alias installKitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin &&
 	ln -sf ~/.local/kitty.app/bin/kitty ~/.local/kitty.app/bin/kitten ~/.local/bin/ &&
 	cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applications/ &&
 	cp ~/.local/kitty.app/share/applications/kitty-open.desktop ~/.local/share/applications/ &&
@@ -78,6 +77,76 @@ fi
 
 # Sizes of Folder Contents
 alias sizes='du -sh * | sort -h'
+
+# open a list of ssh servers in separate kitty tabs
+sshTab() {
+	tool=tssh
+	while [ "$#" -gt 0 ]; do
+		case "$1" in
+			-t|--tool)
+				if [ "$#" -lt 2 ]; then
+					echo "Usage: sshTab [-t tool] host [...]" >&2
+					return 1
+				fi
+				tool=$2
+				shift 2
+				;;
+			--tool=*)
+				tool=${1#*=}
+				shift
+				;;
+			--)
+				shift
+				break
+				;;
+			-*)
+				echo "Unknown option: $1" >&2
+				return 1
+				;;
+			*)
+				break
+				;;
+		esac
+	done
+
+	if [ "$#" -eq 0 ]; then
+		echo "Usage: sshTab [-t tool] host [...]" >&2
+		return 1
+	fi
+
+	for h in "$@"; do
+		case "$tool" in
+			mosh)
+				echo "Opening MOSH tab to $h"
+				if command -v kitty >/dev/null 2>&1; then
+					kitty @ launch --type tab --tab-title "$h" "$(command -v mosh)" "$h"
+				else
+					mosh "$h"
+				fi
+				;;
+			tssh)
+				echo "Opening TSSH tab to $h"
+				if command -v kitty >/dev/null 2>&1; then
+					kitty @ launch --type tab --tab-title "$h" -- "$(command -v tssh)" --udp "$h"
+				else
+					tssh --udp "$h"
+				fi
+				;;
+			ssh)
+				echo "Opening SSH tab to $h"
+				if command -v kitty >/dev/null 2>&1; then
+					kitty @ launch --type tab --tab-title "$h" kitten ssh "$h" --kitten login_shell=elvish
+				else
+					ssh "$h"
+				fi
+				;;
+			*)
+				echo "Unsupported tool: $tool" >&2
+				return 1
+				;;
+		esac
+	done
+}
 
 # Download - it downloads the specified file
 alias dl='curl -C - -O'
