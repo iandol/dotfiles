@@ -50,7 +50,7 @@ hash = "5af4b06948bb7b825a243131eea2075c"
 
 [[plugin.deps]]
 use = "AminurAlam/yazi-plugins:preview-typst"
-rev = "8a3b35d"
+rev = "bbeb314"
 hash = "cbbe7b580cdc241c198be1632df8babe"
 
 [[plugin.deps]]

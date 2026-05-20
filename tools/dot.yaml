@@ -5,6 +5,7 @@ global:
     rubocop.yml: ~/.rubocop.yml
     starship.toml: ~/.config/starship.toml
     tmux.conf: ~/.config/tmux/tmux.conf
+    herdr.toml: ~/.config/herdr/config.toml
     yazi/yazi.toml: ~/.config/yazi/yazi.toml
     yazi/keymap.toml: ~/.config/yazi/keymap.toml
     yazi/theme.toml: ~/.config/yazi/theme.toml
