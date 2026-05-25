@@ -1,3 +1,4 @@
+onboarding = false
 # herdr configuration
 # Place this file at ~/.config/herdr/config.toml
 
@@ -52,7 +53,7 @@ prefix = "ctrl+a"
 # split_vertical = "v"
 # split_horizontal = "-"
 # close_pane = "x"
-zoom = "z"             # legacy alias: fullscreen
+zoom = "prefix+z"             # legacy alias: fullscreen
 # resize_mode = "r"
 # toggle_sidebar = "b"
 
@@ -112,6 +113,7 @@ zoom = "z"             # legacy alias: fullscreen
 # delivery = "off"
 
 # Play sounds when agents change state in background workspaces
+delivery = "herdr"
 [ui.sound]
 # enabled = true
 # Optional custom mp3 sound files. Relative paths are resolved from this config file's directory.

@@ -85,11 +85,6 @@ channels = ["conda-forge"]
 dependencies = { moreutils = "*" }
 exposed = { chronic = "chronic", combine = "combine", errno = "errno", ifdata = "ifdata", ifne = "ifne", isutf8 = "isutf8", lckdo = "lckdo", mispipe = "mispipe", parallel = "parallel", pee = "pee", sponge = "sponge", ts = "ts", vidir = "vidir", vipe = "vipe", zrun = "zrun" }
 
-[envs.awscli]
-channels = ["conda-forge"]
-dependencies = { awscli = "*" }
-exposed = { aws = "aws", aws_completer = "aws_completer" }
-
 [envs.fd-find]
 channels = ["conda-forge"]
 dependencies = { fd-find = "*" }
@@ -209,4 +204,14 @@ exposed = { tssh = "tssh" }
 channels = ["conda-forge"]
 dependencies = { tsshd = "*" }
 exposed = { tsshd = "tsshd" }
+
+[envs.tmux]
+channels = ["conda-forge"]
+dependencies = { tmux = "*" }
+exposed = { tmux = "tmux" }
+
+[envs.tmuxp]
+channels = ["conda-forge"]
+dependencies = { tmuxp = "*" }
+exposed = { tmuxp = "tmuxp" }
 

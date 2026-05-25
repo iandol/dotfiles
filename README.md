@@ -10,19 +10,20 @@ My preferred terminal is [Kitty](https://sw.kovidgoyal.net/kitty/overview/): man
 
 ## Main shell tools: 
 
-* [`carapace`](https://github.com/carapace-sh/carapace-bin) awesome cross-shell command completion.  
-* [`pixi`](https://pixi.sh/latest/): cross-platform packager manager to install most core tools (see [pixi-global.toml](package-managers/pixi-global.toml)). _Note: Lua from pixi is static, which doesn't work well when remote debugging._
-* [`brew`](https://brew.sh) for packages not available in `pixi`; casks are awesome (especially for installing packaging fonts for macOS AND Linux)! 
+* [`pixi`](https://pixi.sh/latest/): cross-platform packager manager to install most core tools (see [pixi-global.toml](package-managers/pixi-global.toml) for the package list). _Note: Lua from pixi is static, which doesn't work well when remote debugging._
+* [`brew`](https://brew.sh) for packages not available in `pixi`; casks are awesome (especially for installing fonts for macOS AND Linux)! 
 * [`x` X-Cmd 文](https://www.x-cmd.com) as an all-in-one shell helper (it is fast and a great way to discover/test new shell tools). I love that it makes everything discoverable. Note: x-cmd integrates with `brew` and `pixi` as well as offering its own packages.
+* [`yazi`](https://github.com/sxyazi/yazi) amazing tabbed and fast file manager!
 * [`starship`](https://starship.rs) for the prompt.
-* [`neovim`](https://neovim.io) for most editing *in* the terminal (I use the lazy.nvim plugin manager), though my vim skills are really basic. I use VSCode for GUI editing (though it is sloooow on the RPi).  
+* [`carapace`](https://github.com/carapace-sh/carapace-bin) awesome cross-shell command completion.  
+* [`neovim`](https://neovim.io) for most editing *in* the terminal (I use the lazy.nvim plugin manager), though my vim skills are really basic. I stick to VSCode for GUI editing (though it is sloooow on the RPi).  
 * [`tssh`](https://github.com/trzsz/trzsz-ssh) to upgrade the OpenSSH client (and `tsshd` to replace `mosh`).
-* [`eza`](https://github.com/eza-community/eza) to replace `ls`.
-* [`bat`](https://github.com/sharkdp/bat) to replace `cat`.
-* [`zoxide`](https://github.com/ajeetdsouza/zoxide) to replace `cd`.
-* [`fd`](https://github.com/sharkdp/fd) to find files.
+* [`eza`](https://github.com/eza-community/eza) to replace/improve `ls`.
+* [`bat`](https://github.com/sharkdp/bat) to replace/improve `cat`.
+* [`zoxide`](https://github.com/ajeetdsouza/zoxide) to replace/improve `cd`.
+* [`fd`](https://github.com/sharkdp/fd) to `find` files.
 * [`ripgrep`](https://github.com/BurntSushi/ripgrep) to `grep`.
-* [`sd`](https://github.com/chmln/sd) to sed with simpler syntax.
+* [`sd`](https://github.com/chmln/sd) to `sed` with simpler syntax.
 * [`lazygit`](https://github.com/jesseduffield/lazygit) to visually `git`.
 * [`dua`](https://github.com/byfd/dua) to `du`.
 * [`jq`](https://stedolan.github.io/jq/) and [yq](https://github.com/mikefarah/yq) to json/yaml.

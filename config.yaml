@@ -1,3 +1,4 @@
+# rotz global config (rotz is a dotfiles manager)
 global:
   dotfiles: ~/.dotfiles
   link_type: 'Symbolic'

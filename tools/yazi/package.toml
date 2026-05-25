@@ -1,6 +1,6 @@
 [[plugin.deps]]
 use = "yazi-rs/plugins:chmod"
-rev = "5d5c480"
+rev = "be524fb"
 hash = "f0c8c378184d5f8abd1b095a443d336d"
 
 [[plugin.deps]]
@@ -10,7 +10,7 @@ hash = "6ea5f37c7f219671ec504cb8311f889d"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:smart-enter"
-rev = "5d5c480"
+rev = "be524fb"
 hash = "187cc58ba7ac3befd49c342129e6f1b6"
 
 [[plugin.deps]]
@@ -35,12 +35,12 @@ hash = "370b6f97a2008322352addbedaf7c390"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:mount"
-rev = "5d5c480"
+rev = "be524fb"
 hash = "e3260d0b1feded8c8e3ae3afa1169e30"
 
 [[plugin.deps]]
 use = "yazi-rs/plugins:toggle-pane"
-rev = "5d5c480"
+rev = "be524fb"
 hash = "9c7987da2d2a2120dac33abb64132004"
 
 [[plugin.deps]]
@@ -50,7 +50,7 @@ hash = "5af4b06948bb7b825a243131eea2075c"
 
 [[plugin.deps]]
 use = "AminurAlam/yazi-plugins:preview-typst"
-rev = "bbeb314"
+rev = "2abf6a7"
 hash = "cbbe7b580cdc241c198be1632df8babe"
 
 [[plugin.deps]]
@@ -60,10 +60,10 @@ hash = "f5afc904d5106ee368c8aa2ded43bd74"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-frappe"
-rev = "54ab389"
+rev = "36c49ac"
 hash = "1844f850b0c5d1af511c84399c95e3d7"
 
 [[flavor.deps]]
 use = "yazi-rs/flavors:catppuccin-latte"
-rev = "54ab389"
+rev = "36c49ac"
 hash = "b8f46853c27707115f25f3423a47bd38"

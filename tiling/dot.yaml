@@ -15,6 +15,9 @@ linux:
 linux[whoami.hostname="cog5"]:
   links:
     Xresources150: ~/.Xresources
+linux[whoami.hostname="cog-WS1"]:
+  links:
+    Xresources150: ~/.Xresources
 linux[whoami.hostname="cog6"]:
   links:
     Xresources150: ~/.Xresources
