@@ -653,9 +653,11 @@ function updateAll() {
 	[[ -f $(which pyenv) ]] && (printf '\n\n---> Rehash \e[92mPYENV\e[m...\n'; pyenv rehash)
 	[[ -f $(which uv) ]] && (printf '\n\n---> \e[92muv tools\e[m...\n'; uv tool upgrade --all)
 	[[ -f $(which pipx) ]] && (printf '\n\n---> Rehash \e[92mRBENV\e[m...\n'; pipx upgrade-all)
-	printf '\n\n---> Checking OS X updates...\n'
-	sudo softwareupdate --list
-	printf '\n---> Update finished...\n'
+	if [[ $PLATFORM = 'Darwin' ]]; then 
+		printf '\n\n---> Checking OS X updates...\n'
+		sudo softwareupdate --list
+		printf '\n---> Update finished...\n'
+	fi
 }
 
 # See all UDP ports open
