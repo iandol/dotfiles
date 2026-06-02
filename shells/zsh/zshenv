@@ -1,0 +1,11 @@
+skip_global_compinit=1
+
+d="/home/cog5/.local/share/uv/tools/argcomplete/lib/python3.13/site-packages/argcomplete/bash_completion.d"
+[[ -d $d ]] && fpath=( "$d" "${fpath[@]}" )
+
+d="/opt/homebrew/share/zsh/site-functions"
+[[ -d $d ]] && fpath=( "$d" "${fpath[@]}" )
+
+d="/home/linuxbrew/.linuxbrew/share/zsh/site-functions"
+[[ -d $d ]] && fpath=( "$d" "${fpath[@]}" )
+

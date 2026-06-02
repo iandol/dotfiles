@@ -1,11 +1,3 @@
-darwin:
-  links:
-    aerospace.toml: ~/.config/aerospace/aerospace.toml
-    scratchpad.sh: ~/.config/aerospace/scratchpad.sh
-    rift.toml: ~/.config/rift/config.toml 
-    paneru.toml: ~/.config/paneru/paneru.toml
-    sketchybarrc: ~/.config/sketchybar/sketchybarrc
-    sbplugins: ~/.config/sketchybar/plugins
 linux:
   links:
     Xresources100: ~/.Xresources
@@ -21,3 +13,12 @@ linux[whoami.hostname="cog-WS1"]:
 linux[whoami.hostname="cog6"]:
   links:
     Xresources150: ~/.Xresources
+darwin:
+  links:
+    aerospace.toml: ~/.config/aerospace/aerospace.toml
+    scratchpad.sh: ~/.config/aerospace/scratchpad.sh
+    rift.toml: ~/.config/rift/config.toml 
+    paneru.toml: ~/.config/paneru/paneru.toml
+    sketchybarrc: ~/.config/sketchybar/sketchybarrc
+    sbplugins: ~/.config/sketchybar/plugins
+

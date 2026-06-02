@@ -4,11 +4,6 @@ export PLATFORM
 PROC=$(uname -m)
 export PROC
 
-#alias cagelab-monitor="tmuxp load $HOME/.config/tmuxp/cagelab-monitor.yaml"
-#alias cagelab-reset="systemctl --user restart cogmoteGO && systemctl --user restart theConductor"
-#alias cagelab-zsh="ln -svf $HOME/Code/Setup/config/zshrc $HOME/.zshrc && ln -svf $HOME/Code/Setup/config/zsh-* $HOME && ln -svf $HOME/Code/Setup/config/aliases $HOME && ln -svf $HOME/Code/Setup/config/pixi-global.toml $HOME/.pixi/manifests && source $HOME/.zshrc"
-#alias cagelab-reset-OBS='systemctl --user stop mediamtx && systemctl --user stop obs && sleep 1 && systemctl --user start mediamtx && systemctl --user start obs'
-
 #============================================EZA
 if [[ -f $(which eza) ]]; then
 	alias lls='eza --icons=auto -al -r -s size'
@@ -484,7 +479,7 @@ function update() {
 	sudo printf "\n=====>>> Start Update @ \e[93m$(date)\e[m <<<=====\n"
 	myolddir=$(pwd)
 	ul=(~/.dotfiles ~/Code/opticka ~/Code/octicka ~/Code/Titta ~/Code/Pingpong
-	~/Code/CageLab ~/Code/matmoteGO ~/Code/PTBSimia ~/Code/Notes 
+	~/Code/CageLab-Code ~/Code/matmoteGO ~/Code/PTBSimia ~/Code/Notes 
 	~/Code/matlab-jzmq ~/Code/matlab-zmq 
 	~/Code/AfterImage ~/Code/equiluminance ~/Code/Pinna ~/Code/spikes 
 	~/Code/Psychtoolbox-3 ~/Code/fieldtrip ~/Code/Training ~/Code/Palamedes 
@@ -557,7 +552,7 @@ function update() {
 
 	[[ -f $(which pixi) ]] && (printf '\n\n---> Updating \e[92mPIXI\e[m...\n'; pixi self-update; pixi global -v update)
 	[[ -f $(which ya) ]] && (printf '\n\n---> Updating \e[92mYAZI\e[m...\n'; ya pkg upgrade)
-	[[ -e "$HOME/.local/share/zinit" ]] && (printf '\n\n---> Updating \e[92mZINIT\e[m...\n';zinit self-update; zinit update -p --all)
+	[[ -d "$HOME/.local/share/znap" ]] && (printf '\n\n---> Updating \e[92mZNAP\e[m...\n'; znap pull)
 	[[ -e "$HOME/.x-cmd.root/bin/x-cmd" ]] &&  (printf '\n\n---> Updating \e[92mX-CMD\e[m...\n'; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force)
 	printf "\n=====>>> Finish Update @ \e[93m%s\e[m <<<=====\n" "$(date)"
 }

@@ -4,6 +4,7 @@ global:
     elvish/aliases.elv: ~/.config/elvish/lib/aliases.elv
     zsh/zshrc: ~/.zshrc
     zsh/zprofile: ~/.zprofile
+    zsh/zshenv: ~/.zshenv
     bash/bashrc: ~/.bashrc
     bash/bash_profile: ~/.bash_profile
     aliases: ~/.config/aliases

@@ -38,6 +38,23 @@ unalias run-help >& /dev/null
 autoload run-help # use ESC + H to bring up help, see https://man.archlinux.org/man/extra/zsh/zshcontrib.1.en
 alias help=run-help
 
+#-------------------------------------ZSNAP MANAGER
+[[ -d "$HOME/.local/share/znap" ]] ||
+    git clone --depth 1 https://github.com/marlonrichert/zsh-snap.git "$HOME/.local/share/znap"
+source ~/.local/share/znap/znap.zsh  # Start Znap
+znap source z-shell/F-Sy-H 
+znap source zsh-users/zsh-autosuggestions 
+znap source zpm-zsh/clipboard
+znap source marlonrichert/zsh-autocomplete
+
+#---------------------------------------STARSHIP
+if [[ -f $(which starship) ]]; then
+	znap eval starship 'starship init zsh --print-full-init'
+else
+	autoload -Uz promptinit; promptinit; prompt fire
+	znap prompt
+fi
+
 #------------------------------------PATHS/ENVS ETC.
 ([[ -x $(which brew) ]] && [[ -d "$(brew --prefix)/share/zsh/site-functions/" ]]) && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
 
@@ -51,7 +68,7 @@ for j in $jl; do
 	fi
 done
 
-ul=("R2025b" "R2025a" "R2024b" "R2024a" "R2023b" "R2023a" "R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
+ul=("R2026b" "R2026a" "R2025b" "R2025a" "R2024b" "R2024a" "R2023b" "R2023a" "R2022b" "R2022a" "R2021b" "R2021a" "R2020b" "R2020a")
 if [[ $PLATFORM == 'Darwin' ]]; then
 	for x in $ul; do
 		if [[ -d "/Applications/MATLAB_${x}.app/bin" ]]; then
@@ -100,45 +117,11 @@ export ___X_CMD_LANG="en"
 
 #------------------------------------FINALISE OTHERS
 [[ -x $(which fzf) ]] && source <(fzf --zsh)
-[[ -x $(which pixi) ]] && eval "$(pixi completion --shell zsh)"
-[[ -x $(which zoxide) ]] && eval "$(zoxide init zsh)"
-[[ -x $(which rotz) ]] && eval "$(rotz completions zsh)"
+[[ -x $(which pixi) ]] && znap eval pixc "$(pixi completion --shell zsh)"
+[[ -x $(which zoxide) ]] && znap eval zoxc "$(zoxide init zsh)"
+[[ -x $(which rotz) ]] && znap eval rotzc eval "$(rotz completions zsh)"
 [[ -x $(which mc) ]] && autoload -U +X bashcompinit && bashcompinit && complete -o nospace -C /usr/local/bin/mc mc
 [[ -f "$DF/shells/aliases" ]] && source "$DF/shells/aliases"
-
-### Added by Zinit's installer
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-        print -P "%F{33} %F{34}Installation successful.%f%b" || \
-        print -P "%F{160} The clone has failed.%f%b"
-fi
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-	zdharma-continuum/zinit-annex-as-monitor \
-	zdharma-continuum/zinit-annex-bin-gem-node \
-	zdharma-continuum/zinit-annex-patch-dl \
-	zdharma-continuum/zinit-annex-rust \
-	z-shell/F-Sy-H \
-	zsh-users/zsh-autosuggestions \
-	marlonrichert/zsh-autocomplete
-#
-
-### End of Zinit's installer chunk
-# marlonrichert/zsh-autocomplete
-
-#---------------------------------------STARSHIP
-if [[ -f $(which starship) ]]; then
-	eval "$(starship init zsh)"
-else
-	autoload -Uz promptinit; promptinit; prompt fire
-fi
 
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"

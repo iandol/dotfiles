@@ -493,16 +493,17 @@ fn update {
 	if (cmds:not-path $E:HOME"/.pixi") { curl -fsSL https://pixi.sh/install.sh | bash }
 	var olddir = (pwd)
 	var oldbranch = ''
-	var ul = [~/.dotfiles ~/Code/opticka ~/Code/CageLab ~/Code/Setup ^
-	~/Code/matmoteGO ~/Code/PTBSimia ~/Code/Notes ^
-	~/Code/matlab-jzmq ~/Code/matlab-zmq ^
-	~/Code/octicka ~/Code/Titta ~/Code/Pingpong ^
-	~/Code/AfterImage ~/Code/equiluminance ~/Code/Pinna ~/Code/spikes ^
-	~/Code/Psychtoolbox-3 ~/Code/fieldtrip ~/Code/Training ~/Code/Palamedes ^
-	~/Code/Mymou ~/Documents/MATLAB/gramm ^
-	~/Code/scrivomatic ~/Code/dotpandoc ~/Code/bookends-tools ~/Code/pandocomatic ^
-	~/Code/gears ~/Code/paru ^
-	/media/$E:USER/data/Code/octicka /media/$E:USER/data/Code/Psychtoolbox-3]
+	var ul = [ ^
+		~/.dotfiles ~/Code/opticka ~/Code/CageLab-Code ~/Code/Setup ^
+		~/Code/matmoteGO ~/Code/PTBSimia ~/Code/Notes ^
+		~/Code/matlab-jzmq ~/Code/matlab-zmq ^
+		~/Code/octicka ~/Code/Titta ~/Code/Pingpong ^
+		~/Code/AfterImage ~/Code/equiluminance ~/Code/Pinna ~/Code/spikes ^
+		~/Code/Psychtoolbox-3 ~/Code/fieldtrip ~/Code/Training ~/Code/Palamedes ^
+		~/Code/Mymou ~/Documents/MATLAB/gramm ^
+		~/Code/scrivomatic ~/Code/dotpandoc ~/Code/bookends-tools ~/Code/pandocomatic ^
+		~/Code/gears ~/Code/paru ^
+		/media/$E:USER/data/Code/octicka /media/$E:USER/data/Code/Psychtoolbox-3]
 	for x $ul {
 		if (not (cmds:is-path $x/.git)) { continue }
 		header2 "Git: Checking "$x
@@ -782,7 +783,7 @@ fn updateAll {
 	updateFFmpeg
 	updateTeX
 	updateuBlock
-	cmds:if-external hermes { header2 "Upgrade Hermes"; hermes update }
+	cmds:if-external hermes { header2 "Upgrade Hermes"; hermes update -y }
 	cmds:if-external opencode { header2 "Upgrade opencode"; opencode upgrade }
 	cmds:if-external pkgx { header2 "Update pkgx"; pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { header2 "Update Micromamba…"; micromamba self-update }
@@ -792,7 +793,7 @@ fn updateAll {
 	cmds:if-external uv { header2 "Update UV tools"; uv tool upgrade --all }
 	cmds:if-external pipx { header2 "Update PIPX packages"; pipx upgrade-all }
 	#cmds:if-external gem { header2 "Update Ruby Gems"; gem update; gem cleanup }
-	try { egetAll } catch { }
+	try { header2 "egetAll"; egetAll } catch { }
 	header1 "====>>> Finish UpdateAll @ "(styled (date) bold)" <<<===="
 }
 edit:add-var updateAll~ $updateAll~
