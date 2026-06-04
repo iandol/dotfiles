@@ -221,8 +221,15 @@ mode "service" {
 		bindsym Escape mode "default"
 		bindsym $mod+r mode "default"
 }
-
 bindsym $mods+z mode "service"
+
+# input mode 
+mode "input" {
+	# back to normal: Enter or Escape or $mod+r
+	bindsym Return mode "default"
+	bindsym Escape mode "default"
+}
+bindsym $mods+x mode "input"
 
 # COLORS
 # class                 border  backgr. text    indicator child_border
@@ -236,7 +243,7 @@ client.background       #444444
 bar {
 	mode hide
 	hidden_state hide
-	modifier Mod4
+	modifier $mod
 	bindsym $mod+button1 bar hidden_state show
 	bindsym $mod+button3 bar hidden_state hide
 	position bottom
