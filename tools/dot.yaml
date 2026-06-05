@@ -19,7 +19,6 @@ darwin:
 linux:
   links:
     clash.yaml: ~/.local/share/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml
-linux:
   installs: |
     sudo apt install -y curl git ripgrep fd-find
 windows:

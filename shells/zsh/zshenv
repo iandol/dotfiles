@@ -1,3 +1,4 @@
+# zshenv
 skip_global_compinit=1
 
 d="$HOME/.pixi/bin"
@@ -11,4 +12,3 @@ d="/opt/homebrew/share/zsh/site-functions"
 
 d="/home/linuxbrew/.linuxbrew/share/zsh/site-functions"
 [[ -d $d ]] && fpath=( "$d" "${fpath[@]}" )
-

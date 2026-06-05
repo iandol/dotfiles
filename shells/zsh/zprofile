@@ -1,2 +1,2 @@
+# zprofile
 [[ -d "/opt/homebrew/bin" ]] && path=("/opt/homebrew/bin" $path)
-

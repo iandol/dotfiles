@@ -1,3 +1,4 @@
+# zshrc
 export DF="$HOME/.dotfiles"
 export PLATFORM="$(uname -s)"
 export HOMEBREW_INSTALL_CLEANUP=true
