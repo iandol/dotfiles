@@ -107,8 +107,10 @@ cmds:if-external eza {
 
 #==================================================== - Management
 fn sshTab { |@hostname &tool=tssh|
-	# This function opens a new terminal tab and SSH into the given hostname.
+	# This function opens a new kitty tab and SSH into the given hostname.
 	# It works on both macOS and Linux systems.
+	#
+	# https://sw.kovidgoyal.net/kitty/remote-control/#kitten-launch
 	#
 	# Usage: sshTab <hostname>
 	# Example: sshTab my-server.com
@@ -116,17 +118,17 @@ fn sshTab { |@hostname &tool=tssh|
 		if ( ==s $tool 'mosh' )	{
 			put "Opening MOSH tab to "$h
 			cmds:if-external kitty {
-				kitty @ launch --type tab --tab-title $h (which mosh) $h
+				kitten @ launch --type tab --tab-title $h -- (which mosh) $h
 			} { mosh $h }
 		} elif ( ==s $tool 'tssh' )	{
 			put "Opening TSSH tab to "$h
 			cmds:if-external kitty {
-				kitty @ launch --type tab --tab-title $h -- (which tssh) --udp $h
+				kitten @ launch --type tab --tab-title $h -- (which tssh) $h
 			} { tssh $hostname[0] }
 		} else {
 			put "Opening SSH tab to "$h
 			cmds:if-external kitty {
-				kitty @ launch --type tab --tab-title $h kitten ssh $h --kitten login_shell=elvish
+				kitten @ launch --type tab --tab-title $h kitten ssh $h --kitten login_shell=elvish
 			} { ssh $hostname[0] }
 		}
 	} $@hostname
