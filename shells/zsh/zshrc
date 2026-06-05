@@ -46,6 +46,9 @@ znap source z-shell/F-Sy-H
 znap source zsh-users/zsh-autosuggestions 
 znap source zpm-zsh/clipboard
 znap source marlonrichert/zsh-autocomplete
+bindkey              '^I' menu-select
+bindkey "$terminfo[kcbt]" menu-select
+zstyle ':autocomplete:*' add-semicolon no
 
 #---------------------------------------STARSHIP
 if [[ -f $(which starship) ]]; then

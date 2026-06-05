@@ -51,10 +51,7 @@ echo -e "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 |
 
 [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
 
-
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/ian/.cache/lm-studio/bin"
 # End of LM Studio CLI section
-
-
 
