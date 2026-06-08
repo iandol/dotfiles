@@ -154,7 +154,7 @@ cmds:if-external pixi {
 python:deactivate
 
 #==================================================== - CARAPACE INTEGRATION
-time { cmds:if-external carapace {
+cmds:if-external carapace {
 	set-env CARAPACE_BRIDGES "bash,zsh"
 	set-env CARAPACE_EXCLUDES "systemctl,x"
 	set-env CARAPACE_MERGEFLAGS 1
@@ -162,7 +162,7 @@ time { cmds:if-external carapace {
 	#carapace --choice ansible/zsh@bridge
 	msg "…carapace integration…"
 } 
-}
+
 #==================================================== - X-CMD 文
 # …should come AFTER carapace
 if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
