@@ -42,6 +42,7 @@ alias help=run-help
 #-------------------------------------ZSNAP MANAGER
 [[ -d "$HOME/.local/share/znap" ]] ||
     git clone --depth 1 https://github.com/marlonrichert/zsh-snap.git "$HOME/.local/share/znap"
+zstyle ':znap:*' auto-compile no # stop conflict with x-cmd
 source ~/.local/share/znap/znap.zsh  # Start Znap
 znap source z-shell/F-Sy-H 
 znap source zsh-users/zsh-autosuggestions 
@@ -117,7 +118,7 @@ export path
 
 #------------------------------------X-CMD SETUP
 export ___X_CMD_LANG="en"
-[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
+[[ ! -f "$HOME/.x-cmd.root/X" ]] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
 
 #------------------------------------FINALISE OTHERS
 [[ -x $(which fzf) ]] && source <(fzf --zsh)

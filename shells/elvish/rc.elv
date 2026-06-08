@@ -41,7 +41,7 @@ set-env XDG_DATA_HOME $E:HOME/.local/share
 if (==s $platform:os "linux") { set-env TMPDIR '/tmp' }
 
 #==================================================== - IMPORT UTIL NAMES TO REPL
-each {|c| # this adds function names from cmds module to REPL, from Kurtis
+peach {|c| # this adds function names from cmds module to REPL, from Kurtis
 	var code = 'edit:add-var '$c' $mod:'$c; eval $code &ns=(ns [&mod:=$cmds:])
 	} [if-external~ append-to-path~ prepend-to-path~ do-if-path~
 	is-path~ is-file~ not-path~ not-file~ is-macos~ is-linux~ 
@@ -83,7 +83,7 @@ if (cmds:is-macos) {
 }
 
 # prepend / append paths only if they exist and not already in path
-each {|p| cmds:prepend-to-path $p } [ /Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
+peach {|p| cmds:prepend-to-path $p } [ /Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
 	~/scoop/apps/msys2/current/usr/bin  ~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims
 	/opt/amdgpu-pro/bin  /opt/amdgpu/bin  
 	~/.cache/lm-studio/bin ~/.antigravity/antigravity/bin ~/.opencode/bin
@@ -92,7 +92,7 @@ each {|p| cmds:prepend-to-path $p } [ /Library/TeX/texbin  ~/Library/TinyTeX/bin
 	/home/linuxbrew/.linuxbrew/bin  /opt/local/bin  /opt/homebrew/bin
 	/usr/local/opt/ruby/bin  /usr/local/lib/ruby/gems/3.{7 6 5 4 3}.0/bin  /opt/homebrew/opt/ruby/bin /opt/homebrew/lib/ruby/gems/3.{7 6 5 4 3}.0/bin
 	~/.pixi/envs/ruby/share/rubygems/bin  ~/.x-cmd.root/bin  ~/.pixi/bin ~/bin]
-each {|p| cmds:append-to-path $p } [ /opt/homebrew/opt/python@3.{15 14 13 12 11 10}/libexec/bin
+peach {|p| cmds:append-to-path $p } [ /opt/homebrew/opt/python@3.{15 14 13 12 11 10}/libexec/bin
 	/Library/Frameworks/GStreamer.framework/Commands]
 
 cmds:do-if-path $E:HOME/.pixi/envs/ruby/share/rubygems {|p| set-env GEM_HOME $p }
@@ -110,7 +110,7 @@ cmds:if-external brew {
 	set-env HOMEBREW_REPOSITORY $pfix'/Homebrew'
 	set-env MANPATH $pfix'/share/man:'$E:MANPATH
 	set-env INFOPATH $pfix'/share/info:'$E:INFOPATH
-	each {|p| cmds:prepend-to-path $p } [ $pfix'/bin' $pfix'/sbin']
+	peach {|p| cmds:prepend-to-path $p } [ $pfix'/bin' $pfix'/sbin']
 }
 
 #==================================================== - KITTY INTEGRATION
@@ -142,27 +142,27 @@ cmds:if-external nvim { set-env EDITOR (which nvim); set-env VISUAL (which nvim)
 cmds:if-external uv { eval (uv generate-shell-completion elvish | slurp) } # python manager
 cmds:if-external rotz { eval (rotz completions elvish | slurp) } # dotfile namager
 cmds:if-external dua { eval (dua completions elvish | slurp ) } # disk usage analyzer
-#cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) } # process viewer
+#cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) } # process viewer #in carapace
 cmds:if-external mihomosh { eval (mihomosh shell-completion elvish | slurp) } # mihomo shell
 cmds:if-external pixi {
-	#eval (pixi completion --shell elvish | slurp)
+	#eval (pixi completion --shell elvish | slurp) # in carapace
 	var pixienv = (pixi info --json | from-json | put (one)[global_info][env_dir])
 	var pixibin = (pixi info --json | from-json | put (one)[global_info][bin_dir])
 	# pixi doesn't expose tools installed with gem etc. so manually expose them
-	if (os:exists $pixienv/ruby/share/rubygems/bin/pandocomatic) { ln -sf $pixienv/ruby/share/rubygems/bin/pandocomatic $pixibin }
+	if (cmds:not-file $pixibin/pandocomatic) { ln -sf $pixienv/ruby/share/rubygems/bin/pandocomatic $pixibin }
 } # global package manager
 python:deactivate
 
 #==================================================== - CARAPACE INTEGRATION
-cmds:if-external carapace {
+time { cmds:if-external carapace {
 	set-env CARAPACE_BRIDGES "bash,zsh"
 	set-env CARAPACE_EXCLUDES "systemctl,x"
 	set-env CARAPACE_MERGEFLAGS 1
 	eval (carapace _carapace elvish | slurp)
-	carapace --choice ansible/zsh@bridge
+	#carapace --choice ansible/zsh@bridge
 	msg "…carapace integration…"
+} 
 }
-
 #==================================================== - X-CMD 文
 # …should come AFTER carapace
 if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
@@ -189,7 +189,7 @@ cmds:do-if-path ~/.pixi/envs/luarocks/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.s
 cmds:do-if-path ~/.local/share/pandoc/ {|p| set-env PD $p }
 
 #==================================================== - MY ALIASES
-use aliases
+use aliases 
 
 #==================================================== - KEY BINDINGS
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
@@ -201,11 +201,11 @@ cmds:if-external fzf { set edit:insert:binding[Ctrl-r] = { aliases:history >/dev
 #==================================================== - THEME
 cmds:if-external starship {
 	eval ((search-external starship) init elvish --print-full-init | slurp)
-	eval ((search-external starship) completions elvish | slurp)
+	#eval ((search-external starship) completions elvish | slurp)
 	msg "…starship init…"
 } { use github.com/muesli/elvish-libs/theme/powerline }
 
 #==================================================== - ENSURE SHIM PREPENDED
-put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /.pixi/bin /bin} | each {|p| cmds:prepend-to-path $p} # needs to go after brew init
+put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /.pixi/bin /bin} | peach {|p| cmds:prepend-to-path $p} # needs to go after brew init
 
 #==================================================== - THIS IS THE END, MY FRIEND
