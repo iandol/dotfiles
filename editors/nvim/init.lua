@@ -39,7 +39,7 @@ vim.lsp.config("matlab_ls", {
 	settings = {
 		MATLAB = {
 			langserver = {
-				installPath = '/Applications/MATLAB_R2025b.app',
+				installPath = '/Applications/MATLAB_R2026a.app',
 			}
 		}
 	}

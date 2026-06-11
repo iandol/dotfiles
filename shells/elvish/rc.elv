@@ -83,7 +83,7 @@ if (cmds:is-macos) {
 }
 
 # prepend / append paths only if they exist and not already in path
-peach {|p| cmds:prepend-to-path $p } [ /Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
+each {|p| cmds:prepend-to-path $p } [ /Library/TeX/texbin  ~/Library/TinyTeX/bin/universal-darwin  ~/.TinyTeX/bin/x86_64-linux
 	~/scoop/apps/msys2/current/usr/bin  ~/.rbenv/shims  ~/.pyenv/shims  ~/scoop/shims
 	/opt/amdgpu-pro/bin  /opt/amdgpu/bin  
 	~/.cache/lm-studio/bin ~/.antigravity/antigravity/bin ~/.opencode/bin
@@ -92,7 +92,7 @@ peach {|p| cmds:prepend-to-path $p } [ /Library/TeX/texbin  ~/Library/TinyTeX/bi
 	/home/linuxbrew/.linuxbrew/bin  /opt/local/bin  /opt/homebrew/bin
 	/usr/local/opt/ruby/bin  /usr/local/lib/ruby/gems/3.{7 6 5 4 3}.0/bin  /opt/homebrew/opt/ruby/bin /opt/homebrew/lib/ruby/gems/3.{7 6 5 4 3}.0/bin
 	~/.pixi/envs/ruby/share/rubygems/bin  ~/.x-cmd.root/bin  ~/.pixi/bin ~/bin]
-peach {|p| cmds:append-to-path $p } [ /opt/homebrew/opt/python@3.{15 14 13 12 11 10}/libexec/bin
+each {|p| cmds:append-to-path $p } [ /opt/homebrew/opt/python@3.{15 14 13 12 11 10}/libexec/bin
 	/Library/Frameworks/GStreamer.framework/Commands]
 
 cmds:do-if-path $E:HOME/.pixi/envs/ruby/share/rubygems {|p| set-env GEM_HOME $p }
