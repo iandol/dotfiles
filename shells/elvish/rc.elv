@@ -91,7 +91,7 @@ each {|p| cmds:prepend-to-path $p } [ /Library/TeX/texbin  ~/Library/TinyTeX/bin
 	/usr/local/bin  /usr/local/sbin  ~/.local/bin
 	/home/linuxbrew/.linuxbrew/bin  /opt/local/bin  /opt/homebrew/bin
 	/usr/local/opt/ruby/bin  /usr/local/lib/ruby/gems/3.{7 6 5 4 3}.0/bin  /opt/homebrew/opt/ruby/bin /opt/homebrew/lib/ruby/gems/3.{7 6 5 4 3}.0/bin
-	~/.pixi/envs/ruby/share/rubygems/bin  ~/.x-cmd.root/bin  ~/.pixi/bin ~/bin]
+	~/.pixi/envs/ruby/share/rubygems/bin  ~/.x-cmd.root/bin  ~/.pixi/bin $E:HOME/bin]
 each {|p| cmds:append-to-path $p } [ /opt/homebrew/opt/python@3.{15 14 13 12 11 10}/libexec/bin
 	/Library/Frameworks/GStreamer.framework/Commands]
 
@@ -205,7 +205,9 @@ cmds:if-external starship {
 	msg "…starship init…"
 } { use github.com/muesli/elvish-libs/theme/powerline }
 
-#==================================================== - ENSURE SHIM PREPENDED
-put $E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /.pixi/bin /bin} | peach {|p| cmds:prepend-to-path $p} # needs to go after brew init
+#==================================================== - ENSURE SHIM DIRS PREPENDED
+each {|p| cmds:prepend-to-path $p} [$E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /.pixi/bin /bin}]
 
-#==================================================== - THIS IS THE END, MY FRIEND
+#==================================================== 
+#========================- THIS IS THE END, MY FRIEND
+#==================================================== 
