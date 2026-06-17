@@ -65,15 +65,15 @@ workspace_auto_back_and_forth yes
 ###################################### Window tweaks
 for_window [title="Event Tester"] floating enable
 for_window [title="xclock"] floating enable
-for_window [class="copyq"] floating enable
 for_window [title="Bitwarden"] floating enable
-for_window [title="CageLab-GUI"] floating enable
+for_window [title="^CageLab"] floating enable
 for_window [title="^PTB Onscreen Window"] floating enable
 for_window [title="^Figures"] floating enable
 for_window [title="^Opticka"] floating enable
 for_window [title="^Comments"] floating enable
 for_window [class="^Matlab-GLEE"] floating enable
 for_window [class="kitty"] border none
+for_window [class="copyq"] floating enable
 
 ###################################### KEYS
 # start a terminal

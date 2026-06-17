@@ -79,6 +79,7 @@ elif [ "$PLATFORM" = "Linux" ]; then
 	sudo apt -my install python3-pip python3-venv
 	sudo apt -my install openssh-server
 	sudo apt -my install wakeonlan etherwake
+	sudo apt -my install kitty-terminfo
 	
 	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
 		printf 'Installing Homebrew...\n'
@@ -102,7 +103,9 @@ elif [ "$PLATFORM" = "Linux" ]; then
 		sudo ln -v -f -L /home/linuxbrew/.linuxbrew/share/fonts/* /usr/local/share/fonts/
 		sudo fc-cache -fv
 	fi
+
 	sudo snap install code arduino rpi-imager obs-studio
+
 elif [ "$PLATFORM" = "LinuxRPi" ]; then
 	printf 'Assume we are setting up a Raspberry Pi machine\n'
 	#make sure our minimum packages are installed
@@ -120,6 +123,8 @@ elif [ "$PLATFORM" = "LinuxRPi" ]; then
 	sudo apt -my install flatpak
 	sudo apt -my install wakeonlan etherwake
 	sudo apt -my install python3-pip python3-venv
+	sudo apt -my install kitty-terminfo
+
 	sudo snap install core
 	sudo snap install starship --edge
 

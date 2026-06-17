@@ -153,24 +153,6 @@ cmds:if-external pixi {
 } # global package manager
 python:deactivate
 
-#==================================================== - CARAPACE INTEGRATION
-cmds:if-external carapace {
-	set-env CARAPACE_BRIDGES "bash,zsh"
-	set-env CARAPACE_EXCLUDES "systemctl,x"
-	set-env CARAPACE_MERGEFLAGS 1
-	eval (carapace _carapace elvish | slurp)
-	#carapace --choice ansible/zsh@bridge
-	msg "…carapace integration…"
-} 
-
-#==================================================== - X-CMD 文
-# …should come AFTER carapace
-if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
-	set-env ___X_CMD_LANG en
-	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 0
-	use x; x:init
-	msg "…x-cmd 文 integration…"
-}
 
 #==================================================== - GENERAL ENVIRONMENT
 set-env PAPERSIZE A4
@@ -187,6 +169,25 @@ cmds:do-if-path /home/linuxbrew/.linuxbrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p
 cmds:do-if-path ~/.pixi/envs/luarocks/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
 cmds:do-if-path ~/.pixi/envs/luarocks/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
 cmds:do-if-path ~/.local/share/pandoc/ {|p| set-env PD $p }
+
+#==================================================== - CARAPACE INTEGRATION
+cmds:if-external carapace {
+	msg "…carapace integration…"
+	set-env CARAPACE_BRIDGES "bash,zsh"
+	set-env CARAPACE_EXCLUDES "systemctl,x"
+	set-env CARAPACE_MERGEFLAGS 1
+	eval (carapace _carapace elvish | slurp)
+	#carapace --choice ansible/zsh@bridge
+} 
+
+#==================================================== - X-CMD 文
+# …should come AFTER carapace
+if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
+	set-env ___X_CMD_LANG en
+	set-env ___X_CMD_ADVISE_ACTIVATION_ON_NON_POSIX_SHELL 0
+	use x; x:init
+	msg "…x-cmd 文 integration…"
+}
 
 #==================================================== - MY ALIASES
 use aliases 
