@@ -561,7 +561,7 @@ fn update {
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		try {
 			brew update; brew outdated
-			brew upgrade --display-times
+			brew upgrade --yes --display-times
 			brew cleanup --prune=all
 		} catch { msg "\t\t …can't upgrade!" }
 	}

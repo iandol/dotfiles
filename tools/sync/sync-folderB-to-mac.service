@@ -1,0 +1,8 @@
+[Unit]
+Description=One-way sync folderB from Ubuntu to macOS
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/bin/sync-folderB-ubuntu-to-mac.sh

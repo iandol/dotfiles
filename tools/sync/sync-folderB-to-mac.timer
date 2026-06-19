@@ -1,0 +1,10 @@
+[Unit]
+Description=Run folderB Ubuntu-to-macOS sync every 120 minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=120min
+Unit=sync-folderB-to-mac.service
+
+[Install]
+WantedBy=timers.target

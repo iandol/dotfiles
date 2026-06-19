@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.ian.sync.folderA-to-ubuntu</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/ian/bin/sync-folderA-mac-to-ubuntu.sh</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <!-- Run every 5 minutes. Change to 900 for 15 minutes, 3600 for hourly. -->
+  <key>StartInterval</key>
+  <integer>7200</integer>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/Users/ian/.pixi/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/ian/Library/Logs/folder-sync/folderA-launchd.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/ian/Library/Logs/folder-sync/folderA-launchd.err.log</string>
+</dict>
+</plist>
