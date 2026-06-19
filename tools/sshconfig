@@ -4,8 +4,8 @@
 ###================================= ADMIN
 Host seneca
 	HostName fd00::1
-	Port 2222
-	User Ian
+	Port 22
+	User ian
 	IdentityFile ~/.ssh/iansync
 	IdentitiesOnly yes
 	#!! GroupLabels admin

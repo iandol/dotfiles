@@ -118,7 +118,7 @@ export path
 
 #------------------------------------X-CMD SETUP
 export ___X_CMD_LANG="en"
-[[ ! -f "$HOME/.x-cmd.root/X" ]] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
+[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
 
 #------------------------------------FINALISE OTHERS
 [[ -x $(which fzf) ]] && source <(fzf --zsh)
@@ -131,4 +131,3 @@ export ___X_CMD_LANG="en"
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
 #---------------------------------------END OF FILE
-
