@@ -6,7 +6,7 @@ Host seneca
 	HostName fd00::1
 	Port 2222
 	User Ian
-	IdentityFile ~/.ssh/id_rsa
+	IdentityFile ~/.ssh/iansync
 	IdentitiesOnly yes
 	#!! GroupLabels admin
 	#!! EnableOSC52 yes
@@ -22,7 +22,7 @@ Host cog5
 	HostName cog5.cloud.lab
 	Port 2222
 	User cog5
-	IdentityFile ~/.ssh/id_rsa
+	IdentityFile ~/.ssh/iansync
 	IdentitiesOnly yes
 	#!! GroupLabels admin
 	#!! EnableOSC52 yes
@@ -30,7 +30,7 @@ Host cog5z
 	HostName fd00::2
 	Port 2222
 	User cog5
-	IdentityFile ~/.ssh/id_rsa
+	IdentityFile ~/.ssh/iansync
 	IdentitiesOnly yes
 	#!! GroupLabels admin
 	#!! EnableOSC52 yes
