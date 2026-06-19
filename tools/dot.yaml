@@ -1,5 +1,6 @@
 global:
   links:
+    sshconfig: ~/.ssh/config
     rsync-excludes: ~/.config/.rsync-excludes
     ansiweatherrc: ~/.ansiweatherrc
     rubocop.yml: ~/.rubocop.yml

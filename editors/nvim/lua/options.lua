@@ -2,7 +2,9 @@
 vim.opt.number = true							-- Line numbers
 vim.opt.relativenumber = true					-- Relative line numbers
 vim.opt.cursorline = true						-- Highlight current line
-vim.opt.wrap = false							-- Don't wrap lines
+vim.opt.wrap = true								-- wrap lines?
+vim.opt.linebreak = true						-- Break at word boundaries, not mid-word 
+vim.opt.breakindent = true						-- Align wrapped lines with original indentation
 vim.opt.scrolloff = 10							-- Keep 10 lines above/below cursor 
 vim.opt.sidescrolloff = 8						-- Keep 8 columns left/right of cursor
 
