@@ -133,6 +133,7 @@ delivery = "herdr"
 # Requires a Kitty graphics-compatible outer terminal.
 # kitty_graphics = false
 
+pane_history = false
 [advanced]
 # Maximum scrollback buffer size in bytes retained per pane terminal.
 # Matches Ghostty's default scrollback-limit behavior.
