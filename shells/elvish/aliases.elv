@@ -10,6 +10,7 @@ msg "…loading command aliases…"
 set edit:abbr['||'] = '| less'
 set edit:abbr['>dn'] = '2>/dev/null'
 set edit:abbr['>eo'] = '2>&1'
+set edit:command-abbr['rs'] = 'rsync -ahv --progress --itemize-changes --delete'
 set edit:command-abbr['cd'] = 'z' #switch to zoxide
 set edit:command-abbr['lz'] = 'lazygit' #git tui
 set edit:command-abbr['curld'] = 'curl --retry 5 -L -C -'

@@ -47,12 +47,8 @@ fi
 ssh -p "$SSH_PORT" "$REMOTE" "mkdir -p $(q "$DEST") $(q "$REMOTE_BACKUP_ROOT")"
 
 RSYNC_ARGS=(
-  -rltp
-  --links
-  --human-readable
+  -avh
   --itemize-changes
-  --partial
-  --safe-links
   --exclude='.DS_Store'
   --exclude='._*'
   --exclude='.Trash-*'
@@ -79,7 +75,7 @@ if [[ "$DRY_RUN" == "1" ]]; then
 fi
 
 log "Starting sync: $SRC -> $REMOTE:$DEST"
-"$RSYNC" "${RSYNC_ARGS[@]}" -e "ssh -p $SSH_PORT" "$SRC" "$REMOTE:$DEST" 2>&1 | tee -a "$LOG_FILE"
+"$RSYNC" "${RSYNC_ARGS[@]}" "$SRC" "$REMOTE:$DEST" 2>&1 | tee -a "$LOG_FILE"
 status=${PIPESTATUS[0]}
 
 # Clean old backup folders on the destination host. This is best-effort only.
