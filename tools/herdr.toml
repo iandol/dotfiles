@@ -29,7 +29,7 @@ onboarding = false
 prefix = "ctrl+a"
 
 # Navigate-mode actions
-# new_workspace = "n"
+# new_workspace = "prefix+n"
 # rename_workspace = "shift+n"
 # close_workspace = "shift+d"
 # previous_workspace = "" # optional, unset by default
@@ -50,9 +50,9 @@ prefix = "ctrl+a"
 # focus_pane_down = ""    # optional, unset by default
 # focus_pane_up = ""      # optional, unset by default
 # focus_pane_right = ""   # optional, unset by default
-# split_vertical = "v"
-# split_horizontal = "-"
-# close_pane = "x"
+split_vertical = "prefix+|"
+split_horizontal = "prefix+-"
+close_pane = "prefix+x"
 zoom = "prefix+z"             # legacy alias: fullscreen
 # resize_mode = "r"
 # toggle_sidebar = "b"
