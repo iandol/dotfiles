@@ -34,7 +34,7 @@ exec --no-startup-id xset -dpms s off
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
-exec --no-startup-id nm-applet
+exec --no-startup-id /usr/bin/nm-applet
 
 # try to start gnome keyring, also edit /usr/share/xdg-desktop-portal/portals/gnome-keyring.portal
 # UseIn=gnome;i3

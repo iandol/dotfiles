@@ -192,6 +192,11 @@ Host pacman-005
 	User cagelab
 	IdentityFile ~/.ssh/cagelab
 	IdentitiesOnly yes
+Host pacman-006
+	HostName pacman-006.cloud.lab
+	User cagelab
+	IdentityFile ~/.ssh/cagelab
+	IdentitiesOnly yes
 ##================================= PACMAN IP
 Host pacman-001i
 	HostName 192.168.3.21
@@ -215,6 +220,11 @@ Host pacman-004i
 	IdentitiesOnly yes
 Host pacman-005i
 	HostName 192.168.3.25
+	User cagelab
+	IdentityFile ~/.ssh/cagelab
+	IdentitiesOnly yes
+Host pacman-006i
+	HostName 192.168.3.26
 	User cagelab
 	IdentityFile ~/.ssh/cagelab
 	IdentitiesOnly yes
