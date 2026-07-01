@@ -1,6 +1,12 @@
-#########################################
-# AEROSPACE CONFIG                      #
-#########################################
+#:tombi toml-version = "v1.1.0"
+#/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/
+#  ______     ______     ______     ______     ______     ______   ______     ______     ______    
+# /\  __ \   /\  ___\   /\  == \   /\  __ \   /\  ___\   /\  == \ /\  __ \   /\  ___\   /\  ___\   
+# \ \  __ \  \ \  __\   \ \  __<   \ \ \/\ \  \ \___  \  \ \  _-/ \ \  __ \  \ \ \____  \ \  __\   
+#  \ \_\ \_\  \ \_____\  \ \_\ \_\  \ \_____\  \/\_____\  \ \_\    \ \_\ \_\  \ \_____\  \ \_____\ 
+#   \/_/\/_/   \/_____/   \/_/ /_/   \/_____/   \/_____/   \/_/     \/_/\/_/   \/_____/   \/_____/ 
+#
+#/\/\/\/\/\/\/\/\/\/\/\/\/\/\//\/\/\/\/\/\/\/\/\/\/\/\/\/\/
 
 # Config version for compatibility and deprecations
 # Fallback value (if you omit the key): config-version = 1
@@ -62,6 +68,128 @@ automatically-unhide-macos-hidden-apps = false
 # Fallback value (if you omit the key): persistent-workspaces = []
 persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 
+# Callbacks that run when a new window is detected https://nikitabobko.github.io/AeroSpace/guide#on-window
+on-window-detected = [
+	######################################### ID
+	{
+		if = 'test %{app-bundle-id} = com.apple.finder',
+		run = 'layout floating',
+		check-further-callbacks = true
+	},{
+		if  = 'test %{app-bundle-id} = net.kovidgoyal.kitty',
+		run = 'move-node-to-workspace 1',
+		check-further-callbacks = true,
+	},{
+		if  = 'test %{app-bundle-id} = com.bitwarden.desktop',
+		run = ['layout floating', 'move-node-to-workspace S'],
+		check-further-callbacks = true
+	},{
+		if  = 'test %{app-bundle-id} = com.apple.MobileSMS',
+		run = ['layout floating', 'move-node-to-workspace S'],
+		check-further-callbacks = true
+	},{
+		if  = 'test %{app-bundle-id} = com.apple.Music',
+		run = ['layout floating', 'move-node-to-workspace S'],
+	},{
+		if  = 'test %{app-bundle-id} = com.apple.FaceTime',
+		run = ['layout floating']
+	},{
+		if  = 'test %{app-bundle-id} = com.apple.AppStore',
+		run = ['layout floating']
+	},{
+		if  = 'test %{app-bundle-id} = com.hegenberg.BetterTouchTool',
+		run = 'layout floating'
+	},{
+		if  = 'test %{app-bundle-id} = com.runningwithcrayons.Alfred-Preferences',
+		run = 'layout floating'
+	},{
+		if  = 'test %{app-bundle-id} = com.binarynights.ForkLift',
+		run = 'layout floating'
+	},{
+		if  = 'test %{app-bundle-id} = com.objective-see.lulu.app',
+		run = 'layout floating'
+	},{
+		if  = 'test %{app-bundle-id} = com.metacubex.ClashX.meta',
+		run = ['layout floating', 'move-node-to-workspace S']
+	},{
+		if  = 'test %{app-bundle-id} = io.mpv',
+		run = ['layout floating', 'move-node-to-workspace D']
+	},{
+		if  = 'test %{app-bundle-id} = com.soma-zone.LaunchControl',
+		run = ['layout floating', 'move-node-to-workspace S']
+	},{
+		if  = 'test %{app-bundle-id} = com.tencent.xinWeChat',
+		run = ['layout floating', 'move-node-to-workspace S']
+	},{
+		if  = 'test %{app-bundle-id} = net.pornel.ImageOptim',
+		run = 'layout floating'
+	},{
+		if  = 'test %{app-bundle-id} = com.sonnysoftware.bookends2 && test %{window-title} ~= "^Search|Inspector"',
+		run = 'layout tiling'
+	},{
+		if  = 'test %{app-bundle-id} = org.localsend.localsendApp',
+		run = 'layout floating'
+	},{
+		if  = 'test %{app-bundle-id} = org.videolan.vlc',
+		run = ['layout floating', 'move-node-to-workspace D'],
+		check-further-callbacks = true
+	},{
+		if  = 'test %{app-bundle-id} = com.wanwire.12vpx.app',
+		run = ['layout floating', 'move-node-to-workspace S'],
+	},{
+		if  = 'test %{app-bundle-id} = com.apple.appleseed.FeedbackAssistant',
+		run = ['layout floating', 'move-node-to-workspace S'],
+	},{
+		if  = 'test %{app-bundle-id} = co.fluder.FSNotes',
+		run = 'layout floating'
+	},############################# APP-NAME
+	{
+		if = 'test %{app-name} ~= Finder',
+		run = 'layout floating'
+	},{
+		if = 'test %{app-name} ~= Console',
+		run = 'layout floating'
+	},{
+		if = 'test %{app-name} ~= Vivaldi',
+		run = ['move-node-to-workspace A'],
+		check-further-callbacks = true
+	},{
+		if = 'test %{app-name} ~= "Clash Verge"',
+		run = ['layout floating', 'move-node-to-workspace S']
+	},{
+		if = 'test %{app-name} ~= "ClashX Meta"',
+		run = ['layout floating', 'move-node-to-workspace S']
+	},{
+		if = 'test %{app-name} ~= mpv',
+		run = ['layout floating', 'move-node-to-workspace D'],
+		check-further-callbacks = true
+	},{
+		if = 'test %{app-name} ~= "LuLu Alert"',
+		run = 'layout floating'
+	},{
+		if = 'test %{app-name} ~= "Pixelmator Pro"',
+		run = 'layout floating'
+	},{
+		if = 'test %{app-name} ~= Zotero && test %{window-title} ~= "Citation|Document"',
+		run = 'layout floating'
+	},{ ############################ WINDOW TITLE
+		if = 'test %{window-title} ~= "Windows App"',
+		run = 'layout floating'
+	},{
+		if = 'test %{window-title} ~= CageLab',
+		run = 'layout floating',
+		check-further-callbacks = true
+	},{
+		if = 'test %{window-title} ~= Opticka',
+		run = 'layout floating',
+		check-further-callbacks = true
+	},{
+		if = 'test %{workspace} = A && test %{window-title} ~= "^Bitwarden"',
+		run = 'layout floating',
+		check-further-callbacks = true
+	}
+]
+
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
@@ -74,6 +202,12 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	PATH = '/Applications/kitty.app/Contents/MacOS:${HOME}/bin:${HOME}/.pixi/bin:/opt/homebrew/bin:/opt/homebrew/sbin:${PATH}'
 	LANG = 'en_US.UTF-8'
 	LC_ALL = 'en_US.UTF-8'
+
+# See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
+[workspace-to-monitor-force-assignment]
+	A = ['secondary','main']
+	S = ['secondary','main']
+	D = ['secondary','main']
 
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
 # Possible values:
@@ -91,169 +225,6 @@ persistent-workspaces = [ '1', '2', '3', 'Q', 'W', 'E', 'A', 'S', 'D' ]
 	outer.top =			[ { monitor."Built-in" = -6 }, 30 ]
 	outer.right =		3
 
-[workspace-to-monitor-force-assignment]
-	A = ['secondary','main']
-	S = ['secondary','main']
-	D = ['secondary','main']
-
-# Callbacks that run when a new window is detected
-# See: https://nikitabobko.github.io/AeroSpace/guide#on-window
-
-######################################### ID
-[[on-window-detected]]
-	if.app-id = 'com.apple.finder'
-	run = 'layout floating'
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.app-id = 'net.kovidgoyal.kitty'
-	run = 'move-node-to-workspace 1'
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.app-id = 'com.bitwarden.desktop'
-	run = ['layout floating', 'move-node-to-workspace S']
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.app-id = 'com.apple.MobileSMS'
-	run = ['layout floating', 'move-node-to-workspace S']
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.app-id = 'com.apple.Music'
-	run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
-	if.app-id = 'com.apple.FaceTime'
-	run = ['layout floating']
-
-[[on-window-detected]]
-	if.app-id = 'com.apple.AppStore'
-	run = ['layout floating']
-
-[[on-window-detected]]
-	if.app-id = 'com.hegenberg.BetterTouchTool'
-	run = 'layout floating'
-
-[[on-window-detected]]
-	if.app-id = 'com.runningwithcrayons.Alfred-Preferences'
-	run = 'layout floating'
-	
-[[on-window-detected]]
-	if.app-id = 'com.binarynights.ForkLift'
-	run = 'layout floating'
-
-[[on-window-detected]]
-	if.app-id = 'com.objective-see.lulu.app'
-	run = 'layout floating'
-
-[[on-window-detected]]
-	if.app-id = 'com.metacubex.ClashX.meta'
-	run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
-	if.app-id = 'io.mpv'
-	run = ['layout floating', 'move-node-to-workspace D']
-
-[[on-window-detected]]
-	if.app-id = 'com.soma-zone.LaunchControl'
-	run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
-	if.app-id = 'com.tencent.xinWeChat'
-	run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
-	if.app-id = 'net.pornel.ImageOptim'
-	run = 'layout floating'
-
-[[on-window-detected]]
-	if.app-id = 'com.sonnysoftware.bookends2'
-	if.window-title-regex-substring = '^Search|Inspector'
-	run = 'layout tiling'
-
-[[on-window-detected]]
-	if.app-id = 'org.localsend.localsendApp'
-	run = 'layout floating'
-
-[[on-window-detected]]
-	if.app-id = 'org.videolan.vlc'
-	run = ['layout floating', 'move-node-to-workspace D']
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.app-id = 'com.wanwire.12vpx.app'
-	run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
-	if.app-id = 'com.apple.appleseed.FeedbackAssistant'
-	run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
-	if.app-id = 'co.fluder.FSNotes'
-	run = 'layout floating'
-
-############################# APP-NAME
-[[on-window-detected]]
-	if.app-name-regex-substring = 'Finder'
-	run = 'layout floating'
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'Console'
-	run = 'layout floating'
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'Vivaldi'
-	run = ['move-node-to-workspace A']
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'Clash Verge'
-	run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'ClashX Meta'
-	run = ['layout floating', 'move-node-to-workspace S']
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'mpv'
-	run = ['layout floating', 'move-node-to-workspace D']
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'LuLu Alert'
-	run = 'layout floating'
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'Pixelmator Pro'
-	run = 'layout floating'
-
-[[on-window-detected]]
-	if.app-name-regex-substring = 'Zotero'
-	if.window-title-regex-substring = 'Citation|Document'
-	run = 'layout floating'
-
-############################ WINDOW TITLE
-[[on-window-detected]]
-	if.window-title-regex-substring = 'Windows App'
-	run = 'layout floating'
-
-[[on-window-detected]]
-	if.window-title-regex-substring = 'CageLab'
-	run = 'layout floating'
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.window-title-regex-substring = 'Opticka'
-	run = 'layout floating'
-	check-further-callbacks = true
-
-[[on-window-detected]]
-	if.workspace = 'A'
-	if.window-title-regex-substring = '^Bitwarden'
-	check-further-callbacks = true
-	run = 'layout floating'
 #########################################
 
 # 'main' binding mode declaration
