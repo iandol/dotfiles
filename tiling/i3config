@@ -70,6 +70,7 @@ for_window [title="Event Tester"] floating enable
 for_window [title="xclock"] floating enable
 for_window [title="Bitwarden"] floating enable
 for_window [title="^CageLab"] floating enable
+for_window [title="^Alyx"] floating enable
 for_window [title="^PTB Onscreen Window"] floating enable
 for_window [title="^Figures"] floating enable
 for_window [title="^Opticka"] floating enable

@@ -108,6 +108,7 @@ pth=("/Library/TeX/texbin" "$HOME/Library/TinyTeX/bin/universal-darwin"
 	"$HOME/.opencode/bin"
 	"$HOME/.antigravity/antigravity/bin"
 	"$HOME/.pixi/envs/ruby/share/rubygems/bin"
+	"$HOME/.pixi/envs/nodejs/bin"
 	"$HOME/.pixi/bin" "$HOME/bin")
 for p in $pth; do
 	if [[ -d $p ]]; then
@@ -131,3 +132,4 @@ export ___X_CMD_LANG="en"
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
 #---------------------------------------END OF FILE
+
