@@ -1,14 +1,13 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
+	lazy = false,
 	build = ":TSUpdate",
+	dependencies = {
+		"neovim-treesitter/nvim-treesitter-queries-elvish",
+	},
 	config = function()
-		require("nvim-treesitter.config").setup({
-			ensure_installed = { "ruby", "python", "matlab",
+		require('nvim-treesitter').install { "ruby", "python", "matlab",
 				"lua", "vim", "vimdoc", "elvish", "bash", "ini",
-				"json", "yaml", "toml", "xml", "javascript", "html" },
-			auto_install = true,
-			highlight = { enable = true },
-			indent = { enable = true },
-		})
+				"json", "yaml", "toml", "xml", "javascript", "html" }
 	end
 }

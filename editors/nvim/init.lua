@@ -24,8 +24,28 @@ require("neo-tree").setup({
 	},
 })
 
--- enable lua lsp
+-- add elv
+vim.filetype.add({
+  extension = {
+    elv = "elvish",
+  },
+})
+
+-- this is now required to start highlighting for elvish treesitter
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'elvish' },
+  callback = function() vim.treesitter.start() end,
+})
+
+
+-- try to use elvish lsp
+-- vim.lsp.config['elvishls'] = {
+-- 	cmd = { "/usr/local/bin/elvish", "-lsp" },
+-- 	root_markers = { ".git", "rc.elv" },
+-- 	filetypes = { "elvish" },
+-- }
 vim.lsp.enable({ 'elvishls' })
+
 vim.lsp.config("lua_ls", {
 	settings = {
 		Lua = {
@@ -45,11 +65,6 @@ vim.lsp.config("matlab_ls", {
 	}
 })
 
-vim.filetype.add({
-  extension = {
-    elv = "elvish",
-  },
-})
 
 -- keymaps
 local km = vim.keymap
