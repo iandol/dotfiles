@@ -139,6 +139,7 @@ cmds:if-external fd {
 	}
 }
 cmds:if-external nvim { set-env EDITOR (which nvim); set-env VISUAL (which nvim) } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
+cmds:if-external herdr { eval (herdr completion elvish | slurp) } # tmux alternative
 cmds:if-external uv { eval (uv generate-shell-completion elvish | slurp) } # python manager
 cmds:if-external rotz { eval (rotz completions elvish | slurp) } # dotfile namager
 cmds:if-external dua { eval (dua completions elvish | slurp ) } # disk usage analyzer

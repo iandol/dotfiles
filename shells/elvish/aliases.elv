@@ -786,8 +786,10 @@ fn updateAll {
 	updateFFmpeg
 	updateTeX
 	updateuBlock
-	cmds:if-external hermes { header2 "Upgrade Hermes"; hermes update -y }
+	cmds:if-external hermes { header2 "Upgrade Hermes"; hermes update --no-backup -y }
 	cmds:if-external opencode { header2 "Upgrade opencode"; opencode upgrade }
+	cmds:if-external codebase-memory-mcp { header2 "Upgrade codebase mcp"; codebase-memory-mcp update }
+	cmds:if-external herdr { header2 "Upgrade Herdr"; herdr update }
 	cmds:if-external pkgx { header2 "Update pkgx"; pkgx --sync; pkgx --update }
 	cmds:if-external micromamba { header2 "Update Micromamba…"; micromamba self-update }
 	cmds:if-external rbenv { header2 "Rehash RBENV…"; rbenv rehash }

@@ -80,107 +80,73 @@ on-window-detected = [
 		run = 'move-node-to-workspace 1',
 		check-further-callbacks = true,
 	},{
-		if  = 'test %{app-bundle-id} = com.bitwarden.desktop',
+		if  = 'test %{app-bundle-id} = com.bitwarden.desktop || test %{app-bundle-id} = com.apple.MobileSMS',
 		run = ['layout floating', 'move-node-to-workspace S'],
 		check-further-callbacks = true
 	},{
-		if  = 'test %{app-bundle-id} = com.apple.MobileSMS',
-		run = ['layout floating', 'move-node-to-workspace S'],
-		check-further-callbacks = true
-	},{
-		if  = 'test %{app-bundle-id} = com.apple.Music',
+		if  = '''
+		   test %{app-bundle-id} = com.apple.Music \ 
+		|| test %{app-bundle-id} = com.metacubex.ClashX.meta \
+		|| test %{app-bundle-id} = com.soma-zone.LaunchControl \
+		|| test %{app-bundle-id} = com.tencent.xinWeChat \ 
+		''',
 		run = ['layout floating', 'move-node-to-workspace S'],
 	},{
 		if  = 'test %{app-bundle-id} = com.apple.FaceTime',
 		run = ['layout floating']
 	},{
-		if  = 'test %{app-bundle-id} = com.apple.AppStore',
+		if  = '''
+		   test %{app-bundle-id} = com.apple.AppStore \
+		|| test %{app-bundle-id} = com.hegenberg.BetterTouchTool \
+		|| test %{app-bundle-id} = com.runningwithcrayons.Alfred-Preferences \
+		|| test %{app-bundle-id} = com.binarynights.ForkLift \
+		|| test %{app-bundle-id} = com.objective-see.lulu.app \
+		|| test %{app-bundle-id} = net.pornel.ImageOptim \
+		|| test %{app-bundle-id} = org.localsend.localsendApp \
+		|| test %{app-bundle-id} = com.wanwire.12vpx.app \ 
+		|| test %{app-bundle-id} = com.apple.appleseed.FeedbackAssistant \
+		|| test %{app-bundle-id} = co.fluder.FSNotes \
+		''',
 		run = ['layout floating']
-	},{
-		if  = 'test %{app-bundle-id} = com.hegenberg.BetterTouchTool',
-		run = 'layout floating'
-	},{
-		if  = 'test %{app-bundle-id} = com.runningwithcrayons.Alfred-Preferences',
-		run = 'layout floating'
-	},{
-		if  = 'test %{app-bundle-id} = com.binarynights.ForkLift',
-		run = 'layout floating'
-	},{
-		if  = 'test %{app-bundle-id} = com.objective-see.lulu.app',
-		run = 'layout floating'
-	},{
-		if  = 'test %{app-bundle-id} = com.metacubex.ClashX.meta',
-		run = ['layout floating', 'move-node-to-workspace S']
 	},{
 		if  = 'test %{app-bundle-id} = io.mpv',
 		run = ['layout floating', 'move-node-to-workspace D']
 	},{
-		if  = 'test %{app-bundle-id} = com.soma-zone.LaunchControl',
-		run = ['layout floating', 'move-node-to-workspace S']
-	},{
-		if  = 'test %{app-bundle-id} = com.tencent.xinWeChat',
-		run = ['layout floating', 'move-node-to-workspace S']
-	},{
-		if  = 'test %{app-bundle-id} = net.pornel.ImageOptim',
-		run = 'layout floating'
-	},{
 		if  = 'test %{app-bundle-id} = com.sonnysoftware.bookends2 && test %{window-title} ~= "^Search|Inspector"',
 		run = 'layout tiling'
-	},{
-		if  = 'test %{app-bundle-id} = org.localsend.localsendApp',
-		run = 'layout floating'
 	},{
 		if  = 'test %{app-bundle-id} = org.videolan.vlc',
 		run = ['layout floating', 'move-node-to-workspace D'],
 		check-further-callbacks = true
-	},{
-		if  = 'test %{app-bundle-id} = com.wanwire.12vpx.app',
-		run = ['layout floating', 'move-node-to-workspace S'],
-	},{
-		if  = 'test %{app-bundle-id} = com.apple.appleseed.FeedbackAssistant',
-		run = ['layout floating', 'move-node-to-workspace S'],
-	},{
-		if  = 'test %{app-bundle-id} = co.fluder.FSNotes',
-		run = 'layout floating'
-	},############################# APP-NAME
+	},
+	############################# APP-NAME
 	{
-		if = 'test %{app-name} ~= Finder',
-		run = 'layout floating'
-	},{
-		if = 'test %{app-name} ~= Console',
+		if = '''
+			test %{app-name} ~= Finder \
+		||  test %{app-name} ~= Console \
+		||  test %{app-name} ~= "LuLu Alert" \
+		||  test %{app-name} ~= "Pixelmator Pro" \
+		||  test %{app-name} ~= Zotero && test %{window-title} ~= "Citation|Document" \
+		''',
 		run = 'layout floating'
 	},{
 		if = 'test %{app-name} ~= Vivaldi',
 		run = ['move-node-to-workspace A'],
 		check-further-callbacks = true
 	},{
-		if = 'test %{app-name} ~= "Clash Verge"',
-		run = ['layout floating', 'move-node-to-workspace S']
-	},{
-		if = 'test %{app-name} ~= "ClashX Meta"',
+		if = 'test %{app-name} ~= "Clash Verge" || test %{app-name} ~= "ClashX Meta"',
 		run = ['layout floating', 'move-node-to-workspace S']
 	},{
 		if = 'test %{app-name} ~= mpv',
 		run = ['layout floating', 'move-node-to-workspace D'],
 		check-further-callbacks = true
-	},{
-		if = 'test %{app-name} ~= "LuLu Alert"',
-		run = 'layout floating'
-	},{
-		if = 'test %{app-name} ~= "Pixelmator Pro"',
-		run = 'layout floating'
-	},{
-		if = 'test %{app-name} ~= Zotero && test %{window-title} ~= "Citation|Document"',
-		run = 'layout floating'
-	},{ ############################ WINDOW TITLE
+	},
+	############################ WINDOW TITLE
+	{ 
 		if = 'test %{window-title} ~= "Windows App"',
 		run = 'layout floating'
 	},{
-		if = 'test %{window-title} ~= CageLab',
-		run = 'layout floating',
-		check-further-callbacks = true
-	},{
-		if = 'test %{window-title} ~= Opticka',
+		if = 'test %{window-title} ~= CageLab || test %{window-title} ~= Opticka',
 		run = 'layout floating',
 		check-further-callbacks = true
 	},{

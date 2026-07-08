@@ -51,7 +51,7 @@ ln -vfs $mydir/$outfile $HOME/.local/share/pandoc/$outfile
 
 # make a bibtex copy for alfred and other tools
 printf '---> Creating BibTeX copy...\n'
-pandoc -f csljson -t biblatex -o "Core.bib" $outfile
+pandoc -f csljson -t biblatex -o "Core.bib" $infile
 printf '---> Link BIB to pandoc data dir...\n'
 ln -vfs $mydir/Core.bib $HOME/.local/share/pandoc/Core.bib
 printf '---> Finished processing BibTeX copy...\n'
