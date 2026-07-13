@@ -8,7 +8,7 @@ set -Eeuo pipefail
 REMOTE_HOST="${REMOTE_HOST:-seneca}"
 SSH_PORT="${SSH_PORT:-22}"
 SRC="${SRC:-$HOME/wiki/}"                    # trailing slash = copy contents of folderB
-DEST="${DEST:-/Users/ian/wiki/}"             # trailing slash recommended
+DEST="${DEST:-/Users/ian/Dropbox/wiki/}"             # trailing slash recommended
 REMOTE_BACKUP_ROOT="${REMOTE_BACKUP_ROOT:-/Users/ian/.rsync-backups/wiki}"
 # -------------------------------
 
