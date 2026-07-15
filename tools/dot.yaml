@@ -14,6 +14,9 @@ global:
     yazi/init.lua: ~/.config/yazi/init.lua
     mpv/mpv.conf: ~/.config/mpv/mpv.conf
     mpv/input.conf: ~/.config/mpv/input.conf
+    agents/simple.md: ~/.config/opencode/agents
+    skills/matlab-performance-optimizer/: ~/.agents/skills/matlab-performance-optimizer
+    skills/matlab-class-based-tests/: ~/.agents/skills/matlab-class-based-tests
 darwin:
   links:
     clash.yaml: "~/Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml"
