@@ -5,12 +5,26 @@ user     = "cagelab"
 port     = 22
 key_file = "~/.ssh/cagelab"
 
+[providers.seneca]
+type     = "sftp"
+host     = "fd00::1"
+user     = "ian"
+port     = 22
+key_file = "~/.ssh/iansync"
+
+[providers.cog5z]
+type     = "sftp"
+host     = "fd00::2"
+user     = "cog5"
+port     = 2222
+key_file = "~/.ssh/iansync"
+
 [providers.cog5]
 type     = "sftp"
 host     = "cog5.cloud.lab"
 user     = "cog5"
-port     = 22
-key_file = "~/.ssh/id_rsa"
+port     = 2222
+key_file = "~/.ssh/iansync"
 
 [providers.cog21]
 type     = "sftp"

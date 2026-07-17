@@ -150,6 +150,11 @@ on-window-detected = [
 		run = 'layout floating',
 		check-further-callbacks = true
 	},{
+		if = 'test %{window-title} ~= Preferences',
+		run = 'layout floating',
+		check-further-callbacks = true
+
+	},{
 		if = 'test %{workspace} = A && test %{window-title} ~= "^Bitwarden"',
 		run = 'layout floating',
 		check-further-callbacks = true

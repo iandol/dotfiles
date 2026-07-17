@@ -1,197 +1,51 @@
 # A TOML linter such as https://github.com/tombi-toml/tombi can use this schema to validate your config.
-# If you encounter any issues, please make an issue at https://github.com/yazi-rs/schemas.
+# If you encounter any problems, please make an issue at https://github.com/yazi-rs/schemas.
 
-#:schema https://yazi-rs.github.io/schemas/yazi.json
+#:schema https://yazi-rs.github.io/schemas/keymap.json
 
-[[mgr.prepend_keymap]]
-on   = ["T", "x"]
-run  = "plugin toggle-pane max-preview"
-desc = "Maximize or restore the preview pane"
+[mgr]
+prepend_keymap = [
+  { on = ["T", "x"], run = "plugin toggle-pane max-preview", desc = "Maximize or restore the preview pane" },
+  { on = ["T", "m"], run = "plugin toggle-pane min-preview", desc = "Minimize or restore the preview pane" },
+  { on = ["P"], run = "shell --confirm 'qlmanage -p \"$@\"'", desc = "Quick Look", for = "macos" },
+  { on = ["<Enter>"], run = "plugin smart-enter", desc = "Enter the child directory, or open the file" },
+  { on = ["g", "i"], run = "plugin lazygit", desc = "run lazygit" },
+  { on = ["!"], run = 'shell "elvish" --block', desc = "Open Elvish here" },
+  { on = ["@"], run = 'shell --block --interactive --cursor=0 " %h"', desc = "Run command on hovered file" },
+  { on = ["#"], run = 'shell --block --interactive "open --interactive %s"', desc = "Interactive Open" },
+  { on = ["$"], run = 'shell "touch %s"', desc = "Touch Selected" },
+  { on = ["c", "m"], run = "plugin chmod", desc = "Chmod on selected files" },
+  { on = ["c", "p"], run = "plugin pandoc", desc = "Convert with Pandoc" },
+  { on = ["c", "P", "w"], run = "plugin pandoc -- --to_ext=docx --defaults=docx-refs", desc = "Convert with Pandoc DOCX (with references)" },
+  { on = ["c", "P", "l"], run = "plugin pandoc -- --to_ext=pdf --defaults=letter", desc = "Convert with Pandoc Letter (PDF)" },
+  { on = ["c", "o"], run = "plugin ouch", desc = "Compress with ouch" },
+  { on = ["c", "a", "a"], run = "plugin compress", desc = "Archive selected files" },
+  { on = ["c", "a", "p"], run = "plugin compress -p", desc = "Archive selected files (password)" },
+  { on = ["c", "a", "h"], run = "plugin compress -ph", desc = "Archive selected files (password+header)" },
+  { on = ["c", "a", "l"], run = "plugin compress -l", desc = "Archive selected files (compression level)" },
+  { on = ["c", "a", "z"], run = "plugin compress '-l 7z'", desc = "7zip selected files (compression level)" },
+  { on = ["c", "a", "u"], run = "plugin compress -phl", desc = "Archive selected files (password+header+level)" },
+  { on = ["M", "s"], run = "plugin sshfs -- menu", desc = "Open SSHFS options" },
+  { on = ["M", "d"], run = "plugin mount", desc = "Mount" },
+  { on = ["M", "m"], run = "plugin sshfs -- mount --jump", desc = "Mount & jump" },
+  { on = ["M", "u"], run = "plugin sshfs -- unmount", desc = "Unmount SSHFS" },
+  { on = ["M", "r"], run = "plugin sshfs -- remove", desc = "Remove SSH host" },
+  { on = ["M", "h"], run = "plugin sshfs -- home", desc = "Go to mount home" },
+  { on = ["M", "c"], run = "cd ~/.ssh/", desc = "Go to ssh config" },
+  { on = ["g", "m"], run = "plugin sshfs -- jump", desc = "Jump to mount" },
+  { on = ["R", "a"], run = "plugin sudo -- create", desc = "sudo create" },
+  { on = ["R", "D"], run = "plugin sudo -- remove --permanently", desc = "sudo delete" },
+  { on = ["R", "r"], run = "plugin sudo -- rename", desc = "sudo rename" },
+  { on = ["R", "p"], run = "plugin sudo -- paste", desc = "sudo paste" },
+  { on = ["R", "P"], run = "plugin sudo -- paste --force", desc = "sudo paste force" },
+  { on = ["R", "l"], run = "plugin sudo -- link", desc = "sudo link" },
+  { on = ["R", "r"], run = "plugin sudo -- link --relative", desc = "sudo link relative path" },
+  { on = ["R", "L"], run = "plugin sudo -- hardlink", desc = "sudo hardlink" },
+]
 
-[[mgr.prepend_keymap]]
-on   = ["T", "m"]
-run  = "plugin toggle-pane min-preview"
-desc = "Minimize or restore the preview pane"
-
-[[mgr.prepend_keymap]]
-on = [ "P" ]
-run = '''
-  shell --confirm 'qlmanage -p "$@"'
-'''
-desc = "Quick Look"
-for = "macos"
-
-[[mgr.prepend_keymap]]
-on   = "<Enter>"
-run  = "plugin smart-enter"
-desc = "Enter the child directory, or open the file"
-
-[[mgr.append_keymap]]
-on = "<F8>"
-run = "remove"
-desc = "Trash selected files"
-
-[[mgr.prepend_keymap]]
-on   = [ "g", "i" ]
-run  = "plugin lazygit"
-desc = "run lazygit"
-
-[[mgr.prepend_keymap]]
-on   = "!"
-run  = 'shell "elvish" --block'
-desc = "Open Elvish here"
-
-[[mgr.prepend_keymap]]
-on = "@"
-run = 'shell --block --interactive --cursor=0 " %s"'
-desc = "Run command"
-
-[[mgr.prepend_keymap]]
-on   = "#"
-run = 'shell --block --interactive "open --interactive %s"'
-desc = "Interactive Open"
-
-[[mgr.prepend_keymap]]
-on   = [ "c", "m" ]
-run  = "plugin chmod"
-desc = "Chmod on selected files"
-
-[[mgr.prepend_keymap]]
-on   = [ "c", "p" ]
-run  = "plugin pandoc"
-desc = "Convert with Pandoc"
-
-[[mgr.prepend_keymap]]
-on   = [ "c", "P", "w" ]
-run  = "plugin pandoc -- --to_ext=docx --defaults=docx-refs"
-desc = "Convert with Pandoc DOCX (with references)"
-
-[[mgr.prepend_keymap]]
-on   = [ "c", "P", "l" ]
-run  = "plugin pandoc -- --to_ext=pdf --defaults=letter"
-desc = "Convert with Pandoc Letter (PDF)"
-
-[[mgr.prepend_keymap]]
-on = [ "c", "o" ]
-run = "plugin ouch"
-desc = "Compress with ouch"
-
-[[mgr.prepend_keymap]]
-on   = [ "c", "a", "a" ]
-run  = "plugin compress"
-desc = "Archive selected files"
-
-[[mgr.prepend_keymap]]
-on   = [ "c", "a", "p" ]
-run  = "plugin compress -p"
-desc = "Archive selected files (password)"
-
-[[mgr.prepend_keymap]]
-on   = [ "c", "a", "h" ]
-run  = "plugin compress -ph"
-desc = "Archive selected files (password+header)"
-
-[[mgr.prepend_keymap]]
-on   = [ "c", "a", "l" ]
-run  = "plugin compress -l"
-desc = "Archive selected files (compression level)"
-
-[[mgr.prepend_keymap]]
-on   = [ "c", "a", "z" ]
-run  = "plugin compress '-l 7z'"
-desc = "7zip selected files (compression level)"
-
-[[mgr.prepend_keymap]]
-on   = [ "c", "a", "u" ]
-run  = "plugin compress -phl"
-desc = "Archive selected files (password+header+level)"
-
-[[mgr.prepend_keymap]]
-on = [ "M", "s" ]
-run = "plugin sshfs -- menu"        
-desc = "Open SSHFS options"
-
-[[mgr.prepend_keymap]]
-on  = [ "M", "d" ]
-run = "plugin mount"
-
-[[mgr.prepend_keymap]]
-on = ["M","m"] 
-run = "plugin sshfs -- mount --jump"  
-desc = "Mount & jump"
-
-[[mgr.prepend_keymap]]
-on = ["M","u"]
-run = "plugin sshfs -- unmount"
-desc = "Unmount SSHFS" 
-
-[[mgr.prepend_keymap]]
-on = ["M","r"]
-run = "plugin sshfs -- remove"        
-desc = "Remove SSH host"
-
-[[mgr.prepend_keymap]]
-on = ["M","h"]
-run = "plugin sshfs -- home"
-desc = "Go to mount home"
-
-[[mgr.prepend_keymap]]
-on = ["M","c"]
-run = "cd ~/.ssh/"                 
-desc = "Go to ssh config"
-
-[[mgr.prepend_keymap]]
-on = ["g","m"]
-run = "plugin sshfs -- jump"
-desc = "Jump to mount"
-
-# sudo touch/mkdir
-[[mgr.prepend_keymap]]
-on = ["R", "a"]
-run = "plugin sudo -- create"
-desc = "sudo create"
-
-# sudo delete
-[[mgr.prepend_keymap]]
-on = ["R", "D"]
-run = "plugin sudo -- remove --permanently"
-desc = "sudo delete"
-
-# sudo mv
-[[mgr.prepend_keymap]]
-on = ["R", "r"]
-run = "plugin sudo -- rename"
-desc = "sudo rename"
-
-# sudo cp/mv
-[[mgr.prepend_keymap]]
-on = ["R", "p"]
-run = "plugin sudo -- paste"
-desc = "sudo paste"
-
-# sudo cp/mv --force
-[[mgr.prepend_keymap]]
-on = ["R", "P"]
-run = "plugin sudo -- paste --force"
-desc = "sudo paste force"
-
-# sudo ln -s (absolute-path)
-[[mgr.prepend_keymap]]
-on = ["R", "l"]
-run = "plugin sudo -- link"
-desc = "sudo link"
-
-# sudo ln -s (relative-path)
-[[mgr.prepend_keymap]]
-on = ["R", "r"]
-run = "plugin sudo -- link --relative"
-desc = "sudo link relative path"
-
-# sudo ln
-[[mgr.prepend_keymap]]
-on = ["R", "L"]
-run = "plugin sudo -- hardlink"
-desc = "sudo hardlink"
+append_keymap = [
+  { on = ["<F8>"], run = "remove", desc = "Trash selected files" },
+]
 
 
 
