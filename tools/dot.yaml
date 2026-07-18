@@ -12,6 +12,7 @@ global:
     yazi/theme.toml: ~/.config/yazi/theme.toml
     yazi/package.toml: ~/.config/yazi/package.toml
     yazi/init.lua: ~/.config/yazi/init.lua
+    yazi/vfs.toml: ~/.config/yazi/vfs.toml
     mpv/mpv.conf: ~/.config/mpv/mpv.conf
     mpv/input.conf: ~/.config/mpv/input.conf
     agents/simple.md: ~/.config/opencode/agents

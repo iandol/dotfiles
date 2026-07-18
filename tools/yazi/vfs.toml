@@ -1,35 +1,30 @@
-[providers.cagelab-dev]
-type     = "sftp"
-host     = "cagelab-dev.cloud.lab"
-user     = "cagelab"
-port     = 22
-key_file = "~/.ssh/cagelab"
-
-[providers.seneca]
-type     = "sftp"
-host     = "fd00::1"
-user     = "ian"
-port     = 22
-key_file = "~/.ssh/iansync"
-
-[providers.cog5z]
-type     = "sftp"
+[sftp.cog5z]
 host     = "fd00::2"
 user     = "cog5"
 port     = 2222
 key_file = "~/.ssh/iansync"
 
-[providers.cog5]
-type     = "sftp"
+[sftp.cog5]
 host     = "cog5.cloud.lab"
 user     = "cog5"
 port     = 2222
 key_file = "~/.ssh/iansync"
 
-[providers.cog21]
-type     = "sftp"
+[sftp.seneca]
+host     = "fd00::1"
+user     = "ian"
+port     = 22
+key_file = "~/.ssh/iansync"
+
+[sftp.cog21]
 host     = "cog21.cloud.lab"
 user     = "cog"
 port     = 22
 key_file = "~/.ssh/id_rsa"
+
+[sftp.cagelab-dev]
+host     = "cagelab-dev.cloud.lab"
+user     = "cagelab"
+port     = 22
+key_file = "~/.ssh/cagelab"
 

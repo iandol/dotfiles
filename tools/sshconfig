@@ -26,6 +26,14 @@ Host cog5
 	IdentitiesOnly yes
 	#!! GroupLabels admin
 	#!! EnableOSC52 yes
+Host cog5zi
+	HostName 10.147.18.2
+	Port 2222
+	User cog5
+	IdentityFile ~/.ssh/iansync
+	IdentitiesOnly yes
+	#!! GroupLabels admin
+	#!! EnableOSC52 yes
 Host cog5z
 	HostName fd00::2
 	Port 2222
