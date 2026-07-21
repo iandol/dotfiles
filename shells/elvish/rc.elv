@@ -108,6 +108,7 @@ cmds:if-external brew {
 	set-env HOMEBREW_PREFIX $pfix
 	set-env HOMEBREW_CELLAR $pfix'/Cellar'
 	set-env HOMEBREW_REPOSITORY $pfix'/Homebrew'
+	if (cmds:is-mac) { set-env DYLD_FALLBACK_LIBRARY_PATH /opt/homebrew/lib }
 	set-env MANPATH $pfix'/share/man:'$E:MANPATH
 	set-env INFOPATH $pfix'/share/info:'$E:INFOPATH
 	peach {|p| cmds:prepend-to-path $p } [ $pfix'/bin' $pfix'/sbin']

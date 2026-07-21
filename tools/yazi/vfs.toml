@@ -16,6 +16,11 @@ user     = "ian"
 port     = 22
 key_file = "~/.ssh/iansync"
 
+[sftp.nas]
+host     = "10.10.47.188"
+user     = "Ian"
+port     = 2222
+
 [sftp.cog21]
 host     = "cog21.cloud.lab"
 user     = "cog"

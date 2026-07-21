@@ -5,7 +5,8 @@ export HOMEBREW_INSTALL_CLEANUP=true
 
 #-------------------------------Bootstrap homebrew[s]
 [[ $PLATFORM == 'Darwin' ]] && [[ "$(arch)" == "i386" ]] && [[ -f /usr/local/bin/brew ]] && eval "$(/usr/local/bin/brew shellenv)"
-[[ $PLATFORM == 'Darwin' ]] && [[ "$(arch)" == "arm64" ]] && [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+[[ $PLATFORM == 'Darwin' ]] && [[ "$(arch)" == "arm64" ]] && [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)" 
+[[ $PLATFORM == 'Darwin' ]] && [[ "$(arch)" == "arm64" ]] && export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib
 [[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 #-------------------------------PREFER nvim
@@ -133,4 +134,6 @@ export ___X_CMD_LANG="en"
 #---------------------------------------SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
 #---------------------------------------END OF FILE
+
+
 

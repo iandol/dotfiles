@@ -304,6 +304,8 @@ Host github.com
 	IdentityFile ~/.ssh/gitrepo2
 	IdentitiesOnly yes
 	AddKeysToAgent yes
+	ServerAliveInterval 60
+    ServerAliveCountMax 5
 Host codeberg.org
 	HostName codeberg.org
 	User git
@@ -312,3 +314,4 @@ Host codeberg.org
 	AddKeysToAgent yes
 Host instances.cogplatform.cc/001
 	ProxyCommand /opt/homebrew/bin/cloudflared access ssh --hostname %h
+
