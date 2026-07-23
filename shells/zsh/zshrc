@@ -3,20 +3,21 @@ export DF="$HOME/.dotfiles"
 export PLATFORM="$(uname -s)"
 export HOMEBREW_INSTALL_CLEANUP=true
 
-#-------------------------------Bootstrap homebrew[s]
+#=============================================== -- Bootstrap HOMEBREW[s]
 [[ $PLATFORM == 'Darwin' ]] && [[ "$(arch)" == "i386" ]] && [[ -f /usr/local/bin/brew ]] && eval "$(/usr/local/bin/brew shellenv)"
 [[ $PLATFORM == 'Darwin' ]] && [[ "$(arch)" == "arm64" ]] && [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)" 
 [[ $PLATFORM == 'Darwin' ]] && [[ "$(arch)" == "arm64" ]] && export DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib
 [[ $PLATFORM == 'Linux' ]] && [[ -d /home/linuxbrew/.linuxbrew ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+export HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1
 
-#-------------------------------PREFER nvim
+#=============================================== -- PREFER nvim
 if [[ -f $(which nvim) ]]; then
 	export EDITOR='nvim'
 elif [[ -f $(which vim) ]]; then
 	export EDITOR='vim'
 fi
 
-#-------------------------------ZSH OPTIONS
+#=============================================== -- ZSH OPTIONS
 COMPLETION_WAITING_DOTS="true"
 DIRSTACKSIZE=20 # pushd stacksize
 setopt AUTO_PUSHD PUSHD_IGNORE_DUPS PUSHD_MINUS PUSHD_SILENT 
@@ -40,7 +41,7 @@ unalias run-help >& /dev/null
 autoload run-help # use ESC + H to bring up help, see https://man.archlinux.org/man/extra/zsh/zshcontrib.1.en
 alias help=run-help
 
-#-------------------------------------ZSNAP MANAGER
+#=============================================== -- ZSNAP MANAGER
 [[ -d "$HOME/.local/share/znap" ]] ||
     git clone --depth 1 https://github.com/marlonrichert/zsh-snap.git "$HOME/.local/share/znap"
 zstyle ':znap:*' auto-compile no # stop conflict with x-cmd
@@ -53,7 +54,7 @@ bindkey              '^I' menu-select
 bindkey "$terminfo[kcbt]" menu-select
 zstyle ':autocomplete:*' add-semicolon no
 
-#---------------------------------------STARSHIP
+#=============================================== -- STARSHIP
 if [[ -f $(which starship) ]]; then
 	znap eval starship 'starship init zsh --print-full-init'
 else
@@ -61,7 +62,7 @@ else
 	znap prompt
 fi
 
-#------------------------------------PATHS/ENVS ETC.
+#=============================================== -- PATHS/ENVS ETC.
 ([[ -x $(which brew) ]] && [[ -d "$(brew --prefix)/share/zsh/site-functions/" ]]) && fpath=("$(brew --prefix)/share/zsh/site-functions/" $fpath)
 
 jl=("temurin-25-jdk" "temurin-21-jdk" "temurin-17-jdk" "java-21-openjdk" "java-17-openjdk")
@@ -94,12 +95,12 @@ else
 		fi
 	done
 fi
-#------------------------------------LUA
+#=============================================== -- LUA
 [[ -d "$HOME/.local/share/pandoc/filters" ]] && export LUA_PATH="$HOME/.local/share/pandoc/filters/?.lua;;"
 [[ -d /opt/homebrew/share/lua/5.4 ]] && export LUA_PATH="/opt/homebrew/share/lua/5.4/?.lua;$LUA_PATH"
 [[ -d /opt/homebrew/lib/lua/5.4 ]] && export LUA_CPATH="/opt/homebrew/lib/lua/5.4/?.so;/opt/homebrew/lib/lua/5.4/?/?.so;;"
 
-#------------------------------------FINALISE PATH
+#=============================================== -- FINALISE PATH
 pth=("/Library/TeX/texbin" "$HOME/Library/TinyTeX/bin/universal-darwin"
 	"/opt/amdgpu-pro/bin" "opt/amdgpu/bin"
 	"/usr/local/sbin" "/usr/local/bin"
@@ -118,11 +119,11 @@ for p in $pth; do
 done
 export path
 
-#------------------------------------X-CMD SETUP
+#=============================================== -- X-CMD SETUP
 export ___X_CMD_LANG="en"
 [ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
 
-#------------------------------------FINALISE OTHERS
+#=============================================== -- FINALISE OTHERS
 [[ -x $(which fzf) ]] && source <(fzf --zsh)
 [[ -x $(which pixi) ]] && eval "$(pixi completion --shell zsh)"
 [[ -x $(which zoxide) ]] && eval "$(zoxide init zsh)"
@@ -131,9 +132,9 @@ export ___X_CMD_LANG="en"
 [[ -x $(which mc) ]] && autoload -U +X bashcompinit && bashcompinit && complete -o nospace -C /usr/local/bin/mc mc
 [[ -f "$DF/shells/aliases" ]] && source "$DF/shells/aliases"
 
-#---------------------------------------SAY HELLO
+#=============================================== --SAY HELLO
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
-#---------------------------------------END OF FILE
+#=============================================== -- END OF FILE
 
 
 

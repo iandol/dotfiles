@@ -73,30 +73,34 @@ on-window-detected = [
 	######################################### ID
 	{
 		if = 'test %{app-bundle-id} = com.apple.finder',
-		run = 'layout floating',
-		check-further-callbacks = true
-	},{
+		run = 'layout floating'	
+	},
+	{
 		if  = 'test %{app-bundle-id} = net.kovidgoyal.kitty',
-		run = 'move-node-to-workspace 1',
-		check-further-callbacks = true,
-	},{
+		run = 'move-node-to-workspace 1'
+	},
+	{
+		if  = 'test %{app-bundle-id} = com.vivaldi.Vivaldi',
+		run = 'move-node-to-workspace A'
+	},
+	{
 		if  = 'test %{app-bundle-id} = com.bitwarden.desktop || test %{app-bundle-id} = com.apple.MobileSMS',
-		run = ['layout floating', 'move-node-to-workspace S'],
-		check-further-callbacks = true
-	},{
+		run = ['layout floating', 'move-node-to-workspace S']
+	},
+	{
 		if  = '''
 		   test %{app-bundle-id} = com.apple.Music \ 
 		|| test %{app-bundle-id} = com.metacubex.ClashX.meta \
+		|| test %{app-bundle-id} = io.github.clash-verge-rev.clash-verge-rev \
 		|| test %{app-bundle-id} = com.soma-zone.LaunchControl \
-		|| test %{app-bundle-id} = com.tencent.xinWeChat \ 
+		|| test %{app-bundle-id} = com.tencent.xinWeChat
 		''',
-		run = ['layout floating', 'move-node-to-workspace S'],
-	},{
-		if  = 'test %{app-bundle-id} = com.apple.FaceTime',
-		run = ['layout floating']
-	},{
+		run = ['layout floating', 'move-node-to-workspace S']
+	},
+	{
 		if  = '''
 		   test %{app-bundle-id} = com.apple.AppStore \
+		|| test %{app-bundle-id} = com.apple.FaceTime \
 		|| test %{app-bundle-id} = com.hegenberg.BetterTouchTool \
 		|| test %{app-bundle-id} = com.runningwithcrayons.Alfred-Preferences \
 		|| test %{app-bundle-id} = com.binarynights.ForkLift \
@@ -105,57 +109,49 @@ on-window-detected = [
 		|| test %{app-bundle-id} = org.localsend.localsendApp \
 		|| test %{app-bundle-id} = com.wanwire.12vpx.app \ 
 		|| test %{app-bundle-id} = com.apple.appleseed.FeedbackAssistant \
-		|| test %{app-bundle-id} = co.fluder.FSNotes \
+		|| test %{app-bundle-id} = co.fluder.FSNotes
 		''',
 		run = ['layout floating']
-	},{
-		if  = 'test %{app-bundle-id} = io.mpv',
+	},
+	{
+		if  = 'test %{app-bundle-id} = io.mpv || test %{app-bundle-id} = org.videolan.vlc',
 		run = ['layout floating', 'move-node-to-workspace D']
-	},{
+	},
+	{
 		if  = 'test %{app-bundle-id} = com.sonnysoftware.bookends2 && test %{window-title} ~= "^Search|Inspector"',
 		run = 'layout tiling'
-	},{
-		if  = 'test %{app-bundle-id} = org.videolan.vlc',
-		run = ['layout floating', 'move-node-to-workspace D'],
-		check-further-callbacks = true
 	},
 	############################# APP-NAME
 	{
 		if = '''
-			test %{app-name} ~= Finder \
-		||  test %{app-name} ~= Console \
+			test %{app-name} ~= Console \
 		||  test %{app-name} ~= "LuLu Alert" \
 		||  test %{app-name} ~= "Pixelmator Pro" \
-		||  test %{app-name} ~= Zotero && test %{window-title} ~= "Citation|Document" \
+		||  test %{app-name} ~= Zotero && test %{window-title} ~= "Citation|Document"
 		''',
 		run = 'layout floating'
-	},{
-		if = 'test %{app-name} ~= Vivaldi',
-		run = ['move-node-to-workspace A'],
-		check-further-callbacks = true
-	},{
-		if = 'test %{app-name} ~= "Clash Verge" || test %{app-name} ~= "ClashX Meta"',
-		run = ['layout floating', 'move-node-to-workspace S']
-	},{
-		if = 'test %{app-name} ~= mpv',
-		run = ['layout floating', 'move-node-to-workspace D'],
-		check-further-callbacks = true
+	},
+	{
+		if = 'test %{app-name} = Inkscape && test %{window-title} = " "',
+		run = 'layout floating'
 	},
 	############################ WINDOW TITLE
-	{ 
+	{
 		if = 'test %{window-title} ~= "Windows App"',
 		run = 'layout floating'
-	},{
+	},
+	{
 		if = 'test %{window-title} ~= CageLab || test %{window-title} ~= Opticka',
 		run = 'layout floating',
 		check-further-callbacks = true
-	},{
-		if = 'test %{window-title} ~= Preferences',
+	},
+	{
+		if = 'test %{window-title} ~= Preferences || test %{window-title} ~= "Save Document" || test %{window-title} ~= "Open Document" || test %{window-title} ~= "Save As"',
 		run = 'layout floating',
 		check-further-callbacks = true
-
-	},{
-		if = 'test %{workspace} = A && test %{window-title} ~= "^Bitwarden"',
+	},
+	{
+		if = 'test %{workspace} = A && test %{window-title} ~= "Bitwarden"',
 		run = 'layout floating',
 		check-further-callbacks = true
 	}

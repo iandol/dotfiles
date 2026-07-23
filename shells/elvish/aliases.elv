@@ -462,31 +462,6 @@ fn installMATLAB {|&version='R2025b' &action='install' &products='' &dest=''|
 }
 edit:add-var installMATLAB~ $installMATLAB~
 
-#========================================Install required TeX packages for BasicTex
-# tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
-fn updateTeX {|&repo=tuna &ctex=$false|
-	cmds:if-external tlmgr {
-		header2 "UPDATE TeX"
-		if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
-		tlmgr update --self
-		tlmgr update --all
-		tlmgr install lualatex-math luatexja abstract ^
-		latexmk csquotes pagecolor relsize mdframed needspace sectsty ^
-		titling titlesec preprint layouts glossaries tabulary soul xargs todonotes ^
-		mfirstuc xfor wallpaper datatool substr adjustbox collectbox ^
-		sttools wrapfig footnotebackref fvextra zref ^
-		libertinus libertinus-fonts libertinus-otf threeparttable ^
-		elsarticle algorithms algorithmicx siunitx bbding biblatex biber ^
-		stackengine xltabular booktabs orcidlink ^
-		ltablex cleveref makecell threeparttablex tabu multirow ^
-		changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol ^
-		tikzfill luacolor lua-ul xpatch selnolig ^
-		lua-visual-debug lipsum svg newfile
-		if $ctex { tlmgr install ctex }
-	}
-}
-edit:add-var updateTeX~ $updateTeX~
-
 #====================================================Update code and OS
 fn update {
 	sudo -Bv; msg "…Sudo priviledge obtained…"
@@ -562,8 +537,8 @@ fn update {
 		set-env HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK 'true'
 		try {
 			brew update; brew outdated
-			brew upgrade --yes --display-times
-			brew cleanup --prune=all
+			brew upgrade --display-times
+			brew cleanup --prune=2
 		} catch { msg "\t\t …can't upgrade!" }
 	}
 	if (cmds:is-macos) { try { header2 "Check macOS updates…"; softwareupdate --list } catch { } }
@@ -750,6 +725,31 @@ fn updateFFmpeg {
 	rm -rf $tmpdir
 }
 edit:add-var updateFFmpeg~ $updateFFmpeg~
+
+#========================================Install required TeX packages for BasicTex
+# tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet
+fn updateTeX {|&repo=tuna &ctex=$false|
+	cmds:if-external tlmgr {
+		header2 "UPDATE TeX"
+		if (==s $repo tuna) { tlmgr option repository https://mirrors.tuna.tsinghua.edu.cn/CTAN/systems/texlive/tlnet } else { tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet }
+		tlmgr update --self
+		tlmgr update --all
+		tlmgr install lualatex-math luatexja abstract ^
+		latexmk csquotes pagecolor relsize mdframed needspace sectsty ^
+		titling titlesec preprint layouts glossaries tabulary soul xargs todonotes ^
+		mfirstuc xfor wallpaper datatool substr adjustbox collectbox ^
+		sttools wrapfig footnotebackref fvextra zref ^
+		libertinus libertinus-fonts libertinus-otf threeparttable ^
+		elsarticle algorithms algorithmicx siunitx bbding biblatex biber ^
+		stackengine xltabular booktabs orcidlink ^
+		ltablex cleveref makecell threeparttablex tabu multirow ^
+		changepage marginnote sidenotes environ fontawesome5 tcolorbox framed pdfcol ^
+		tikzfill luacolor lua-ul xpatch selnolig ^
+		lua-visual-debug lipsum svg newfile
+		if $ctex { tlmgr install ctex }
+	}
+}
+edit:add-var updateTeX~ $updateTeX~
 
 #===================================================Update Opticka
 fn updateOptickaPages {

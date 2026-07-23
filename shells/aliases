@@ -548,7 +548,7 @@ function update() {
 	if [[ -x $(which brew) ]]; then
 		printf '\n\n---> Updating \e[92mHomeBrew\e[m...\n'
 		export HOMEBREW_NO_BOTTLE_SOURCE_FALLBACK='true'
-		brew update; brew outdated; brew upgrade --yes --force-bottle; brew cleanup
+		brew update; brew outdated; brew upgrade --yes --display-times; brew cleanup --prune=2
 	fi
 
 	if [[ $PLATFORM = "Linux" ]]; then
