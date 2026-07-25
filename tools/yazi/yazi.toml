@@ -41,6 +41,7 @@ play = [
 ]
 edit = [
 	{ run = "nvim %s", block = true, for = "unix", desc = "Edit with Neovim" },
+	{ run = "fresh %s", block = true, desc = "Edit with Fresh" },
 	{ run = "code -w %s", block = true, desc = "Edit with VSCode" },
 	{ run = "code %s", block = false, desc = "Edit with VSCode non-blocking" },
 	{ run = "open -a 'Pixelmator Pro.app' %s", block = false, desc = "Edit with Pixelmator Pro", for = "macos" },
@@ -49,9 +50,15 @@ edit = [
 open = [
 	{ run = "xdg-open %s1", desc = "Open" , orphan = true, for = "linux" },
 	{ run = "open %s", desc = "Open", orphan = true, for = "macos" },
-	{ run = "open -R %s", desc = "Open(Reveal)", orphan = true, for = "macos" },
 	{ run = "start %s", desc = "Open", orphan = true, for = "windows" },
 	{ run = 'zathura %s', orphan = true, desc = "Open PDFs with Zathura", for = "unix" },
+]
+reveal = [
+	{ run = "xdg-open %d1",         desc = "Reveal", for = "linux" },
+	{ run = "open -R %s1",          desc = "Reveal", for = "macos" },
+	{ run = "explorer /select,%s1", desc = "Reveal", for = "windows", orphan = true },
+	{ run = "termux-open %d1",      desc = "Reveal", for = "android" },
+	{ run = "clear; exiftool %s1; echo 'Press enter to exit'; read _", desc = "Show EXIF", for = "unix", block = true },
 ]
 [open]
 prepend_rules = [

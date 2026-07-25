@@ -7,5 +7,6 @@ dns:
   use-system-hosts: false
 
 prepend:
+  - 'DOMAIN-SUFFIX,bigmodel.cn,DIRECT'
   - 'DOMAIN-SUFFIX,z.ai,DIRECT'
   - 'DOMAIN-SUFFIX,codeberg.org,DIRECT'

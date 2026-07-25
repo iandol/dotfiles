@@ -16,8 +16,12 @@ global:
     mpv/mpv.conf: ~/.config/mpv/mpv.conf
     mpv/input.conf: ~/.config/mpv/input.conf
     agents/simple.md: ~/.config/opencode/agents
+    agents/scipaper.md: ~/.config/opencode/agents
     skills/matlab-performance-optimizer/: ~/.agents/skills/matlab-performance-optimizer
     skills/matlab-class-based-tests/: ~/.agents/skills/matlab-class-based-tests
+    skills/adhd/: ~/.agents/skills/adhd
+  installs: |
+    curl -fsSL https://raw.githubusercontent.com/UditAkhourii/adhd/main/skills/adhd/SKILL.md -o ~/.dotfiles/tools/skills/adhd/SKILL.md
 darwin:
   links:
     clash.yaml: "~/Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml"

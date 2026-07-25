@@ -6,6 +6,7 @@ global:
     makeTools.sh: ~/bin/makeTools
     zoteroSearch.sh: ~/bin/zoteroSearch
     fport.sh: ~/bin/fport
+    clashctl: ~/.local/bin/clashctl
 darwin:
   links:
     FitImagesToPageWidth.py: ~/Library/Application Support/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
@@ -17,4 +18,3 @@ linux:
     installV2RAYA.sh: ~/bin/installV2RAYA.sh
     snapcache.sh: ~/bin/snapcache.sh
     FitImagesToPageWidth.py: ~/.config/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
-    clashctl: ~/.local/bin/clashctl

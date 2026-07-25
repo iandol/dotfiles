@@ -8,12 +8,20 @@
 set -euo pipefail
 
 # ---- configuration (override via env) ----
-SOCK="/tmp/verge/verge-mihomo.sock"
-CLASH_CONFIG_DIR="${CLASH_CONFIG_DIR:-$HOME/.local/share/io.github.clash-verge-rev.clash-verge-rev}"
+
+OSTYPE=$(uname -s | tr '[:upper:]' '[:lower:]')
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    MIHOMOSH_CONFIG="${MIHOMOSH_CONFIG:-$HOME/Library/Application Support/io.github.SamuNatsu.mihomosh/config.yaml}"
+	SOCK="/tmp/verge/verge-mihomo.sock"
+	CLASH_CONFIG_DIR="${CLASH_CONFIG_DIR:-$HOME/Library/Application Support/io.github.clash-verge-rev.clash-verge-rev}"
+else
+    MIHOMOSH_CONFIG="${MIHOMOSH_CONFIG:-$HOME/.local/share/mihomosh/config.yaml}"
+	SOCK="/tmp/verge/verge-mihomo.sock"
+	CLASH_CONFIG_DIR="${CLASH_CONFIG_DIR:-$HOME/.local/share/io.github.clash-verge-rev.clash-verge-rev}"
+fi
 CLASH_CONFIG="${CLASH_CONFIG:-$CLASH_CONFIG_DIR/clash-verge.yaml}"
 PROFILES_YAML="${PROFILES_YAML:-$CLASH_CONFIG_DIR/profiles.yaml}"
 VERGE_YAML="${VERGE_YAML:-$CLASH_CONFIG_DIR/verge.yaml}"
-MIHOMOSH_CONFIG="${MIHOMOSH_CONFIG:-$HOME/.local/share/mihomosh/config.yaml}"
 WEBUI_DIR="${WEBUI_DIR:-$HOME/.local/share/metacubexd}"
 WEBUI_PORT="${WEBUI_PORT:-9098}"
 WEBUI_PIDFILE="${WEBUI_PIDFILE:-$HOME/.local/share/metacubexd/.server.pid}"
@@ -610,7 +618,7 @@ cmd_check() {
             ok=1
         fi
     else
-        echo "  WARN  mihomosh not found in PATH (install: cargo install mihomosh)"
+        echo "  WARN  mihomosh not found in PATH (install: eget SamuNatsu/mihomosh)"
     fi
 
     echo ""
