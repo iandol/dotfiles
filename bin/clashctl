@@ -1,0 +1,665 @@
+#!/usr/bin/env bash
+# clashctl - Terminal control for Clash Verge Rev / Mihomo VPN
+# Usage: clashctl [status|proxies|switch|update|log|traffic|restart]
+#
+# Configuration auto-detected from your running clash-verge-service instance.
+# Uses the mihomo REST API via Unix socket (no auth) or HTTP with secret.
+
+set -euo pipefail
+
+# ---- configuration (override via env) ----
+SOCK="/tmp/verge/verge-mihomo.sock"
+CLASH_CONFIG_DIR="${CLASH_CONFIG_DIR:-$HOME/.local/share/io.github.clash-verge-rev.clash-verge-rev}"
+CLASH_CONFIG="${CLASH_CONFIG:-$CLASH_CONFIG_DIR/clash-verge.yaml}"
+PROFILES_YAML="${PROFILES_YAML:-$CLASH_CONFIG_DIR/profiles.yaml}"
+VERGE_YAML="${VERGE_YAML:-$CLASH_CONFIG_DIR/verge.yaml}"
+MIHOMOSH_CONFIG="${MIHOMOSH_CONFIG:-$HOME/.local/share/mihomosh/config.yaml}"
+WEBUI_DIR="${WEBUI_DIR:-$HOME/.local/share/metacubexd}"
+WEBUI_PORT="${WEBUI_PORT:-9098}"
+WEBUI_PIDFILE="${WEBUI_PIDFILE:-$HOME/.local/share/metacubexd/.server.pid}"
+
+# Secret: env var takes priority, then auto-detect from clash config, then fallback
+_resolve_secret() {
+    if [ -n "${CLASH_SECRET:-}" ]; then
+        echo "$CLASH_SECRET"
+        return
+    fi
+    if [ -f "$CLASH_CONFIG" ]; then
+        local s
+        s=$(grep -m1 '^\s*secret:' "$CLASH_CONFIG" 2>/dev/null | awk '{print $2}')
+        if [ -n "${s:-}" ]; then
+            echo "$s"
+            return
+        fi
+    fi
+    echo ""
+}
+
+SECRET=$(_resolve_secret)
+if [ -z "$SECRET" ]; then
+    echo "WARNING: No CLASH_SECRET set and couldn't auto-detect from $CLASH_CONFIG" >&2
+    echo "  Set CLASH_SECRET env var or ensure 'secret:' is in your clash config." >&2
+fi
+
+CURL_SOCK="curl -s --unix-socket $SOCK"
+CURL_HTTP="curl -s -H 'Authorization: Bearer $SECRET'"
+
+# ----- helpers -----
+api_get()    { $CURL_SOCK "http://localhost$1" 2>/dev/null; }
+api_put()    { $CURL_SOCK -X PUT "http://localhost$1" -d '{}' 2>/dev/null; }
+api_post()   { $CURL_SOCK -X POST "http://localhost$1" -d '{}' 2>/dev/null; }
+api_patch()  { $CURL_SOCK -X PATCH -H 'Content-Type: application/json' "http://localhost$1" -d "$2" 2>/dev/null; }
+
+# Sync a key=value in verge.yaml so Clash Verge Rev GUI stays in sync
+# Usage: _sync_verge_key "enable_tun_mode" "true"
+_sync_verge_key() {
+    local key="$1" val="$2"
+    if [ ! -f "$VERGE_YAML" ]; then return; fi
+    if [ ! -w "$VERGE_YAML" ]; then
+        echo "  (cannot write $VERGE_YAML — skipping GUI sync)" >&2
+        return
+    fi
+    sed -i "s/^${key}:.*/${key}: ${val}/" "$VERGE_YAML" 2>/dev/null
+}
+
+# Sync tun.enable in clash-verge.yaml (needed because mihomo PATCH can't re-enable TUN)
+# Usage: _sync_clash_tun "true"
+_sync_clash_tun() {
+    local val="$1"
+    if [ ! -f "$CLASH_CONFIG" ] || [ ! -w "$CLASH_CONFIG" ]; then return; fi
+    # Match indented 'enable:' under the tun: section
+    sed -i "/^tun:/,/^[a-z]/{s/^  enable:.*/  enable: ${val}/}" "$CLASH_CONFIG" 2>/dev/null
+}
+
+cmd_status() {
+    echo "=== Mihomo Status ==="
+    local config
+    config=$(api_get /configs 2>/dev/null)
+    echo "Version: $(api_get /version | python3 -c 'import sys,json;print(json.load(sys.stdin)["version"])' 2>/dev/null)"
+    echo "Mode:    $(echo "$config" | python3 -c 'import sys,json;print(json.load(sys.stdin)["mode"])' 2>/dev/null)"
+    echo "TUN:     $(echo "$config" | python3 -c 'import sys,json;print("enabled" if json.load(sys.stdin)["tun"]["enable"] else "disabled")' 2>/dev/null)"
+    echo "HTTP:    127.0.0.1:7899 | SOCKS: 127.0.0.1:7898 | Mixed: 127.0.0.1:7897"
+    echo "TUN IP:  198.18.0.1 (gVisor, Fake-IP)"
+    echo ""
+    echo "=== Active Profile ==="
+    python3 -c "
+import yaml, sys
+with open('$PROFILES_YAML') as f: data = yaml.safe_load(f)
+curr = data.get('current','')
+for item in data.get('items',[]):
+    if item['uid'] == curr:
+        name = item.get('name', item['uid'])
+        t = item['type']
+        url = item.get('url','N/A')
+        updated = item.get('updated','?')
+        extra = item.get('extra',{})
+        used = extra.get('upload',0)+extra.get('download',0)
+        total = extra.get('total',0)
+        expire = extra.get('expire',0)
+        import datetime
+        exp_str = datetime.datetime.fromtimestamp(expire).strftime('%Y-%m-%d') if expire else 'N/A'
+        print(f'  Profile: {name} ({t})')
+        print(f'  URL:     {url}')
+        print(f'  Usage:   {used/1e9:.1f} GB / {total/1e9:.1f} GB ({(used*100/total) if total else 0:.0f}%)')
+        print(f'  Expires: {exp_str}')
+        break
+" 2>/dev/null || echo "  (could not parse profiles)"
+    echo ""
+    echo "=== Proxy Groups ==="
+    mihomosh proxy view 2>/dev/null || api_get /group | python3 -c "
+import sys,json
+data=json.load(sys.stdin)
+for p in data.get('proxies',[]):
+    name=p['name']; now=p.get('now',''); t=p['type']
+    print(f'  {name}({t}) -> {now}')
+" 2>/dev/null
+}
+
+cmd_proxies() {
+    echo "=== Proxy Groups (current selection shown) ==="
+    mihomosh proxy view 2>/dev/null || api_get /group | python3 -c "
+import sys,json
+data=json.load(sys.stdin)
+for p in data.get('proxies',[]):
+    name=p['name']; now=p.get('now',''); t=p['type']
+    print(f'  {name}({t}) -> {now}')
+"
+}
+
+cmd_switch() {
+    echo "Launching interactive proxy switcher..."
+    mihomosh proxy update 2>/dev/null || echo "mihomosh not available - install via: cargo install mihomosh"
+}
+
+cmd_mode() {
+    local new_mode="${1:-}"
+    local current
+    current=$(api_get /configs | python3 -c 'import sys,json;print(json.load(sys.stdin)["mode"])' 2>/dev/null)
+
+    if [ -z "$new_mode" ]; then
+        echo "Current mode: $current"
+        echo "Usage: clashctl mode [rule|global|direct]"
+        return
+    fi
+
+    case "$new_mode" in
+        rule|global|direct) ;;
+        *) echo "Invalid mode: $new_mode. Use: rule, global, or direct"; return 1 ;;
+    esac
+
+    if [ "$new_mode" = "$current" ]; then
+        echo "Mode is already '$current'"
+        return
+    fi
+
+    echo "Switching mode: $current -> $new_mode"
+    api_patch /configs "{\"mode\":\"$new_mode\"}"
+    echo "Done."
+}
+
+cmd_tun() {
+    local action="${1:-}"
+    local current
+    current=$(api_get /configs | python3 -c 'import sys,json;print("on" if json.load(sys.stdin)["tun"]["enable"] else "off")' 2>/dev/null)
+
+    if [ -z "$action" ]; then
+        echo "TUN is currently: $current"
+        echo "Usage: clashctl tun [on|off]"
+        return
+    fi
+
+    case "$action" in
+        on)  new_state="true" ;;
+        off) new_state="false" ;;
+        *) echo "Invalid: $action. Use: on or off"; return 1 ;;
+    esac
+
+    if [ "$action" = "$current" ]; then
+        echo "TUN is already $current"
+        return
+    fi
+
+    echo "Turning TUN $action..."
+    if [ "$action" = "off" ]; then
+        # PATCH disable works instantly
+        api_patch /configs "{\"tun\":{\"enable\":false}}"
+        _sync_clash_tun "false"
+    else
+        # PATCH enable is broken in mihomo — must update config file and restart kernel
+        _sync_clash_tun "true"
+        api_post /restart >/dev/null
+        sleep 2
+    fi
+    _sync_verge_key "enable_tun_mode" "$action"
+    echo "Done. (verge.yaml synced; GUI may need restart to reflect change)"
+}
+
+cmd_update() {
+    echo "=== Updating VPN Subscription ==="
+    echo "Option 1: Restart clash-verge-service (full refresh, re-downloads subscriptions)"
+    echo "Option 2: Config reload only (reloads current config from disk)"
+    echo ""
+    if [ "${1:-}" = "full" ]; then
+        echo "Restarting clash-verge-service..."
+        systemctl --user restart clash-verge-service 2>/dev/null || sudo systemctl restart clash-verge-service
+        sleep 3
+        echo "Done. Service restarted."
+    else
+        echo "Doing config reload (use 'clashctl update full' for full subscription refresh)..."
+        api_put /configs?force=true
+        echo "Config reloaded."
+    fi
+    sleep 1
+    cmd_proxies
+}
+
+cmd_log() {
+    echo "=== Live Mihomo Log (Ctrl-C to exit) ==="
+    mihomosh inspect log 2>/dev/null || {
+        echo "mihomosh not available. Using journalctl instead:"
+        journalctl -u clash-verge-service -f --no-pager
+    }
+}
+
+cmd_traffic() {
+    echo "=== Real-time Traffic (Ctrl-C to exit) ==="
+    mihomosh inspect traffic 2>/dev/null || echo "mihomosh not available"
+}
+
+cmd_connections() {
+    echo "=== Active Connections ==="
+    mihomosh connection view 2>/dev/null || api_get /connections | python3 -c "
+import sys,json
+data=json.load(sys.stdin)
+for c in data.get('connections',[])[:20]:
+    meta=c.get('metadata',{})
+    chain=c.get('chains',[])
+    print(f'  {meta.get(\"network\",\"\")} {meta.get(\"destinationIP\",\"\")}:{meta.get(\"destinationPort\",\"\")}  host={meta.get(\"host\",\"\")}  chain={\" -> \".join(chain) if chain else \"-\"}')
+    print(f'    process={meta.get(\"process\",\"\")}  rule={c.get(\"rule\",\"\")}')
+"
+}
+
+cmd_restart() {
+    echo "Restarting mihomo kernel..."
+    result=$(api_post /restart)
+    echo "Result: $result"
+    sleep 2
+    cmd_status
+}
+
+cmd_profile() {
+    local action="${1:-list}"
+    local target="${2:-}"
+
+    case "$action" in
+        list|ls)
+            _profile_list ;;
+        switch|use)
+            _profile_switch "$target" ;;
+        *)
+            echo "Usage: clashctl profile [list|switch <uid|name>]"
+            _profile_list
+            return 1 ;;
+    esac
+}
+
+_profile_list() {
+    python3 -c "
+import yaml
+with open('$PROFILES_YAML') as f: data = yaml.safe_load(f)
+curr = data.get('current','')
+remotes = [(i,item) for i,item in enumerate(data.get('items',[])) if item.get('type')=='remote']
+if not remotes:
+    print('No remote subscription profiles found.')
+    exit()
+for idx,item in remotes:
+    active = ' [ACTIVE]' if item['uid']==curr else ''
+    name = item.get('name','(unnamed)')
+    extra = item.get('extra',{})
+    used = extra.get('upload',0)+extra.get('download',0)
+    total = extra.get('total',0)
+    if total:
+        pct = f' ({used*100/total:.0f}%)'
+        gb = f'{used/1e9:.1f}GB/{total/1e9:.1f}GB'
+    else:
+        pct = ''
+        gb = 'N/A'
+    import datetime
+    exp_ts = extra.get('expire',0)
+    exp = datetime.datetime.fromtimestamp(exp_ts).strftime('%Y-%m-%d') if exp_ts else 'N/A'
+    days_left = ((datetime.datetime.fromtimestamp(exp_ts)-datetime.datetime.now()).days) if exp_ts else -1
+    exp_str = f'{exp}' + (f' ({days_left}d left)' if days_left>=0 else '')
+    print(f'[{idx}] {name}{active}')
+    print(f'     UID:  {item[\"uid\"]}')
+    print(f'     Data: {gb}{pct}  |  Expires: {exp_str}')
+    print()
+"
+}
+
+_profile_switch() {
+    local target="$1"
+    if [ -z "${target:-}" ]; then
+        echo "ERROR: Specify a profile UID or index number."
+        echo ""
+        _profile_list
+        return 1
+    fi
+
+    # Resolve target to UID
+    local uid
+    if echo "$target" | grep -qE '^[0-9]+$'; then
+        # Numeric index
+        uid=$(python3 -c "
+import yaml
+with open('$PROFILES_YAML') as f: data = yaml.safe_load(f)
+remotes = [item['uid'] for item in data.get('items',[]) if item.get('type')=='remote']
+idx = $target
+if 0 <= idx < len(remotes):
+    print(remotes[idx])
+" 2>/dev/null)
+    else
+        uid="$target"
+    fi
+
+    if [ -z "${uid:-}" ]; then
+        echo "ERROR: Profile '$target' not found."
+        echo ""
+        _profile_list
+        return 1
+    fi
+
+    # Get current profile
+    local current
+    current=$(python3 -c "
+import yaml
+with open('$PROFILES_YAML') as f:
+    print(yaml.safe_load(f).get('current',''))
+" 2>/dev/null)
+
+    if [ "${uid:-}" = "$current" ]; then
+        echo "Already using profile: $uid"
+        return
+    fi
+
+    # Get name for display
+    local name
+    name=$(python3 -c "
+import yaml
+with open('$PROFILES_YAML') as f: data = yaml.safe_load(f)
+for item in data.get('items',[]):
+    if item.get('uid')=='$uid':
+        print(item.get('name','(unnamed)'))
+" 2>/dev/null)
+
+    echo "Switching profile: $current -> ${name:-$uid} ($uid)"
+    echo "Updating profiles.yaml..."
+    sed -i "s/^current:.*/current: ${uid}/" "$PROFILES_YAML" 2>/dev/null
+
+    echo "Restarting clash-verge-service to apply new profile..."
+    sudo systemctl restart clash-verge-service 2>/dev/null
+    sleep 3
+    echo "Done."
+    echo ""
+    clashctl status 2>&1 | head -6
+}
+
+cmd_list_subscriptions() {
+    echo "=== Subscription Profiles ==="
+    _profile_list
+}
+
+
+cmd_webui() {
+    local action="${1:-status}"
+
+    case "$action" in
+        start)
+            _webui_start ;;
+        stop)
+            _webui_stop ;;
+        status)
+            _webui_status ;;
+        update)
+            _webui_update ;;
+        *)
+            echo "Usage: clashctl webui [start|stop|status|update]"
+            echo ""
+            _webui_status
+            return 1 ;;
+    esac
+}
+
+# Ensure an origin is present in clash-verge.yaml CORS allowlist,
+# then reload the mihomo kernel if a change was made.
+_ensure_cors_origin() {
+    local origin="$1"
+    if grep -qF "$origin" "$CLASH_CONFIG" 2>/dev/null; then
+        return  # already present
+    fi
+    # Insert before the allow-private-network line
+    sed -i "s|^  allow-private-network:|  - ${origin}\n  allow-private-network:|" "$CLASH_CONFIG" 2>/dev/null
+    # Reload kernel so change takes effect immediately
+    curl -s -X POST --unix-socket "$MIHOMO_SOCK" http://localhost/restart >/dev/null 2>&1
+    sleep 2
+}
+
+
+_webui_start() {
+    # Check if already running
+    if [ -f "$WEBUI_PIDFILE" ]; then
+        local pid
+        pid=$(cat "$WEBUI_PIDFILE" 2>/dev/null)
+        if kill -0 "$pid" 2>/dev/null; then
+            echo "Web UI already running (PID $pid) on http://127.0.0.1:$WEBUI_PORT"
+            echo "SSH tunnel: ssh -L $WEBUI_PORT:localhost:$WEBUI_PORT user@host"
+            return
+        fi
+        rm -f "$WEBUI_PIDFILE"
+    fi
+
+    # Ensure metacubexd is downloaded
+    if [ ! -f "$WEBUI_DIR/index.html" ]; then
+        _webui_update || return 1
+    fi
+
+    # Ensure our origin is in mihomo's CORS allowlist
+    _ensure_cors_origin "http://127.0.0.1:$WEBUI_PORT"
+    _ensure_cors_origin "http://localhost:$WEBUI_PORT"
+
+    echo "Starting metacubexd web UI on http://127.0.0.1:$WEBUI_PORT ..."
+    mkdir -p "$WEBUI_DIR"
+    cd "$WEBUI_DIR"
+    python3 -m http.server "$WEBUI_PORT" --bind 127.0.0.1 &>/dev/null &
+    local pid=$!
+    echo "$pid" > "$WEBUI_PIDFILE"
+    sleep 0.5
+    if kill -0 "$pid" 2>/dev/null; then
+        echo "Started (PID $pid)."
+        echo ""
+        echo "  Local access:  http://127.0.0.1:$WEBUI_PORT"
+        echo "  Remote access: ssh -L $WEBUI_PORT:localhost:$WEBUI_PORT -L 9097:localhost:9097 $(hostname)"
+        echo ""
+        echo "  In the browser, set API Base URL to: http://127.0.0.1:9097"
+        echo "  Secret: $SECRET"
+    else
+        echo "Failed to start."
+        rm -f "$WEBUI_PIDFILE"
+        return 1
+    fi
+}
+
+_webui_stop() {
+    if [ ! -f "$WEBUI_PIDFILE" ]; then
+        echo "Web UI is not running."
+        return
+    fi
+    local pid
+    pid=$(cat "$WEBUI_PIDFILE" 2>/dev/null)
+    if [ -n "${pid:-}" ] && kill "$pid" 2>/dev/null; then
+        echo "Stopped web UI (PID $pid)."
+        rm -f "$WEBUI_PIDFILE"
+    else
+        echo "Web UI was not running (stale PID file cleaned)."
+        rm -f "$WEBUI_PIDFILE"
+    fi
+}
+
+_webui_status() {
+    if [ -f "$WEBUI_PIDFILE" ]; then
+        local pid
+        pid=$(cat "$WEBUI_PIDFILE" 2>/dev/null)
+        if kill -0 "$pid" 2>/dev/null; then
+            echo "Web UI: RUNNING (PID $pid) on http://127.0.0.1:$WEBUI_PORT"
+            echo "SSH:    ssh -L $WEBUI_PORT:localhost:$WEBUI_PORT -L 9097:localhost:9097 $(hostname)"
+        else
+            echo "Web UI: STOPPED (stale PID file)"
+            rm -f "$WEBUI_PIDFILE"
+        fi
+    else
+        echo "Web UI: STOPPED"
+        echo "Start with: clashctl webui start"
+    fi
+    # Show version if installed
+    if [ -f "$WEBUI_DIR/index.html" ]; then
+        local ver
+        ver=$(head -1 "$WEBUI_DIR/index.html" 2>/dev/null | grep -oP 'v[\d.]+' | head -1)
+        echo "Version: ${ver:-unknown}"
+    else
+        echo "Version: not installed (run 'clashctl webui update' to download)"
+    fi
+}
+
+_webui_update() {
+    echo "Downloading latest metacubexd (static web UI)..."
+    mkdir -p "$WEBUI_DIR"
+
+    # Get latest release download URL
+    local dl_url
+    dl_url=$(curl -sL 'https://api.github.com/repos/metacubex/metacubexd/releases/latest' 2>/dev/null | \
+        python3 -c "import sys,json; r=json.load(sys.stdin); print([a['browser_download_url'] for a in r['assets'] if a['name']=='compressed-dist.tgz'][0])" 2>/dev/null)
+
+    if [ -z "${dl_url:-}" ]; then
+        echo "ERROR: Could not find download URL. Is GitHub reachable?"
+        return 1
+    fi
+
+    echo "Downloading $dl_url ..."
+    local tmpdir
+    tmpdir=$(mktemp -d)
+    curl -sL -o "$tmpdir/metacubexd.tgz" "$dl_url" 2>/dev/null
+    if [ ! -s "$tmpdir/metacubexd.tgz" ]; then
+        echo "ERROR: Download failed."
+        rm -rf "$tmpdir"
+        return 1
+    fi
+
+    # Extract (tgz contains a single directory, we want its contents)
+    echo "Extracting to $WEBUI_DIR ..."
+    rm -rf "$WEBUI_DIR"/*
+    tar xzf "$tmpdir/metacubexd.tgz" -C "$tmpdir" 2>/dev/null
+    local src
+    src=$(find "$tmpdir" -maxdepth 2 -name "index.html" -not -path "$WEBUI_DIR/*" 2>/dev/null | head -1)
+    if [ -n "${src:-}" ]; then
+        cp -r "$(dirname "$src")"/* "$WEBUI_DIR/"
+    else
+        # Fallback: try to copy everything
+        find "$tmpdir" -maxdepth 2 -mindepth 1 -not -name "*.tgz" -exec cp -r {} "$WEBUI_DIR/" \; 2>/dev/null
+    fi
+    rm -rf "$tmpdir"
+
+    if [ -f "$WEBUI_DIR/index.html" ]; then
+        echo "Updated successfully."
+    else
+        echo "WARNING: Extraction may have failed (no index.html found)."
+    fi
+}
+
+cmd_check() {
+    echo "=== Checking Mihomosh Config ==="
+    echo "Config file: $MIHOMOSH_CONFIG"
+    echo ""
+
+    local ok=0
+
+    # --- check config file exists ---
+    if [ ! -f "$MIHOMOSH_CONFIG" ]; then
+        echo "  FAIL  mihomosh config not found"
+        ok=1
+    else
+        echo "  OK    config file exists"
+    fi
+
+    # --- check mihomo-path ---
+    local cfg_path
+    cfg_path=$(grep -E '^\s*mihomo-path:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    if [ -z "${cfg_path:-}" ]; then
+        echo "  FAIL  mihomo-path: not set"
+        ok=1
+    elif [ ! -f "$cfg_path" ]; then
+        echo "  FAIL  mihomo-path: '$cfg_path' does not exist"
+        ok=1
+    elif [ "$cfg_path" != "$CLASH_CONFIG" ]; then
+        echo "  WARN  mihomo-path: '$cfg_path' (expected: '$CLASH_CONFIG')"
+    else
+        echo "  OK    mihomo-path: $cfg_path"
+    fi
+
+    # --- check mihomo-api ---
+    local cfg_api
+    cfg_api=$(grep -E '^\s*mihomo-api:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    if [ -z "${cfg_api:-}" ]; then
+        echo "  FAIL  mihomo-api: not set"
+        ok=1
+    else
+        echo "  OK    mihomo-api: $cfg_api"
+    fi
+
+    # --- check mihomo-secret ---
+    local cfg_secret
+    cfg_secret=$(grep -E '^\s*mihomo-secret:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    if [ -z "${cfg_secret:-}" ]; then
+        echo "  WARN  mihomo-secret: not set. Set CLASH_SECRET or add to config."
+    elif [ "${cfg_secret:-}" != "$SECRET" ]; then
+        echo "  WARN  mihomo-secret in config ('$cfg_secret') differs from CLASH_SECRET ('$SECRET')"
+    else
+        echo "  OK    mihomo-secret: set (matches CLASH_SECRET)"
+    fi
+
+    # --- check API reachable ---
+    echo ""
+    echo "=== Checking API Connectivity ==="
+    if api_get /version >/dev/null 2>&1; then
+        local ver
+        ver=$(api_get /version | python3 -c 'import sys,json;print(json.load(sys.stdin)["version"])' 2>/dev/null)
+        echo "  OK    API reachable via unix socket ($SOCK) — mihomo $ver"
+    else
+        echo "  FAIL  Cannot reach mihomo API via $SOCK"
+        ok=1
+    fi
+
+    # --- check mihomosh binary ---
+    if command -v mihomosh >/dev/null 2>&1; then
+        local mv
+        mv=$(mihomosh --version 2>/dev/null | head -1)
+        echo "  OK    mihomosh binary found: $mv"
+        # quick smoke test
+        if mihomosh inspect version >/dev/null 2>&1; then
+            echo "  OK    mihomosh can talk to mihomo API"
+        else
+            echo "  FAIL  mihomosh cannot reach API (check mihomo-api / mihomo-secret in config)"
+            ok=1
+        fi
+    else
+        echo "  WARN  mihomosh not found in PATH (install: cargo install mihomosh)"
+    fi
+
+    echo ""
+    if [ $ok -eq 0 ]; then
+        echo "All checks passed."
+    else
+        echo "Some checks failed — review the output above."
+    fi
+}
+
+cmd_usage() {
+    echo "clashctl - Terminal VPN control for Clash Verge Rev / Mihomo"
+    echo ""
+    echo "Usage: clashctl COMMAND"
+    echo ""
+    echo "Commands:"
+    echo "  status        Show full status: version, mode, active profile, proxy groups"
+    echo "  proxies       List all proxy groups and current selections"
+    echo "  switch        Interactive proxy switcher (TUI)"
+    echo "  mode          Get/set proxy mode: rule, global, direct"
+    echo "  tun           Get/set TUN mode: on, off"
+    echo "  update        Refresh subscription / reload config"
+    echo "  log           Follow live mihomo logs"
+    echo "  traffic       Real-time traffic monitor"
+    echo "  connections   Show active connections"
+    echo "  restart       Restart mihomo kernel"
+    echo "  subs          List subscription profiles"
+    echo "  profile       List or switch subs (profile list|switch <uid|idx>)"
+    echo "  check         Verify mihomosh config and API connectivity"
+    echo "  webui         Manage metacubexd web dashboard (start|stop|status|update)"
+    echo "  help          This help"
+}
+
+# ----- main -----
+case "${1:-help}" in
+    status)      cmd_status ;;
+    proxies)     cmd_proxies ;;
+    switch)      cmd_switch ;;
+    mode)        cmd_mode "${2:-}" ;;
+    tun)         cmd_tun "${2:-}" ;;
+    update)      cmd_update "${2:-}" ;;
+    log)         cmd_log ;;
+    traffic)     cmd_traffic ;;
+    connections) cmd_connections ;;
+    restart)     cmd_restart ;;
+    subs)        cmd_list_subscriptions ;;
+    profile)     cmd_profile "${2:-list}" "${3:-}" ;;
+    check)       cmd_check ;;
+    webui)       cmd_webui "${2:-status}" ;;
+    help|--help|-h) cmd_usage ;;
+    *) echo "Unknown command: $1"; cmd_usage; exit 1 ;;
+esac
