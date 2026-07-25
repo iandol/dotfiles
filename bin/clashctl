@@ -399,7 +399,7 @@ _ensure_cors_origin() {
     # Insert before the allow-private-network line
     sed -i "s|^  allow-private-network:|  - ${origin}\n  allow-private-network:|" "$CLASH_CONFIG" 2>/dev/null
     # Reload kernel so change takes effect immediately
-    curl -s -X POST --unix-socket "$MIHOMO_SOCK" http://localhost/restart >/dev/null 2>&1
+    curl -s -X POST --unix-socket "$SOCK" http://localhost/restart >/dev/null 2>&1
     sleep 2
 }
 
