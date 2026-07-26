@@ -618,7 +618,7 @@ MIHOMOSHEOF
 
     # --- fix mihomo-secret (handles both '#mihomo-secret:' and 'mihomo-secret:') ---
     local cur_secret
-    cur_secret=$(grep -E '^#?[[:space:]]*mihomo-secret:[[:space:]]*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^#\?[[:space:]]*mihomo-secret:[[:space:]]*//' | xargs)
+    cur_secret=$(grep -E '^#?[[:space:]]*mihomo-secret:[[:space:]]*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:[[:space:]]*//' | xargs)
     if [ "${cur_secret:-}" != "$SECRET" ]; then
         echo "  FIXING mihomo-secret: ${cur_secret:-'(unset)'} -> $SECRET"
         if grep -qE '^#?[[:space:]]*mihomo-secret:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
@@ -687,7 +687,7 @@ cmd_check() {
 
     # --- check mihomo-secret ---
     local cfg_secret
-    cfg_secret=$(grep -E '^#?[[:space:]]*mihomo-secret:[[:space:]]*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^#\?[[:space:]]*mihomo-secret:[[:space:]]*//' | xargs)
+    cfg_secret=$(grep -E '^#?[[:space:]]*mihomo-secret:[[:space:]]*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:[[:space:]]*//' | xargs)
     if [ -z "${cfg_secret:-}" ]; then
         echo "  WARN  mihomo-secret: not set. Set CLASH_SECRET or add to config."
     elif [ "${cfg_secret:-}" != "$SECRET" ]; then
