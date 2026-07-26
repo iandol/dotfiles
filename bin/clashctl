@@ -43,7 +43,7 @@ _resolve_secret() {
     fi
     if [ -f "$CLASH_CONFIG" ]; then
         local s
-        s=$(grep -m1 '^\s*secret:' "$CLASH_CONFIG" 2>/dev/null | awk '{print $2}')
+        s=$(grep -m1 '^[[:space:]]*secret:' "$CLASH_CONFIG" 2>/dev/null | awk '{print $2}')
         if [ -n "${s:-}" ]; then
             echo "$s"
             return
@@ -587,13 +587,13 @@ MIHOMOSHEOF
 
     # --- fix mihomo-path ---
     local cur_path
-    cur_path=$(grep -E '^\s*mihomo-path:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    cur_path=$(grep -E '^[[:space:]]*mihomo-path:[[:space:]]*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:[[:space:]]*//' | xargs)
     if [ "${cur_path:-}" != "$CLASH_CONFIG" ]; then
         echo "  FIXING mihomo-path: ${cur_path:-'(unset)'} -> $CLASH_CONFIG"
-        if grep -qE '^\s*mihomo-path:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
+        if grep -qE '^[[:space:]]*mihomo-path:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
             _sed_inplace "s|^mihomo-path:.*|mihomo-path: $CLASH_CONFIG|" "$MIHOMOSH_CONFIG"
         else
-            _sed_inplace "2a mihomo-path: $CLASH_CONFIG" "$MIHOMOSH_CONFIG"
+            _sed_inplace -e '2a\' -e "mihomo-path: $CLASH_CONFIG" "$MIHOMOSH_CONFIG"
         fi
         need_rewrite=1
     else
@@ -602,29 +602,29 @@ MIHOMOSHEOF
 
     # --- fix mihomo-api ---
     local cur_api
-    cur_api=$(grep -E '^\s*mihomo-api:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    cur_api=$(grep -E '^[[:space:]]*mihomo-api:[[:space:]]*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:[[:space:]]*//' | xargs)
     local expect_api="http://127.0.0.1:9097"
     if [ "${cur_api:-}" != "$expect_api" ]; then
         echo "  FIXING mihomo-api: ${cur_api:-'(unset)'} -> $expect_api"
-        if grep -qE '^\s*mihomo-api:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
+        if grep -qE '^[[:space:]]*mihomo-api:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
             _sed_inplace "s|^mihomo-api:.*|mihomo-api: $expect_api|" "$MIHOMOSH_CONFIG"
         else
-            _sed_inplace "/^mihomo-path:/a mihomo-api: $expect_api" "$MIHOMOSH_CONFIG"
+            _sed_inplace -e '/^mihomo-path:/a\' -e "mihomo-api: $expect_api" "$MIHOMOSH_CONFIG"
         fi
         need_rewrite=1
     else
         echo "  OK    mihomo-api: $cur_api"
     fi
 
-    # --- fix mihomo-secret ---
+    # --- fix mihomo-secret (handles both '#mihomo-secret:' and 'mihomo-secret:') ---
     local cur_secret
-    cur_secret=$(grep -E '^\s*mihomo-secret:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    cur_secret=$(grep -E '^#?[[:space:]]*mihomo-secret:[[:space:]]*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^#\?[[:space:]]*mihomo-secret:[[:space:]]*//' | xargs)
     if [ "${cur_secret:-}" != "$SECRET" ]; then
         echo "  FIXING mihomo-secret: ${cur_secret:-'(unset)'} -> $SECRET"
-        if grep -qE '^\s*mihomo-secret:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
-            _sed_inplace "s|^mihomo-secret:.*|mihomo-secret: $SECRET|" "$MIHOMOSH_CONFIG"
+        if grep -qE '^#?[[:space:]]*mihomo-secret:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
+            _sed_inplace -E "s|^#?mihomo-secret:.*|mihomo-secret: $SECRET|" "$MIHOMOSH_CONFIG"
         else
-            _sed_inplace "/^mihomo-api:/a mihomo-secret: $SECRET" "$MIHOMOSH_CONFIG"
+            _sed_inplace -e '/^mihomo-api:/a\' -e "mihomo-secret: $SECRET" "$MIHOMOSH_CONFIG"
         fi
         need_rewrite=1
     else
@@ -662,7 +662,7 @@ cmd_check() {
 
     # --- check mihomo-path ---
     local cfg_path
-    cfg_path=$(grep -E '^\s*mihomo-path:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    cfg_path=$(grep -E '^[[:space:]]*mihomo-path:[[:space:]]*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:[[:space:]]*//' | xargs)
     if [ -z "${cfg_path:-}" ]; then
         echo "  FAIL  mihomo-path: not set"
         ok=1
@@ -677,7 +677,7 @@ cmd_check() {
 
     # --- check mihomo-api ---
     local cfg_api
-    cfg_api=$(grep -E '^\s*mihomo-api:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    cfg_api=$(grep -E '^[[:space:]]*mihomo-api:[[:space:]]*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:[[:space:]]*//' | xargs)
     if [ -z "${cfg_api:-}" ]; then
         echo "  FAIL  mihomo-api: not set"
         ok=1
@@ -687,7 +687,7 @@ cmd_check() {
 
     # --- check mihomo-secret ---
     local cfg_secret
-    cfg_secret=$(grep -E '^\s*mihomo-secret:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    cfg_secret=$(grep -E '^#?[[:space:]]*mihomo-secret:[[:space:]]*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^#\?[[:space:]]*mihomo-secret:[[:space:]]*//' | xargs)
     if [ -z "${cfg_secret:-}" ]; then
         echo "  WARN  mihomo-secret: not set. Set CLASH_SECRET or add to config."
     elif [ "${cfg_secret:-}" != "$SECRET" ]; then
