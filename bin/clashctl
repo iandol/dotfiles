@@ -542,7 +542,101 @@ _webui_update() {
     fi
 }
 
+# Rewrite mihomosh config to point at Clash Verge Rev's mihomo kernel.
+# Fixes mihomo-path, mihomo-api, and mihomo-secret to match the current setup.
+_fix_mihomosh_config() {
+    local dir
+    dir=$(dirname "$MIHOMOSH_CONFIG")
+    if [ ! -d "$dir" ]; then
+        mkdir -p "$dir" || return 1
+    fi
+
+    local need_rewrite=0
+
+    # Ensure config exists with baseline content
+    if [ ! -f "$MIHOMOSH_CONFIG" ]; then
+        cat > "$MIHOMOSH_CONFIG" << 'MIHOMOSHEOF'
+## Mihomosh configs
+
+# Mihomo config file path (REQUIRED)
+# Mihomo external controller URL (REQUIRED)
+# Mihomo external controller secret (Optional)
+# Log level
+log-level: info
+# Proxy mode
+mode: rule
+# HTTP(S) port
+port: 7890
+# Allow LAN
+allow-lan: false
+# Allow IPv6
+allow-ipv6: true
+# Unified delay
+unified-delay: true
+MIHOMOSHEOF
+    fi
+
+    # --- fix mihomo-path ---
+    local cur_path
+    cur_path=$(grep -E '^\s*mihomo-path:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    if [ "${cur_path:-}" != "$CLASH_CONFIG" ]; then
+        echo "  FIXING mihomo-path: ${cur_path:-'(unset)'} -> $CLASH_CONFIG"
+        if grep -qE '^\s*mihomo-path:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
+            sed -i "s|^mihomo-path:.*|mihomo-path: $CLASH_CONFIG|" "$MIHOMOSH_CONFIG"
+        else
+            sed -i "2a mihomo-path: $CLASH_CONFIG" "$MIHOMOSH_CONFIG"
+        fi
+        need_rewrite=1
+    else
+        echo "  OK    mihomo-path: $cur_path"
+    fi
+
+    # --- fix mihomo-api ---
+    local cur_api
+    cur_api=$(grep -E '^\s*mihomo-api:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    local expect_api="http://127.0.0.1:9097"
+    if [ "${cur_api:-}" != "$expect_api" ]; then
+        echo "  FIXING mihomo-api: ${cur_api:-'(unset)'} -> $expect_api"
+        if grep -qE '^\s*mihomo-api:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
+            sed -i "s|^mihomo-api:.*|mihomo-api: $expect_api|" "$MIHOMOSH_CONFIG"
+        else
+            sed -i "/^mihomo-path:/a mihomo-api: $expect_api" "$MIHOMOSH_CONFIG"
+        fi
+        need_rewrite=1
+    else
+        echo "  OK    mihomo-api: $cur_api"
+    fi
+
+    # --- fix mihomo-secret ---
+    local cur_secret
+    cur_secret=$(grep -E '^\s*mihomo-secret:\s*' "$MIHOMOSH_CONFIG" 2>/dev/null | sed 's/^[^:]*:\s*//' | xargs)
+    if [ "${cur_secret:-}" != "$SECRET" ]; then
+        echo "  FIXING mihomo-secret: ${cur_secret:-'(unset)'} -> $SECRET"
+        if grep -qE '^\s*mihomo-secret:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
+            sed -i "s|^mihomo-secret:.*|mihomo-secret: $SECRET|" "$MIHOMOSH_CONFIG"
+        else
+            sed -i "/^mihomo-api:/a mihomo-secret: $SECRET" "$MIHOMOSH_CONFIG"
+        fi
+        need_rewrite=1
+    else
+        echo "  OK    mihomo-secret: set (matches CLASH_SECRET)"
+    fi
+
+    if [ $need_rewrite -eq 1 ]; then
+        echo ""
+        echo "  Mihomosh config fixed. Run 'clashctl check' to verify."
+    fi
+}
+
 cmd_check() {
+    local fix_mode="${1:-}"
+    if [ "$fix_mode" = "--fix" ]; then
+        _fix_mihomosh_config
+        fix_mode="--fix"
+    else
+        fix_mode=""
+    fi
+
     echo "=== Checking Mihomosh Config ==="
     echo "Config file: $MIHOMOSH_CONFIG"
     echo ""
@@ -629,6 +723,46 @@ cmd_check() {
     fi
 }
 
+cmd_test() {
+    echo "=== VPN Connectivity Test ==="
+    echo ""
+
+    local targets=("https://github.com" "https://google.com")
+    local names=("github.com" "google.com")
+    local all_ok=0
+
+    for i in "${!targets[@]}"; do
+        local url="${targets[$i]}"
+        local name="${names[$i]}"
+        local result
+
+        # Use curl with connect-time metrics: time_connect, time_total, http_code
+        result=$(curl -o /dev/null -s -w '%{http_code} %{time_connect} %{time_total}' --connect-timeout 15 --max-time 20 "$url" 2>/dev/null)
+
+        if [ -z "${result:-}" ]; then
+            printf "  %-20s FAIL - no response (VPN may be down)\n" "$name"
+            all_ok=1
+            continue
+        fi
+
+        local code connect total
+        read -r code connect total <<< "$result"
+
+        if [ "${code:-0}" -ge 200 ] && [ "${code:-0}" -lt 400 ]; then
+            printf "  %-20s HTTP %s  connect: %5.2fs  total: %5.2fs\n" "$name" "$code" "$connect" "$total"
+        else
+            printf "  %-20s HTTP %s  connect: %5.2fs  total: %5.2fs  (unexpected status)\n" "$name" "${code:-?}" "${connect:-?}" "${total:-?}"
+            all_ok=1
+        fi
+    done
+
+    echo ""
+    if [ $all_ok -eq 0 ]; then
+        echo "VPN is working correctly."
+    else
+        echo "One or more targets unreachable — check VPN status with 'clashctl status'."
+    fi
+}
 cmd_usage() {
     echo "clashctl - Terminal VPN control for Clash Verge Rev / Mihomo"
     echo ""
@@ -647,7 +781,8 @@ cmd_usage() {
     echo "  restart       Restart mihomo kernel"
     echo "  subs          List subscription profiles"
     echo "  profile       List or switch subs (profile list|switch <uid|idx>)"
-    echo "  check         Verify mihomosh config and API connectivity"
+    echo "  check         Verify mihomosh config and API connectivity (add --fix to auto-repair)"
+    echo "  test          Test VPN connectivity to github.com and google.com"
     echo "  webui         Manage metacubexd web dashboard (start|stop|status|update)"
     echo "  help          This help"
 }
@@ -666,7 +801,8 @@ case "${1:-help}" in
     restart)     cmd_restart ;;
     subs)        cmd_list_subscriptions ;;
     profile)     cmd_profile "${2:-list}" "${3:-}" ;;
-    check)       cmd_check ;;
+    check)       cmd_check "${2:-}" ;;
+    test)        cmd_test ;;
     webui)       cmd_webui "${2:-status}" ;;
     help|--help|-h) cmd_usage ;;
     *) echo "Unknown command: $1"; cmd_usage; exit 1 ;;
