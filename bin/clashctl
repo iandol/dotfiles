@@ -772,6 +772,74 @@ cmd_test() {
         echo "One or more targets unreachable — check VPN status with 'clashctl status'."
     fi
 }
+
+cmd_delay() {
+    local group="${1:-}"
+    local timeout="${DELAY_TIMEOUT:-3000}"
+    local testurl="${DELAY_URL:-https://www.gstatic.com/generate_204}"
+
+    # List selector-type groups if none specified
+    if [ -z "${group:-}" ]; then
+        echo "=== Proxy Groups (delay-testable) ==="
+        echo ""
+        api_get /group 2>/dev/null | python3 -c "
+import sys, json, shlex
+data = json.load(sys.stdin)
+for g in data.get('proxies',[]):
+    t = g.get('type','')
+    if t in ('Selector','URLTest','Fallback','LoadBalance'):
+        name = g.get('name','')
+        now = g.get('now','')
+        cnt = len(g.get('all',[]))
+        print(f'  {name}  ({t}, now={now}, {cnt} proxies)')
+        print(f'    clashctl delay {shlex.quote(name)}')
+        print()
+"
+        echo "Usage: clashctl delay <group-name>"
+        return
+    fi
+
+    # URL-encode the group name and test URL, then trigger delay test
+    local encoded encoded_url
+    encoded=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$group'))" 2>/dev/null)
+    encoded_url=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$testurl'))" 2>/dev/null)
+
+    echo "Testing latency for group: $group"
+    echo "URL: $testurl (timeout: ${timeout}ms)"
+    echo ""
+
+    local results
+    local max_wait=$((timeout * 2 / 1000 + 5))  # generous curl timeout: 2× proxy timeout + 5s buffer
+    results=$($CURL_SOCK --max-time "$max_wait" "http://localhost/group/${encoded}/delay?url=${encoded_url}&timeout=${timeout}" 2>/dev/null) || true
+
+    if [ -z "${results:-}" ]; then
+        echo "No response from API — is the proxy group name correct?"
+        echo "Use 'clashctl delay' to list available groups."
+        return 1
+    fi
+
+    echo "$results" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+# Delay endpoint returns: {proxy_name: delay_ms, ...} where delay_ms is an int
+items = []
+for name, val in data.items():
+    delay = val if isinstance(val, (int, float)) else val.get('delay', -1)
+    items.append((delay if delay >= 0 else 999999, name, delay))
+if not items:
+    print('(empty results)')
+    sys.exit(0)
+items.sort()
+for delay, name, raw in items:
+    if raw < 0:
+        print(f'  {name:40s} TIMEOUT')
+    else:
+        print(f'  {name:40s} {raw:5d}ms')
+" 2>/dev/null || {
+        echo "(Could not parse delay results — raw response shown below)"
+        echo "$results" | head -5
+    }
+}
 cmd_usage() {
     echo "clashctl - Terminal VPN control for Clash Verge Rev / Mihomo"
     echo ""
@@ -792,6 +860,7 @@ cmd_usage() {
     echo "  profile       List or switch subs (profile list|switch <uid|idx>)"
     echo "  check         Verify mihomosh config and API connectivity (add --fix to auto-repair)"
     echo "  test          Test VPN connectivity to github.com and google.com"
+    echo "  delay         Ping all proxies in a group (delay <group>)"
     echo "  webui         Manage metacubexd web dashboard (start|stop|status|update)"
     echo "  help          This help"
 }
@@ -812,6 +881,7 @@ case "${1:-help}" in
     profile)     cmd_profile "${2:-list}" "${3:-}" ;;
     check)       cmd_check "${2:-}" ;;
     test)        cmd_test ;;
+    delay)       cmd_delay "${2:-}" ;;
     webui)       cmd_webui "${2:-status}" ;;
     help|--help|-h) cmd_usage ;;
     *) echo "Unknown command: $1"; cmd_usage; exit 1 ;;
