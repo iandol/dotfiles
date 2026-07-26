@@ -20,6 +20,15 @@ else
 	CLASH_CONFIG_DIR="${CLASH_CONFIG_DIR:-$HOME/.local/share/io.github.clash-verge-rev.clash-verge-rev}"
 fi
 CLASH_CONFIG="${CLASH_CONFIG:-$CLASH_CONFIG_DIR/clash-verge.yaml}"
+
+# macOS sed needs '-i ""' (GNU/Linux wants '-i'); use this wrapper everywhere.
+_sed_inplace() {
+    if [ "$(uname -s)" = "Darwin" ]; then
+        sed -i '' "$@"
+    else
+        sed -i "$@"
+    fi
+}
 PROFILES_YAML="${PROFILES_YAML:-$CLASH_CONFIG_DIR/profiles.yaml}"
 VERGE_YAML="${VERGE_YAML:-$CLASH_CONFIG_DIR/verge.yaml}"
 WEBUI_DIR="${WEBUI_DIR:-$HOME/.local/share/metacubexd}"
@@ -67,7 +76,7 @@ _sync_verge_key() {
         echo "  (cannot write $VERGE_YAML — skipping GUI sync)" >&2
         return
     fi
-    sed -i "s/^${key}:.*/${key}: ${val}/" "$VERGE_YAML" 2>/dev/null
+    _sed_inplace "s/^${key}:.*/${key}: ${val}/" "$VERGE_YAML" 2>/dev/null
 }
 
 # Sync tun.enable in clash-verge.yaml (needed because mihomo PATCH can't re-enable TUN)
@@ -76,7 +85,7 @@ _sync_clash_tun() {
     local val="$1"
     if [ ! -f "$CLASH_CONFIG" ] || [ ! -w "$CLASH_CONFIG" ]; then return; fi
     # Match indented 'enable:' under the tun: section
-    sed -i "/^tun:/,/^[a-z]/{s/^  enable:.*/  enable: ${val}/}" "$CLASH_CONFIG" 2>/dev/null
+    _sed_inplace "/^tun:/,/^[a-z]/{s/^  enable:.*/  enable: ${val}/}" "$CLASH_CONFIG" 2>/dev/null
 }
 
 cmd_status() {
@@ -361,7 +370,7 @@ for item in data.get('items',[]):
 
     echo "Switching profile: $current -> ${name:-$uid} ($uid)"
     echo "Updating profiles.yaml..."
-    sed -i "s/^current:.*/current: ${uid}/" "$PROFILES_YAML" 2>/dev/null
+    _sed_inplace "s/^current:.*/current: ${uid}/" "$PROFILES_YAML" 2>/dev/null
 
     echo "Restarting clash-verge-service to apply new profile..."
     sudo systemctl restart clash-verge-service 2>/dev/null
@@ -405,7 +414,7 @@ _ensure_cors_origin() {
         return  # already present
     fi
     # Insert before the allow-private-network line
-    sed -i "s|^  allow-private-network:|  - ${origin}\n  allow-private-network:|" "$CLASH_CONFIG" 2>/dev/null
+    _sed_inplace "s|^  allow-private-network:|  - ${origin}\n  allow-private-network:|" "$CLASH_CONFIG" 2>/dev/null
     # Reload kernel so change takes effect immediately
     curl -s -X POST --unix-socket "$SOCK" http://localhost/restart >/dev/null 2>&1
     sleep 2
@@ -582,9 +591,9 @@ MIHOMOSHEOF
     if [ "${cur_path:-}" != "$CLASH_CONFIG" ]; then
         echo "  FIXING mihomo-path: ${cur_path:-'(unset)'} -> $CLASH_CONFIG"
         if grep -qE '^\s*mihomo-path:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
-            sed -i "s|^mihomo-path:.*|mihomo-path: $CLASH_CONFIG|" "$MIHOMOSH_CONFIG"
+            _sed_inplace "s|^mihomo-path:.*|mihomo-path: $CLASH_CONFIG|" "$MIHOMOSH_CONFIG"
         else
-            sed -i "2a mihomo-path: $CLASH_CONFIG" "$MIHOMOSH_CONFIG"
+            _sed_inplace "2a mihomo-path: $CLASH_CONFIG" "$MIHOMOSH_CONFIG"
         fi
         need_rewrite=1
     else
@@ -598,9 +607,9 @@ MIHOMOSHEOF
     if [ "${cur_api:-}" != "$expect_api" ]; then
         echo "  FIXING mihomo-api: ${cur_api:-'(unset)'} -> $expect_api"
         if grep -qE '^\s*mihomo-api:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
-            sed -i "s|^mihomo-api:.*|mihomo-api: $expect_api|" "$MIHOMOSH_CONFIG"
+            _sed_inplace "s|^mihomo-api:.*|mihomo-api: $expect_api|" "$MIHOMOSH_CONFIG"
         else
-            sed -i "/^mihomo-path:/a mihomo-api: $expect_api" "$MIHOMOSH_CONFIG"
+            _sed_inplace "/^mihomo-path:/a mihomo-api: $expect_api" "$MIHOMOSH_CONFIG"
         fi
         need_rewrite=1
     else
@@ -613,9 +622,9 @@ MIHOMOSHEOF
     if [ "${cur_secret:-}" != "$SECRET" ]; then
         echo "  FIXING mihomo-secret: ${cur_secret:-'(unset)'} -> $SECRET"
         if grep -qE '^\s*mihomo-secret:' "$MIHOMOSH_CONFIG" 2>/dev/null; then
-            sed -i "s|^mihomo-secret:.*|mihomo-secret: $SECRET|" "$MIHOMOSH_CONFIG"
+            _sed_inplace "s|^mihomo-secret:.*|mihomo-secret: $SECRET|" "$MIHOMOSH_CONFIG"
         else
-            sed -i "/^mihomo-api:/a mihomo-secret: $SECRET" "$MIHOMOSH_CONFIG"
+            _sed_inplace "/^mihomo-api:/a mihomo-secret: $SECRET" "$MIHOMOSH_CONFIG"
         fi
         need_rewrite=1
     else
