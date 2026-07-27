@@ -95,8 +95,25 @@ cmd_status() {
     echo "Version: $(api_get /version | python3 -c 'import sys,json;print(json.load(sys.stdin)["version"])' 2>/dev/null)"
     echo "Mode:    $(echo "$config" | python3 -c 'import sys,json;print(json.load(sys.stdin)["mode"])' 2>/dev/null)"
     echo "TUN:     $(echo "$config" | python3 -c 'import sys,json;print("enabled" if json.load(sys.stdin)["tun"]["enable"] else "disabled")' 2>/dev/null)"
-    echo "HTTP:    127.0.0.1:7899 | SOCKS: 127.0.0.1:7898 | Mixed: 127.0.0.1:7897"
-    echo "TUN IP:  198.18.0.1 (gVisor, Fake-IP)"
+    echo "$config" | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+bind = d.get('bind-address','127.0.0.1')
+bind = '127.0.0.1' if bind == '*' else bind
+http_p   = d.get('port','?')
+socks_p  = d.get('socks-port','?')
+mixed_p  = d.get('mixed-port','?')
+tun      = d.get('tun',{})
+tun_ip   = (tun.get('inet4-address',['?'])[0]).split('/')[0]
+tun_dev  = tun.get('device','?')
+tun_stack = tun.get('stack','?')
+# DNS mode is in the config file, not the API
+import yaml
+with open('$CLASH_CONFIG') as f: fconf = yaml.safe_load(f)
+dns_mode = fconf.get('dns',{}).get('enhanced-mode','?')
+print(f'HTTP:    {bind}:{http_p} | SOCKS: {bind}:{socks_p} | Mixed: {bind}:{mixed_p}')
+print(f'TUN IP:  {tun_ip} ({tun_dev}, {tun_stack}, {dns_mode})')
+"
     echo ""
     echo "=== Active Profile ==="
     python3 -c "
@@ -146,6 +163,8 @@ for p in data.get('proxies',[]):
 cmd_switch() {
     echo "Launching interactive proxy switcher..."
     mihomosh proxy update 2>/dev/null || echo "mihomosh not available - install via: cargo install mihomosh"
+    echo ""
+    cmd_test
 }
 
 cmd_mode() {
