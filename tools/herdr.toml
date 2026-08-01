@@ -6,11 +6,22 @@ onboarding = false
 # Missing also shows onboarding; set false after you've chosen.
 # onboarding = true
 
-[theme]
+[terminal]
+default_shell = "elvish"
+shell_mode = "auto"
+new_cwd = "follow"
+
+[worktrees]
+directory = "~/.herdr/worktrees"
+
 # Built-in themes: catppuccin, terminal, tokyo-night, dracula, nord,
 #                  gruvbox, one-dark, solarized, kanagawa, rose-pine,
 #                  vesper
-# name = "catppuccin"
+[theme]
+name = "catppuccin"
+auto_switch = true
+light_name = "catppuccin-latte"
+dark_name = "catppuccin"
 
 # Override individual color tokens on top of the base theme.
 # Accepts: hex (#rrggbb), named colors, rgb(r,g,b), or panel_bg = "reset"
