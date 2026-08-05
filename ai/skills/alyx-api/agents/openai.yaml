@@ -1,0 +1,4 @@
+interface:
+  display_name: "Alyx API"
+  short_description: "Work with Alyx REST APIs and MATLAB alyxManager safely."
+  default_prompt: "Use Alyx API guidance to inspect schemas, form read-only queries, and integrate with MATLAB alyxManager."

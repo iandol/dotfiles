@@ -1,0 +1,19 @@
+global:
+  links:
+    skills/matlab-performance-optimizer/: 
+      - ~/.agents/skills/matlab-performance-optimizer
+      - ~/.hermes/skills/matlab-performance-optimizer
+    skills/cagelab-task-development/: 
+      - ~/.agents/skills/cagelab-task-development
+      - ~/.hermes/skills/cagelab-task-development
+    skills/matlab-class-based-tests/: 
+      - ~/.agents/skills/matlab-class-based-tests
+      - ~/.hermes/skills/matlab-class-based-tests
+    skills/alyx-api/: 
+      - ~/.agents/skills/alyx-api
+      - ~/.hermes/skills/alyx-api
+    skills/adhd/: ~/.agents/skills/adhd
+    agents/simple.md: ~/.config/opencode/agents
+    agents/scipaper.md: ~/.config/opencode/agents
+  installs: |
+    curl -fsSL https://raw.githubusercontent.com/UditAkhourii/adhd/main/skills/adhd/SKILL.md -o ~/.dotfiles/tools/skills/adhd/SKILL.md
