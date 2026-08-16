@@ -35,13 +35,20 @@ logic.
 2. clutil.checkInput(in)  — apply defaults from the switch(in.task) router
 3. Stage/task parsing     — split taskType into string array, validate stages
 4. Dataset setup          — load metadata.csv, build lookupPNG lambda
-5. Stimulus creation      — imageStimulus + metaStimulus, grid positions
+5. Stimulus creation      — imageStimulus + metaStimulus, radial positions
+   (startThings pattern: polarToCartesianPoints around r.fix;
+   distractorCenterAngle/distractorSpreadAngle arc or full circle;
+   objectSize*0.414 hypotenuse mod on the cardinal slot(s); per-trial
+   slot shuffle via updateXY)
 6. Setup & hide           — setup(r.fix, sM); setup(targets, sM); hide(targets)
 7. IED progression state  — r.stageIdx, r.consecutiveCorrect, r.stageIncorrect
 8. Trial loop (while r.keepRunning)
    a. clutil.initTrialVariables(r)
-   b. Determine stage parameters (setNum, relDim, correctIdx, exemplar)
-   c. Select stimuli (dimLevels lookup, randperm positions)
+   b. Determine stage parameters (setNum, setCfg, correctLevel from
+      config.correct, exemplar)
+   c. Select stimuli (permuted relLevels/extraLevels, distractor fill,
+      lookupPNG, randperm positions; re-position targets per trial via
+      updateXY — radial slots at equal objectSep radius around r.fix)
    d. Log to r.store (all per-trial fields for offline analysis)
    e. showSet + update targets
    f. clutil.ensureTouchRelease → clutil.initTouchTrial
@@ -146,8 +153,8 @@ Two gotchas when adding this guard:
 ## Morphobes Dataset Lookup
 
 The resources submodule holds a **single unified dataset** at
-`resources/morphobes/` (4096 stimuli, factorial grid: shape 0-7, colour
-0-7, appendage 0-3, texture 0-3, exemplar 0-3). Legacy checkouts may still
+`resources/morphobes/` (6400 stimuli, factorial grid: 8 shapes, 8
+colours, 5 appendages, 5 textures, 4 exemplars). Legacy checkouts may still
 have separate `morphobes_ied` / `morphobes_ied4d` folders — resolve the
 dataset folder with candidate fallbacks rather than hardcoding one name:
 
@@ -182,33 +189,50 @@ appendage=0, texture=0, exemplar=0 for all rows.
 
 The per-set stimulus specification is computed by
 `clutil.iedMorphobesConfig(in, metaTable)`, which reads the task settings
-(numTargets, idDimension, edDimension, distractors, randomiseDistractors,
-distractorOne, distractorTwo, useExemplars) and derives every level value
-directly from the dataset metadata table. Returns:
+(numTargets, idDimension, edDimension, stages, distractors,
+randomiseDistractors, distractorOne, distractorTwo, useExemplars) and
+derives every level value directly from the dataset metadata table.
+Returns:
 
 ```matlab
 config.numTargets / idDimension / edDimension / distractors /
   randomiseDistractors / useExemplars / distractorOne / distractorTwo /
-  distractorDims = {d1 d2}        % the two non-ID/ED dimensions
+  distractorDims = {d1 d2}        % the two non-ID/ED persistent distractors
 config.available.(dim)            % levels present in metaTable per dim
+config.correct.(stage)            % correct (rewarded) level per stage —
+                                  %   constant across the stage's trials
 config.sets(1..3)                 % one entry per IED stimulus set
-  sets(n).relDim                  % relevant dim (ID for sets 1-2, ED for set 3)
-  sets(n).relLevels               % 1xnumTargets levels for relDim (distinct)
-  sets(n).nonRelevantDims         % cellstr of non-relevant dims
+  sets(n).relDim / extraDim       % relevant dim (ID for sets 1-2, ED for
+                                  %   set 3) and the other task-relevant dim
+  sets(n).relLevels / extraLevels % 1xnumTargets sample levels for both
+                                  %   task-relevant dims (distinct)
+  sets(n).extraFixed              % fixed extraDim level for all targets in
+                                  %   sd/sr (random member of extraLevels)
+  sets(n).distractorDims          % {1x2} the persistent distractor dims
   sets(n).distractorValues        % cell of 1xN fixed values (neutral if
-                                  %   distractors=false; distractorOne/Two for
-                                  %   the two persistent distractors, 0 for the
-                                  %   temporarily irrelevant ID/ED dim)
+                                  %   distractors=false; distractorOne/Two)
   sets(n).distractorPools         % cell of 1xM pools (when distractors &&
                                   %   randomiseDistractors) drawn per trial
   sets(n).exemplar / exemplarPool % fixed exemplar or per-trial draw pool
 ```
 
-The task, per trial in set n: `stimVals.(relDim) = relLevels`; each
-non-relevant dim gets a fresh draw from its pool (randomise) or its fixed
-values; exemplar is drawn from the pool (useExemplars) or fixed. Every
-level value is guaranteed to exist in the dataset. `pickLevels` spreads
-2-target pairs roughly half a catalogue apart for discriminability.
+Sample-set logic (identical for numTargets 2 and 4): each task-relevant
+dimension provides TWO disjoint random sample sets of numTargets levels —
+Set A for sd/sr/cd/cr, Set B (drawn from the remaining levels) for
+ids/idr/eds/edr. Sets 2 and 3 SHARE Set B (the ED shift keeps the IDS
+exemplars). Requires ≥ 2*numTargets levels per task-relevant dim, so with
+the current dataset (8 colours, 8 shapes, 5 appendages, 5 textures) 4
+targets are restricted to colour/shape ID/ED while 2 targets allow any
+dimension. The correct-level state machine: sd fresh, sr fresh ≠ sd,
+cd keeps sr, cr fresh ≠ cd (Set A); ids fresh, idr fresh ≠ ids (Set B,
+ID dim); eds fresh, edr fresh ≠ eds (Set B, ED dim).
+
+The task, per trial in set n: `stimVals.(relDim) = relLevels` permuted
+(the correct level lands on `fixationChoice`); the extra dim is fixed at
+`extraFixed` in sd/sr and permuted `extraLevels` otherwise; each
+persistent distractor gets its fixed value or ONE random level shared by
+all targets; exemplar is drawn from the pool (useExemplars) or fixed.
+Every level value is guaranteed to exist in the dataset.
 
 Sets correspond to IED stages: Set 1 (SD/SR/CD/CR), Set 2 (IDS/IDR),
 Set 3 (EDS/EDR).
@@ -221,20 +245,28 @@ The stage progression algorithm is shared across all IED variants:
 2. Each stage runs until `criterion` consecutive correct (default 6)
 3. `maxIncorrect` (default 50) triggers task termination
 7. Only trials with `result == 1 || result == 0` count toward progression
-8. Reversal stages (`sr`, `cr`, `idr`, `edr`) swap `correctIdx` from 1→2
+8. The correct (rewarded) level is fixed per stage, chosen by the config
+   state machine (`config.correct.(stage)`): sd fresh, sr fresh ≠ sd,
+   cd keeps sr, cr fresh ≠ cd, ids fresh, idr fresh ≠ ids, eds fresh
+   (relevant dim switches to ED), edr fresh ≠ eds. The task finds
+   `correctIdx` as the index of that level in the permuted relLevels —
+   NOT a 1→2 reversal swap.
 9. ID dimension is relevant for sets 1-2; ED dimension for set 3
 10. Distractor behaviour is explicit, not stage-based: `distractors`
-    (show non-ID/ED dims), `randomiseDistractors` (draw from dataset
-    levels per trial), `distractorOne`/`distractorTwo` (fixed values),
-    `useExemplars` (fresh exemplar per trial). Defaults: 2 targets →
-    neutral distractors + fixed exemplar (classic SD); 4 targets →
-    compound random distractors + per-trial exemplars.
+    (show the two persistent non-ID/ED dims), `randomiseDistractors`
+    (one random level per trial, same on all targets), `distractorOne`/
+    `distractorTwo` (fixed values), `useExemplars` (fresh exemplar per
+    trial). Defaults: 2 targets → neutral distractors + fixed exemplar
+    (classic SD); 4 targets → compound random distractors + per-trial
+    exemplars. The task-relevant dims always show real sample-set levels
+    (the extra dim is held at `extraFixed` only in sd/sr).
 
 ### Key r.store fields for offline analysis
 
 - `stage`, `stageIdx`, `stagesTotal`, `stagesCompleted`, `taskFailed`
 - `consecutiveCorrect`, `stageIncorrect`, `stageTrialN`
-- `relDim`, `idDim`, `edDim`, `setNum`, `exemplar`, `distractorsConstant`
+- `relDim`, `extraDim`, `idDim`, `edDim`, `setNum`, `exemplar`, `distractorsConstant`
+- `correctLevel` (per-stage rewarded level), `relLevels`, `extraLevels`
 - `idx` (position randomization), `correctIdx`, `stimVals`, `chosenTarget`
 - `result`, `anyTouch`, `fixationChoice`, `correctDim`, `numTargets`
 
@@ -247,8 +279,9 @@ paradigm), merge using this approach:
    stimulus selection (algorithmic > hardcoded switch) is the base
 2. **Parameterize the distinguishing dimension** — add a `numTargets` (or
    similar) field to `in`, routed via `checkInput.m`
-3. **Replace hardcoded switch with algorithmic config** — the 4D
-   `dimLevels` + `setExemplars` approach subsumes the 2D per-stage switch
+3. **Replace hardcoded switch with algorithmic config** — the config
+   helper approach (`clutil.iedMorphobesConfig`) subsumes the 2D
+   per-stage switch
 4. **Make dataset selection conditional** — default folder based on
    `numTargets` (or equivalent parameter)
 5. **Make grid layout conditional** — 1×2 for 2 targets, 2×2 for 4
@@ -296,21 +329,30 @@ paradigm), merge using this approach:
   `shape_level`, `colour_level`, etc. (snake_case with `_level` suffix).
   Do not assume `shape` or `colour` — always use the full column name.
 - **Exemplar affects shape, appendage, texture simultaneously** — colour is
-  unaffected by exemplar. In 2D mode, only exemplar 0 exists in the dataset.
+  unaffected by exemplar. With the unified dataset all four exemplars
+  (0-3) exist; 2-target mode defaults `useExemplars=false` so the fixed
+  exemplar (0) is used.
 - **`in.taskType` is overwritten to first stage** — after parsing,
   `in.taskType = char(stages(1))` for `updateTrialResult` compatibility.
   The full stage sequence is preserved in `in.stages`.
 - **Levels must exist in the dataset — derive them, never hardcode.** The
   current procedural morphobes dataset (`procedural_microorganisms.py`,
   master seed 1234) uses NON-CONTIGUOUS level encodings: shape
-  {0,1,2,4,7,8,11}, colour {0,1,2,3,6,7}, appendage {0,1,2,4,5}, texture
-  {0,1,2,3,4}, exemplar {0,1,2,3}. Hardcoded contiguous matrices (shape
-  0-7, colour 0-7, appendage 0-3) silently miss levels; `lookupPNG` then
-  returns an empty result and the task breaks at runtime with no
+  {0,1,2,3,5,7,9,11}, colour {0,1,2,3,4,5,6,7}, appendage {0,1,2,4,5},
+  texture {0,1,2,3,4}, exemplar {0,1,2,3}. Hardcoded contiguous matrices
+  (shape 0-7, colour 0-7, appendage 0-3) silently miss levels; `lookupPNG`
+  then returns an empty result and the task breaks at runtime with no
   compile-time warning. `clutil.iedMorphobesConfig(in, metaTable)` reads
   `unique(metaTable.<dim>_level)` and validates/clamps every value, so
   config and dataset can never drift apart. Check `metadata.json`
   `catalogue_sizes` for the current encodings.
+- **Two disjoint sample sets per task-relevant dim drive the 4-target
+  restriction** — each ID/ED dim needs ≥ 2*numTargets dataset levels
+  (Set A + Set B). colour/shape have 8 but appendage/texture only 5, so
+  numTargets=4 must use colour/shape for ID/ED and the config throws
+  `iedMorphobesConfig:NotEnoughLevels` otherwise; numTargets=2 permits any
+  dimension. Don't hardcode this rule in the GUI — enforce it from the
+  dataset levels in the config (the task surfaces the error).
 - **Extract level config into a clutil function for testability** — the
   per-set stimulus spec was pulled out of `startIEDmorphobes` into
   `clutil.iedMorphobesConfig(in, metaTable)`. Tests validate the config

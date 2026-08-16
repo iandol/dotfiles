@@ -12,8 +12,11 @@ global:
     skills/alyx-api/: 
       - ~/.agents/skills/alyx-api
       - ~/.hermes/skills/alyx-api
+    skills/firecrawl-research-index/:
+      - ~/.agents/skills/firecrawl-research-index
+      - ~/.hermes/skills/firecrawl-research-index
     skills/adhd/: ~/.agents/skills/adhd
-    agents/simple.md: ~/.config/opencode/agents
-    agents/scipaper.md: ~/.config/opencode/agents
+    agents/simple.md: ~/.config/opencode/agents/simple.md
+    agents/scipaper.md: ~/.config/opencode/agents/scipaper.md
   installs: |
     curl -fsSL https://raw.githubusercontent.com/UditAkhourii/adhd/main/skills/adhd/SKILL.md -o ~/.dotfiles/tools/skills/adhd/SKILL.md

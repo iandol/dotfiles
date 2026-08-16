@@ -6,7 +6,7 @@ global:
     makeTools.sh: ~/bin/makeTools
     zoteroSearch.sh: ~/bin/zoteroSearch
     fport.sh: ~/bin/fport
-    clashctl: ~/.local/bin/clashctl
+    clashctl: ~/bin/clashctl
 darwin:
   links:
     FitImagesToPageWidth.py: ~/Library/Application Support/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
