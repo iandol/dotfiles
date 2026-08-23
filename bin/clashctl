@@ -751,20 +751,63 @@ cmd_check() {
 }
 
 cmd_test() {
+    local json_output=false
+    local urls=()
+    local connect_timeout=${TEST_CONNECT_TIMEOUT:-15}
+    local max_time=${TEST_MAX_TIME:-20}
+
+    # Parse args
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --json) json_output=true; shift ;;
+            --connect-timeout) connect_timeout="$2"; shift 2 ;;
+            --max-time) max_time="$2"; shift 2 ;;
+            -*) echo "Unknown option: $1" >&2; return 1 ;;
+            *) urls+=("$1"); shift ;;
+        esac
+    done
+
+    # Default URLs if none specified
+    if [ ${#urls[@]} -eq 0 ]; then
+        urls=("https://github.com" "https://google.com")
+    fi
+
+    if [ "$json_output" = true ]; then
+        # ---- JSON output (machine-parseable) ----
+        local entries=""
+        local json_ok=0
+        for url in "${urls[@]}"; do
+            local result
+            result=$(curl -o /dev/null -s -w '%{http_code} %{time_connect} %{time_total}' --connect-timeout "$connect_timeout" --max-time "$max_time" "$url" 2>/dev/null)
+            local code=-1 connect=-1 total=-1 ok_val=0
+            if [ -n "${result:-}" ]; then
+                read -r code connect total <<< "$result"
+                if [ "${code:-0}" -ge 200 ] && [ "${code:-0}" -lt 400 ]; then
+                    ok_val=1
+                else
+                    json_ok=1
+                fi
+            else
+                json_ok=1
+            fi
+            local entry
+            entry=$(python3 -c "import json; print(json.dumps({'url':'$url','http_code':${code:-0},'connect':${connect:--1},'total':${total:--1},'ok':$ok_val}))")
+            if [ -z "$entries" ]; then entries="$entry"; else entries="$entries,$entry"; fi
+        done
+        echo "[$entries]"
+        return $json_ok
+    fi
+
+    # ---- Human-readable output ----
     echo "=== VPN Connectivity Test ==="
     echo ""
 
-    local targets=("https://github.com" "https://google.com")
-    local names=("github.com" "google.com")
     local all_ok=0
-
-    for i in "${!targets[@]}"; do
-        local url="${targets[$i]}"
-        local name="${names[$i]}"
+    for url in "${urls[@]}"; do
+        local name
+        name=$(python3 -c "from urllib.parse import urlparse; print(urlparse('$url').hostname)")
         local result
-
-        # Use curl with connect-time metrics: time_connect, time_total, http_code
-        result=$(curl -o /dev/null -s -w '%{http_code} %{time_connect} %{time_total}' --connect-timeout 15 --max-time 20 "$url" 2>/dev/null)
+        result=$(curl -o /dev/null -s -w '%{http_code} %{time_connect} %{time_total}' --connect-timeout "$connect_timeout" --max-time "$max_time" "$url" 2>/dev/null)
 
         if [ -z "${result:-}" ]; then
             printf "  %-20s FAIL - no response (VPN may be down)\n" "$name"
@@ -788,6 +831,120 @@ cmd_test() {
         echo "VPN is working correctly."
     else
         echo "One or more targets unreachable — check VPN status with 'clashctl status'."
+    fi
+    return $all_ok
+}
+
+cmd_switch_auto() {
+    echo "=== Auto-switching to Fastest Proxy ==="
+    local testurl="${DELAY_URL:-https://www.gstatic.com/generate_204}"
+    local timeout="${DELAY_TIMEOUT:-5000}"
+    echo "Test URL: $testurl (timeout: ${timeout}ms)"
+    echo ""
+
+    # Find all selector/URLTest/Fallback groups
+    local groups
+    groups=$(api_get /group 2>/dev/null | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+for g in data.get('proxies',[]):
+    t = g.get('type','')
+    if t in ('Selector','URLTest','Fallback','LoadBalance'):
+        print(g['name'])
+" 2>/dev/null)
+
+    if [ -z "$groups" ]; then
+        echo "  No switchable proxy groups found."
+        return 1
+    fi
+
+    local overall_best_delay=999999
+    local overall_best_proxy=""
+    local overall_best_group=""
+
+    while IFS= read -r group; do
+        [ -z "$group" ] && continue
+        echo "--- Group: $group ---"
+
+        local encoded encoded_url
+        encoded=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$group'))" 2>/dev/null)
+        encoded_url=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$testurl'))" 2>/dev/null)
+
+        local results
+        local max_wait=$((timeout * 2 / 1000 + 5))
+        results=$($CURL_SOCK --max-time "$max_wait" "http://localhost/group/${encoded}/delay?url=${encoded_url}&timeout=${timeout}" 2>/dev/null) || true
+
+        if [ -z "${results:-}" ]; then
+            echo "  No response from API"
+            echo ""
+            continue
+        fi
+
+        # Parse and find the fastest proxy in this group
+        local best_proxy best_delay
+        local read_result
+        read_result=$(echo "$results" | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+best_delay = 999999
+best_proxy = ''
+for name, val in data.items():
+    delay = val if isinstance(val, (int, float)) else val.get('delay', -1)
+    if 0 <= delay < best_delay:
+        best_delay = delay
+        best_proxy = name
+if best_proxy:
+    print(f'{best_proxy} {best_delay}')
+" 2>/dev/null)
+
+        if [ -z "$read_result" ]; then
+            echo "  All proxies timed out"
+            echo ""
+            continue
+        fi
+
+        best_proxy=$(echo "$read_result" | awk '{print $1}')
+        best_delay=$(echo "$read_result" | awk '{print $2}')
+
+        echo "  Best: $best_proxy ($best_delay ms)"
+
+        # Track overall best across all groups
+        if [ "$best_delay" -lt "$overall_best_delay" ] 2>/dev/null; then
+            overall_best_delay="$best_delay"
+            overall_best_proxy="$best_proxy"
+            overall_best_group="$group"
+        fi
+
+        # Switch this group to the best proxy
+        local now
+        now=$(api_get /group 2>/dev/null | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+for g in data.get('proxies',[]):
+    if g['name']=='$group':
+        print(g.get('now',''))
+" 2>/dev/null)
+
+        if [ "$now" = "$best_proxy" ]; then
+            echo "  Already selected, no switch needed."
+        else
+            echo "  Switching: $now -> $best_proxy ..."
+            local sw_encoded sw_pe
+            sw_encoded=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$group'))" 2>/dev/null)
+            sw_pe=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$best_proxy'))" 2>/dev/null)
+            $CURL_SOCK -X PUT "http://localhost/proxies/${sw_encoded}" -H 'Content-Type: application/json' -d "{\"name\":\"$best_proxy\"}" 2>/dev/null
+            echo "  Done."
+        fi
+        echo ""
+    done <<< "$groups"
+
+    if [ -n "$overall_best_proxy" ]; then
+        echo "=== Summary ==="
+        echo "Overall fastest: $overall_best_proxy in $overall_best_group ($overall_best_delay ms)"
+    else
+        echo "=== Summary ==="
+        echo "Could not find any working proxy."
+        return 1
     fi
 }
 
@@ -879,8 +1036,10 @@ cmd_usage() {
     echo "  subs          List subscription profiles"
     echo "  profile       List or switch subs (profile list|switch <uid|idx>)"
     echo "  check         Verify mihomosh config and API connectivity (add --fix to auto-repair)"
-    echo "  test          Test VPN connectivity to github.com and google.com"
+    echo "  test [URL...]  Test VPN connectivity (default: github.com, google.com)"
+    echo "  test --json   Machine-parseable JSON output with exit code"
     echo "  delay         Ping all proxies in a group (delay <group>)"
+    echo "  switch-auto   Delay-test all groups and switch to the fastest proxy"
     echo "  webui         Manage metacubexd web dashboard (start|stop|status|update)"
     echo "  help          This help"
 }
@@ -900,8 +1059,9 @@ case "${1:-help}" in
     subs)        cmd_list_subscriptions ;;
     profile)     cmd_profile "${2:-list}" "${3:-}" ;;
     check)       cmd_check "${2:-}" ;;
-    test)        cmd_test ;;
+    test)        cmd_test "${@:2}" ;;
     delay)       cmd_delay "${2:-}" ;;
+    switch-auto) cmd_switch_auto ;;
     webui)       cmd_webui "${2:-status}" ;;
     help|--help|-h) cmd_usage ;;
     *) echo "Unknown command: $1"; cmd_usage; exit 1 ;;
