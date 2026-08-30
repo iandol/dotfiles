@@ -20,7 +20,7 @@ exec --no-startup-id dex --autostart --environment i3
 exec --no-startup-id xrdb -merge ~/.Xresources
 
 # wallpaper
-exec --no-startup-id /usr/bin/nitrogen --set-scaled ~/.dotfiles/terminals/everforest.jpg
+exec --no-startup-id /usr/bin/feh --bg-fill ~/.dotfiles/terminals/everforest.jpg
 
 # bluetooth only if blueman is installed
 exec --no-startup-id command -v /usr/bin/blueman-applet && /usr/bin/blueman-applet

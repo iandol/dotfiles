@@ -76,7 +76,7 @@ elif [ "$PLATFORM" = "Linux" ]; then
 	sudo apt -my install gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly
 	sudo apt -my install synaptic zathura zathura-pdf-poppler zathura-ps
 	sudo apt -my install rofi i3 xdotool unicode gucharmap
-	sudo apt -my install nitrogen
+	sudo apt -my install feh
 	sudo apt -my install network-manager-applet blueman
 	sudo apt -my install python3-pip python3-venv
 	sudo apt -my install openssh-server
