@@ -225,3 +225,8 @@ channels = ["conda-forge"]
 dependencies = { nodejs = "*" }
 exposed = { node = "node", npm = "npm", npx = "npx" }
 
+[envs.hayagriva]
+channels = ["conda-forge"]
+dependencies = { hayagriva = "*" }
+exposed = { hayagriva = "hayagriva" }
+
