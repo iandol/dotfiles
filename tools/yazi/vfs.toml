@@ -16,7 +16,7 @@ user     = "ian"
 port     = 22
 key_file = "~/.ssh/iansync"
 
-[sftp.nas]
+[sftp.nasx]
 host     = "10.10.47.188"
 user     = "Ian"
 port     = 2222

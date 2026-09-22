@@ -26,3 +26,14 @@ function Linemode:size_and_mtime()
 	local size = self._file:size()
 	return string.format("%s %s", size and ya.readable_size(size) or "-", time)
 end
+
+vf.sftp = {
+  nas = {
+    host = "10.10.47.188",
+    user = "Ian",
+    port = 2222,
+    password = os.getenv("NAS_PWD"),
+  },
+}
+
+
