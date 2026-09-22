@@ -18,6 +18,10 @@ else
 	CLASH_CONFIG_DIR="${CLASH_CONFIG_DIR:-$HOME/.local/share/io.github.clash-verge-rev.clash-verge-rev}"
 fi
 SOCK="/tmp/verge/verge-mihomo.sock"
+# Fallback for service-managed cores (Clash Verge Rev service mode puts the socket under /run)
+if [ ! -S "$SOCK" ]; then
+    SOCK="/run/clash-verge-service/users/$(id -u)/verge-mihomo.sock"
+fi
 CLASH_CONFIG="${CLASH_CONFIG:-$CLASH_CONFIG_DIR/clash-verge.yaml}"
 PROFILES_YAML="${PROFILES_YAML:-$CLASH_CONFIG_DIR/profiles.yaml}"
 VERGE_YAML="${VERGE_YAML:-$CLASH_CONFIG_DIR/verge.yaml}"

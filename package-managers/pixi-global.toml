@@ -45,11 +45,6 @@ channels = ["conda-forge"]
 dependencies = { librsvg = "*" }
 exposed = { ".librsvg-post-link" = ".librsvg-post-link", ".librsvg-pre-unlink" = ".librsvg-pre-unlink", rsvg-convert = "rsvg-convert" }
 
-[envs.nvim]
-channels = ["conda-forge"]
-dependencies = { nvim = "*" }
-exposed = { nvim = "nvim" }
-
 [envs.yt-dlp]
 channels = ["conda-forge"]
 dependencies = { yt-dlp = "*" }
@@ -229,4 +224,9 @@ exposed = { node = "node", npm = "npm", npx = "npx" }
 channels = ["conda-forge"]
 dependencies = { hayagriva = "*" }
 exposed = { hayagriva = "hayagriva" }
+
+[envs.nvim]
+channels = ["conda-forge"]
+dependencies = { nvim = "*" }
+exposed = { nvim = "nvim" }
 

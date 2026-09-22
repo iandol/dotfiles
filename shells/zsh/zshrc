@@ -138,3 +138,6 @@ echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | �
 
 
 
+
+# Added by codebase-memory-mcp install
+export PATH="/home/cog5/.local/bin:$PATH"
