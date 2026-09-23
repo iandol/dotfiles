@@ -31,7 +31,7 @@ reg import "$ENV:HOME\scoop\apps\vscode\current\install-associations.reg"
 sudo scoop install Cascadia-Code FantasqueSansMono-NF FiraCode-NF
 
 cd ~
-git clone https://github.com/iandol/dotfiles .dotfiles
+git clone https://codeberg.org/iandol/dotfiles .dotfiles
 
 New-Item -Path $ENV:HOME\Documents\PowerShell -ItemType Directory
 Copy-Item $ENV:HOME\.dotfiles\configs\Microsoft.PowerShell_profile.ps1 $ENV:HOME\Documents\PowerShell\

@@ -1,262 +1,239 @@
-#!/bin/bash
-cd ~ || return
-printf "\n\n--->>> Bootstrap terminal %s setup, current directory is %s\n\n" "$SHELL" "$(pwd)"
-printf '\e[36m'
-uname -a | grep -iq "microsoft" && MOD="WSL"
-uname -a | grep -iq "aarch64|armv7" && MOD="RPi"
-PLATFORM=$(uname -s)$MOD
-printf "Using %s...\n" "$PLATFORM"
+#!/usr/bin/env bash
+#
+# bootstrap.sh - provision a new machine (macOS, Ubuntu, Raspberry Pi OS or WSL).
+#
+# Core toolchain: x-cmd, pixi and Homebrew (macOS/Ubuntu only). Dotfiles are
+# linked with rotz; zsh uses znap (zsh-snap) as its plugin manager.
+#
+# Usage: bash bootstrap.sh
 
-[[ -x $(which curl) ]] && eval "$(curl https://get.x-cmd.com/x7)"
-[[ -x $(which wget) ]] && eval "$(wget -O- https://get.x-cmd.com/x7)"
+set -o nounset -o pipefail
 
-#try to install homebrew on macOS
-if [ "$PLATFORM" = "Darwin" ]; then
-	if [ ! -e /usr/bin/clang ]; then
-		printf 'We will need to install Command-line tools ... '
-		xcode-select --install
-		printf 'Wait for it to finish then rerun bootstrap.sh ... '
-		exit 0
-	fi
-	chflags nohidden ~/Library
-	printf 'Let us bootstrap Homebrew if not present ... '
-	if [ -e "$(which brew)" ]; then
-		printf 'Homebrew is present!\n'
-	else
-		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-		printf 'Homebrew now installed...\n'
-	fi
-	printf 'Add Caskroom fonts to Homebrew...\n'
-	#make sure our minimum packages are installed
-	if [ -e "$(which brew)" ]; then
-		printf 'Adding Homebrew packages...\n'
-		brew install git bat p7zip pixi fzf ruby-build
-		brew install neovim figlet
-		brew install prettyping ansiweather media-info 
-		brew install git-delta diff-so-fancy pandoc pandoc-crossref
-		brew install multimarkdown libusb exodriver yt-dlp
-		brew tap rsteube/tap
-		brew install carapace
-		# VPN options
-		brew tap v2raya/v2raya
-		brew install v2raya
-		brew install clash-verge-rev
-		#cask fonts
-		brew install --cask font-symbols-only-nerd-font font-recursive-code \
-		font-fantasque-sans-mono font-fira-code font-jetbrains-mono \
-		font-cascadia-code font-libertinus font-stix font-alegreya font-alegreya-sans
-		brew tap iandol/adobe-fonts
-		brew install font-source-sans
-		brew install font-source-serif
-		printf 'Do you want to install Apps? (y / n): '
-		read -r ans
-		if [ "$ans" == 'y' ]; then
-			#cask apps
-			brew install alfred blackhole-2ch bettertouchtool betterzip bitwarden
-			brew install bookends calibre daisydisk deckset draw-things
-			brew install ff-works forklift fsnotes hex-fiend 
-			brew install iina imageoptim inkscape kitty knockknock launchcontrol mpv
-			brew install nomachine prince proxyman r scrivener suspicious-package 
-			brew install syntax-highlight xld wechat visual-studio-code zerotier-one 
-			# other software
-			#brew install libreoffice microsoft-word microsoft-powerpoint microsoft-excel
-			#brew install dropbox #fails unless on VPN
-			#brew install adoptopenjdk android-studio mono-mdk
+readonly DOTFILES_REPO="https://codeberg.org/iandol/dotfiles.git"
+readonly DOTFILES_DIR="${HOME}/.dotfiles"
+readonly ZNAP_DIR="${HOME}/.local/share/znap"
+readonly ZNAP_REPO="https://github.com/marlonrichert/zsh-snap.git"
+readonly ROTZ_REPO="volllly/rotz"
+readonly ROTZ_INSTALLER="https://volllly.github.io/rotz/install.sh"
+readonly XCMD_INSTALLER="https://get.x-cmd.com/x7"
+readonly PIXI_INSTALLER="https://pixi.sh/install.sh"
+readonly HOMEBREW_INSTALLER="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+readonly LINUXBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+readonly DIFF_SO_FANCY_FATPACK="https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy"
+
+PLATFORM=""
+ROTZ_BIN=""
+
+if [[ -t 1 && -n "${TERM:-}" ]]; then
+	readonly C_RESET=$'\e[0m' C_CYAN=$'\e[36m' C_GREEN=$'\e[32m' C_YELLOW=$'\e[33m' C_RED=$'\e[31m'
+else
+	readonly C_RESET="" C_CYAN="" C_GREEN="" C_YELLOW="" C_RED=""
+fi
+
+info() { printf '%s%s%s\n' "${C_CYAN}" "$*" "${C_RESET}"; }
+ok() { printf '%s%s%s\n' "${C_GREEN}" "$*" "${C_RESET}"; }
+warn() { printf '%s%s%s\n' "${C_YELLOW}" "$*" "${C_RESET}" >&2; }
+
+die() {
+	printf '%s%s%s\n' "${C_RED}" "$*" "${C_RESET}" >&2
+	exit 1
+}
+
+step() { printf '\n%s==> %s%s\n' "${C_CYAN}" "$*" "${C_RESET}"; }
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+confirm() {
+	local reply
+	[[ -t 0 ]] || return 1
+	read -r -p "$1 [y/N] " reply
+	[[ "${reply:-}" == [Yy]* ]]
+}
+
+detect_platform() {
+	local kernel arch
+	kernel="$(uname -s)"
+	arch="$(uname -m)"
+	case "${kernel}" in
+	Darwin)
+		PLATFORM="macos"
+		;;
+	Linux)
+		if grep -qi microsoft /proc/version 2>/dev/null; then
+			PLATFORM="wsl"
+		elif grep -qi raspberry /proc/device-tree/model 2>/dev/null; then
+			PLATFORM="rpi"
+		elif [[ "${arch}" == aarch64 || "${arch}" == armv7l || "${arch}" == armv6l ]]; then
+			PLATFORM="rpi"
+		else
+			PLATFORM="ubuntu"
 		fi
+		;;
+	*)
+		PLATFORM="unknown"
+		;;
+	esac
+}
+
+install_xcmd() {
+	local xbin="${HOME}/.x-cmd.root/bin/x"
+	if [[ -x "${xbin}" ]]; then
+		ok "x-cmd already installed"
+		return 0
 	fi
-elif [ "$PLATFORM" = "Linux" ]; then
-	printf 'Assume we are setting up a Ubuntu machine\n'
-	#make sure our minimum packages are installed
-	sudo apt update
-	sudo apt -my install apt-transport-https ca-certificates software-properties-common
-	sudo apt -my install build-essential zsh git gparted vim curl file mc
-	sudo apt -my install freeglut3 gawk mesa-utils exfatprogs
-	sudo apt -my install p7zip-full p7zip-rar figlet jq ansiweather htop 
-	sudo apt -my install libunrar5 libdc1394-25 libraw1394-11
-	sudo apt -my install gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly
-	sudo apt -my install synaptic zathura zathura-pdf-poppler zathura-ps
-	sudo apt -my install rofi i3 xdotool unicode gucharmap
-	sudo apt -my install feh
-	sudo apt -my install network-manager-applet blueman
-	sudo apt -my install python3-pip python3-venv
-	sudo apt -my install openssh-server
-	sudo apt -my install wakeonlan etherwake
-	sudo apt -my install kitty-terminfo
-	
-	if [ ! -d /home/linuxbrew/.linuxbrew ]; then
-		printf 'Installing Homebrew...\n'
-		/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+	step "Installing x-cmd"
+	if have curl; then
+		bash -c 'eval "$(curl -fsSL "$1")"' _ "${XCMD_INSTALLER}" || die "x-cmd installation failed"
+	elif have wget; then
+		bash -c 'eval "$(wget -qO- "$1")"' _ "${XCMD_INSTALLER}" || die "x-cmd installation failed"
 	else
-		printf 'Homebrew already installed...\n'
-		eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+		die "curl or wget is required to install x-cmd"
 	fi
-	if [ -x /home/linuxbrew/.linuxbrew/bin/brew ]; then
-		printf 'Adding Homebrew packages...\n'
-		brew install gcc git-delta diff-so-fancy bat rbenv ruby-build fzf 
-		brew install procs ripgrep prettyping starship httping
-		brew tap rsteube/tap
-		brew install carapace
-		brew install --cask font-symbols-only-nerd-font font-recursive-code \
-		font-fantasque-sans-mono font-fira-code \
-		font-jetbrains-mono font-cascadia-code font-libertinus \
-		font-alegreya font-alegreya-sans font-stix
-		#brew install --HEAD font-source-sans-3
-		sudo ln -v -f -L /home/linuxbrew/.linuxbrew/share/fonts/* /usr/local/share/fonts/
-		sudo fc-cache -fv
+	[[ -x "${xbin}" ]] && ok "x-cmd installed"
+}
+
+ensure_pixi() {
+	if ! have pixi && [[ -x "${HOME}/.pixi/bin/pixi" ]]; then
+		export PATH="${HOME}/.pixi/bin:${PATH}"
+	fi
+	if have pixi; then
+		ok "pixi ready"
+		return 0
 	fi
 
-	sudo snap install code arduino rpi-imager obs-studio
-
-elif [ "$PLATFORM" = "LinuxRPi" ]; then
-	printf 'Assume we are setting up a Raspberry Pi machine\n'
-	#make sure our minimum packages are installed
-	sudo apt update
-	sudo apt -my install build-essential gparted vim curl file zsh git mc
-	sudo apt -my install gawk mesa-utils exfatprogs
-	sudo apt -my install freeglut3-dev 
-	sudo apt -my install libglut-dev
-	sudo apt -my install pipewire-pulse pulseaudio-utils
-	sudo apt -my install openssh-server
-	sudo apt -my install i3 rofi nitrogen xdotool
-	sudo apt -my install p7zip-full p7zip-rar figlet jq ansiweather exfat-fuse exfat-utils htop 
-	sudo apt -my install libunrar5 libdc1394-25 libraw1394-11
-	sudo apt -my install snapd synaptic zathura zathura-pdf-poppler zathura-ps
-	sudo apt -my install flatpak
-	sudo apt -my install wakeonlan etherwake
-	sudo apt -my install python3-pip python3-venv
-	sudo apt -my install kitty-terminfo
-
-	sudo snap install core
-	sudo snap install starship --edge
-
-	# get update i3 desktop manager
-	"$SPATH/config/geti3.sh"
-
-	# Install snap packages
-	[[ ! -f $(which vlc) ]] && sudo snap install vlc
-	[[ ! -f $(which code) ]] && sudo snap install --classic code
-
-	# flatpak
-	flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-	flatpak install -y flathub com.obsproject.Studio
-
-	mkdir -p ~/bin
-	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > ~/bin/diff-so-fancy
-	chmod +x ~/bin/diff-so-fancy
-elif [ "$PLATFORM" = "LinuxWSL" ]; then
-	printf 'Assume we are setting up a Ubuntu on Windows machine\n'
-	#make sure our minimum packages are installed
-	sudo apt update
-	sudo apt-get install build-essential vim curl p7zip-full p7zip-rar file zsh git figlet jq ansiweather wget rbenv ruby gawk
-	printf 'We will not install homebrew under WSL, try scoop in PS...'
-	mkdir -p ~/bin
-	curl https://raw.githubusercontent.com/so-fancy/diff-so-fancy/master/third_party/build_fatpack/diff-so-fancy > ~/bin/diff-so-fancy
-	chmod +x ~/bin/diff-so-fancy
-fi
-
-sleep 1
-
-if [ -d "$HOME/.rbenv/" ]; then
-	git clone https://github.com/rbenv/rbenv-default-gems.git "$(rbenv root)/plugins/rbenv-default-gems"
-	ln -s "$HOME/.dotfiles/default-gems" "$HOME/.rbenv/"
-fi
-
-#few python packages
-printf "Do you want to add Python packages? [y / n]:  "
-read -r ans
-if [ "$ans" == 'y' ]; then
-	printf 'Install a few python packages ... '
-	pip3 install howdoi black pylint
-fi
-
-sleep 1
-
-printf 'Let us bootstrap .dotfiles if not present ... '
-read -rp "Press any key to continue... " -n1 -s; printf '\n'
-if [ -d ~/.dotfiles/.git ]; then
-	printf ' .dotfiles are present! \n'
-	cd "$HOME/.dotfiles" || return; git pull; cd "$HOME" || return
-else
-	git clone https://codeberg.org/iandol/dotfiles.git ~/.dotfiles
-	chown -R "$USER" ~/.dotfiles
-	printf 'We cloned a new .dotfiles...\n'
-fi
-
-sleep 1
-
-printf 'Setting up the symbolic links at: '
-date
-printf '...\n'
-printf '\e[32m'
-.dotfiles/makeLinks.sh
-printf '\e[36m'
-
-sleep 1
-
-printf 'Will check for a functional ZI...\n'
-if [ -d ~/.oh-my-zsh/ ]; then
-	printf '\t...Going to replace oh-my-zsh with ZI... '
-	rm -rf ~/.oh-my-zsh/
-fi
-if [ -d ~/.antigen/ ]; then
-	printf '\t...Going to replace antigen with ZI... '
-	rm -rf ~/.antigen/
-fi
-if [ -d ~/.zplug/ ]; then
-	printf '\t...Going to replace zplug with ZI... '
-	rm -rf ~/.zplug/
-fi
-if [ -d ~/.zi/ ]; then
-	printf '\t...Going to replace zinit with ZI... '
-	rm -rf ~/.zi/
-fi
-### Added by Zinit's installer
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-        print -P "%F{33} %F{34}Installation successful.%f%b" || \
-        print -P "%F{160} The clone has failed.%f%b"
-fi
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
-
-printf 'Linking some bin files in ~/bin/: \n'
-printf '\e[32m'
-mkdir -pv ~/bin/
-if [ "$PLATFORM" = "Darwin" ]; then
-	ln -sv ~/.dotfiles/bin/* $HOME/bin
-else
-	ln -sv ~/.dotfiles/bin/*.sh $HOME/bin
-	ln -sv ~/.dotfiles/bin/*.rb $HOME/bin
-fi
-chown -R "$USER" ~/bin/*
-printf '\e[36m\n\n'
-
-if [ "$PLATFORM" = "Darwin" ]; then
-	printf "Do you want to set up OS X defaults? [y / n]:  "
-	read -r ans
-	if [ "$ans" == 'y' ]; then
-		echo 'Enter password for setup command:'
-		sudo echo -n "..."
-		zsh ~/.dotfiles/macos.sh
+	step "Installing pixi"
+	curl -fsSL "${PIXI_INSTALLER}" | bash || warn "pixi installation failed"
+	if [[ -x "${HOME}/.pixi/bin/pixi" ]]; then
+		export PATH="${HOME}/.pixi/bin:${PATH}"
 	fi
-fi
+}
 
-sleep 1
+install_rotz() {
+	ROTZ_BIN=""
+	if have rotz; then
+		ROTZ_BIN="$(command -v rotz)"
+	elif [[ -x "${HOME}/.local/bin/rotz" ]]; then
+		ROTZ_BIN="${HOME}/.local/bin/rotz"
+	fi
+	if [[ -n "${ROTZ_BIN}" ]]; then
+		ok "rotz already installed (${ROTZ_BIN})"
+		return 0
+	fi
 
-if [ -f "$(which git)" ]; then
-	printf 'Setting some GIT defaults...\n'
-	git config --global --replace-all user.email 'iandol@machine'
-	git config --global --replace-all user.name 'iandol'
-	y
-	[[ -f $(which nvim) ]] && git config --global core.editor "nvim"
-	git config --global init.defaultBranch main
-	git config --global core.autocrlf input
-	git config --global core.eol lf
-	git config --global pull.ff only
+	step "Installing rotz"
+	if [[ -x "${HOME}/.x-cmd.root/bin/x" ]]; then
+		bash -c '. "$HOME/.x-cmd.root/X" >/dev/null 2>&1; x eget use "$1"' _ "${ROTZ_REPO}" ||
+			warn "x eget could not install rotz"
+	fi
+	if [[ ! -x "${HOME}/.local/bin/rotz" ]] && have curl; then
+		ROTZ_INSTALL="${HOME}/.local" sh -c "$(curl -fsSL "${ROTZ_INSTALLER}")" || warn "rotz installer failed"
+	fi
+	if [[ -x "${HOME}/.local/bin/rotz" ]]; then
+		ROTZ_BIN="${HOME}/.local/bin/rotz"
+		ok "rotz installed (${ROTZ_BIN})"
+	fi
+}
+
+setup_dotfiles() {
+	if [[ -d "${DOTFILES_DIR}/.git" ]]; then
+		step "Updating dotfiles"
+		git -C "${DOTFILES_DIR}" pull --ff-only || warn "Could not update ${DOTFILES_DIR}"
+	else
+		step "Cloning dotfiles"
+		git clone "${DOTFILES_REPO}" "${DOTFILES_DIR}" || die "Could not clone ${DOTFILES_REPO}"
+	fi
+
+	install_rotz
+
+	if [[ -z "${ROTZ_BIN}" ]]; then
+		warn "rotz is unavailable; link dotfiles later with: rotz -d ${DOTFILES_DIR} link --force"
+		return 0
+	fi
+	step "Linking dotfiles with rotz"
+	"${ROTZ_BIN}" -d "${DOTFILES_DIR}" link --force ||
+		warn "rotz reported errors; rerun: rotz -d ${DOTFILES_DIR} link --force"
+}
+
+setup_zsh() {
+	local legacy_dirs=(
+		"${HOME}/.oh-my-zsh"
+		"${HOME}/.antigen"
+		"${HOME}/.zplug"
+		"${HOME}/.zi"
+		"${HOME}/.zinit"
+		"${HOME}/.local/share/zinit"
+	)
+	local dir
+	for dir in "${legacy_dirs[@]}"; do
+		if [[ -e "${dir}" ]]; then
+			warn "Removing legacy zsh plugin manager ${dir}"
+			rm -rf "${dir}"
+		fi
+	done
+
+	if [[ -d "${ZNAP_DIR}/.git" ]]; then
+		ok "znap already installed"
+	else
+		step "Installing znap (zsh-snap)"
+		mkdir -p "$(dirname "${ZNAP_DIR}")"
+		git clone --depth 1 "${ZNAP_REPO}" "${ZNAP_DIR}" || warn "znap installation failed"
+	fi
+
+	local zsh_bin=""
+	if [[ "${PLATFORM}" == "macos" ]] && have brew && [[ -x "$(brew --prefix)/bin/zsh" ]]; then
+		zsh_bin="$(brew --prefix)/bin/zsh"
+	else
+		zsh_bin="$(command -v zsh || true)"
+	fi
+	if [[ -z "${zsh_bin}" ]]; then
+		warn "zsh is not installed; skipping default shell change"
+		return 0
+	fi
+	if [[ "${SHELL:-}" == "${zsh_bin}" ]]; then
+		ok "zsh is already the default shell"
+		return 0
+	fi
+
+	if ! grep -qxF "${zsh_bin}" /etc/shells 2>/dev/null; then
+		printf '%s\n' "${zsh_bin}" | sudo tee -a /etc/shells >/dev/null
+	fi
+	if chsh -s "${zsh_bin}"; then
+		ok "Default shell set to ${zsh_bin} (restart your terminal)"
+	else
+		warn "Could not change the default shell; run: chsh -s ${zsh_bin}"
+	fi
+}
+
+setup_rbenv() {
+	have rbenv || return 0
+	local rbenv_root plugin gems
+	rbenv_root="$(rbenv root)"
+	plugin="${rbenv_root}/plugins/rbenv-default-gems"
+	gems="${DOTFILES_DIR}/package-managers/default-gems"
+	[[ -f "${gems}" ]] || return 0
+	if [[ ! -d "${plugin}/.git" ]]; then
+		step "Installing rbenv-default-gems"
+		git clone --depth 1 https://github.com/rbenv/rbenv-default-gems.git "${plugin}" ||
+			warn "Could not install rbenv-default-gems"
+	fi
+	[[ -d "${plugin}/.git" ]] && ln -sfn "${gems}" "${rbenv_root}/default-gems"
+}
+
+setup_git() {
+	if ! have git; then
+		warn "git is not installed; skipping git configuration"
+		return 0
+	fi
+
+	step "Configuring git defaults"
+	git config --global --replace-all user.email "iandol@machine"
+	git config --global --replace-all user.name "iandol"
+	have nvim && git config --global --replace-all core.editor "nvim"
+	git config --global --replace-all init.defaultBranch main
+	git config --global --replace-all core.autocrlf input
+	git config --global --replace-all core.eol lf
+	git config --global --replace-all pull.ff only
 	git config --global --replace-all alias.last 'log -1 HEAD'
 	git config --global --replace-all alias.unstage 'reset HEAD --'
 	git config --global --replace-all alias.history 'log -p --'
@@ -268,45 +245,283 @@ if [ -f "$(which git)" ]; then
 	git config --global --replace-all alias.dta 'difftool -d'
 	git config --global --replace-all alias.dtl 'difftool HEAD^'
 	git config --global --replace-all difftool.prompt false
-	if [ "$PLATFORM" = 'Darwin' ]; then
+	if [[ "${PLATFORM}" == "macos" ]]; then
 		git config --global --replace-all credential.helper osxkeychain
 	else
 		git config --global --replace-all credential.helper 'cache --timeout=86400'
 	fi
-	if [ -f "$(which delta)" ]; then
+	if have delta; then
 		git config --global core.pager "delta --line-numbers"
 		git config --global interactive.diffFilter "delta --color-only --features=interactive"
 		git config --global delta.features "decorations"
 		git config --global delta.navigate "true"
-	elif [ -f "$(which diff-so-fancy)" ]; then
+	elif have diff-so-fancy; then
 		git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
 		git config --global interactive.diffFilter "diff-so-fancy --patch"
 	fi
 	git config --global color.ui true
-	git config --global color.diff-highlight.oldNormal    "red bold"
+	git config --global color.diff-highlight.oldNormal "red bold"
 	git config --global color.diff-highlight.oldHighlight "red bold 52"
-	git config --global color.diff-highlight.newNormal    "green bold"
+	git config --global color.diff-highlight.newNormal "green bold"
 	git config --global color.diff-highlight.newHighlight "green bold 22"
-	git config --global color.diff.meta       "11"
-	git config --global color.diff.frag       "magenta bold"
-	git config --global color.diff.func       "146 bold"
-	git config --global color.diff.commit     "yellow bold"
-	git config --global color.diff.old        "red bold"
-	git config --global color.diff.new        "green bold"
+	git config --global color.diff.meta "11"
+	git config --global color.diff.frag "magenta bold"
+	git config --global color.diff.func "146 bold"
+	git config --global color.diff.commit "yellow bold"
+	git config --global color.diff.old "red bold"
+	git config --global color.diff.new "green bold"
 	git config --global color.diff.whitespace "red reverse"
-else
-	printf 'GIT is not installed, use command line tools or install brew/apt...\n'
-fi
+}
 
-sleep 2
-
-if [ -x "$(which zsh)" ]; then
-	printf 'Switching to use ZSH, you will need to reboot...\n'
-	if [ $PLATFORM = "Darwin" ]; then
-		chsh -s /usr/local/bin/zsh && source ~/.zshrc #installed via brew
-	else
-		chsh -s "$(which zsh)" && source ~/.zshrc
+apt_install() {
+	if ! have apt-get; then
+		warn "apt-get is unavailable; skipping: $*"
+		return 0
 	fi
-fi
-printf '\n\n--->>> All Done...\n'
-printf '\e[m'
+	sudo apt-get install -y --ignore-missing "$@" || warn "Some apt packages could not be installed"
+}
+
+snap_install() {
+	if ! have snap; then
+		warn "snap is unavailable; skipping: $*"
+		return 0
+	fi
+	local package
+	for package in "$@"; do
+		if snap list "${package}" >/dev/null 2>&1; then
+			ok "snap ${package} already installed"
+		else
+			sudo snap install "${package}" || warn "Could not install snap ${package}"
+		fi
+	done
+}
+
+install_homebrew() {
+	if have brew; then
+		ok "Homebrew already installed"
+		return 0
+	fi
+
+	local prefixes prefix
+	if [[ "${PLATFORM}" == "macos" ]]; then
+		prefixes=(/opt/homebrew /usr/local)
+	else
+		prefixes=("${LINUXBREW_PREFIX}")
+	fi
+	for prefix in "${prefixes[@]}"; do
+		if [[ -x "${prefix}/bin/brew" ]]; then
+			eval "$("${prefix}/bin/brew" shellenv)"
+			ok "Homebrew already installed"
+			return 0
+		fi
+	done
+
+	step "Installing Homebrew"
+	NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL "${HOMEBREW_INSTALLER}")" || warn "Homebrew installation failed"
+	for prefix in "${prefixes[@]}"; do
+		if [[ -x "${prefix}/bin/brew" ]]; then
+			eval "$("${prefix}/bin/brew" shellenv)"
+			return 0
+		fi
+	done
+	warn "Homebrew is still unavailable"
+}
+
+brew_install() {
+	if ! have brew; then
+		warn "Homebrew is unavailable; skipping: $*"
+		return 0
+	fi
+	brew install "$@"
+}
+
+brew_install_cask() {
+	if ! have brew; then
+		warn "Homebrew is unavailable; skipping casks: $*"
+		return 0
+	fi
+	brew install --cask "$@"
+}
+
+link_brew_fonts() {
+	local font_dir files
+	font_dir="$(brew --prefix)/share/fonts"
+	[[ -d "${font_dir}" ]] || return 0
+	shopt -s nullglob
+	files=("${font_dir}"/*)
+	shopt -u nullglob
+	((${#files[@]})) || return 0
+	sudo mkdir -p /usr/local/share/fonts
+	sudo ln -v -f -L "${files[@]}" /usr/local/share/fonts/
+	sudo fc-cache -f >/dev/null
+}
+
+install_diff_so_fancy_fatpack() {
+	[[ -x "${HOME}/bin/diff-so-fancy" ]] && return 0
+	have curl || return 0
+	step "Installing diff-so-fancy"
+	mkdir -p "${HOME}/bin"
+	if curl -fsSL "${DIFF_SO_FANCY_FATPACK}" -o "${HOME}/bin/diff-so-fancy"; then
+		chmod +x "${HOME}/bin/diff-so-fancy"
+	else
+		warn "Could not install diff-so-fancy"
+	fi
+}
+
+setup_macos() {
+	if ! xcode-select -p >/dev/null 2>&1; then
+		step "Xcode Command Line Tools are required"
+		xcode-select --install || true
+		die "Rerun bootstrap.sh after the Command Line Tools installation finishes."
+	fi
+	chflags nohidden "${HOME}/Library" 2>/dev/null || true
+
+	install_homebrew
+	if ! have brew; then
+		warn "Homebrew is unavailable; skipping macOS packages"
+		return 0
+	fi
+
+	step "Installing Homebrew formulae"
+	local formulae=(
+		git bat p7zip pixi fzf ruby-build zsh
+		neovim figlet prettyping ansiweather media-info
+		git-delta diff-so-fancy pandoc pandoc-crossref
+		multimarkdown libusb exodriver yt-dlp
+	)
+	brew_install "${formulae[@]}"
+
+	brew tap rsteube/tap
+	brew_install carapace
+	brew tap v2raya/v2raya
+	brew_install v2raya
+	brew_install clash-verge-rev
+
+	step "Installing fonts"
+	local fonts=(
+		font-symbols-only-nerd-font font-recursive-code font-fantasque-sans-mono
+		font-fira-code font-jetbrains-mono font-cascadia-code font-libertinus
+		font-stix font-alegreya font-alegreya-sans
+	)
+	brew_install_cask "${fonts[@]}"
+	brew tap iandol/adobe-fonts
+	brew_install font-source-sans font-source-serif
+
+	if confirm "Install GUI applications (casks)?"; then
+		local apps=(
+			alfred blackhole-2ch bettertouchtool betterzip bitwarden
+			bookends calibre daisydisk deckset draw-things ff-works forklift
+			fsnotes hex-fiend iina imageoptim inkscape kitty knockknock
+			launchcontrol mpv nomachine prince proxyman r scrivener
+			suspicious-package syntax-highlight xld wechat visual-studio-code
+			zerotier-one
+		)
+		local app
+		for app in "${apps[@]}"; do
+			brew install --cask "${app}" || warn "Could not install ${app}"
+		done
+	fi
+}
+
+setup_ubuntu() {
+	step "Installing Ubuntu packages"
+	sudo apt-get update || warn "apt-get update failed"
+	apt_install \
+		apt-transport-https ca-certificates software-properties-common \
+		build-essential zsh git gparted vim curl file mc wget \
+		freeglut3 gawk mesa-utils exfatprogs \
+		p7zip-full p7zip-rar figlet jq ansiweather htop \
+		libunrar5 libdc1394-25 libraw1394-11 \
+		gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly \
+		synaptic zathura zathura-pdf-poppler zathura-ps \
+		rofi i3 xdotool unicode gucharmap feh \
+		network-manager-applet blueman \
+		python3-pip python3-venv \
+		openssh-server wakeonlan etherwake kitty-terminfo
+
+	install_homebrew
+	if have brew; then
+		step "Installing Homebrew packages"
+		local formulae=(
+			gcc git-delta diff-so-fancy bat rbenv ruby-build fzf pixi
+			procs ripgrep prettyping starship httping
+		)
+		brew_install "${formulae[@]}"
+		brew tap rsteube/tap
+		brew_install carapace
+
+		local fonts=(
+			font-symbols-only-nerd-font font-recursive-code font-fantasque-sans-mono
+			font-fira-code font-jetbrains-mono font-cascadia-code font-libertinus
+			font-alegreya font-alegreya-sans font-stix
+		)
+		brew_install_cask "${fonts[@]}"
+		link_brew_fonts
+	fi
+
+	snap_install code arduino rpi-imager obs-studio
+}
+
+setup_rpi() {
+	step "Installing Raspberry Pi packages"
+	sudo apt-get update || warn "apt-get update failed"
+	apt_install \
+		build-essential gparted vim curl file zsh git mc wget \
+		gawk mesa-utils exfatprogs freeglut3-dev libglut-dev \
+		pipewire-pulse pulseaudio-utils openssh-server \
+		i3 rofi nitrogen xdotool \
+		p7zip-full p7zip-rar figlet jq ansiweather exfat-fuse exfat-utils htop \
+		libunrar5 libdc1394-25 libraw1394-11 \
+		snapd synaptic zathura zathura-pdf-poppler zathura-ps flatpak \
+		wakeonlan etherwake python3-pip python3-venv kitty-terminfo
+
+	snap_install core
+	if have snap && ! snap list starship >/dev/null 2>&1; then
+		sudo snap install starship --edge || warn "Could not install snap starship"
+	fi
+	have vlc || sudo snap install vlc || warn "Could not install snap vlc"
+	have code || sudo snap install --classic code || warn "Could not install snap code"
+
+	if have flatpak; then
+		flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo ||
+			warn "Could not add the flathub remote"
+		flatpak install -y flathub com.obsproject.Studio || warn "Could not install OBS via flatpak"
+	fi
+
+	install_diff_so_fancy_fatpack
+}
+
+setup_wsl() {
+	step "Installing WSL packages"
+	sudo apt-get update || warn "apt-get update failed"
+	apt_install \
+		build-essential vim curl p7zip-full p7zip-rar file zsh git \
+		figlet jq ansiweather wget rbenv ruby gawk
+	info "Skipping Homebrew under WSL; use scoop/winget for Windows applications."
+	install_diff_so_fancy_fatpack
+}
+
+main() {
+	cd "${HOME}" || die "Cannot change to ${HOME}"
+	detect_platform
+	printf '\n--->>> Bootstrap on %s (%s)\n' "$(uname -srm)" "${PLATFORM}"
+
+	case "${PLATFORM}" in
+	macos) setup_macos ;;
+	ubuntu) setup_ubuntu ;;
+	rpi) setup_rpi ;;
+	wsl) setup_wsl ;;
+	*) die "Unsupported platform: $(uname -s) $(uname -m)" ;;
+	esac
+
+	install_xcmd
+	ensure_pixi
+	setup_dotfiles
+	setup_zsh
+	setup_rbenv
+	setup_git
+
+	printf '\n--->>> All done. Restart your terminal (or log out) to use zsh with znap.\n'
+}
+
+main "$@"

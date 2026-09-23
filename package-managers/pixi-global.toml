@@ -43,7 +43,7 @@ exposed = { typst = "typst" }
 [envs.librsvg]
 channels = ["conda-forge"]
 dependencies = { librsvg = "*" }
-exposed = { ".librsvg-post-link" = ".librsvg-post-link", ".librsvg-pre-unlink" = ".librsvg-pre-unlink", rsvg-convert = "rsvg-convert" }
+exposed = { rsvg-convert = "rsvg-convert" }
 
 [envs.yt-dlp]
 channels = ["conda-forge"]
