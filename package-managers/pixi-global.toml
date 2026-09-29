@@ -162,8 +162,8 @@ exposed = { timeout = "timeout" }
 
 [envs.openjdk]
 channels = ["conda-forge"]
-dependencies = { openjdk = "21.*" }
-exposed = { jar = "jar", java = "java", javac = "javac", jdb = "jdb", javadoc = "javadoc" }
+dependencies = { openjdk = "25.*" }
+exposed = { jar = "jar", java = "java", javac = "javac", jdb = "jdb", javadoc = "javadoc", jarsigner = "jarsigner", javap = "javap", jcmd = "jcmd", jconsole = "jconsole", jdeprscan = "jdeprscan", jdeps = "jdeps", jfr = "jfr", jhsdb = "jhsdb", jimage = "jimage", jinfo = "jinfo", jlink = "jlink", jmap = "jmap", jmod = "jmod", jnativescan = "jnativescan", jpackage = "jpackage", jps = "jps", jrunscript = "jrunscript", jshell = "jshell", jstack = "jstack", jstat = "jstat", jstatd = "jstatd", jwebserver = "jwebserver", keytool = "keytool", rmiregistry = "rmiregistry", serialver = "serialver" }
 
 [envs.procs]
 channels = ["conda-forge"]
@@ -229,4 +229,9 @@ exposed = { hayagriva = "hayagriva" }
 channels = ["conda-forge"]
 dependencies = { nvim = "*" }
 exposed = { nvim = "nvim" }
+
+[envs.rclone]
+channels = ["conda-forge"]
+dependencies = { rclone = "*" }
+exposed = { rclone = "rclone" }
 
