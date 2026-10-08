@@ -1,0 +1,21 @@
+# Converted from rotz ai/dot.yaml
+# Skills are linked into both ~/.agents and ~/.hermes.
+# Enable with the default profile: `bombadil link`
+
+[settings.dots]
+matlab-performance-optimizer-agents = { source = "ai/skills/matlab-performance-optimizer", target = ".agents/skills/matlab-performance-optimizer" }
+matlab-performance-optimizer-hermes = { source = "ai/skills/matlab-performance-optimizer", target = ".hermes/skills/matlab-performance-optimizer" }
+cagelab-task-development-agents = { source = "ai/skills/cagelab-task-development", target = ".agents/skills/cagelab-task-development" }
+cagelab-task-development-hermes = { source = "ai/skills/cagelab-task-development", target = ".hermes/skills/cagelab-task-development" }
+matlab-class-based-tests-agents = { source = "ai/skills/matlab-class-based-tests", target = ".agents/skills/matlab-class-based-tests" }
+matlab-class-based-tests-hermes = { source = "ai/skills/matlab-class-based-tests", target = ".hermes/skills/matlab-class-based-tests" }
+alyx-api-agents = { source = "ai/skills/alyx-api", target = ".agents/skills/alyx-api" }
+alyx-api-hermes = { source = "ai/skills/alyx-api", target = ".hermes/skills/alyx-api" }
+firecrawl-research-index-agents = { source = "ai/skills/firecrawl-research-index", target = ".agents/skills/firecrawl-research-index" }
+firecrawl-research-index-hermes = { source = "ai/skills/firecrawl-research-index", target = ".hermes/skills/firecrawl-research-index" }
+adhd = { source = "ai/skills/adhd", target = ".agents/skills/adhd" }
+opencode-agent-simple = { source = "ai/agents/simple.md", target = ".config/opencode/agents/simple.md" }
+opencode-agent-scipaper = { source = "ai/agents/scipaper.md", target = ".config/opencode/agents/scipaper.md" }
+
+# rotz `installs:` - bombadil has no install phase, run manually if needed:
+# curl -fsSL https://raw.githubusercontent.com/UditAkhourii/adhd/main/skills/adhd/SKILL.md -o ~/.dotfiles/tools/skills/adhd/SKILL.md

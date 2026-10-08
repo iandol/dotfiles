@@ -1,6 +1,58 @@
-# Path to your dotfile directory containing this config file (relative to $HOME). 
+# Toml Bombadil configuration (converted from rotz).
+#
+# rotz kept its config in dot.yaml files per module; each module now has a
+# bombadil.toml imported below. rotz `global:`/top-level links live in the imported
+# `[settings.dots]` (linked by plain `bombadil link`), while rotz `linux:` /
+# `darwin:` / `windows:` sections live in module profiles listed under the
+# `linux` / `darwin` / `windows` profiles at the bottom of this file.
+#
+# Usage:
+#   bombadil link                 # global/common links
+#   bombadil link -p linux        # + rotz linux section
+#   bombadil link -p darwin       # + rotz darwin section
+#   bombadil link -p windows      # + rotz windows section
+#   bombadil link -p linux cog5   # hostname-specific extras: cog5, cog-WS1, cog6
+#   bombadil link -p raspberry    # Raspberry Pi starship override
+#   bombadil watch -p linux       # re-link when dotfiles change
+#
+# Notes:
+# - rotz ran with link_type: Symbolic; bombadil renders templates into `.dots`
+#   and links the result. Entries that break Tera rendering ({{{ fold markers,
+#   ${#...}) use `direct = true` to symlink the source as-is.
+# - bombadil has no install phase, so rotz `installs:` commands are preserved
+#   as comments in the corresponding bombadil.toml files.
+# - `bombadil install ~/.dotfiles` symlinks this file to $XDG_CONFIG/bombadil.toml.
+# - When migrating from rotz or switching profiles/targets, run `bombadil unlink`
+#   first: bombadil leaves an existing symlink in place instead of replacing it
+#   (`--force` is not usable with direct directory links).
+
 dotfiles_dir = ".dotfiles"
 
-[settings.dots]
+import = [
+  { path = "ai/bombadil.toml" },
+  { path = "bin/bombadil.toml" },
+  { path = "completions/bombadil.toml" },
+  { path = "editors/bombadil.toml" },
+  { path = "launchd/bombadil.toml" },
+  { path = "package-managers/bombadil.toml" },
+  { path = "shells/bombadil.toml" },
+  { path = "terminals/bombadil.toml" },
+  { path = "tiling/bombadil.toml" },
+  { path = "tools/bombadil.toml" },
+]
 
-zsh = { source = "shells/zsh/zshrc", target = ".zshrc" }
+[settings]
+# rotz config.yaml `variables:`
+vars = ["vars.toml"]
+
+# rotz `linux:` sections across modules
+[profiles.linux]
+extra_profiles = ["bin-linux", "tiling-linux", "tools-linux"]
+
+# rotz `darwin:` sections across modules
+[profiles.darwin]
+extra_profiles = ["bin-darwin", "launchd-darwin", "tiling-darwin", "tools-darwin"]
+
+# rotz `windows:` sections across modules
+[profiles.windows]
+extra_profiles = ["shells-windows"]

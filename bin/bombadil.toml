@@ -1,0 +1,24 @@
+# Converted from rotz bin/dot.yaml
+
+[settings.dots]
+makeJSON = { source = "bin/makeJSON.sh", target = "bin/makeJSON.sh" }
+checkZT = { source = "bin/checkZT", target = "bin/checkZT" }
+egetAll = { source = "bin/egetAll.sh", target = "bin/egetAll" }
+makeTools = { source = "bin/makeTools.sh", target = "bin/makeTools" }
+zoteroSearch = { source = "bin/zoteroSearch.sh", target = "bin/zoteroSearch" }
+fport = { source = "bin/fport.sh", target = "bin/fport" }
+# `${#...}` in clashctl breaks Tera rendering, hence direct.
+clashctl = { source = "bin/clashctl", target = "bin/clashctl", direct = true }
+
+# rotz `linux:` section - `bombadil link -p linux`
+[profiles.bin-linux.dots]
+matlab_hang_capture = { source = "bin/matlab_hang_capture.sh", target = "bin/matlab_hang_capture.sh" }
+matlab_hang_toolinstall = { source = "bin/matlab_hang_toolinstall.sh", target = "bin/matlab_hang_toolinstall.sh" }
+installV2RAYA = { source = "bin/installV2RAYA.sh", target = "bin/installV2RAYA.sh" }
+snapcache = { source = "bin/snapcache.sh", target = "bin/snapcache.sh" }
+libreoffice-pagewidth-linux = { source = "bin/FitImagesToPageWidth.py", target = ".config/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py" }
+
+# rotz `darwin:` section - `bombadil link -p darwin`
+[profiles.bin-darwin.dots]
+runSync = { source = "bin/runSync.applescript", target = "bin/runSync.applescript" }
+libreoffice-pagewidth-darwin = { source = "bin/FitImagesToPageWidth.py", target = "Library/Application Support/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py" }

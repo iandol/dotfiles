@@ -1,0 +1,7 @@
+# Converted from rotz completions/dot.yaml
+# Enable with the default profile: `bombadil link`
+
+[settings.dots]
+carapace-pandocomatic = { source = "completions/pandocomatic.yaml", target = ".config/carapace/specs/pandocomatic.yaml" }
+carapace-scrivomatic = { source = "completions/scrivomatic.yaml", target = ".config/carapace/specs/scrivomatic.yaml" }
+carapace-bridges = { source = "completions/bridges.yaml", target = ".config/carapace/bridges.yaml" }

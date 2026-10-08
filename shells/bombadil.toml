@@ -1,0 +1,16 @@
+# Converted from rotz shells/dot.yaml
+# Enable with the default profile: `bombadil link`
+
+[settings.dots]
+elvish-rc = { source = "shells/elvish/rc.elv", target = ".config/elvish/rc.elv" }
+elvish-aliases = { source = "shells/elvish/aliases.elv", target = ".config/elvish/lib/aliases.elv" }
+zsh-zshrc = { source = "shells/zsh/zshrc", target = ".zshrc" }
+zsh-zprofile = { source = "shells/zsh/zprofile", target = ".zprofile" }
+zsh-zshenv = { source = "shells/zsh/zshenv", target = ".zshenv" }
+bash-bashrc = { source = "shells/bash/bashrc", target = ".bashrc" }
+bash-bash_profile = { source = "shells/bash/bash_profile", target = ".bash_profile" }
+aliases = { source = "shells/aliases", target = ".config/aliases" }
+
+# rotz `windows:` section - `bombadil link -p windows`
+[profiles.shells-windows.dots]
+powershell-profile = { source = "shells/Powershell/Microsoft.PowerShell_profile.ps1", target = "Documents/PowerShell/Microsoft.PowerShell_profile.ps1" }

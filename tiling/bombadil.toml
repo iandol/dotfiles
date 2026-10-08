@@ -1,0 +1,39 @@
+# Converted from rotz tiling/dot.yaml
+
+# rotz `linux:` section - `bombadil link -p linux`
+[profiles.tiling-linux.dots]
+xresources = { source = "tiling/Xresources100", target = ".Xresources" }
+i3 = { source = "tiling/i3config", target = ".config/i3/config" }
+i3status = { source = "tiling/i3status", target = ".config/i3status/config" }
+polybar = { source = "tiling/polybar.ini", target = ".config/polybar/config.ini" }
+polybar-launch = { source = "tiling/polybar.sh", target = ".config/polybar/launch.sh" }
+sway = { source = "tiling/swayconfig", target = ".config/sway/config" }
+
+# rotz `darwin:` section - `bombadil link -p darwin`
+[profiles.tiling-darwin.dots]
+aerospace = { source = "tiling/aerospace.toml", target = ".config/aerospace/aerospace.toml" }
+aerospace-scratchpad = { source = "tiling/scratchpad.sh", target = ".config/aerospace/scratchpad.sh" }
+rift = { source = "tiling/rift.toml", target = ".config/rift/config.toml" }
+paneru = { source = "tiling/paneru.toml", target = ".config/paneru/paneru.toml" }
+sketchybarrc = { source = "tiling/sketchybarrc", target = ".config/sketchybar/sketchybarrc" }
+sketchybar-plugins = { source = "tiling/sbplugins", target = ".config/sketchybar/plugins" }
+
+# rotz host conditions `linux[whoami.hostname="..."]` use a 150 DPI Xresources.
+# Enable together with linux, e.g. `bombadil link -p linux cog5`.
+[profiles.cog5]
+extra_profiles = ["tiling-cog5"]
+
+[profiles.tiling-cog5.dots]
+xresources = { source = "tiling/Xresources150", target = ".Xresources" }
+
+[profiles.cog-WS1]
+extra_profiles = ["tiling-cog-WS1"]
+
+[profiles.tiling-cog-WS1.dots]
+xresources = { source = "tiling/Xresources150", target = ".Xresources" }
+
+[profiles.cog6]
+extra_profiles = ["tiling-cog6"]
+
+[profiles.tiling-cog6.dots]
+xresources = { source = "tiling/Xresources150", target = ".Xresources" }

@@ -1,0 +1,8 @@
+# Converted from rotz launchd/dot.yaml
+# All entries are macOS-only: `bombadil link -p darwin`
+
+[profiles.launchd-darwin.dots]
+dotfilesSync = { source = "launchd/dotfilesSync.plist", target = "Library/LaunchAgents/dotfilesSync.plist" }
+processPandocJSON = { source = "launchd/processPandocJSON.plist", target = "Library/LaunchAgents/processPandocJSON.plist" }
+syncBookends = { source = "launchd/syncBookends.plist", target = "Library/LaunchAgents/syncBookends.plist" }
+setenv-XDG-CONFIG-HOME = { source = "launchd/setenv_XDG_CONFIG_HOME.plist", target = "Library/LaunchAgents/setenv_XDG_CONFIG_HOME.plist" }

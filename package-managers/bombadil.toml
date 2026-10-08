@@ -1,0 +1,13 @@
+# Converted from rotz package-managers/dot.yaml
+# Enable with the default profile: `bombadil link`
+
+[settings.dots]
+default-gems = { source = "package-managers/default-gems", target = ".config/default-gems" }
+pixi-global = { source = "package-managers/pixi-global.toml", target = ".pixi/manifests/pixi-global.toml" }
+eget = { source = "package-managers/eget.toml", target = ".eget.toml" }
+
+# rotz `installs:` (darwin|linux) - bombadil has no install phase, run manually:
+# curl -fsSL https://pixi.sh/install.sh | sh
+# curl https://zyedidia.github.io/eget.sh | sh
+# mv -f ./eget /usr/local/bin/eget
+# export ROTZ_INSTALL=/usr/local && curl -fsSL volllly.github.io/rotz/install.sh | sh

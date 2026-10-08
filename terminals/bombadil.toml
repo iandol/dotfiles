@@ -1,0 +1,15 @@
+# Converted from rotz terminals/dot.yaml
+# Enable with the default profile: `bombadil link`
+
+[settings.dots]
+# `{{{` fold markers in the kitty configs break Tera rendering, hence direct.
+kitty-conf = { source = "terminals/kitty/kitty.conf", target = ".config/kitty/kitty.conf", direct = true }
+kitty-macos-conf = { source = "terminals/kitty/kittymacos.conf", target = ".config/kitty/kittymacos.conf" }
+kitty-linux-conf = { source = "terminals/kitty/kittylinux.conf", target = ".config/kitty/kittylinux.conf" }
+kitty-keymap = { source = "terminals/kitty/kitty-keymap.py", target = ".config/kitty/kitty-keymap.py" }
+kitty-map = { source = "terminals/kitty/kitty.map", target = ".config/kitty/kitty.map" }
+kitty-quick-access-terminal = { source = "terminals/kitty/quick-access-terminal.conf", target = ".config/kitty/quick-access-terminal.conf", direct = true }
+kitty-colors = { source = "terminals/colors.png", target = ".config/kitty/colors.png" }
+kitty-colors-dark = { source = "terminals/colors-dark.png", target = ".config/kitty/colors-dark.png" }
+alacritty = { source = "terminals/alacritty.yml", target = ".config/alacritty.yml" }
+ghostty = { source = "terminals/ghostty-config", target = ".config/ghostty/config" }

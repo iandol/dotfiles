@@ -1,0 +1,41 @@
+# Converted from rotz tools/dot.yaml
+# Enable with the default profile: `bombadil link`
+
+[settings.dots]
+ssh-config = { source = "tools/sshconfig", target = ".ssh/config" }
+rsync-excludes = { source = "tools/rsync-excludes", target = ".config/.rsync-excludes" }
+ansiweatherrc = { source = "tools/ansiweatherrc", target = ".ansiweatherrc" }
+rubocop = { source = "tools/rubocop.yml", target = ".rubocop.yml" }
+starship = { source = "tools/starship.toml", target = ".config/starship.toml" }
+tmux = { source = "tools/tmux.conf", target = ".config/tmux/tmux.conf" }
+herdr = { source = "tools/herdr.toml", target = ".config/herdr/config.toml" }
+yazi = { source = "tools/yazi/yazi.toml", target = ".config/yazi/yazi.toml" }
+yazi-keymap = { source = "tools/yazi/keymap.toml", target = ".config/yazi/keymap.toml" }
+yazi-theme = { source = "tools/yazi/theme.toml", target = ".config/yazi/theme.toml" }
+yazi-package = { source = "tools/yazi/package.toml", target = ".config/yazi/package.toml" }
+yazi-init = { source = "tools/yazi/init.lua", target = ".config/yazi/init.lua" }
+yazi-vfs = { source = "tools/yazi/vfs.toml", target = ".config/yazi/vfs.toml" }
+mpv = { source = "tools/mpv/mpv.conf", target = ".config/mpv/mpv.conf" }
+mpv-input = { source = "tools/mpv/input.conf", target = ".config/mpv/input.conf" }
+
+# rotz `darwin:` section - `bombadil link -p darwin`
+[profiles.tools-darwin.dots]
+clash = { source = "tools/clash.yaml", target = "Library/Application Support/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml" }
+
+# rotz `linux:` section - `bombadil link -p linux`
+[profiles.tools-linux.dots]
+clash = { source = "tools/clash.yaml", target = ".local/share/io.github.clash-verge-rev.clash-verge-rev/profiles/Merge.yaml" }
+
+# rotz `linux[whoami.distro^="Raspberry"]` starship override - `bombadil link -p raspberry`
+[profiles.raspberry.dots]
+starship = { source = "tools/starshiprpi.toml" }
+
+# rotz `installs:` - bombadil has no install phase, run manually:
+
+# linux:
+# sudo apt install -y curl git ripgrep fd-find
+
+# windows:
+# winget install Microsoft.PowerShell
+# powershell -ExecutionPolicy ByPass -c "irm -useb https://pixi.sh/install.ps1 | iex"
+# irm volllly.github.io/rotz/install.sh | iex

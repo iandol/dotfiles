@@ -1,0 +1,11 @@
+# Converted from rotz editors/dot.yaml
+# Enable with the default profile: `bombadil link`
+
+[settings.dots]
+nvim-init = { source = "editors/nvim/init.lua", target = ".config/nvim/init.lua" }
+nvim-lua = { source = "editors/nvim/lua", target = ".config/nvim/lua" }
+nvim-lsp = { source = "editors/nvim/lsp", target = ".config/nvim/lsp" }
+vimrc = { source = "editors/vim/vimrc", target = ".vimrc" }
+# `{{{` fold markers in .vim/colors/*.vim break Tera rendering, hence direct.
+vim-dir = { source = "editors/vim/.vim", target = ".vim", direct = true }
+zerobrane-user = { source = "editors/zerobrane/user.lua", target = ".zbstudio/user.lua" }
