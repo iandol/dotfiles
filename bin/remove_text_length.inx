@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inkscape-extension xmlns="http://www.inkscape.org/namespace/inkscape/extension">
+    <name>Remove Text Length</name>
+    <id>org.cogplatform.remove-text-length</id>
+    <effect>
+        <object-type>all</object-type>
+        <effects-menu>
+            <submenu name="Text"/>
+        </effects-menu>
+    </effect>
+    <script>
+        <command location="inx" interpreter="python">remove_text_length.py</command>
+    </script>
+</inkscape-extension>

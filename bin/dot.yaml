@@ -10,6 +10,8 @@ global:
 darwin:
   links:
     FitImagesToPageWidth.py: ~/Library/Application Support/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
+    remove_text_length.py: ~/Library/Application Support/org.inkscape.Inkscape/config/inkscape/extensions/remove_text_length.py
+    remove_text_length.inx: ~/Library/Application Support/org.inkscape.Inkscape/config/inkscape/extensions/remove_text_length.inx
     runSync.applescript: ~/bin/runSync.applescript
 linux:
   links:
@@ -18,3 +20,6 @@ linux:
     installV2RAYA.sh: ~/bin/installV2RAYA.sh
     snapcache.sh: ~/bin/snapcache.sh
     FitImagesToPageWidth.py: ~/.config/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
+    # snap Inkscape reads extensions from ~/snap/inkscape/common/extensions (hard links only; snap cannot read ~/.dotfiles)
+    remove_text_length.py: ~/snap/inkscape/common/extensions/remove_text_length.py
+    remove_text_length.inx: ~/snap/inkscape/common/extensions/remove_text_length.inx
