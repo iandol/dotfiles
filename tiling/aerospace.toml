@@ -114,7 +114,12 @@ on-window-detected = [
 		run = ['layout floating']
 	},
 	{
-		if  = 'test %{app-bundle-id} = io.mpv || test %{app-bundle-id} = org.videolan.vlc',
+		if  = '''
+			test %{app-bundle-id} = io.mpv \
+			|| test %{app-bundle-id} = org.videolan.vlc \
+			|| test %{app-bundle-id} = com.colliderli.iina \
+			|| test %{app-bundle-id} = com.osbytes.ffworks5
+		''',
 		run = ['layout floating', 'move-node-to-workspace D']
 	},
 	{
