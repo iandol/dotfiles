@@ -13,6 +13,7 @@ darwin:
     remove_text_length.py: ~/Library/Application Support/org.inkscape.Inkscape/config/inkscape/extensions/remove_text_length.py
     remove_text_length.inx: ~/Library/Application Support/org.inkscape.Inkscape/config/inkscape/extensions/remove_text_length.inx
     runSync.applescript: ~/bin/runSync.applescript
+    airdrop: ~/bin/airdrop
 linux:
   links:
     matlab_hang_capture.sh: ~/bin/matlab_hang_capture.sh
