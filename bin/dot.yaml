@@ -7,6 +7,7 @@ global:
     zoteroSearch.sh: ~/bin/zoteroSearch
     fport.sh: ~/bin/fport
     clashctl: ~/bin/clashctl
+    inkscapeLink.sh: ~/bin/inkscapeLink
 darwin:
   links:
     FitImagesToPageWidth.py: ~/Library/Application Support/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
@@ -21,6 +22,4 @@ linux:
     installV2RAYA.sh: ~/bin/installV2RAYA.sh
     snapcache.sh: ~/bin/snapcache.sh
     FitImagesToPageWidth.py: ~/.config/LibreOffice/4/user/Scripts/python/FitImagesToPageWidth.py
-    # snap Inkscape reads extensions from ~/snap/inkscape/common/extensions (hard links only; snap cannot read ~/.dotfiles)
-    remove_text_length.py: ~/snap/inkscape/common/extensions/remove_text_length.py
-    remove_text_length.inx: ~/snap/inkscape/common/extensions/remove_text_length.inx
+    # Inkscape extension files are installed by bin/inkscapeLink.sh (hard links for snap; not rotz-managed)
