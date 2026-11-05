@@ -166,6 +166,12 @@ set $ws8 "8"
 set $ws9 "9"
 set $ws10 "10"
 
+# Keep workspace 1 on the 4K monitor.  This machine (cog5): DisplayPort-2 is the
+# left 1920x1200 panel, DisplayPort-3 the 3840x2160 one.  On a host without that
+# output name i3 leaves the workspace where it is, so this is safe in a shared
+# dotfiles config.
+workspace 1 output DisplayPort-3
+
 # switch to workspace
 bindsym $mod+1 workspace number $ws1
 bindsym $mod+2 workspace number $ws2
