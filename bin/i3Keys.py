@@ -2,34 +2,58 @@
 from __future__ import annotations
 
 import html
+import json
+import os
+import shutil
 import subprocess
 import sys
 from typing import List, Tuple
 
 
-def escape_markup(value: str) -> str:
-	"""HTML-escape strings for rofi markup."""
-	return html.escape(value, quote=True)
+def ipc_tool() -> str:
+	"""Pick the IPC client for the running compositor (sway or i3)."""
+	if os.environ.get("SWAYSOCK") and shutil.which("swaymsg"):
+		return "swaymsg"
+	if os.environ.get("I3SOCK") and shutil.which("i3-msg"):
+		return "i3-msg"
+	# No IPC socket in the environment: guess from the session type so a
+	# machine with both sway and i3 installed picks the right client.
+	if os.environ.get("WAYLAND_DISPLAY") and shutil.which("swaymsg"):
+		return "swaymsg"
+	if os.environ.get("DISPLAY") and shutil.which("i3-msg"):
+		return "i3-msg"
+	for candidate in ("swaymsg", "i3-msg"):
+		if shutil.which(candidate):
+			return candidate
+	return "i3-msg"
 
 
 def collect_bindings() -> List[Tuple[str, str]]:
-	"""Return (key, command) tuples parsed from the current i3 config."""
+	"""Return (key, command) tuples parsed from the compositor config."""
+	tool = ipc_tool()
 	try:
-		config = subprocess.check_output(["i3-msg", "-t", "get_config"], text=True)
+		raw = subprocess.check_output([tool, "-t", "get_config"], text=True)
 	except (OSError, subprocess.CalledProcessError) as err:
-		raise SystemExit(f"Failed to read i3 config: {err}") from err
+		raise SystemExit(f"Failed to read config via {tool}: {err}") from err
+
+	# Both i3-msg and swaymsg wrap the config in JSON: {"config": "..."}
+	try:
+		config = json.loads(raw)["config"]
+	except (ValueError, KeyError, TypeError):
+		config = raw
 
 	bindings: List[Tuple[str, str]] = []
 	for line in config.splitlines():
 		line = line.strip()
-		if not line or line.startswith("#") or not line.startswith("bindsym "):
+		if not line.startswith("bindsym "):
 			continue
-		entry = line[len("bindsym ") :]
-		try:
-			key, cmd = entry.split(maxsplit=1)
-		except ValueError:
+		tokens = line[len("bindsym ") :].split()
+		# Drop binding flags such as --locked / --to-code / --whole-window.
+		while tokens and tokens[0].startswith("--"):
+			tokens.pop(0)
+		if len(tokens) < 2:
 			continue
-		bindings.append((key, cmd))
+		bindings.append((tokens[0], " ".join(tokens[1:])))
 	return bindings
 
 
@@ -43,6 +67,11 @@ def build_rofi_payload(bindings: List[Tuple[str, str]]) -> bytes:
 	return "".join(parts).encode("utf-8")
 
 
+def escape_markup(value: str) -> str:
+	"""HTML-escape strings for rofi markup."""
+	return html.escape(value, quote=True)
+
+
 def prompt_with_rofi(payload: bytes) -> Tuple[int, int]:
 	"""Send payload to rofi and return (exit_code, selected_index)."""
 	try:
@@ -51,7 +80,7 @@ def prompt_with_rofi(payload: bytes) -> Tuple[int, int]:
 				"rofi",
 				"-dmenu",
 				"-p",
-				"i3 keybindings",
+				"keybindings",
 				"-sep",
 				r"\0",
 				"-eh",
@@ -75,10 +104,11 @@ def prompt_with_rofi(payload: bytes) -> Tuple[int, int]:
 
 
 def execute_binding(cmd: str) -> None:
+	tool = ipc_tool()
 	try:
-		subprocess.run(["i3-msg", cmd], check=True)
+		subprocess.run([tool, cmd], check=True)
 	except (OSError, subprocess.CalledProcessError) as err:
-		raise SystemExit(f"Failed to execute i3 command '{cmd}': {err}") from err
+		raise SystemExit(f"Failed to execute '{cmd}' via {tool}: {err}") from err
 
 
 def main() -> None:
