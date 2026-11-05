@@ -204,6 +204,25 @@ results = runner.run(suite);
 
 **Important**: Always use the full package path `matlab.unittest.TestSuite` and `matlab.unittest.TestRunner` — bare `TestSuite.fromFolder()` will fail with "Unable to resolve the name" if the package is not on the MATLAB path.
 
+### Selecting tests by tag
+
+Do not rely on the legacy `-IncludeTag` / `-ExcludeTag` flags. Recent releases reject them (*"Unmatched parameter name '-ExcludeTag' must be a string scalar or character vector that can represent a field name"*), and `runtests(f,'Tag','CI')` is rejected as well. Build the suite and filter it yourself:
+
+```matlab
+suite = matlab.unittest.TestSuite.fromFile('tests/MyTest.m');
+isHW  = cellfun(@(c) any(strcmp(c,'hardware')), {suite.Tags});
+results = run(suite(~isHW));        %> CI-safe subset
+```
+
+`suite.Tags` is a cell array of cell arrays of char, so `{suite.Tags}` plus `cellfun` is the reliable filter regardless of release.
+
+In Opticka, `tests/runOptickaTests.m` already does this: pass `excludeTag` /
+`includeTag` (`runOptickaTests('myTest','excludeTag','hardware')`). Per-file
+docstrings show `addpath('tests')` first because `addOptickaToPath` strips
+`tests/` from the path. A runner that calls `addOptickaToPath` must re-add its
+own folder afterwards (`addpath(testDir)` right after the call), otherwise it
+works on the first call and becomes unfindable for every call after it.
+
 ### Batch mode (no display)
 
 ```bash
@@ -277,8 +296,11 @@ methods (Test, Tags = {'hardware'})
     end
 end
 
-% In CI, exclude tagged tests:
-% runtests('tests/', '-ExcludeTag', 'hardware')
+% In CI, exclude tagged tests by filtering the suite
+% (see "Selecting tests by tag"; -ExcludeTag is not accepted):
+% suite = matlab.unittest.TestSuite.fromFolder('tests');
+% isHW = cellfun(@(c) any(strcmp(c,'hardware')), {suite.Tags});
+% results = run(suite(~isHW));
 ```
 
 ## Conversion checklist (legacy function test -> class-based)
@@ -302,6 +324,10 @@ end
 - Doxygen-style comments (`%>` for line comments)
 - Tests that require PTB/GetSecs will work locally but need `assume` guards for CI
 - The `tests/` folder is excluded from `addOptickaToPath` by default; tests must call `addOptickaToPath` themselves
+- **`verbose` is abstract in `optickaCore`**: subclass it as a bare `verbose = false` with no type or validator, and list `"verbose"` in `allowedProperties`; `verbose logical = false` errors with *"Using size and validation functions on an inherited property is not supported"*.
+- **A typed handle property is never `[]`**: `properties (Access = protected); sM screenManager; end` starts as a 0×0 `screenManager`, so `isa(me.sM,'screenManager')` is true while `me.sM.screenVals` errors (*"Intermediate dot '.' indexing produced a comma-separated list with 0 values"*). Guard with `isscalar(me.sM) && isa(me.sM,'screenManager')` before reading fields.
+- **A validated numeric property still rejects device values**: `fps double {mustBePositive} = []` accepts the empty default, but assigning a device-reported `0` throws — test `> 0` before assigning values from `Screen('NominalFramerate')` and the like.
+- **Let `setup()` accept a plain struct as well as a `screenManager`**: accepting a struct of `fps`/`ppd` (or a `screenVals` struct) lets tests and offline analysis generate data without opening a PTB window, keeping the suite CI-safe.
 
 ## Pitfalls
 
@@ -313,3 +339,5 @@ end
 - **CI without PTB**: `GetSecs`, `Screen`, etc. are not available in MATLAB-only CI. Tests using these must be tagged or guarded.
 - **TestSuite/TestRunner package resolution**: Always use `matlab.unittest.TestSuite.fromFolder(...)` and `matlab.unittest.TestRunner.withTextOutput` — bare `TestSuite.fromFolder(...)` fails with "Unable to resolve the name 'TestSuite.fromFolder'" when the package is not explicitly imported or on the path. The `runtests()` function works without the package prefix because it is a top-level MATLAB function.
 - **runtests results object**: `~all(results)` doesn't work on the `TestResult` array — use `sum([results.Failed]) > 0` or `any([results.Failed])` instead.
+- **Private helper methods need `testCase.`**: call `testCase.makePath(...)`, never a bare `makePath(...)` — the unqualified call passes its first argument as the object and errors. When bulk-renaming call sites with `replace_all`, the method signature `function p = makePath(...)` gets rewritten too and must be restored.
+- **Negative tolerances**: `verifyLessThan(testCase,x,0.01*median(dTheta))` always fails when the data are negative (e.g. `unwrap(atan2(...))` along a clockwise path). Wrap the tolerance in `abs(...)`.
