@@ -84,6 +84,10 @@ on-window-detected = [
 		run = 'move-node-to-workspace A'
 	},
 	{
+		if  = 'test %{app-bundle-id} = com.sonnysoftware.bookends2',
+		run = 'move-node-to-workspace E'
+	},
+	{
 		if  = 'test %{app-bundle-id} = com.bitwarden.desktop || test %{app-bundle-id} = com.apple.MobileSMS',
 		run = ['layout floating', 'move-node-to-workspace S']
 	},
@@ -93,7 +97,8 @@ on-window-detected = [
 		|| test %{app-bundle-id} = com.metacubex.ClashX.meta \
 		|| test %{app-bundle-id} = io.github.clash-verge-rev.clash-verge-rev \
 		|| test %{app-bundle-id} = com.soma-zone.LaunchControl \
-		|| test %{app-bundle-id} = com.tencent.xinWeChat
+		|| test %{app-bundle-id} = com.tencent.xinWeChat \
+		|| test %{app-bundle-id} = com.daisydiskapp.DaisyDiskStandAlone
 		''',
 		run = ['layout floating', 'move-node-to-workspace S']
 	},

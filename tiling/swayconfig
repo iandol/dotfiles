@@ -213,7 +213,6 @@ bar {
 	tray_padding 0px
 	separator_symbol "☄️"
 	workspace_min_width 50
-	padding 0px 5px 2px 5px
 	colors {
 		background #111111
 		statusline #eeeeee

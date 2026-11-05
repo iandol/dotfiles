@@ -127,8 +127,8 @@ exposed = { ya = "ya", yazi = "yazi" }
 
 [envs.pandoc]
 channels = ["conda-forge"]
-dependencies = { pandoc = "*" }
-exposed = { pandoc = "pandoc", pandoc-lua = "pandoc-lua", pandoc-server = "pandoc-server" }
+dependencies = { pandoc = "*", pandoc-crossref = "*" }
+exposed = { pandoc = "pandoc", pandoc-crossref = "pandoc-crossref", pandoc-lua = "pandoc-lua", pandoc-server = "pandoc-server" }
 
 [envs.bat]
 channels = ["conda-forge"]

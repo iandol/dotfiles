@@ -66,6 +66,15 @@ Host win420
  Host cog21
 	HostName cog21.cloud.lab
 	User cog
+	Port 2222
+	IdentityFile ~/.ssh/cagelab
+	IdentitiesOnly yes
+	#!! GroupLabels admin
+	#!! EnableOSC52 yes
+Host cog21z
+	HostName fd00:5::2
+	User cog
+	Port 2222
 	IdentityFile ~/.ssh/cagelab
 	IdentitiesOnly yes
 	#!! GroupLabels admin
