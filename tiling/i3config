@@ -248,8 +248,12 @@ bar {
 	mode hide
 	hidden_state hide
 	modifier $mod
-	bindsym $mod+button1 bar hidden_state show
-	bindsym $mod+button3 bar hidden_state hide
+	# Bar bindings take a bare mouse button; i3 rejects modifier prefixes
+	# ("Bindings for a bar can only be mouse bindings"), so the old
+	# $mod+button1/$mod+button3 lines never fired.  Right-click toggles
+	# between pinned (show) and auto-hide.  swaybar has no
+	# `hidden_state toggle`, so swayconfig uses `bar mode toggle` instead.
+	bindsym button3 bar hidden_state toggle
 	position bottom
 	status_command i3status
 	font pango:Alegreya Sans 15
