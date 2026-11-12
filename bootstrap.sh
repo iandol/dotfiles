@@ -278,7 +278,12 @@ apt_install() {
 		warn "apt-get is unavailable; skipping: $*"
 		return 0
 	fi
-	sudo apt-get install -y --ignore-missing "$@" || warn "Some apt packages could not be installed"
+	# Install one package per apt-get invocation: --ignore-missing is unreliable,
+	# and a single unavailable package aborts the whole batch otherwise.
+	local package
+	for package in "$@"; do
+		sudo apt-get install -y "${package}" || warn "Could not install apt package ${package}"
+	done
 }
 
 snap_install() {
@@ -391,7 +396,6 @@ setup_macos() {
 	)
 	brew_install "${formulae[@]}"
 
-	brew tap rsteube/tap
 	brew_install carapace
 	brew tap v2raya/v2raya
 	brew_install v2raya
@@ -429,9 +433,9 @@ setup_ubuntu() {
 	apt_install \
 		apt-transport-https ca-certificates software-properties-common \
 		build-essential zsh git gparted vim curl file mc wget \
-		freeglut3 gawk mesa-utils exfatprogs \
-		p7zip-full p7zip-rar figlet jq ansiweather htop \
-		libunrar5 libdc1394-25 libraw1394-11 \
+		libglut-dev gawk mesa-utils exfatprogs \
+		7zip 7zip-rar figlet jq ansiweather htop \
+		libunrar5t64 libdc1394-25 libraw1394-11 \
 		gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly \
 		synaptic zathura zathura-pdf-poppler zathura-ps \
 		rofi i3 xdotool unicode gucharmap feh \
@@ -443,12 +447,10 @@ setup_ubuntu() {
 	if have brew; then
 		step "Installing Homebrew packages"
 		local formulae=(
-			gcc git-delta diff-so-fancy bat rbenv ruby-build fzf pixi
+			gcc git-delta diff-so-fancy bat fzf
 			procs ripgrep prettyping starship httping
 		)
 		brew_install "${formulae[@]}"
-		brew tap rsteube/tap
-		brew_install carapace
 
 		local fonts=(
 			font-symbols-only-nerd-font font-recursive-code font-fantasque-sans-mono
@@ -467,11 +469,11 @@ setup_rpi() {
 	sudo apt-get update || warn "apt-get update failed"
 	apt_install \
 		build-essential gparted vim curl file zsh git mc wget \
-		gawk mesa-utils exfatprogs freeglut3-dev libglut-dev \
+		gawk mesa-utils exfatprogs libglut-dev \
 		pipewire-pulse pulseaudio-utils openssh-server \
 		i3 rofi nitrogen xdotool \
-		p7zip-full p7zip-rar figlet jq ansiweather exfat-fuse exfat-utils htop \
-		libunrar5 libdc1394-25 libraw1394-11 \
+		p7zip-full p7zip-rar figlet jq ansiweather exfat-fuse htop \
+		libunrar5t64 libdc1394-25 libraw1394-11 \
 		snapd synaptic zathura zathura-pdf-poppler zathura-ps flatpak \
 		wakeonlan etherwake python3-pip python3-venv kitty-terminfo
 
@@ -495,7 +497,7 @@ setup_wsl() {
 	step "Installing WSL packages"
 	sudo apt-get update || warn "apt-get update failed"
 	apt_install \
-		build-essential vim curl p7zip-full p7zip-rar file zsh git \
+		build-essential vim curl 7zip 7zip-rar file zsh git \
 		figlet jq ansiweather wget rbenv ruby gawk
 	info "Skipping Homebrew under WSL; use scoop/winget for Windows applications."
 	install_diff_so_fancy_fatpack
