@@ -10,6 +10,14 @@ Host seneca
 	IdentitiesOnly yes
 	#!! GroupLabels admin
 	#!! EnableOSC52 yes
+Host cagelab-matrix
+	HostName fd00:1:1::200
+	Port 2222
+	User cog
+	IdentityFile ~/.ssh/cagelab
+	IdentitiesOnly yes
+	#!! GroupLabels admin
+	#!! EnableOSC52 yes
 Host cog-WS1
 	HostName cog-WS1.cloud.lab
 	Port 2222

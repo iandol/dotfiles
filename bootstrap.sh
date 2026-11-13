@@ -433,7 +433,7 @@ setup_ubuntu() {
 	apt_install \
 		apt-transport-https ca-certificates software-properties-common \
 		build-essential zsh git gparted vim curl file mc wget \
-		libglut-dev gawk mesa-utils exfatprogs \
+		libglut-dev libglu1-mesa-dev gawk mesa-utils exfatprogs \
 		7zip 7zip-rar figlet jq ansiweather htop \
 		libunrar5t64 libdc1394-25 libraw1394-11 \
 		gstreamer1.0-plugins-bad gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly \
@@ -441,7 +441,7 @@ setup_ubuntu() {
 		rofi i3 xdotool unicode gucharmap feh \
 		network-manager-applet blueman \
 		python3-pip python3-venv \
-		openssh-server wakeonlan etherwake kitty-terminfo
+		openssh-server wakeonlan etherwake kitty-terminfo flatpak matlab-support
 
 	install_homebrew
 	if have brew; then
@@ -461,7 +461,15 @@ setup_ubuntu() {
 		link_brew_fonts
 	fi
 
-	snap_install code arduino rpi-imager obs-studio
+	have vlc || sudo snap install vlc || warn "Could not install snap vlc"
+	have code || sudo snap install --classic code || warn "Could not install snap code"
+
+	if have flatpak; then
+		flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo ||
+			warn "Could not add the flathub remote"
+		flatpak install -y flathub com.obsproject.Studio || warn "Could not install OBS via flatpak"
+	fi
+
 }
 
 setup_rpi() {

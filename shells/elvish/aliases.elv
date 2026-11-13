@@ -164,7 +164,6 @@ edit:add-var cloneReset~ $cloneReset~
 edit:add-var cagelab-zsh~ { ln -svf $E:HOME/Code/Setup/config/zshrc $E:HOME/.zshrc; ln -svf $E:HOME/Code/Setup/config/zsh-* $E:HOME/.config; ln -svf $E:HOME/Code/Setup/config/aliases $E:HOME/.config }
 
 #==================================================== - GENERAL
-edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/stdin }
 if ( cmds:is-macos ) {
 	edit:add-var mano~ { |@cmds|
 		each {|c| mandoc -T pdf (man -w $c) | open -fa Preview.app } $cmds
@@ -209,14 +208,6 @@ if ( cmds:is-macos ) {
 	}
 }
 
-cmds:if-external httping { edit:add-var hping~ {|@in| e:httping -K $@in } }
-cmds:if-external bat { edit:add-var cat~ {|@in| e:bat $@in } }
-cmds:if-external python3 { 
-	edit:add-var urlencode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } 
-	edit:add-var urldecode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
-}
-cmds:if-external nvim { edit:add-var vi~ $e:nvim~ }
-
 edit:add-var listUDP~ { |@in|
 	msg "Searching for: "$@in
 	sudo lsof -i UDP -P | grep -E $@in }
@@ -237,6 +228,16 @@ edit:add-var makepwd~ { e:openssl rand -base64 15 }
 edit:add-var dl~ { |@in| e:curl -C - -O '{}' $@in }
 edit:add-var ping~ { |@in| e:ping -c 5 $@in }
 edit:add-var updatePip~ { pip install -U (pip freeze | each {|c| re:split "==| @" $c | cmds:first [(all)] }) }
+edit:add-var installmicromamba~ { curl -L micro.mamba.pm/install.sh | zsh /dev/stdin }
+
+#==================================================== - CHECK APPS ALIASES
+cmds:if-external httping { edit:add-var hping~ {|@in| e:httping -K $@in } }
+cmds:if-external bat { edit:add-var cat~ {|@in| e:bat $@in } }
+cmds:if-external python3 { 
+	edit:add-var urlencode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.quote_plus(sys.argv[1]));" $@in } 
+	edit:add-var urldecode~ { |@in| e:python3 -c "import sys, urllib.parse as ul; print(ul.unquote(sys.argv[1]));" $@in } 
+}
+cmds:if-external nvim { edit:add-var vi~ $e:nvim~ }
 
 #==================================================== - FUNCTIONS
 # from @krader https://skepticism.us/elvish/learn/useful-customizations.html#add-a-help-command
@@ -307,20 +308,74 @@ fn nvimToggle {
 }
 edit:add-var nvimToggle~ $nvimToggle~
 
-#===================================================Transfer a file (using either transfer.sh or 0x0.st)
-fn transfer {|@in &use=transfer| 
-	var url = ''
-	if (==s $use "transfer") { set url = (e:curl --upload-file $@in 'https://transfer.sh/'$@in) 
-	} else { set url = (e:curl -F 'file=@'$@in 'https://0x0.st') }
-	header1 "\n======================================================="
-	md:show "The *online URL* for the file is: "$url
+#===================================================Transfer a file
+# Upload files and print their public URL.
+#   transfer shot.png                 # uguu.se: direct GET link, kept ~3 hours
+#   transfer log.txt &use=temp.sh     # temp.sh: download page, kept ~3 days
+# The old backends are gone: transfer.sh was retired in 2024 and 0x0.st has
+# uploads disabled, so neither can work any more.
+fn transfer {|@in &use=uguu|
+	if (== (count $in) 0) {
+		msg "transfer — upload files and print their public URLs"
+		echo '  usage: transfer <file> [<file> …] [&use=uguu|temp.sh]'
+		echo '    uguu     https://uguu.se    direct link, works with curl, kept ~3 hours'
+		echo '    temp.sh                     download page, kept ~3 days'
+		echo '  retired: transfer.sh (shut down 2024) · 0x0.st (uploads disabled)'
+		return
+	}
+	if (or (==s $use 'transfer') (==s $use '0x0')) {
+		msg (styled "…"$use" no longer works — transfer.sh retired, 0x0.st disabled uploads; use &use=uguu or temp.sh" bold red)
+		return
+	} elif (and (!=s $use 'uguu') (!=s $use 'temp.sh')) {
+		msg (styled "…unknown backend "$use" — use uguu or temp.sh" bold red)
+		return
+	}
+	each {|f|
+		if (not (path:is-regular $f)) {
+			msg (styled "…not a file: "$f bold red)
+		} else {
+			header1 "TRANSFER "$f" → "$use
+			var url = ''
+			try {
+				if (==s $use 'uguu') {
+					set url = (e:curl -sS --max-time 300 -F 'files[]=@'$f 'https://uguu.se/upload?output=text')
+				} else {
+					set url = (e:curl -sS --max-time 300 -F 'file=@'$f 'https://temp.sh/upload')
+				}
+			} catch e {
+				msg (styled "…upload failed: "(to-string $e) bold red)
+			}
+			if (re:match '^https?://' $url) {
+				md:show "The *online URL* for the file is: "$url
+			} elif (not-eq $url '') {
+				msg (styled "…unexpected answer from "$use": "$url bold red)
+			}
+		}
+	} $in
 }
 edit:add-var transfer~ $transfer~
 
 #===================================================Cl1p service
-fn cl1p {|in name|
+# cl1p <content> <name> -- POST text to cl1p.net so it can be read back with
+# `curl https://api.cl1p.net/<name>` or in a browser at https://cl1p.net/<name>.
+# The API token is read from ~/.cl1papitoken.
+fn cl1p {|@args|
+	if (!= (count $args) 2) {
+		msg "cl1p — share text through cl1p.net"
+		echo '  usage: cl1p "the text to share" mynote'
+		echo '         curl https://api.cl1p.net/mynote    # read it back'
+		echo '         https://cl1p.net/mynote             # …or open it in a browser'
+		echo '  token: ~/.cl1papitoken (sent as the cl1papitoken header)'
+		return
+	}
+	if (not (path:is-regular ~/.cl1papitoken)) {
+		msg (styled "…no API token at ~/.cl1papitoken — create one at cl1p.net first" bold red)
+		return
+	}
+	var content = $args[0]
+	var name = $args[1]
 	var key = (e:cat ~/.cl1papitoken)
-	e:curl -H "Content-Type: text/html; charset=UTF-8" -H "cl1papitoken: "$key -X POST --data $in https://api.cl1p.net/$name
+	e:curl -H "Content-Type: text/html; charset=UTF-8" -H "cl1papitoken: "$key -X POST --data $content https://api.cl1p.net/$name
 	md:show (echo "Read data using `curl https://api.cl1p.net/"$name"`")
 }
 edit:add-var cl1p~ $cl1p~
@@ -569,132 +624,390 @@ fn update {
 edit:add-var update~ $update~
 
 #====================================================UPDATE UBLOCK
-fn updateuBlock {
-	var @uSrc = []
+# uBlock publishes its Chromium dev build as a *prerelease*, and the releases
+# endpoint returns newest-first, so the first prerelease *is* the current one —
+# the old `jq 'sort_by(.published_at) | last'` was computing exactly that.
+#   updateuBlock                 # download + unpack into ~/Downloads
+#   updateuBlock &check=$true    # report the current release and asset only
+fn updateuBlock {|&check=$false|
+	var rels = (cmds:gh-api 'repos/gorhill/uBlock/releases?per_page=30')
+	if (== (count $rels) 0) { msg (styled "…can't read the uBlock release metadata (gh/API unavailable)" bold red); return }
+	var rel = []
+	each {|r|
+		if (and (eq $rel []) (has-key $r prerelease) (eq $r[prerelease] $true)) { set rel = $r }
+	} $rels
+	if (eq $rel []) { msg (styled "…no uBlock prerelease in the last 30 releases" bold red); return }
+	var url = (cmds:asset-url $rel 'chromium[.]zip$')
+	if (==s $url '') { msg (styled "…no chromium.zip asset in "$rel[tag_name] bold red); return }
+	header2 "uBlock "$rel[tag_name]" ("(to-string $rel[published_at])")"
+	msg "URL: "$url
+	if $check { return }
+	var dest = $E:HOME'/Downloads'
+	var olddir = $pwd
+	var tmpdir = (path:temp-dir)
+	cd $tmpdir
 	try {
-		set @uSrc = (curl -s https://api.github.com/repos/gorhill/uBlock/releases | jq -r 'map(select(.prerelease)) | sort_by(.published_at) | last | .assets[]' | from-json)
-	} catch {
-		msg "…Can't retrieve uBlock release metadata!"
-		return
-	}
-	each { |rel| 
-		if (cmds:is-match $rel[name] "chromium.zip$") {
-			var url = $rel[browser_download_url]
-			header2 "uBlock "$rel[name]
-			msg "URL: "$url
-			try {
-				curl -k -L -o ublock.zip $url
-				rm -rf $E:HOME/Downloads/uBlock0.chromium
-				unzip -oq ublock.zip -d $E:HOME/Downloads/
-				rm ublock.zip
-			} catch { msg "…Can't download uBlock!" }
+		try {
+			wget -q --no-check-certificate -O ublock.zip $url
+			rm -rf $dest'/uBlock0.chromium'
+			unzip -oq ublock.zip -d $dest
+			echo (styled "===UPDATED: uBlock "$rel[tag_name] bold yellow)
+			echo "unpacked into "$dest'/uBlock0.chromium'
+		} catch e {
+			msg (styled "…Can't install uBlock: "(to-string $e) bold red)
 		}
-	} $uSrc
+	} finally {
+		cd $olddir
+		rm -rf $tmpdir
+	}
 }
 edit:add-var updateuBlock~ $updateuBlock~
 
 #====================================================UPDATE MPV
-fn updateMPV {
+# The macOS nightly is a GitHub Actions artifact whose name embeds the build:
+#   mpv-v0.42.0-dev-gfe753a782-43295607237-macos-26-arm
+# so the old fixed nightly.link URL (…/master/mpv-macos-26-arm.zip) answers 404
+# forever. The current name is resolved from the Actions API (gh, else curl) and,
+# failing that, from the nightly.link index page; the download still goes through
+# nightly.link, so no GitHub login is needed. The artifact zip holds a single
+# mpv.tar.gz that unpacks to mpv.app.
+#   updateMPV                 # install only when the build differs
+#   updateMPV &check=$true    # report local vs remote, change nothing
+#   updateMPV &force=$true    # reinstall even if the build matches
+#   updateMPV &arch=intel     # take a macos-…-intel build (default: arm64)
+fn updateMPV {|&check=$false &force=$false &arch=''|
 	if (!=s $platform:os 'darwin') { return }
-	var mpvPath = '/Applications/mpv.app/Contents/MacOS/mpv'
-	var oldver newver = '' ''
-	cmds:if-external $mpvPath { set oldver = ($mpvPath --version | slurp) }
+	header2 "UPDATE MPV"
+	var host = 'mpv-player/mpv'
+	var wf = 'build'
+	var branch = 'master'
+	var want = $arch
+	if (==s $want '') {
+		if (==s $platform:arch 'amd64') { set want = 'intel' } else { set want = 'arm' }
+	}
+	# --- which artifact did the latest successful master build publish? ---
+	var names = []
+	var run = (cmds:gh-api 'repos/'$host'/actions/workflows/'$wf'.yml/runs?branch='$branch'&status=success&per_page=1')
+	if (has-key $run workflow_runs) {
+		if (> (count $run[workflow_runs]) 0) {
+			var rid = (to-string $run[workflow_runs][0][id])
+			var arts = (cmds:gh-api 'repos/'$host'/actions/runs/'$rid'/artifacts')
+			if (has-key $arts artifacts) {
+				each {|a| set names = (conj $names $a[name]) } $arts[artifacts]
+			}
+		}
+	}
+	if (== (count $names) 0) {
+		# fallback: the nightly.link index lists the current names, no API quota
+		var page = ''
+		try { set page = (curl -fsSL --max-time 30 'https://nightly.link/'$host'/workflows/'$wf'/'$branch | slurp) } catch { }
+		var @ms = (re:find 'mpv-[^"<>/ ]*?-macos-[0-9]+-'$want'[.]zip' $page)
+		each {|m|
+			set names = (conj $names (re:replace '[.]zip$' '' $m[text]))
+		} $ms
+	}
+	# prefer the macos-26 build, then macos-15, then whatever remains
+	var pick = ''
+	var score = 0
+	each {|n|
+		var @m = (re:find '-macos-([0-9]+)-'$want'$' $n)
+		if (not-eq $m []) {
+			var v = (num $m[0][groups][1][text])
+			var s = 1
+			if (== $v 26) { set s = 3 } elif (== $v 15) { set s = 2 }
+			if (> $s $score) { set score = $s; set pick = $n }
+		}
+	} $names
+	if (==s $pick '') { msg (styled "…no mpv -macos-*-"$want" artifact in the latest build" bold red); return }
+	var ver = ''
+	var @vm = (re:find '^mpv-(.+)-[0-9]+-macos-[0-9]+-'$want'$' $pick)
+	if (not-eq $vm []) { set ver = $vm[0][groups][1][text] }
+	var url = 'https://nightly.link/'$host'/workflows/'$wf'/'$branch'/'$pick'.zip'
+	# --- local version ---
+	var bin = '/Applications/mpv.app/Contents/MacOS/mpv'
+	var local = ''
+	cmds:if-external $bin {
+		try {
+			var @lm = (re:find '^mpv ([^ ]+)' ($bin --version | head -n 1))
+			if (not-eq $lm []) { set local = $lm[0][groups][1][text] }
+		} catch { }
+	}
+	echo "remote: "$pick
+	if (==s $local '') { echo "local : not installed" } else { echo "local : "$local }
+	var same = (and (not-eq $ver '') (==s $ver $local))
+	if $same { echo (styled "✔ up to date — the installed mpv is that build" green) } else { echo (styled "⬆ newer build available" bold magenta) }
+	if (or $check (and $same (not $force))) { return }
+	# --- download, unpack, install ---
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
-	var mpvURL = 'https://nightly.link/mpv-player/mpv/workflows/build/master/mpv-macos-26-arm.zip'
-	header2 "GET MPV URL: "$mpvURL
-	try { wget --no-check-certificate -O mpv.zip $mpvURL
-		unzip -p mpv.zip | tar -xf -
-		sudo rm -rf /Applications/mpv.app
-		sudo mv -vf mpv.app /Applications/mpv.app
-		cmds:if-external $mpvPath { 
-			set newver = ($mpvPath --version | slurp) 
-			echo (styled "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n" bold yellow)
-		} } catch { msg "Can't download MPV!" }
-	cd $olddir
-	rm -rf $tmpdir
+	try {
+		header2 "GET "$url
+		try {
+			wget -q --no-check-certificate -O mpv.zip $url
+			var sz = (os:stat ./mpv.zip)[size]
+			if (< $sz 1000000) { fail "downloaded only "(to-string $sz)" bytes — not an artifact" }
+			msg "downloaded "(to-string $sz)" bytes"
+			unzip -p mpv.zip | tar xzf -
+			if (not (path:is-dir ./mpv.app)) { fail "no mpv.app in the archive" }
+			sudo rm -rf /Applications/mpv.app
+			sudo mv -vf ./mpv.app /Applications/mpv.app
+			var newver = ''
+			cmds:if-external $bin {
+				try {
+					var @nm = (re:find '^mpv ([^ ]+)' ($bin --version | head -n 1))
+					if (not-eq $nm []) { set newver = $nm[0][groups][1][text] }
+				} catch { }
+			}
+			echo (styled "===UPDATED:===\nOld: "$local"\nNew: "$newver"\n" bold yellow)
+		} catch e {
+			msg (styled "…MPV update failed: "(to-string $e) bold red)
+		}
+	} finally {
+		cd $olddir
+		rm -rf $tmpdir
+	}
 }
 edit:add-var updateMPV~ $updateMPV~
 
 #====================================================UPDATE XRAY
-fn updateXRay {
-	if (!=s $platform:os 'linux') { return }
+# Asset names differ per platform (XTLS/Xray-core · v2raya/v2raya):
+#   linux  amd64 → Xray-linux-64.zip            installer_debian_x64_<v>.deb
+#   linux  arm64 → Xray-linux-arm64-v8a.zip     installer_debian_arm64_<v>.deb
+#   macos  amd64 → Xray-macos-64.zip            v2raya_darwin_x64_<v>
+#   macos  arm64 → Xray-macos-arm64-v8a.zip     v2raya_darwin_arm64_<v>
+# Every asset has a checksum sidecar (.dgst for Xray, .sha256.txt for v2raya)
+# that is verified before anything is installed. clash-verge ships its own
+# dmg/AppImage installer, so it is only reported here.
+#   updateXRay                 # install only when the release differs
+#   updateXRay &check=$true    # report local vs remote, change nothing
+#   updateXRay &force=$true    # reinstall the current release
+fn updateXRay {|&check=$false &force=$false|
 	header2 "UPDATE XRAY & V2RAYA"
-	var xLabel = ''; var vLabel = ''
-	if (and (cmds:is-mac) (cmds:is-arm64)) {
-		var xLabel = "Xray-macos-arm64-v8a.zip$"
-		var vLabel = "v2raya_darwin_arm"
-	} elif (and (cmds:is-linux) (cmds:is-arm64)) {
-		var xLabel = "Xray-linux-64.zip$"
-		var vLabel = "debian_x64.+deb$"
-	} elif (cmds:is-linux) {
-		set xLabel = "Xray-linux-arm64-v8a.zip$"
-		set vLabel = "debian_arm64.+deb$"
-	} else { return }
-	var xSrc = ''; var vSrc = ''; var cSrc = ''
-	var xURL = ''; var vURL = ''; var clURL = ''
+	var dest = /usr/local/bin
+	var arm = (cmds:is-arm64)
+	var xPat = ''
+	var vPat = ''
+	var vKind = 'deb'
+	if (cmds:is-linux) {
+		if $arm {
+			set xPat = '^Xray-linux-arm64-v8a[.]zip$'
+			set vPat = '^installer_debian_arm64_.*[.]deb$'
+		} else {
+			set xPat = '^Xray-linux-64[.]zip$'
+			set vPat = '^installer_debian_x64_.*[.]deb$'
+		}
+	} else {
+		set vKind = 'bin'
+		if $arm {
+			set xPat = '^Xray-macos-arm64-v8a[.]zip$'
+			set vPat = '^v2raya_darwin_arm64_'
+		} else {
+			set xPat = '^Xray-macos-64[.]zip$'
+			set vPat = '^v2raya_darwin_x64_'
+		}
+	}
+	# --- remote release metadata ---
+	var xSrc = (cmds:gh-latest 'XTLS/Xray-core')
+	if (==s $xSrc[tag_name] '') { msg (styled "…can't read the Xray release metadata (gh/API unavailable)" bold red); return }
+	var vSrc = (cmds:gh-latest 'v2raya/v2raya')
+	var xRemote = (str:trim-left $xSrc[tag_name] 'v')
+	var vRemote = ''
+	if (!=s $vSrc[tag_name] '') { set vRemote = (str:trim-left $vSrc[tag_name] 'v') }
+	# --- local versions ---
+	var xLocal = ''
+	var vLocal = ''
+	cmds:if-external xray { set xLocal = (cmds:first-version (xray --version | slurp)) }
+	cmds:if-external v2raya { set vLocal = (cmds:first-version (v2raya --version | slurp)) }
+	var xTxt = 'not installed'
+	if (!=s $xLocal '') { set xTxt = $xLocal }
+	echo "XRay   : remote "$xRemote" | local "$xTxt
+	if (!=s $vRemote '') {
+		var vTxt = 'not installed'
+		if (!=s $vLocal '') { set vTxt = $vLocal }
+		echo "V2RayA : remote "$vRemote" | local "$vTxt
+	}
+	# --- what needs installing? ---
+	var xURL = (cmds:asset-url $xSrc $xPat)
+	var vURL = ''
+	if (!=s $vRemote '') { set vURL = (cmds:asset-url $vSrc $vPat) }
+	var xDo = (or $force (!=s $xRemote $xLocal))
+	var vDo = (and (!=s $vURL '') (or $force (!=s $vRemote $vLocal)))
+	if (not $xDo) { echo (styled "xray "$xLocal" is already the current release" green) }
+	if (and (not $vDo) (!=s $vRemote '')) { echo (styled "v2raya "$vLocal" is already the current release" green) }
+	if (and $xDo (==s $xURL '')) { msg (styled "…no Xray asset matches "$xPat bold red) }
+	if (and $vDo (==s $vURL '')) { msg (styled "…no v2raya asset matches "$vPat bold red) }
+	if $check { return }
+	# --- download, verify, install ---
+	var olddir = $pwd
+	var tmpdir = (path:temp-dir)
+	cd $tmpdir
 	try {
-		set xSrc = (curl -s https://api.github.com/repos/XTLS/Xray-core/releases/latest | from-json)
-		set vSrc = (curl -s https://api.github.com/repos/v2raya/v2raya/releases/latest | from-json)
-		set cSrc = (curl -s https://api.github.com/repos/clash-verge-rev/clash-verge-rev/releases/latest | from-json)
-	} catch {
-		echo (styled "Failed to get Repo info!\n" bold red)
-		break
-	}
-	cmds:if-external xray {
-		echo "XRay remote: "$xSrc[name]" | local: "(xray --version | sd -f s '(Xray )([\d\.]+) (.+)' '$2')
-		} { echo "XRay remote: "$xSrc[name] }
-	cmds:if-external v2raya {
-		echo "V2RayA remote: "$vSrc[name]" | local: "(v2raya --version)
-	} { echo "V2RayA remote: "$vSrc[name] }
-	if (cmds:is-path '/Applications/clash Verge.app/') {
-		echo "Clash remote: "$cSrc[name]" | local: "(defaults read '/Applications/clash Verge.app/Contents/Info.plist' CFBundleShortVersionString)
-	} else { echo "Clash remote: "$cSrc[name] }
-
-	each {|a| 
-		if (re:match $xLabel $a[browser_download_url]) { set xURL = $a[browser_download_url] }
-	} $xSrc[assets]
-	if (!=s $xURL '') {
-		echo (styled "\n=== GET XRAY ===\nURL: "$xURL bold yellow)
-		try { wget --no-check-certificate -O xray.zip $xURL
-			sudo unzip -o xray.zip -d /usr/local/bin
-		} catch { msg "…Can't download Xray!" }
-	}
-
-	each {|a| 
-		if (re:match $vLabel $a[browser_download_url]) { set vURL = $a[browser_download_url] }
-	} $vSrc[assets]
-	if (!=s $vURL '') {
-		echo (styled "\n=== GET V2RAYA ===\nURL: "$vURL bold yellow)
-		try { wget --no-check-certificate -O v2raya.deb $vURL
-			if cmds:is-linux { sudo dpkg -i v2raya.deb }
-		} catch { msg "…Can't download V2raya!" }
+		if (and $xDo (!=s $xURL '')) {
+			header2 "GET XRAY "$xRemote
+			echo "URL: "$xURL
+			try {
+				wget -q --no-check-certificate -O xray.zip $xURL
+				var want = (cmds:remote-sha $xURL'.dgst' &pattern='SHA2-256=[ ]*([0-9a-f]{64})')
+				var got = (cmds:sha256 ./xray.zip)
+				if (and (not-eq $want '') (!=s $got $want)) { fail "xray.zip sha256 mismatch (want "$want", got "$got")" }
+				msg "xray.zip sha256 verified "(cmds:hash-short $got)
+				sudo unzip -o xray.zip -d $dest xray geoip.dat geosite.dat
+			} catch e {
+				msg (styled "…Can't install Xray: "(to-string $e) bold red)
+			}
+		}
+		if (and $vDo (!=s $vURL '')) {
+			header2 "GET V2RAYA "$vRemote
+			echo "URL: "$vURL
+			var vFile = 'v2raya.deb'
+			if (==s $vKind 'bin') { set vFile = 'v2raya' }
+			try {
+				wget -q --no-check-certificate -O $vFile $vURL
+				var want = (cmds:remote-sha $vURL'.sha256.txt')
+				var got = (cmds:sha256 './'$vFile)
+				if (and (not-eq $want '') (!=s $got $want)) { fail $vFile" sha256 mismatch (want "$want", got "$got")" }
+				msg $vFile" sha256 verified "(cmds:hash-short $got)
+				if (==s $vKind 'deb') {
+					sudo dpkg -i $vFile
+				} else {
+					chmod +x $vFile
+					sudo mv -vf $vFile $dest'/v2raya'
+				}
+			} catch e {
+				msg (styled "…Can't install v2raya: "(to-string $e) bold red)
+			}
+		}
+		# --- report the result ---
+		var xBin = $dest'/xray'
+		var xNow = ''
+		var vNow = ''
+		if (path:is-regular $xBin) {
+			try { set xNow = (cmds:first-version ($xBin -version | slurp)) } catch { }
+		}
+		cmds:if-external v2raya { set vNow = (cmds:first-version (v2raya --version | slurp)) }
+		if (and $xDo (!=s $xNow '')) {
+			echo (styled "===XRAY: "$xLocal" → "$xNow"===" bold yellow)
+			if (!=s $xNow $xRemote) { msg (styled "⚠ "$xBin" reports "$xNow", expected "$xRemote bold red) }
+		}
+		if (and $vDo (!=s $vNow '')) { echo (styled "===V2RAYA: "$vLocal" → "$vNow"===" bold yellow) }
+		# clash-verge has its own installer, so only report its release
+		if (or (cmds:is-path '/Applications/clash Verge.app') (has-external clash-verge)) {
+			var cSrc = (cmds:gh-latest 'clash-verge-rev/clash-verge-rev')
+			if (!=s $cSrc[tag_name] '') { echo "Clash  : remote "$cSrc[tag_name] }
+		}
+	} finally {
+		cd $olddir
+		rm -rf $tmpdir
 	}
 }
 edit:add-var updateXRay~ $updateXRay~
 
 #===================================================Update Elvish
-fn updateElvish {|&source=tuna|
-	var url = 'https://mirrors.tuna.tsinghua.edu.cn/elvish/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz'
-	if (!=s $source 'tuna') { set url = 'https://dl.elv.sh/'$platform:os'-'$platform:arch'/elvish-HEAD.tar.gz' }
-	var oldver newver = '' ''
-	cmds:if-external elvish { set oldver = (elvish -version) }
+# Elvish ships a per-platform HEAD tarball with sha256 sidecars, so the remote
+# build can be identified *without* downloading the ~6MB archive:
+#   <base>/elvish-HEAD.tar.gz            archive (extracts to ./elvish)
+#   <base>/elvish-HEAD.sha256sum         sha256 of the binary  → version check
+#   <base>/elvish-HEAD.tar.gz.sha256sum  sha256 of the archive → download check
+# The archive's Last-Modified header is the UTC build time that is baked into
+# `elvish -version` (0.22.0-dev.0.20250308121232-49937be09a7e), so it doubles as
+# a human-readable "remote version". There is no JSON API: dl.elv.sh/INDEX only
+# lists file names and is rewritten only when a build is published, and the
+# GitHub API is rate limited and does not track HEAD builds.
+#   updateElvish                        # probe mirror, install only if newer
+#   updateElvish &check=$true           # report local vs remote, never install
+#   updateElvish &force=$true           # reinstall even if byte-identical
+#   updateElvish &version=v0.21.0       # pin a released version instead of HEAD
+#   updateElvish &source=dl|tuna|<url>  # pick mirror (tuna falls back to dl)
+fn updateElvish {|&source=tuna &version=HEAD &check=$false &force=$false|
+	var osarch = $platform:os'-'$platform:arch
+	var art = 'elvish-'$version'.tar.gz'
+	var bases = []
+	if (re:match '^https?://' $source) {
+		set bases = [$source]
+	} elif (==s $source 'dl') {
+		set bases = ['https://dl.elv.sh/'$osarch]
+	} else {
+		# tuna is fast from CN but not always reachable; dl.elv.sh is upstream
+		set bases = ['https://mirrors.tuna.tsinghua.edu.cn/elvish/'$osarch 'https://dl.elv.sh/'$osarch]
+	}
+	var bin = /usr/local/bin/elvish
+	var installed = $false
+	var oldver = ''; var oldsha = ''
+	if (path:is-regular $bin) {
+		set installed = $true
+		try { set oldver = ($bin -version) } catch { }
+		set oldsha = (cmds:sha256 $bin)
+	}
+	header2 "ELVISH "$version" · "$osarch
+	if $installed {
+		msg "installed: "$oldver" · sha256 "(cmds:hash-short $oldsha)
+	} else {
+		msg "installed: none ("$bin")"
+	}
+	# --- probe the mirrors: two tiny requests, no archive download ---
+	var base = ''; var rlmt = ''; var rbin = ''
+	for b $bases {
+		var p = (cmds:http-probe $b'/'$art)
+		var bh = (cmds:remote-sha $b'/elvish-'$version'.sha256sum')
+		if (==s $p[lmt] '') { set p[lmt] = '?' }
+		var pc = 'HTTP '$p[code]
+		if (==s $p[code] '000') { set pc = 'HTTP 000 (unreachable)' }
+		msg "probe: "$b" → "$pc" · built "$p[lmt]" · sha256 "(cmds:hash-short $bh)
+		if (==s $p[code] '200') { set base = $b; set rlmt = $p[lmt]; set rbin = $bh; break }
+	}
+	if (==s $base '') { msg (styled "…no mirror served "$art" — aborting" bold red); return }
+	if (not (re:match '^https://dl\.elv.sh/' $base)) {
+		var up = (cmds:http-probe 'https://dl.elv.sh/'$osarch'/'$art)
+		if (not-eq $up[lmt] '') { msg "upstream dl.elv.sh built "$up[lmt] }
+	}
+	# --- is that build what we already have? ---
+	var same = $false
+	if $installed {
+		if (not-eq $rbin '') {
+			set same = (==s $rbin $oldsha)
+		} else {
+			# no binary sidecar (released tags): fall back to the version string
+			set same = (str:has-prefix $oldver (str:trim-left $version 'v'))
+		}
+	}
+	if $same { msg (styled "✔ up to date — installed binary is byte-identical to the published build" green) } elif (==s $version 'HEAD') { msg (styled "⬆ newer build published "$rlmt" — update available" bold magenta) } else { msg (styled "≢ installed is not "$version" ("$rlmt") — update available" bold magenta) }
+	if (or $check (and $same (not $force))) { return }
+	# --- download, verify, install ---
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
-	header2 "ELVISH URL: "$url
-	try { wget --no-check-certificate $url
-	} catch { msg "…Couldn't download for some reason!" 
-	} else { 
-		tar xvf elvish-HEAD.tar.gz
-		if (cmds:is-file ./elvish-HEAD) { mv ./elvish-HEAD ./elvish }
-		chmod +x ./elvish
-		sudo mv -vf ./elvish /usr/local/bin/elvish
-		cmds:if-external elvish { 
-			set newver = (elvish -version)
-			echo (styled "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n" bold yellow)
+	try {
+		var updated = $false
+		var trybases = [$base]
+		for b $bases { if (!=s $b $base) { set trybases = (conj $trybases $b) } }
+		for b $trybases {
+			if $updated { break }
+			header2 "GET "$b'/'$art
+			try {
+				wget -q --no-check-certificate -O $art $b'/'$art
+				var wantTar = (cmds:remote-sha $b'/'$art'.sha256sum')
+				var gotTar = (cmds:sha256 './'$art)
+				if (and (not-eq $wantTar '') (!=s $gotTar $wantTar)) { fail "archive sha256 mismatch (want "$wantTar", got "$gotTar")" }
+				msg "archive sha256 verified "(cmds:hash-short $gotTar)
+				tar xzf $art
+				each {|c|
+					if (and (path:is-regular $c) (not (path:is-regular ./elvish))) { mv -vf $c ./elvish }
+				} [./elvish ./elvish-HEAD './elvish-'$version]
+				if (not (path:is-regular ./elvish)) { fail "no elvish binary in the archive" }
+				chmod +x ./elvish
+				sudo mv -vf ./elvish $bin
+				var newver = ''; var newsha = ''
+				try { set newver = ($bin -version) } catch { }
+				set newsha = (cmds:sha256 $bin)
+				if (and (not-eq $rbin '') (!=s $newsha $rbin)) { msg (styled "⚠ installed binary does not match the published sha256!" bold red) }
+				echo (styled "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n" bold yellow)
+				set updated = $true
+			} catch e {
+				msg (styled "…failed from "$b": "(to-string $e) bold red)
+			}
 		}
+		if (not $updated) { msg "…ELVISH was not updated" }
 	} finally {
 		cd $olddir
 		rm -rf $tmpdir
@@ -703,26 +1016,105 @@ fn updateElvish {|&source=tuna|
 edit:add-var updateElvish~ $updateElvish~
 
 #===================================================Update FFMPEG
-fn updateFFmpeg {
+# Static builds from ffmpeg.martin-riedl.de. The documented script URLs are
+#   …/redirect/latest/<os>/<arch>/<channel>/<tool>.zip
+# and answer 307 pointing at an immutable build directory that carries the
+# build id:  …/download/linux/amd64/1789931100_9.0.2/ffmpeg.zip
+# so the remote build is identified by one bodiless request instead of pulling
+# ~100MB of zips; every file also has a .sha256 sidecar that is verified before
+# anything is installed.
+# Two quirks worth knowing: the /redirect/ endpoint answers 404 to a HEAD (the
+# probe must be a GET with the body thrown away), and the binaries report a
+# suffixed version (`9.0.2-https://www.martin-riedl.de`, snapshots report
+# `<branch>.git-<url>`), so the build id is remembered in $dest/.ffmpeg-build
+# and the -version string is only used as a fallback test.
+#   updateFFmpeg                  # release channel (default)
+#   updateFFmpeg &channel=snapshot
+#   updateFFmpeg &check=$true     # report local vs remote, change nothing
+#   updateFFmpeg &force=$true     # reinstall even if the build matches
+fn updateFFmpeg {|&channel=release &check=$false &force=$false|
+	var tools = [ffmpeg ffprobe ffplay]
+	var os = $platform:os
+	if (eq $os 'darwin') { set os = 'macos' }
+	var arch = $platform:arch
+	var dest = /usr/local/bin
+	header2 "FFMPEG "$channel" · "$os"-"$arch
+	# --- remote build id: one redirect, no payload ---
+	var url = 'https://ffmpeg.martin-riedl.de/redirect/latest/'$os'/'$arch'/'$channel'/ffmpeg.zip'
+	var target = ''
+	try { set target = (curl -sS --max-time 30 -o /dev/null -w '%{redirect_url}' $url) } catch { }
+	if (==s $target '') { msg (styled "…can't resolve "$url" — no "$channel" build for "$os"-"$arch"?" bold red); return }
+	var @bm = (re:find '/download/[^/]+/[^/]+/([0-9]+)_([^/]+)/ffmpeg[.]zip$' $target)
+	if (eq $bm []) { msg (styled "…unexpected redirect target: "$target bold red); return }
+	var build = $bm[0][groups][1][text]'_'$bm[0][groups][2][text]
+	var ver = $bm[0][groups][2][text]
+	var dir = (re:replace 'ffmpeg[.]zip$' '' $target)
+	# --- what is installed? ---
+	var bin = $dest'/ffmpeg'
+	var local = ''
+	if (path:is-regular $bin) {
+		try {
+			var @lm = (re:find '^ffmpeg version ([^ ]+)' ($bin -version | head -n 1))
+			if (not-eq $lm []) { set local = $lm[0][groups][1][text] }
+		} catch { }
+	}
+	var marker = $dest'/.ffmpeg-build'
+	var seen = ''
+	if (path:is-regular $marker) {
+		try {
+			var @ml = (slurp < $marker)
+			if (> (count $ml) 0) { set seen = (str:trim-space $ml[0]) }
+		} catch { }
+	}
+	echo "remote: "$ver" (build "$build")"
+	if (==s $local '') { echo "local : not installed" } else { echo "local : "$local }
+	# --- already there? build id first, version string as a fallback ---
+	var same = $false
+	if (==s $seen $build) {
+		set same = $true
+	} elif (and (not-eq $local '') (str:has-prefix $local $ver)) {
+		set same = $true
+	}
+	if $same { echo (styled "✔ up to date — installed build is "$build green) } else { echo (styled "⬆ newer build available" bold magenta) }
+	if (or $check (and $same (not $force))) { return }
+	# --- download, verify, install ---
 	var olddir = $pwd
 	var tmpdir = (path:temp-dir)
 	cd $tmpdir
-	var oldver newver  = '' ''
-	var os = $platform:os
-	if (eq $os 'darwin') { set os = 'macos'}
-	cmds:if-external ffmpeg { set oldver = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
-	header2 "FFMPEG UPDATE OS: "$os" & Arch: "$platform:arch
-	var tnames = [ffmpeg ffplay ffprobe]
-	for x $tnames {
-		try {
-			wget --no-check-certificate -O $x.zip 'https://ffmpeg.martin-riedl.de/redirect/latest/'$os'/'$platform:arch'/snapshot/'$x'.zip'
-			unzip -o $x.zip -d /usr/local/bin/
-		} catch { msg "…Can't download "$x }
+	try {
+		var ok = 0
+		each {|t|
+			var zurl = $dir$t'.zip'
+			header2 "GET "$t".zip"
+			echo $zurl
+			try {
+				wget -q --no-check-certificate -O $t'.zip' $zurl
+				var want = (cmds:remote-sha $zurl'.sha256')
+				var got = (cmds:sha256 './'$t'.zip')
+				if (and (not-eq $want '') (!=s $got $want)) { fail $t".zip sha256 mismatch (want "$want", got "$got")" }
+				msg $t".zip sha256 verified "(cmds:hash-short $got)
+				try { unzip -oq $t'.zip' -d $dest } catch e { sudo unzip -oq $t'.zip' -d $dest }
+				set ok = (+ $ok 1)
+			} catch e {
+				msg (styled "…"$t" failed: "(to-string $e) bold red)
+			}
+		} $tools
+		if (== $ok (count $tools)) {
+			echo $build > ./ffmpeg-build.txt
+			try { mv -f ./ffmpeg-build.txt $marker } catch e { sudo mv -f ./ffmpeg-build.txt $marker }
+			var newver = ''
+			try {
+				var @nm = (re:find '^ffmpeg version ([^ ]+)' ($bin -version | head -n 1))
+				if (not-eq $nm []) { set newver = $nm[0][groups][1][text] }
+			} catch { }
+			echo (styled "===UPDATED:===\nOld: "$local"\nNew: "$newver"\n" bold yellow)
+		} else {
+			msg (styled "…only "$ok" of "(to-string (count $tools))" tools were installed" bold red)
+		}
+	} finally {
+		cd $olddir
+		rm -rf $tmpdir
 	}
-	cmds:if-external ffmpeg { set newver = (ffmpeg -version | grep -owE 'ffmpeg version [^ :]+' | sed -E 's/ffmpeg version//g') }
-	echo (styled "===UPDATED:===\nOld: "$oldver"\nNew: "$newver"\n" bold yellow)
-	cd $olddir
-	rm -rf $tmpdir
 }
 edit:add-var updateFFmpeg~ $updateFFmpeg~
 

@@ -365,21 +365,131 @@ function cloneReset () {
 	echo "For netbird, you must [netbird profile add newprofile] and then [netbird profile select] it"
 }
 
+#============================================FFMPEG
+# Static builds from ffmpeg.martin-riedl.de (replaces the evermeet.cx updater,
+# which was macOS-only, snapshot-only and needed 7z). The documented script
+# URLs are  …/redirect/latest/<os>/<arch>/<channel>/<tool>.zip  and answer 307
+# pointing at an immutable build directory that carries the build id:
+#   …/download/linux/amd64/1789931100_9.0.2/ffmpeg.zip
+# so the remote build is identified with one bodiless request instead of
+# pulling ~100MB of zips; every file also has a .sha256 sidecar that is
+# verified before anything is installed.
+# Two quirks: the /redirect/ endpoint answers 404 to a HEAD (the probe must be a
+# GET with the body thrown away), and the binaries report a suffixed version
+# (`9.0.2-https://www.martin-riedl.de`, snapshots `<branch>.git-<url>`), so the
+# build id is remembered in $dest/.ffmpeg-build.
+#   updateFFMPEG                     # release channel (default)
+#   updateFFMPEG --channel=snapshot
+#   updateFFMPEG --check             # report local vs remote, change nothing
+#   updateFFMPEG --force             # reinstall even if the build matches
+# shellcheck disable=SC2120 # called with options by hand, bare from updateAll
 function updateFFMPEG() {
-	cd ~ || exit
-	lver=$(ffmpeg -version | grep -owE 'N-\d+-[^-]+')
-	rver=$(curl -s https://evermeet.cx/ffmpeg/info/ffmpeg/snapshot | jq -r '.version')
-	echo "Local: $lver & Remote: $rver"
-	if [[ ! "N-$lver" =~ $rver ]]; then
-		printf '\tDownloading new ffmpeg:\n'
-		curl -JL --output ff.7z https://evermeet.cx/ffmpeg/get
-		7z -y -o"$HOME/bin/" e ff.7z
-		cp ~/bin/ffmpeg "$HOME/Library/Application Support/FFmpegTools/"
-		rm ff.7z
-		ffmpeg -version
-	else
-		printf "\tNo need to update…\n"
+	local channel=release check=0 force=0
+	while [ $# -gt 0 ]; do
+		case "$1" in
+			-c|--check) check=1 ;;
+			-f|--force) force=1 ;;
+			--channel=*) channel=${1#*=} ;;
+			--channel) channel=$2; shift ;;
+			-h|--help)
+				printf 'usage: updateFFMPEG [--check] [--force] [--channel=release|snapshot]\n'
+				return 0 ;;
+			*)
+				printf 'updateFFMPEG: unknown option %s\n' "$1" >&2
+				return 2 ;;
+		esac
+		shift
+	done
+
+	local os arch
+	[ "$PLATFORM" = 'Darwin' ] && os=macos || os=linux
+	case "$PROC" in
+		arm64|aarch64) arch=arm64 ;;
+		*) arch=amd64 ;;
+	esac
+	local dest=/usr/local/bin
+	local url="https://ffmpeg.martin-riedl.de/redirect/latest/$os/$arch/$channel/ffmpeg.zip"
+	printf '\n---> FFMPEG %s · %s-%s\n' "$channel" "$os" "$arch"
+
+	# --- remote build id: one redirect, no payload ---
+	local target dir build ver
+	target=$(curl -sS --max-time 30 -o /dev/null -w '%{redirect_url}' "$url") || target=''
+	if [ -z "$target" ]; then
+		printf '	✗ cannot resolve %s — no %s build for %s-%s?\n' "$url" "$channel" "$os" "$arch" >&2
+		return 1
 	fi
+	dir=$(dirname "$target")
+	build=$(basename "$dir")
+	ver=${build#*_}
+	case "$build" in
+		[0-9]*_*) : ;;
+		*)
+			printf '	✗ unexpected redirect target: %s\n' "$target" >&2
+			return 1 ;;
+	esac
+
+	# --- what is installed? ---
+	local bin=$dest/ffmpeg localver='' marker=$dest/.ffmpeg-build seen=''
+	if [ -f "$bin" ]; then
+		localver=$("$bin" -version 2>/dev/null | head -n 1 | sed -nE 's/^ffmpeg version ([^ ]+).*/\1/p')
+	fi
+	[ -f "$marker" ] && seen=$(head -n 1 "$marker" | tr -d '[:space:]')
+	printf '	remote: %s (build %s)\n' "$ver" "$build"
+	printf '	local : %s\n' "${localver:-not installed}"
+
+	# --- already there? build id first, version string as a fallback ---
+	local same=0
+	if [ "$seen" = "$build" ]; then
+		same=1
+	elif [ -n "$localver" ]; then
+		case "$localver" in "$ver"*) same=1 ;; esac
+	fi
+	if [ $same -eq 1 ]; then
+		printf '	✔ up to date — installed build is %s\n' "$build"
+	else
+		printf '	⬆ newer build available\n'
+	fi
+	[ $check -eq 1 ] && return 0
+	[ $same -eq 1 ] && [ $force -eq 0 ] && return 0
+
+	# --- download, verify, install ---
+	local tmp ok=0 t zurl want got
+	tmp=$(mktemp -d "${TMPDIR:-/tmp}/ffmpeg.XXXXXX") || return 1
+	for t in ffmpeg ffprobe ffplay; do
+		zurl=$dir/$t.zip
+		printf '\n---> GET %s\n	%s\n' "$t.zip" "$zurl"
+		if ! curl -fsSL --max-time 300 -o "$tmp/$t.zip" "$zurl"; then
+			printf '	✗ download failed\n' >&2
+			continue
+		fi
+		want=$(curl -fsSL --max-time 30 "$zurl.sha256" 2>/dev/null | grep -oE '[0-9a-f]{64}' | head -n 1)
+		got=$(_sha256 "$tmp/$t.zip")
+		if [ -n "$want" ] && [ "$got" != "$want" ]; then
+			printf '	✗ %s sha256 mismatch (want %s, got %s)\n' "$t.zip" "$want" "$got" >&2
+			continue
+		fi
+		printf '	%s sha256 verified %.12s…\n' "$t.zip" "$got"
+		if ! { unzip -oq "$tmp/$t.zip" -d "$dest" 2>/dev/null || sudo unzip -oq "$tmp/$t.zip" -d "$dest"; }; then
+			printf '	✗ unzip failed for %s\n' "$t" >&2
+			continue
+		fi
+		ok=$((ok + 1))
+	done
+
+	if [ $ok -eq 3 ]; then
+		printf '%s\n' "$build" > "$tmp/marker"
+		mv -f "$tmp/marker" "$marker" 2>/dev/null || sudo mv -f "$tmp/marker" "$marker"
+		# kept from the old evermeet updater: some GUI apps look here
+		if [ "$PLATFORM" = 'Darwin' ] && [ -d "$HOME/Library/Application Support/FFmpegTools" ]; then
+			cp -f "$dest/ffmpeg" "$dest/ffprobe" "$HOME/Library/Application Support/FFmpegTools/" 2>/dev/null
+		fi
+		local newver
+		newver=$("$bin" -version 2>/dev/null | head -n 1 | sed -nE 's/^ffmpeg version ([^ ]+).*/\1/p')
+		printf '\n===UPDATED===\nOld: %s\nNew: %s\n' "${localver:-(none)}" "${newver:-(unknown)}"
+	else
+		printf '	✗ only %s of 3 tools were installed\n' "$ok" >&2
+	fi
+	rm -rf "$tmp"
 }
 
 function avahiReset() {
@@ -400,20 +510,61 @@ function avahiStop() {
 	fi
 }
 
-function transfer() { 
+#============================================Transfer files
+# Upload files and print their public URL.
+#   transfer shot.png             # uguu.se: direct GET link, kept ~3 hours
+#   cat file | transfer name.txt  # upload stdin under a name
+# transfer.sh was retired in 2024, so its upload endpoint is gone.
+function transfer() {
 	if [ $# -eq 0 ]; then
-		echo -e "No arguments specified. Usage:\necho transfer /tmp/test.md\ncat /tmp/test.md | transfer test.md";
-		return 1;
+		printf 'transfer — upload files and print their public URLs\n'
+		printf '  usage: transfer <file> [<file> ...]\n'
+		printf '         cat file | transfer <name>\n'
+		printf '  backend: https://uguu.se (direct link, works with curl, kept ~3 hours)\n'
+		return 1
 	fi
-	tmpfile=$( mktemp -t transferXXX );
-	if tty -s; then
-		basefile=$(basename "$1" | sed -e 's/[^a-zA-Z0-9._-]/-/g');
-		curl --progress-bar --upload-file "$1" "https://transfer.sh/$basefile" >> "$tmpfile"
-	else 
-		curl --progress-bar --upload-file "-" "https://transfer.sh/$1" >> "$tmpfile"
-	fi;
-	cat "$tmpfile"
-	rm -f "$tmpfile"
+	local f url
+	for f in "$@"; do
+		if [ -f "$f" ]; then
+			url=$(curl -sS --max-time 300 -F "files[]=@${f}" 'https://uguu.se/upload?output=text') || url=''
+		elif [ ! -t 0 ]; then
+			url=$(curl -sS --max-time 300 -F "files[]=@-;filename=$(basename "$f")" \
+				'https://uguu.se/upload?output=text') || url=''
+		else
+			printf 'transfer: not a file: %s\n' "$f" >&2
+			continue
+		fi
+		case "$url" in
+			https://*) printf '%s -> %s\n' "$f" "$url" ;;
+			*) printf 'transfer: upload failed for %s: %s\n' "$f" "$url" >&2 ;;
+		esac
+	done
+}
+
+#============================================Cl1p service
+# cl1p <content> <name> -- POST text to cl1p.net so it can be read back with
+# `curl https://api.cl1p.net/<name>` or in a browser at https://cl1p.net/<name>.
+# The API token is read from ~/.cl1papitoken.
+function cl1p() {
+	if [ $# -ne 2 ]; then
+		printf 'cl1p — share text through cl1p.net\n'
+		printf '  usage: cl1p "the text to share" mynote\n'
+		printf '         curl https://api.cl1p.net/mynote    # read it back\n'
+		printf '         https://cl1p.net/mynote             # …or open it in a browser\n'
+		printf '  token: ~/.cl1papitoken (sent as the cl1papitoken header)\n'
+		return 1
+	fi
+	if [ ! -f ~/.cl1papitoken ]; then
+		printf 'cl1p: no API token at ~/.cl1papitoken — create one at cl1p.net first\n' >&2
+		return 1
+	fi
+	# command cat: this file aliases cat to bat when it is installed
+	local key response
+	key=$(command cat ~/.cl1papitoken)
+	response=$(curl -sS -H "Content-Type: text/html; charset=UTF-8" \
+		-H "cl1papitoken: $key" -X POST --data "$1" "https://api.cl1p.net/$2") || return 1
+	[ -n "$response" ] && printf '%s\n' "$response"
+	printf 'Read data using `curl https://api.cl1p.net/%s`\n' "$2"
 }
 
 function sp() {
@@ -566,27 +717,159 @@ function update() {
 	printf "\n=====>>> Finish Update @ \e[93m%s\e[m <<<=====\n" "$(date)"
 }
 
-function updateElvish () {
-	[[ -f $(which elvish) ]] && elvish -version
-	old_dir=$(pwd)
-	tmp_dir=$(mktemp -d -t ci-XXXXXXXXXX)
-	cd $tmp_dir
-	tos='linux'; [[ $PLATFORM = "Darwin" ]] && tos='darwin'
-	tpr='amd64'; 
-	if [[ $(uname -m) = 'arm64' || $(uname -m) = 'aarch64' ]]; then
-		tpr='arm64'
+#============================================Elvish
+# Identify the published build before pulling ~6MB: the mirror serves a sha256
+# sidecar for the binary and for the archive, and the archive's Last-Modified
+# date is the UTC build time baked into `elvish -version`
+# (0.22.0-dev.0.20250308121232-...). An identical hash means the installed
+# binary *is* the published build, so nothing is downloaded.
+#   updateElvish                      # install only when the build changed
+#   updateElvish --check              # report local vs remote, change nothing
+#   updateElvish --force              # reinstall even if byte-identical
+#   updateElvish --version v0.21.0    # pin a released tag instead of HEAD
+#   updateElvish --source dl|tuna|URL # choose the mirror (tuna falls back to dl)
+function _sha256() {
+	if command -v sha256sum >/dev/null 2>&1; then
+		command sha256sum "$1" | awk '{print $1}'
+	elif command -v shasum >/dev/null 2>&1; then
+		command shasum -a 256 "$1" | awk '{print $1}'
 	fi
-	printf "\nElvish download: OS = %s | Processor = %s\n" "${tos}" "${tpr}"
-	curl -C - -O "https://mirrors.tuna.tsinghua.edu.cn/elvish/$tos-$tpr/elvish-HEAD.tar.gz" &&
-	tar xvf elvish-HEAD.tar.gz &&
-	sudo mkdir -p /usr/local/bin &&
-	sudo rm -rf /usr/local/bin/elvish &&
-	sudo cp elvish /usr/local/bin &&
-	sudo chown $USER /usr/local/bin/elvish &&
-	sudo chmod +x /usr/local/bin/elvish
-	cd $old_dir
-	rm -rf $tmp_dir
-	[[ -f $(which elvish) ]] && elvish -version
+}
+
+# shellcheck disable=SC2120 # called with options by hand, bare from updateAll
+function updateElvish() {
+	local ver=HEAD src=tuna check=0 force=0
+	while [ $# -gt 0 ]; do
+		case "$1" in
+			-c|--check) check=1 ;;
+			-f|--force) force=1 ;;
+			-v|--version) ver=$2; shift ;;
+			-s|--source) src=$2; shift ;;
+			-h|--help)
+				printf 'usage: updateElvish [--check] [--force] [--version TAG] [--source tuna|dl|URL]\n'
+				return 0 ;;
+			*)
+				printf 'updateElvish: unknown option %s\n' "$1" >&2
+				return 2 ;;
+		esac
+		shift
+	done
+
+	local os=linux arch=amd64
+	[ "$PLATFORM" = 'Darwin' ] && os=darwin
+	case "$(uname -m)" in
+		arm64|aarch64) arch=arm64 ;;
+	esac
+	local art="elvish-$ver.tar.gz"
+	local bindir=/usr/local/bin/elvish
+
+	local -a bases
+	case "$src" in
+		dl) bases=("https://dl.elv.sh/$os-$arch") ;;
+		tuna) bases=("https://mirrors.tuna.tsinghua.edu.cn/elvish/$os-$arch" "https://dl.elv.sh/$os-$arch") ;;
+		*) bases=("$src") ;;
+	esac
+
+	local oldver='' oldsha=''
+	if [ -f "$bindir" ]; then
+		oldver=$("$bindir" -version 2>/dev/null)
+		oldsha=$(_sha256 "$bindir")
+	fi
+	printf '\n---> ELVISH %s · %s-%s\n' "$ver" "$os" "$arch"
+	if [ -n "$oldver" ]; then
+		printf '	installed: %s · sha256 %.12s…\n' "$oldver" "$oldsha"
+	else
+		printf '	installed: none (%s)\n' "$bindir"
+	fi
+
+	# probe every mirror: two tiny requests, no archive download
+	local base='' rbin='' b hdr code lmt bh
+	for b in "${bases[@]}"; do
+		hdr=$(curl -sSIL --max-time 20 "$b/$art" 2>&1 | tr -d '\r')
+		code=$(printf '%s\n' "$hdr" | awk '/^HTTP\//{c=$2} END{print c+0}')
+		lmt=$(printf '%s\n' "$hdr" | grep -i '^last-modified:' | tail -n 1 | sed 's/^[^:]*:[[:space:]]*//')
+		bh=$(curl -fsSL --max-time 20 "$b/elvish-$ver.sha256sum" 2>/dev/null | grep -oE '[0-9a-f]{64}' | head -n 1)
+		printf '	probe: %s → HTTP %03d · built %s · sha256 %.12s…\n' \
+			"$b" "$code" "${lmt:-(unknown)}" "${bh:-(none)}"
+		if [ "$code" = 200 ]; then
+			base=$b; rbin=$bh
+			break
+		fi
+	done
+	if [ -z "$base" ]; then
+		printf '	✗ no mirror served %s — aborting\n' "$art" >&2
+		return 1
+	fi
+	if [ "$base" != "https://dl.elv.sh/$os-$arch" ]; then
+		hdr=$(curl -sSIL --max-time 20 "https://dl.elv.sh/$os-$arch/$art" 2>&1 | tr -d '\r')
+		lmt=$(printf '%s\n' "$hdr" | grep -i '^last-modified:' | tail -n 1 | sed 's/^[^:]*:[[:space:]]*//')
+		[ -n "$lmt" ] && printf '	upstream dl.elv.sh built %s\n' "$lmt"
+	fi
+
+	# is the published build the one already installed?
+	local same=0
+	if [ -n "$rbin" ] && [ "$rbin" = "$oldsha" ]; then
+		same=1
+	elif [ -z "$rbin" ] && [ -n "$oldver" ] && [ "$ver" != HEAD ]; then
+		case "$oldver" in "${ver#v}"*) same=1 ;; esac
+	fi
+	if [ $same -eq 1 ]; then
+		printf '	✔ up to date — installed binary is byte-identical to the published build\n'
+	elif [ "$ver" = HEAD ]; then
+		printf '	⬆ newer build published — update available\n'
+	else
+		printf '	≢ installed is not %s — update available\n' "$ver"
+	fi
+	[ $check -eq 1 ] && return 0
+	[ $same -eq 1 ] && [ $force -eq 0 ] && return 0
+
+	# download, verify, install
+	local -a tryl
+	tryl=("$base")
+	for b in "${bases[@]}"; do
+		[ "$b" = "$base" ] || tryl+=("$b")
+	done
+	local tmp ok=0 want got newver newsha
+	tmp=$(mktemp -d "${TMPDIR:-/tmp}/elvish.XXXXXX") || return 1
+	for b in "${tryl[@]}"; do
+		[ $ok -eq 1 ] && break
+		printf '\n---> GET %s/%s\n' "$b" "$art"
+		if ! curl -fsSL --max-time 300 -o "$tmp/$art" "$b/$art"; then
+			printf '	✗ download failed from %s\n' "$b" >&2
+			continue
+		fi
+		want=$(curl -fsSL --max-time 20 "$b/$art.sha256sum" 2>/dev/null | grep -oE '[0-9a-f]{64}' | head -n 1)
+		got=$(_sha256 "$tmp/$art")
+		if [ -n "$want" ] && [ "$got" != "$want" ]; then
+			printf '	✗ archive sha256 mismatch (want %s, got %s)\n' "$want" "$got" >&2
+			continue
+		fi
+		printf '	archive sha256 verified %.12s…\n' "$got"
+		if ! tar xzf "$tmp/$art" -C "$tmp" || [ ! -f "$tmp/elvish" ]; then
+			printf '	✗ no elvish binary in the archive\n' >&2
+			continue
+		fi
+		if ! {
+			sudo mkdir -p "$(dirname "$bindir")" &&
+				sudo rm -f "$bindir" &&
+				sudo cp "$tmp/elvish" "$bindir" &&
+				sudo chown "${USER:-$(id -un)}" "$bindir" &&
+				sudo chmod +x "$bindir"
+		}; then
+			printf '	✗ install failed (sudo?)\n' >&2
+			continue
+		fi
+		newver=$("$bindir" -version 2>/dev/null)
+		newsha=$(_sha256 "$bindir")
+		if [ -n "$rbin" ] && [ "$newsha" != "$rbin" ]; then
+			printf '	⚠ installed binary does not match the published sha256!\n' >&2
+		fi
+		printf '\n===UPDATED===\nOld: %s\nNew: %s\n' "${oldver:-(none)}" "$newver"
+		ok=1
+	done
+	rm -rf "$tmp"
+	[ $ok -eq 1 ] || printf '	ELVISH was not updated\n' >&2
+	return 0
 }
 
 function doBib() {
@@ -650,6 +933,7 @@ function updateAll() {
 	update
 	egetAll
 	updateElvish
+	updateFFMPEG
 	[[ -f $(which hermes) ]] && (printf '\n\n---> Upgrade \e[92mHERMES\e[m...\n'; hermes update)
 	[[ -f $(which opencode) ]] && (printf '\n\n---> Upgrade \e[92mOPENCODE\e[m...\n'; opencode upgrade)
 	[[ -f $(which nvim) ]] && (printf '\n\n---> Upgrade \e[92mNVIM\e[m...\n';nvim --headless "+Lazy! sync" +qa  )
