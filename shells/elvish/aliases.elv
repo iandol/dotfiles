@@ -648,7 +648,7 @@ fn updateuBlock {|&check=$false|
 	cd $tmpdir
 	try {
 		try {
-			wget -q --no-check-certificate -O ublock.zip $url
+			curl -fsSL --max-time 300 -o ublock.zip $url
 			rm -rf $dest'/uBlock0.chromium'
 			unzip -oq ublock.zip -d $dest
 			echo (styled "===UPDATED: uBlock "$rel[tag_name] bold yellow)
@@ -744,7 +744,7 @@ fn updateMPV {|&check=$false &force=$false &arch=''|
 	try {
 		header2 "GET "$url
 		try {
-			wget -q --no-check-certificate -O mpv.zip $url
+			curl -fsSL --max-time 300 -o mpv.zip $url
 			var sz = (os:stat ./mpv.zip)[size]
 			if (< $sz 1000000) { fail "downloaded only "(to-string $sz)" bytes — not an artifact" }
 			msg "downloaded "(to-string $sz)" bytes"
@@ -847,8 +847,8 @@ fn updateXRay {|&check=$false &force=$false|
 			header2 "GET XRAY "$xRemote
 			echo "URL: "$xURL
 			try {
-				wget -q --no-check-certificate -O xray.zip $xURL
-				var want = (cmds:remote-sha $xURL'.dgst' &pattern='SHA2-256=[ ]*([0-9a-f]{64})')
+				curl -fsSL --max-time 300 -o xray.zip $xURL
+				var want = (cmds:remote-sha $xURL'.dgst' &pattern='SHA2-256=[ ]*([0-9a-f]{64})' &timeout=30)
 				var got = (cmds:sha256 ./xray.zip)
 				if (and (not-eq $want '') (!=s $got $want)) { fail "xray.zip sha256 mismatch (want "$want", got "$got")" }
 				msg "xray.zip sha256 verified "(cmds:hash-short $got)
@@ -863,8 +863,8 @@ fn updateXRay {|&check=$false &force=$false|
 			var vFile = 'v2raya.deb'
 			if (==s $vKind 'bin') { set vFile = 'v2raya' }
 			try {
-				wget -q --no-check-certificate -O $vFile $vURL
-				var want = (cmds:remote-sha $vURL'.sha256.txt')
+				curl -fsSL --max-time 300 -o $vFile $vURL
+				var want = (cmds:remote-sha $vURL'.sha256.txt' &timeout=30)
 				var got = (cmds:sha256 './'$vFile)
 				if (and (not-eq $want '') (!=s $got $want)) { fail $vFile" sha256 mismatch (want "$want", got "$got")" }
 				msg $vFile" sha256 verified "(cmds:hash-short $got)
@@ -949,7 +949,7 @@ fn updateElvish {|&source=tuna &version=HEAD &check=$false &force=$false|
 	var base = ''; var rlmt = ''; var rbin = ''
 	for b $bases {
 		var p = (cmds:http-probe $b'/'$art)
-		var bh = (cmds:remote-sha $b'/elvish-'$version'.sha256sum')
+		var bh = (cmds:remote-sha $b'/elvish-'$version'.sha256sum' &timeout=30)
 		if (==s $p[lmt] '') { set p[lmt] = '?' }
 		var pc = 'HTTP '$p[code]
 		if (==s $p[code] '000') { set pc = 'HTTP 000 (unreachable)' }
@@ -985,8 +985,8 @@ fn updateElvish {|&source=tuna &version=HEAD &check=$false &force=$false|
 			if $updated { break }
 			header2 "GET "$b'/'$art
 			try {
-				wget -q --no-check-certificate -O $art $b'/'$art
-				var wantTar = (cmds:remote-sha $b'/'$art'.sha256sum')
+				curl -fsSL --max-time 300 -o $art $b'/'$art
+				var wantTar = (cmds:remote-sha $b'/'$art'.sha256sum' &timeout=30)
 				var gotTar = (cmds:sha256 './'$art)
 				if (and (not-eq $wantTar '') (!=s $gotTar $wantTar)) { fail "archive sha256 mismatch (want "$wantTar", got "$gotTar")" }
 				msg "archive sha256 verified "(cmds:hash-short $gotTar)
