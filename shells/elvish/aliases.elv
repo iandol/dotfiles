@@ -1032,6 +1032,8 @@ edit:add-var updateElvish~ $updateElvish~
 #   updateFFmpeg &channel=snapshot
 #   updateFFmpeg &check=$true     # report local vs remote, change nothing
 #   updateFFmpeg &force=$true     # reinstall even if the build matches
+# Downloads use curl's --max-time 300 per file (the same cap as the bash/zsh
+# twin), so a stalled mirror fails instead of hanging on wget's default retries.
 fn updateFFmpeg {|&channel=release &check=$false &force=$false|
 	var tools = [ffmpeg ffprobe ffplay]
 	var os = $platform:os
@@ -1088,8 +1090,8 @@ fn updateFFmpeg {|&channel=release &check=$false &force=$false|
 			header2 "GET "$t".zip"
 			echo $zurl
 			try {
-				wget -q --no-check-certificate -O $t'.zip' $zurl
-				var want = (cmds:remote-sha $zurl'.sha256')
+				curl -fsSL --max-time 300 -o $t'.zip' $zurl
+				var want = (cmds:remote-sha $zurl'.sha256' &timeout=30)
 				var got = (cmds:sha256 './'$t'.zip')
 				if (and (not-eq $want '') (!=s $got $want)) { fail $t".zip sha256 mismatch (want "$want", got "$got")" }
 				msg $t".zip sha256 verified "(cmds:hash-short $got)
