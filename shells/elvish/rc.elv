@@ -148,9 +148,14 @@ cmds:if-external dua { eval (dua completions elvish | slurp ) } # disk usage ana
 #cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) } # process viewer #in carapace
 cmds:if-external mihomosh { eval (mihomosh shell-completion elvish | slurp) } # mihomo shell
 cmds:if-external pixi {
-	#eval (pixi completion --shell elvish | slurp) # in carapace
-	var pixienv = (pixi info --json | from-json | put (one)[global_info][env_dir])
-	var pixibin = (pixi info --json | from-json | put (one)[global_info][bin_dir])
+	# Do NOT call `pixi info` during startup: it resolves the channel's virtual
+	# package detectors and can retry conda.anaconda.org requests (3 attempts)
+	# on every shell start. The global layout is deterministic:
+	#   $PIXI_HOME/bin (default ~/.pixi/bin) and $PIXI_HOME/envs.
+	var pixiHome = $E:PIXI_HOME
+	if (==s $pixiHome '') { set pixiHome = $E:HOME'/.pixi' }
+	var pixienv = $pixiHome'/envs'
+	var pixibin = $pixiHome'/bin'
 	# pixi doesn't expose tools installed with gem etc. so manually expose them
 	if (cmds:not-file $pixibin/pandocomatic) { ln -sf $pixienv/ruby/share/rubygems/bin/pandocomatic $pixibin }
 } # global package manager
