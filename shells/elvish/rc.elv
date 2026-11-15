@@ -20,6 +20,40 @@ if $platform:is-unix { use unix; edit:add-var unix: $unix: }
 echo (styled "𓁜◖" bold "#FFAA33")(styled "Elvish V"$version"—"$platform:os"▷"$platform:arch bold italic bg-"#FFAA33" black)(styled "◗𓁝" bold "#FFAA33")
 fn msg { |@t| echo (styled "👉🏼 "$@t bold italic yellow) }
 
+# Cache generated integration code (completions, prompts). The generators are
+# external programs whose output only changes when the tool changes, so replay
+# the cached code until the binary's mtime is newer than the cache file.
+# `stat` is used because os:stat does not expose mtime; on macOS it is BSD
+# stat, on Linux GNU stat. Clear with: rm -rf ~/.cache/elvish/completions
+fn stat-mtime {|f|
+	if (eq $platform:os windows) { put 0; return }
+	var out = ''
+	if (eq $platform:os darwin) { set out = (stat -L -f %m $f) } else { set out = (stat -L -c %Y $f) }
+	put (num (str:trim-space $out))
+}
+fn cached-code {|name bin @cmd|
+	var bp = ''
+	try { set bp = (search-external $bin) } catch { put ''; return }
+	var base = $E:XDG_CACHE_HOME
+	if (==s $base '') { set base = $E:HOME'/.cache' }
+	var dir = $base'/elvish/completions'
+	var file = $dir'/'$name'.elv'
+	var stale = $true
+	if (path:is-regular $file) {
+		set stale = $false
+		try {
+			if (> (stat-mtime $bp) (stat-mtime $file)) { set stale = $true }
+		} catch { set stale = $true }
+	}
+	if $stale {
+		var code = ($bp $@cmd | slurp)
+		if (==s $code '') { put ''; return }
+		os:mkdir-all $dir
+		print $code > $file
+	}
+	put (slurp < $file)
+}
+
 #==================================================== - EXTERNAL MODULES
 try { epm:install &silent-if-installed ^
 	github.com/iandol/elvish-modules ^
@@ -39,6 +73,10 @@ set-env DF $E:HOME/.dotfiles
 set-env XDG_CONFIG_HOME $E:HOME/.config
 set-env XDG_DATA_HOME $E:HOME/.local/share
 if (==s $platform:os "linux") { set-env TMPDIR '/tmp' }
+# One pair of uname calls for the whole startup (banner, PROCESSOR, PLATFORM).
+var machine = ''
+var sysname = ''
+try { set machine = (uname -m); set sysname = (uname -s) } catch { }
 
 #==================================================== - IMPORT UTIL NAMES TO REPL
 peach {|c| # this adds function names from cmds module to REPL, from Kurtis
@@ -102,9 +140,14 @@ cmds:do-if-path [/media/cogp/micromamba /media/cog/data/micromamba $E:HOME/micro
 #==================================================== - HOMEBREW
 if (cmds:is-macintel) { cmds:prepend-to-path '/usr/local/bin' } # intel homebrew (native or via Rosetta 2)
 cmds:if-external brew {
-	var pfix = (brew --prefix)
-	if (cmds:is-macintel) { var pfix = '/usr/local' }
-	echo (styled "👉🏼 …configuring homebrew "$platform:os"-"$platform:arch" [runmode:"(uname -m)"] prefix: "$pfix" …" bold italic yellow)
+	var pfix = ''
+	if (has-env HOMEBREW_PREFIX) { set pfix = $E:HOMEBREW_PREFIX }
+	if (==s $pfix '') {
+		if (cmds:is-macarm) { set pfix = '/opt/homebrew' }
+		elif (cmds:is-macintel) { set pfix = '/usr/local' }
+		else { set pfix = (brew --prefix) }
+	}
+	echo (styled "👉🏼 …configuring homebrew "$platform:os"-"$platform:arch" [runmode:"$machine"] prefix: "$pfix" …" bold italic yellow)
 	set-env HOMEBREW_PREFIX $pfix
 	set-env HOMEBREW_CELLAR $pfix'/Cellar'
 	set-env HOMEBREW_REPOSITORY $pfix'/Homebrew'
@@ -140,13 +183,17 @@ cmds:if-external fd {
 		set-env FZF_DEFAULT_OPTS "--ansi"
 	}
 }
-cmds:if-external nvim { set-env EDITOR (which nvim); set-env VISUAL (which nvim) } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
-cmds:if-external herdr { eval (herdr completion elvish | slurp) } # tmux alternative
-cmds:if-external uv { eval (uv generate-shell-completion elvish | slurp) } # python manager
-cmds:if-external rotz { eval (rotz completions elvish | slurp) } # dotfile namager
-cmds:if-external dua { eval (dua completions elvish | slurp ) } # disk usage analyzer
+cmds:if-external nvim {
+	var nvimPath = (which nvim)
+	set-env EDITOR $nvimPath
+	set-env VISUAL $nvimPath
+} { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
+cmds:if-external herdr { eval (cached-code herdr herdr completion elvish) } # tmux alternative
+cmds:if-external uv { eval (cached-code uv uv generate-shell-completion elvish) } # python manager
+cmds:if-external rotz { eval (cached-code rotz rotz completions elvish) } # dotfile namager
+cmds:if-external dua { eval (cached-code dua dua completions elvish) } # disk usage analyzer
 #cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) } # process viewer #in carapace
-cmds:if-external mihomosh { eval (mihomosh shell-completion elvish | slurp) } # mihomo shell
+cmds:if-external mihomosh { eval (cached-code mihomosh mihomosh shell-completion elvish) } # mihomo shell
 cmds:if-external pixi {
 	# Do NOT call `pixi info` during startup: it resolves the channel's virtual
 	# package detectors and can retry conda.anaconda.org requests (3 attempts)
@@ -164,8 +211,8 @@ python:deactivate
 
 #==================================================== - GENERAL ENVIRONMENT
 set-env PAPERSIZE A4
-set-env PROCESSOR (str:to-lower (uname -m))
-if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower (uname -s)) }
+set-env PROCESSOR (str:to-lower $machine)
+if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower $sysname) }
 
 #==================================================== - LUA PATHS
 if (not (has-env LUA_PATH)) { set-env LUA_PATH ';'; set-env LUA_CPATH ';' }
@@ -184,7 +231,7 @@ cmds:if-external carapace {
 	set-env CARAPACE_BRIDGES "bash,zsh"
 	set-env CARAPACE_EXCLUDES "systemctl,x"
 	set-env CARAPACE_MERGEFLAGS 1
-	eval (carapace _carapace elvish | slurp)
+	eval (cached-code carapace carapace _carapace elvish)
 	#carapace --choice ansible/zsh@bridge
 } 
 
@@ -209,7 +256,7 @@ cmds:if-external fzf { set edit:insert:binding[Ctrl-r] = { aliases:history >/dev
 
 #==================================================== - THEME
 cmds:if-external starship {
-	eval ((search-external starship) init elvish --print-full-init | slurp)
+	eval (cached-code starship starship init elvish --print-full-init)
 	#eval ((search-external starship) completions elvish | slurp)
 	msg "…starship init…"
 } { use github.com/muesli/elvish-libs/theme/powerline }
