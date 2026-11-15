@@ -143,9 +143,13 @@ cmds:if-external brew {
 	var pfix = ''
 	if (has-env HOMEBREW_PREFIX) { set pfix = $E:HOMEBREW_PREFIX }
 	if (==s $pfix '') {
-		if (cmds:is-macarm) { set pfix = '/opt/homebrew' }
-		elif (cmds:is-macintel) { set pfix = '/usr/local' }
-		else { set pfix = (brew --prefix) }
+		if (cmds:is-macarm) {
+			set pfix = '/opt/homebrew'
+		} elif (cmds:is-macintel) {
+			set pfix = '/usr/local'
+		} else {
+			set pfix = (brew --prefix)
+		}
 	}
 	echo (styled "👉🏼 …configuring homebrew "$platform:os"-"$platform:arch" [runmode:"$machine"] prefix: "$pfix" …" bold italic yellow)
 	set-env HOMEBREW_PREFIX $pfix
