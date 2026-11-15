@@ -192,8 +192,12 @@ cmds:if-external nvim {
 	set-env EDITOR $nvimPath
 	set-env VISUAL $nvimPath
 } { set-env EDITOR 'vim'; set-env VISUAL 'vim' }
-cmds:if-external herdr { eval (cached-code herdr herdr completion elvish) } # tmux alternative
-cmds:if-external uv { eval (cached-code uv uv generate-shell-completion elvish) } # python manager
+# Carapace (initialised below) registers completers for uv and herdr and runs
+# after this block, so their native generators would be overwritten anyway.
+# `carapace --list` confirms dedicated uv/herdr completers; keep native only
+# for tools Carapace does not provide: rotz, dua, mihomosh.
+#cmds:if-external herdr { eval (cached-code herdr herdr completion elvish) } # tmux alternative
+#cmds:if-external uv { eval (cached-code uv uv generate-shell-completion elvish) } # python manager
 cmds:if-external rotz { eval (cached-code rotz rotz completions elvish) } # dotfile namager
 cmds:if-external dua { eval (cached-code dua dua completions elvish) } # disk usage analyzer
 #cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) } # process viewer #in carapace
