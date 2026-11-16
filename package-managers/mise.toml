@@ -1,35 +1,40 @@
-
-# Global development tools
+# Mise Package Manager -- Global development tools
 # ~/.config/mise/config.toml
-#
-# Designed for Linux and macOS.
 # Conda packages are installed individually into isolated prefixes.
 
 [tools]
 
 # ------------------------------------------------------------
+# Dotfiles / Package Handling
+# ------------------------------------------------------------
+
+"aqua:zyedidia/eget" = "latest"
+"github:volllly/rotz" = "latest"
+
+# ------------------------------------------------------------
 # Terminal utilities
 # ------------------------------------------------------------
 
-"sd" = "latest"
-"jq" = "latest"
-"fzf" = "latest"
-"eza" = "latest"
-"hyperfine" = "latest"
-"starship" = "latest"
-"dua" = "latest"
+"sd" = "latest" # sed alternative 
+"jq" = "latest" # json processor
+"yq" = "latest" # yaml processor
+"fzf" = "latest" # fuzzy finder
+"eza" = "latest" # improved ls
+"hyperfine" = "latest" # benchmarking tool
+"starship" = "latest" # fast prompt
+"dua" = "latest" # better du
+"fd" = "latest" # better find
+"delta" = "latest" # git diff viewer
+"carapace" = "latest" # universal completion engine
+"lazygit" = "latest" # git TUI
+"zoxide" = "latest" # way better cd
+"yazi" = "latest" # amazing file manager TUI
+"bat" = "latest" # better cat
+"btop" = "latest" # process monitor TUI
+tealdeer = "latest" # simple help for commands
+"aqua:dalance/procs" = "latest" # better ps
+"aqua:ouch-org/ouch" = "latest" # universal compression tool
 #"moreutils" = "latest"
-"fd" = "latest"
-"delta" = "latest"
-"carapace" = "latest"
-"lazygit" = "latest"
-"zoxide" = "latest"
-"yazi" = "latest"
-"bat" = "latest"
-"yq" = "latest"
-"conda:btop" = "latest"
-"aqua:dalance/procs" = "latest"
-"aqua:ouch-org/ouch" = "latest"
 
 # ------------------------------------------------------------
 # Development tools
@@ -47,8 +52,9 @@ neovim = "latest"
 "typst" = "latest"
 "pandoc" = "latest"
 "conda:pandoc-crossref" = "latest"
+"gem:pandocomatic" = "latest"
 "conda:librsvg" = "latest"
-"conda:resvg" = "latest"
+"resvg" = "latest"
 "poppler" = "latest"
 "conda:img2pdf" = "latest"
 "yt-dlp" = "latest"
@@ -86,7 +92,6 @@ java = "25"
 
 # Python CLI utility
 "pypi:pipx" = "latest"
-
 
 # ------------------------------------------------------------
 # mise settings
