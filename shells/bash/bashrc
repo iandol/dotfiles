@@ -24,19 +24,19 @@ export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help"
 if [[ $PLATFORM == 'Darwin' ]]; then
 	[[ -d $(/usr/libexec/java_home) ]] && export JAVA_HOME=$(/usr/libexec/java_home)
 	[[ -d $JAVA_HOME ]] && path=("${JAVA_HOME}/bin" "$path")
-	[[ -d "/Applications/MATLAB_R2025a.app/bin" ]] && export PATH="/Applications/MATLAB_R2025a.app/bin:$PATH" # matlab
-	[[ -x "/Applications/MATLAB_R2025a.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2024a.app/bin/maci64/mlint" ~/bin/mlint # matlab
+	[[ -d "/Applications/MATLAB_R2026b.app/bin" ]] && export PATH="/Applications/MATLAB_R2025a.app/bin:$PATH" # matlab
+	[[ -x "/Applications/MATLAB_R2026b.app/bin/maci64/mlint" ]] && ln -sf "/Applications/MATLAB_R2026b.app/bin/maci64/mlint" ~/bin/mlint # matlab
 	#-------------------------------Bootstrap homebrew[s]
 	[[ -f /usr/local/bin/brew ]] && [[ "$(arch)" == "i386" ]] && eval "$(/usr/local/bin/brew shellenv)"
 	[[ -d /opt/homebrew ]] && [[ "$(arch)" == "arm64" ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 else
-	if [[ -d "/usr/local/MATLAB/R2025a/bin" ]]; then
-		export PATH="/usr/local/MATLAB/R2025a/bin:$PATH" # matlab
-		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2025a/bin" # matlab
-		ln -sf "/usr/local/MATLAB/R2024a/bin/glnxa64/mlint" ~/bin/ # mlint
+	if [[ -d "/usr/local/MATLAB/R2026b/bin" ]]; then
+		export PATH="/usr/local/MATLAB/R2026b/bin:$PATH" # matlab
+		export MATLAB_EXECUTABLE="/usr/local/MATLAB/R2026b/bin" # matlab
+		ln -sf "/usr/local/MATLAB/R2026b/bin/glnxa64/mlint" ~/bin/ # mlint
 	fi
-	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64/" # Linux Java
-	[[ -d "/usr/lib/jvm/java-17-openjdk-amd64/bin/" ]] && export PATH="${JAVA_HOME}bin:$PATH" # Linux JDK
+	[[ -d "/usr/lib/jvm/java-21-openjdk-amd64/bin/" ]] && export JAVA_HOME="/usr/lib/jvm/java-21-openjdk-amd64/" # Linux Java
+	[[ -d "/usr/lib/jvm/java-21-openjdk-amd64/bin/" ]] && export PATH="${JAVA_HOME}bin:$PATH" # Linux JDK
 	[[ -d "/home/linuxbrew/" ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
@@ -44,15 +44,11 @@ fi
 [[ -f $(which starship) ]] && eval "$(starship init bash)"
 [[ -f $(which pixi) ]] && eval "$(pixi completion --shell bash)"
 [[ -f $(which mc) ]] && complete -C /usr/local/bin/mc mc
-
+[[ -x $(which mise) ]] && eval "$(mise activate bash)"
 [[ -f "$DF/shells/aliases" ]] && source "$DF/shells/aliases"
+[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
 
 #---------------------------------------SAY HELLO
 echo -e "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
 
-[ ! -f "$HOME/.x-cmd.root/X" ] || . "$HOME/.x-cmd.root/X" # boot up x-cmd.
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/ian/.cache/lm-studio/bin"
-# End of LM Studio CLI section
 
