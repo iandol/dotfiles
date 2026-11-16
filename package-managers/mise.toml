@@ -1,0 +1,101 @@
+
+# Global development tools
+# ~/.config/mise/config.toml
+#
+# Designed for Linux and macOS.
+# Conda packages are installed individually into isolated prefixes.
+
+[tools]
+
+# ------------------------------------------------------------
+# Terminal utilities
+# ------------------------------------------------------------
+
+"sd" = "latest"
+"jq" = "latest"
+"fzf" = "latest"
+"eza" = "latest"
+"hyperfine" = "latest"
+"starship" = "latest"
+"dua" = "latest"
+#"moreutils" = "latest"
+"fd" = "latest"
+"delta" = "latest"
+"carapace" = "latest"
+"lazygit" = "latest"
+"zoxide" = "latest"
+"yazi" = "latest"
+"bat" = "latest"
+"yq" = "latest"
+"conda:btop" = "latest"
+"aqua:dalance/procs" = "latest"
+"aqua:ouch-org/ouch" = "latest"
+
+# ------------------------------------------------------------
+# Development tools
+# ------------------------------------------------------------
+
+"uv" = "latest"
+"tree-sitter" = "latest"
+"conda:hayagriva" = "latest"
+neovim = "latest"
+
+# ------------------------------------------------------------
+# Document, graphics and media utilities
+# ------------------------------------------------------------
+
+"typst" = "latest"
+"pandoc" = "latest"
+"conda:pandoc-crossref" = "latest"
+"conda:librsvg" = "latest"
+"conda:resvg" = "latest"
+"poppler" = "latest"
+"conda:img2pdf" = "latest"
+"yt-dlp" = "latest"
+
+# ------------------------------------------------------------
+# Networking, transfer and terminal applications
+# ------------------------------------------------------------
+
+"mosh" = "latest"
+"aqua:asciinema/asciinema" = "latest"
+"rclone" = "latest"
+"conda:minio-client" = "latest"
+"tssh" = "latest"
+"conda:tsshd" = "latest"
+"tmux" = "latest"
+"conda:tmuxp" = "latest"
+"trzsz-go" = "latest"
+
+# ------------------------------------------------------------
+# Archive utilities
+# ------------------------------------------------------------
+
+"7zip" = "latest"
+
+# ------------------------------------------------------------
+# Language runtimes
+# Native mise backends, rather than Conda
+# ------------------------------------------------------------
+
+rust = "latest"
+python = "3.12"
+node = "lts"
+ruby = "latest"
+java = "25"
+
+# Python CLI utility
+"pypi:pipx" = "latest"
+
+
+# ------------------------------------------------------------
+# mise settings
+# ------------------------------------------------------------
+
+[settings]
+
+# Use conda-forge for all conda: tools
+conda.channel = "conda-forge"
+
+# Avoid legacy shell-script plugin backends
+disable_backends = ["asdf", "vfox", "ubi"]

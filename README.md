@@ -8,6 +8,8 @@ My *favourite interactive shell* is [**_Elvish_**](https://elv.sh) — with a fa
 
 My preferred terminal is [Kitty](https://sw.kovidgoyal.net/kitty/overview/): many helpful features, cross-platform and fast. Installed with my `installKitty` `elvish`/`zsh` alias for macOS and Linux.
 
+I am currently testing mise (`curl -fsSL https://mise.run | sh`) to replace pixi.
+
 ## Main shell tools: 
 
 * [`pixi`](https://pixi.sh/latest/): cross-platform packager manager to install most core tools (see [pixi-global.toml](package-managers/pixi-global.toml) for the package list). _Note: Lua from pixi is static, which doesn't work well when remote debugging._

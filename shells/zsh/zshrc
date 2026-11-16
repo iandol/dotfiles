@@ -105,13 +105,14 @@ pth=("/Library/TeX/texbin" "$HOME/Library/TinyTeX/bin/universal-darwin"
 	"/opt/amdgpu-pro/bin" "opt/amdgpu/bin"
 	"/usr/local/sbin" "/usr/local/bin"
 	"/opt/homebrew/opt/ruby/bin" "/opt/homebrew/lib/ruby/gems/3.4.0/bin"
-	"/snap/bin" "$HOME/.local/bin" 
+	"/snap/bin" 
+	"$HOME/.local/bin" 
 	"$HOME/.cache/lm-studio/bin"
 	"$HOME/.opencode/bin"
 	"$HOME/.antigravity/antigravity/bin"
 	"$HOME/.pixi/envs/ruby/share/rubygems/bin"
 	"$HOME/.pixi/envs/nodejs/bin"
-	"$HOME/.pixi/bin" "$HOME/bin")
+	"$HOME/.pixi/bin" "$HOME/.local/share/mise/bin" "$HOME/bin")
 for p in $pth; do
 	if [[ -d $p ]]; then
 		path=($p $path)
@@ -129,6 +130,7 @@ export ___X_CMD_LANG="en"
 [[ -x $(which zoxide) ]] && eval "$(zoxide init zsh)"
 [[ -x $(which rotz) ]] && eval "$(rotz completions zsh)"
 [[ -x $(which herdr) ]] && eval "$(herdr completion zsh)"
+[[ -x $(which mise) ]] && eval "$(mise activate zsh)"
 [[ -x $(which mc) ]] && autoload -U +X bashcompinit && bashcompinit && complete -o nospace -C /usr/local/bin/mc mc
 [[ -f "$DF/shells/aliases" ]] && source "$DF/shells/aliases"
 
@@ -136,8 +138,3 @@ export ___X_CMD_LANG="en"
 echo "\n⌃a,e: ⇄ | ⌃w,k,u: 🔪 | ⌃r,s: 🔍 | d, cd - & cd #n: 🚀 | 💡 curl cheat.sh/?\n"
 #=============================================== -- END OF FILE
 
-
-
-
-# Added by codebase-memory-mcp install
-export PATH="/home/cog5/.local/bin:$PATH"

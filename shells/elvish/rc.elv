@@ -1,11 +1,20 @@
 #====================================================
-#  __|  |      _)       |   
-#  _|   | \ \ / | (_-<    \ 
-# ___| _|  \_/ _| ___/ _| _|
+#     ______     __         __   __   __     ______     __  __    
+#    /\  ___\   /\ \       /\ \ / /  /\ \   /\  ___\   /\ \_\ \   
+#    \ \  __\   \ \ \____  \ \ \'/   \ \ \  \ \___  \  \ \  __ \  
+#     \ \_____\  \ \_____\  \ \__|    \ \_\  \/\_____\  \ \_\ \_\ 
+#      \/_____/   \/_____/   \/_/      \/_/   \/_____/   \/_/\/_/ 
+#  
+# ,'     |_ _   '     \  
+#  | --- |_)_)_ | (~) /\ 
+#    (_,           /      
+#                                                
 # elvish shell config: https://elv.sh/learn/tour.html
 #====================================================
 
-#==================================================== - CORE MODULES
+# ----------------------------------------------------------------------
+# ==================================================== - CORE MODULES
+# ----------------------------------------------------------------------
 use re
 use str
 use epm
@@ -54,7 +63,9 @@ fn cached-code {|name bin @cmd|
 	put (slurp < $file)
 }
 
-#==================================================== - EXTERNAL MODULES
+# ----------------------------------------------------------------------
+# ==================================================== - EXTERNAL MODULES
+# ----------------------------------------------------------------------
 try { epm:install &silent-if-installed ^
 	github.com/iandol/elvish-modules ^
 	github.com/zzamboni/elvish-modules ^
@@ -66,7 +77,9 @@ use github.com/iandol/elvish-modules/mamba # for conda support
 use github.com/zzamboni/elvish-modules/bang-bang # use ! for last command expansion
 bang-bang:init &plain-bang="Alt-1" # remember for kitty this is RIGHT alt key only
 
-#==================================================== - BASIC ENVIRONMENT
+# -----------------------------------------------------------------------
+# ==================================================== - BASIC ENVIRONMENT
+# -----------------------------------------------------------------------
 if $platform:is-windows { set-env HOME $E:USERPROFILE; set-env USER $E:USERNAME }
 set-env HOSTNAME (platform:hostname &strip-domain=$true)
 set-env DF $E:HOME/.dotfiles
@@ -78,7 +91,9 @@ var machine = ''
 var sysname = ''
 try { set machine = (uname -m); set sysname = (uname -s) } catch { }
 
-#==================================================== - IMPORT UTIL NAMES TO REPL
+# -------------------------------------------------------------------------------
+# ==================================================== - IMPORT UTIL NAMES TO REPL
+# -------------------------------------------------------------------------------
 peach {|c| # this adds function names from cmds module to REPL, from Kurtis
 	var code = 'edit:add-var '$c' $mod:'$c; eval $code &ns=(ns [&mod:=$cmds:])
 	} [if-external~ append-to-path~ prepend-to-path~ do-if-path~
@@ -95,8 +110,10 @@ edit:add-vars [
 set edit:completion:arg-completer[pya] = $edit:completion:arg-completer[python:activate]
 set edit:completion:arg-completer[mama] = $edit:completion:arg-completer[mamba:activate]
 
-#==================================================== - PATHS + VENVS
-try { cmds:path_helper } catch { } # /usr/libexec/path_helper for elvish
+# ----------------------------------------------------------------------
+# ==================================================== - PATHS + VENVS
+# ----------------------------------------------------------------------
+try { cmds:path_helper } catch { msg "path_helper didn't run…" } # /usr/libexec/path_helper for elvish
 
 # MATLAB -- https://www.mathworks.com/help/matlab/matlab-environment.html
 var prefix suffix
@@ -106,7 +123,7 @@ var releases = [$prefix{6b 6a 5b 5a 4b 4a 3b 3a 2b 2a 1b 1a 0b 0a}$suffix]
 cmds:do-if-path $releases { |p|
 	cmds:prepend-to-path $p
 	set-env MATLAB_EXECUTABLE $p"/matlab" # matlab
-	if (cmds:is-macos) { ln -sf $p"/maci64/mlint" $E:HOME/bin/mlint }
+	#if (cmds:is-macos) { ln -sf $p"/maci64/mlint" $E:HOME/bin/mlint }
 }
 if (cmds:is-macos) {
 	cmds:do-if-path [(/usr/libexec/java_home -v {25 21 17 11 8})] {|p| set-env JAVA_HOME $p }
@@ -137,7 +154,9 @@ cmds:do-if-path $E:HOME/.pixi/envs/ruby/share/rubygems {|p| set-env GEM_HOME $p 
 cmds:do-if-path $E:HOME/.venv {|p| set python:venv-directory = $p }
 cmds:do-if-path [/media/cogp/micromamba /media/cog/data/micromamba $E:HOME/micromamba ] {|p| set mamba:root = $p; set-env MAMBA_ROOT_PREFIX $mamba:root }
 
-#==================================================== - HOMEBREW
+# ----------------------------------------------------------------------
+# ==================================================== - HOMEBREW
+# ----------------------------------------------------------------------
 if (cmds:is-macintel) { cmds:prepend-to-path '/usr/local/bin' } # intel homebrew (native or via Rosetta 2)
 cmds:if-external brew {
 	var pfix = ''
@@ -162,7 +181,9 @@ cmds:if-external brew {
 	peach {|p| cmds:prepend-to-path $p } [ $pfix'/bin' $pfix'/sbin']
 }
 
-#==================================================== - KITTY INTEGRATION
+# ------------------------------------------------------------------------
+# ==================================================== - KITTY INTEGRATION
+# ------------------------------------------------------------------------
 if (has-env KITTY_INSTALLATION_DIR) {
 	fn osc {|c| print "\e]"$c"\a" }
 	fn send-title {|t| osc '0;ɛ'$t }
@@ -173,13 +194,17 @@ if (has-env KITTY_INSTALLATION_DIR) {
 	msg "…"(kitty --version)" integration…"
 }
 
-#==================================================== - GHOSTTY INTEGRATION
+# --------------------------------------------------------------------------
+# ==================================================== - GHOSTTY INTEGRATION
+# --------------------------------------------------------------------------
 if (eq $E:TERM "xterm-ghostty") {
 	use ghostty-integration
 	msg "…ghostty integration…"
 }
 
-#==================================================== - OTHER INTEGRATIONS
+# -------------------------------------------------------------------------
+# ==================================================== - OTHER INTEGRATIONS
+# -------------------------------------------------------------------------
 cmds:if-external zoxide { eval (zoxide init elvish | slurp) } # better cd
 cmds:if-external fd {
 	cmds:if-external fzf {
@@ -202,38 +227,43 @@ cmds:if-external rotz { eval (cached-code rotz rotz completions elvish) } # dotf
 cmds:if-external dua { eval (cached-code dua dua completions elvish) } # disk usage analyzer
 #cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) } # process viewer #in carapace
 cmds:if-external mihomosh { eval (cached-code mihomosh mihomosh shell-completion elvish) } # mihomo shell
-cmds:if-external pixi {
-	# Do NOT call `pixi info` during startup: it resolves the channel's virtual
-	# package detectors and can retry conda.anaconda.org requests (3 attempts)
-	# on every shell start. The global layout is deterministic:
-	#   $PIXI_HOME/bin (default ~/.pixi/bin) and $PIXI_HOME/envs.
-	var pixiHome = $E:PIXI_HOME
-	if (==s $pixiHome '') { set pixiHome = $E:HOME'/.pixi' }
-	var pixienv = $pixiHome'/envs'
-	var pixibin = $pixiHome'/bin'
-	# pixi doesn't expose tools installed with gem etc. so manually expose them
-	if (cmds:not-file $pixibin/pandocomatic) { ln -sf $pixienv/ruby/share/rubygems/bin/pandocomatic $pixibin }
-} # global package manager
+# cmds:if-external pixi {
+# 	# Do NOT call `pixi info` during startup: it resolves the channel's virtual
+# 	# package detectors and can retry conda.anaconda.org requests (3 attempts)
+# 	# on every shell start. The global layout is deterministic:
+# 	#   $PIXI_HOME/bin (default ~/.pixi/bin) and $PIXI_HOME/envs.
+# 	var pixiHome = $E:PIXI_HOME
+# 	if (==s $pixiHome '') { set pixiHome = $E:HOME'/.pixi' }
+# 	var pixienv = $pixiHome'/envs'
+# 	var pixibin = $pixiHome'/bin'
+# 	# pixi doesn't expose tools installed with gem etc. so manually expose them
+# 	if (cmds:not-file $pixibin/pandocomatic) { ln -sf $pixienv/ruby/share/rubygems/bin/pandocomatic $pixibin }
+# } # global package manager
 python:deactivate
 
-
-#==================================================== - GENERAL ENVIRONMENT
+# -------------------------------------------------------------------------
+# ==================================================== - GENERAL ENVIRONMENT
+# -------------------------------------------------------------------------
 set-env PAPERSIZE A4
 set-env PROCESSOR (str:to-lower $machine)
 if (not (has-env PLATFORM)) { set-env PLATFORM (str:to-lower $sysname) }
 
-#==================================================== - LUA PATHS
+# ----------------------------------------------------------------------
+# ==================================================== - LUA PATHS
+# ----------------------------------------------------------------------
 if (not (has-env LUA_PATH)) { set-env LUA_PATH ';'; set-env LUA_CPATH ';' }
 cmds:do-if-path ~/.local/share/pandoc/filters {|p| set-env LUA_PATH $p'/?.lua;'$E:LUA_PATH }
 cmds:do-if-path /opt/homebrew/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
 cmds:do-if-path /opt/homebrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
 cmds:do-if-path /home/linuxbrew/.linuxbrew/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
 cmds:do-if-path /home/linuxbrew/.linuxbrew/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
-cmds:do-if-path ~/.pixi/envs/luarocks/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
-cmds:do-if-path ~/.pixi/envs/luarocks/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
+#cmds:do-if-path ~/.pixi/envs/luarocks/share/lua/5.4 {|p| set-env LUA_PATH $p'/?.lua;'$p'/?/?.lua;'$E:LUA_PATH}
+#cmds:do-if-path ~/.pixi/envs/luarocks/lib/lua/5.4 {|p| set-env LUA_CPATH $p'/?.so;'$p'/?/?.so;'$E:LUA_CPATH}
 cmds:do-if-path ~/.local/share/pandoc/ {|p| set-env PD $p }
 
-#==================================================== - CARAPACE INTEGRATION
+# --------------------------------------------------------------------------
+# ==================================================== - CARAPACE INTEGRATION
+# --------------------------------------------------------------------------
 cmds:if-external carapace {
 	msg "…carapace integration…"
 	set-env CARAPACE_BRIDGES "bash,zsh"
@@ -243,7 +273,20 @@ cmds:if-external carapace {
 	#carapace --choice ansible/zsh@bridge
 } 
 
-#==================================================== - X-CMD 文
+
+# ----------------------------------------------------------------------
+# ==================================================== -  MISE ACTIVATION
+# ----------------------------------------------------------------------
+cmds:if-external mise {
+	var mise: = (ns [&])
+	eval (mise activate elvish | slurp) &ns=$mise: &on-end={|ns| set mise: = $ns }
+	mise:activate
+	edit:add-var mise~ {|@args| mise:mise $@args }
+}
+
+# ----------------------------------------------------------------------
+# ==================================================== - X-CMD 文
+# ----------------------------------------------------------------------
 # …should come AFTER carapace
 if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
 	set-env ___X_CMD_LANG en
@@ -252,26 +295,36 @@ if (os:is-regular (path:dir $runtime:rc-path)/lib/x.elv) {
 	msg "…x-cmd 文 integration…"
 }
 
-#==================================================== - MY ALIASES
+## ----------------------------------------------------------------------
+# ==================================================== - MY ALIASES
+# ----------------------------------------------------------------------
 use aliases 
 
-#==================================================== - KEY BINDINGS
+# ----------------------------------------------------------------------
+# ==================================================== - KEY BINDINGS
+# ----------------------------------------------------------------------
+
 set edit:insert:binding[Ctrl-a] = $edit:move-dot-sol~
 set edit:insert:binding[Ctrl-e] = $edit:move-dot-eol~
 set edit:insert:binding[Ctrl-b] = { aliases:external-edit-command }
 set edit:insert:binding[Ctrl-y] = { echo $edit:current-command | pbcopy; edit:replace-input ""; edit:notify "Cut ✂️" }
 cmds:if-external fzf { set edit:insert:binding[Ctrl-r] = { aliases:history >/dev/tty 2>&1 } }
 
-#==================================================== - THEME
+# ----------------------------------------------------------------------
+# ==================================================== - THEME
+# ----------------------------------------------------------------------
 cmds:if-external starship {
 	eval (cached-code starship starship init elvish --print-full-init)
 	#eval ((search-external starship) completions elvish | slurp)
 	msg "…starship init…"
 } { use github.com/muesli/elvish-libs/theme/powerline }
 
-#==================================================== - ENSURE SHIM DIRS PREPENDED
-each {|p| cmds:prepend-to-path $p} [$E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /.pixi/bin /bin}]
+# ----------------------------------------------------------------------
+# ==================================================== - ENSURE SHIM DIRS PREPENDED
+# ----------------------------------------------------------------------
+each {|p| cmds:prepend-to-path $p} [$E:HOME{/scoop/shims /.pyenv/shims /.rbenv/shims /usr/local/bin /bin}]
 
-#==================================================== 
-#========================- THIS IS THE END, MY FRIEND
-#==================================================== 
+# ----------------------------------------------------------------------
+# ==================================================== - THIS IS THE END, MY FRIEND
+# ----------------------------------------------------------------------
+

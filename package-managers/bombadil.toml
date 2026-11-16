@@ -3,6 +3,7 @@
 
 [settings.dots]
 default-gems = { source = "package-managers/default-gems", target = ".config/default-gems" }
+mise = { source = "package-managers/mise.toml", target = ".config/mise/config.toml" }
 pixi-global = { source = "package-managers/pixi-global.toml", target = ".pixi/manifests/pixi-global.toml" }
 eget = { source = "package-managers/eget.toml", target = ".eget.toml" }
 

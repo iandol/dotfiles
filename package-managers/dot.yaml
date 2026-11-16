@@ -1,6 +1,7 @@
 global:
   links:
     default-gems: ~/.config/default-gems
+    mise.toml: ~/.config/mise/config.toml
     pixi-global.toml: ~/.pixi/manifests/pixi-global.toml
     eget.toml: ~/.eget.toml
 darwin|linux:

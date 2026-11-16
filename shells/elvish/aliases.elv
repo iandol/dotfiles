@@ -612,12 +612,12 @@ fn update {
 	try { curl -sS https://raw.githubusercontent.com/cagelab/cogmoteGO/main/install.sh | sh } catch { }
 
 	# update other tools
-	cmds:if-external pixi { header2 "Update pixi"; pixi self-update; pixi global sync; pixi global -v update }	
+	cmds:if-external mise { header2 "Update mise"; mise self-update; mise upgrade }	
 	cmds:if-external nvim { header2 "Update NVIM plugins…"; nvim --headless "+Lazy! sync" +qa }
 	cmds:if-external ya { header2 "Update Yazi"; ya pkg upgrade --discard }
 	cmds:if-external eget { header2 "Update eget"; eget zyedidia/eget --upgrade-only }
  
-	try { header2 "Updating Elvish Packages…";epm:upgrade } catch { echo "Couldn't update EPM packages…" }
+	try { header2 "Updating Elvish Packages…"; epm:upgrade } catch { echo "Couldn't update EPM packages…" }
 	try { cmds:if-external x-cmd { header2 "Update 文 x-cmd"; x-cmd upgrade; x-cmd update; x-cmd env upgrade --all --force; x-cmd elv --setup mod } } catch { }
 	header1 "====>>> Finish Update @ "(styled (date) bold)" <<<===="
 }
