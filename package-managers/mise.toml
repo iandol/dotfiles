@@ -30,7 +30,8 @@
 "zoxide" = "latest" # way better cd
 "yazi" = "latest" # amazing file manager TUI
 "bat" = "latest" # better cat
-"btop" = "latest" # process monitor TUI
+"btop" = {version = "latest", os = "linux" } # process monitor TUI
+"conda:btop" = {version = "latest", os = "macos" } # process monitor TUI
 tealdeer = "latest" # simple help for commands
 "aqua:dalance/procs" = "latest" # better ps
 "aqua:ouch-org/ouch" = "latest" # universal compression tool
