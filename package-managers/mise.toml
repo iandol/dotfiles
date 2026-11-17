@@ -30,12 +30,11 @@
 "zoxide" = "latest" # way better cd
 "yazi" = "latest" # amazing file manager TUI
 "bat" = "latest" # better cat
-"btop" = {version = "latest", os = "linux" } # process monitor TUI
-"conda:btop" = {version = "latest", os = "macos" } # process monitor TUI
-tealdeer = "latest" # simple help for commands
+"btop" = { version = "latest", os = ["linux"] } # process monitor TUI
+"conda:btop" = { version = "latest", os = ["macos"] } # process monitor TUI
+"tealdeer" = "latest" # simple help for commands
 "aqua:dalance/procs" = "latest" # better ps
 "aqua:ouch-org/ouch" = "latest" # universal compression tool
-#"moreutils" = "latest"
 
 # ------------------------------------------------------------
 # Development tools
@@ -55,9 +54,9 @@ neovim = "latest"
 "conda:pandoc-crossref" = "latest"
 "gem:pandocomatic" = "latest"
 "conda:librsvg" = "latest"
+"conda:img2pdf" = "latest"
 "resvg" = "latest"
 "poppler" = "latest"
-"conda:img2pdf" = "latest"
 "yt-dlp" = "latest"
 
 # ------------------------------------------------------------
@@ -93,6 +92,14 @@ java = "25"
 
 # Python CLI utility
 "pypi:pipx" = "latest"
+
+# ------------------------------------------------------------
+# mise tasks
+# ------------------------------------------------------------
+
+[tasks.relink]
+description = "Run rotz link"
+run = "rotz link -f"
 
 # ------------------------------------------------------------
 # mise settings

@@ -29,40 +29,6 @@ if $platform:is-unix { use unix; edit:add-var unix: $unix: }
 echo (styled "𓁜◖" bold "#FFAA33")(styled "Elvish V"$version"—"$platform:os"▷"$platform:arch bold italic bg-"#FFAA33" black)(styled "◗𓁝" bold "#FFAA33")
 fn msg { |@t| echo (styled "👉🏼 "$@t bold italic yellow) }
 
-# Cache generated integration code (completions, prompts). The generators are
-# external programs whose output only changes when the tool changes, so replay
-# the cached code until the binary's mtime is newer than the cache file.
-# `stat` is used because os:stat does not expose mtime; on macOS it is BSD
-# stat, on Linux GNU stat. Clear with: rm -rf ~/.cache/elvish/completions
-fn stat-mtime {|f|
-	if (eq $platform:os windows) { put 0; return }
-	var out = ''
-	if (eq $platform:os darwin) { set out = (stat -L -f %m $f) } else { set out = (stat -L -c %Y $f) }
-	put (num (str:trim-space $out))
-}
-fn cached-code {|name bin @cmd|
-	var bp = ''
-	try { set bp = (search-external $bin) } catch { put ''; return }
-	var base = $E:XDG_CACHE_HOME
-	if (==s $base '') { set base = $E:HOME'/.cache' }
-	var dir = $base'/elvish/completions'
-	var file = $dir'/'$name'.elv'
-	var stale = $true
-	if (path:is-regular $file) {
-		set stale = $false
-		try {
-			if (> (stat-mtime $bp) (stat-mtime $file)) { set stale = $true }
-		} catch { set stale = $true }
-	}
-	if $stale {
-		var code = ($bp $@cmd | slurp)
-		if (==s $code '') { put ''; return }
-		os:mkdir-all $dir
-		print $code > $file
-	}
-	put (slurp < $file)
-}
-
 # ----------------------------------------------------------------------
 # ==================================================== - EXTERNAL MODULES
 # ----------------------------------------------------------------------
@@ -221,12 +187,12 @@ cmds:if-external nvim {
 # after this block, so their native generators would be overwritten anyway.
 # `carapace --list` confirms dedicated uv/herdr completers; keep native only
 # for tools Carapace does not provide: rotz, dua, mihomosh.
-#cmds:if-external herdr { eval (cached-code herdr herdr completion elvish) } # tmux alternative
-#cmds:if-external uv { eval (cached-code uv uv generate-shell-completion elvish) } # python manager
-cmds:if-external rotz { eval (cached-code rotz rotz completions elvish) } # dotfile namager
-cmds:if-external dua { eval (cached-code dua dua completions elvish) } # disk usage analyzer
+#cmds:if-external herdr { eval (cmds:cached-code herdr herdr completion elvish) } # tmux alternative
+#cmds:if-external uv { eval (cmds:cached-code uv uv generate-shell-completion elvish) } # python manager
+cmds:if-external rotz { eval (cmds:cached-code rotz rotz completions elvish) } # dotfile namager
+cmds:if-external dua { eval (cmds:cached-code dua dua completions elvish) } # disk usage analyzer
 #cmds:if-external procs { eval (procs --gen-completion-out elvish | slurp ) } # process viewer #in carapace
-cmds:if-external mihomosh { eval (cached-code mihomosh mihomosh shell-completion elvish) } # mihomo shell
+cmds:if-external mihomosh { eval (cmds:cached-code mihomosh mihomosh shell-completion elvish) } # mihomo shell
 # cmds:if-external pixi {
 # 	# Do NOT call `pixi info` during startup: it resolves the channel's virtual
 # 	# package detectors and can retry conda.anaconda.org requests (3 attempts)
@@ -269,7 +235,7 @@ cmds:if-external carapace {
 	set-env CARAPACE_BRIDGES "bash,zsh"
 	set-env CARAPACE_EXCLUDES "systemctl,x"
 	set-env CARAPACE_MERGEFLAGS 1
-	eval (cached-code carapace carapace _carapace elvish)
+	eval (cmds:cached-code carapace carapace _carapace elvish)
 	#carapace --choice ansible/zsh@bridge
 } 
 
@@ -314,7 +280,7 @@ cmds:if-external fzf { set edit:insert:binding[Ctrl-r] = { aliases:history >/dev
 # ==================================================== - THEME
 # ----------------------------------------------------------------------
 cmds:if-external starship {
-	eval (cached-code starship starship init elvish --print-full-init)
+	eval (cmds:cached-code starship starship init elvish --print-full-init)
 	#eval ((search-external starship) completions elvish | slurp)
 	msg "…starship init…"
 } { use github.com/muesli/elvish-libs/theme/powerline }
